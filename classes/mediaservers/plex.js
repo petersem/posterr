@@ -200,7 +200,7 @@ class Plex {
         medCard.decision = transcode;
 
         // add generic random theme if applicable
-        if (medCard.theme == "" && playGenenericThemes == true) {
+        if (medCard.theme == "" && playGenenericThemes == "true") {
           medCard.theme = "/randomthemes/" + (await core.GetRandomMP3());
         }
 

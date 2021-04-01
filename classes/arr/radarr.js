@@ -67,7 +67,7 @@ class Radarr {
         medCard.cardType = cType.CardTypeEnum.ComingSoon;
 
         // dont bother to download if only looking for premiers
-        if (premieres && md.episodeNumber != 1) {
+        if (premieres == "true" && md.episodeNumber != 1) {
           // dont get cached files
         } else {
           // cache mp3 file
