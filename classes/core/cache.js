@@ -71,9 +71,9 @@ class Core {
   }
 
   static async GetRandomMP3() {
-    var directory = "./public/randomthemes";
+    let directory = "./public/randomthemes";
 
-    var randomFile = await util.random_item(fs.readdirSync(directory));
+    let randomFile = await util.random_item(fs.readdirSync(directory));
     return randomFile;
   }
 }

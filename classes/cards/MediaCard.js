@@ -31,15 +31,15 @@ class MediaCard {
   }
 
   async Render() {
-    var hidden = "";
+    let hidden = "";
     if (this.cardType != "Now Screening") hidden = "hidden";
 
     // pill variables
-    var contentRatingPill = "";
-    var resCodecPill = "";
-    var audioCodecPill = "";
-    var runTimePill = "";
-    var ratingPill = "";
+    let contentRatingPill = "";
+    let resCodecPill = "";
+    let audioCodecPill = "";
+    let runTimePill = "";
+    let ratingPill = "";
 
     // include if value present
     if (!(await util.isEmpty(this.contentRating))) {

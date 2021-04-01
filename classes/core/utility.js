@@ -25,9 +25,9 @@ class utility {
   // builds random set of on-demand cards
   static async build_random_od_set(numberOnDemand,mediaCards) {
     
-    var onDemandCards = [];
+    let onDemandCards = [];
     for await (let i of Array(numberOnDemand).keys()) {
-      var odc;
+      let odc;
       odc = await this.random_item(mediaCards);
       onDemandCards.push(odc);
     }

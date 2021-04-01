@@ -20,7 +20,7 @@ class globalPage {
 
   async OrderAndRenderCards() {
     if (this.cards.length != 0) {
-      var webID = 0;
+      let webID = 0;
       // move through cards and update ID's and active, then render
       await this.cards.reduce(async (memo, card) => {
         await memo;

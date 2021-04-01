@@ -70,26 +70,26 @@ class Sonarr {
           // dont get cached files
         } else {
           // cache mp3 file
-          var mp3 = md.series.tvdbId + ".mp3";
+          let mp3 = md.series.tvdbId + ".mp3";
           await core.CacheMP3(mp3);
           medCard.theme = "/mp3cache/" + mp3;
 
           // cache image
-          var fileName = md.series.tvdbId + ".jpg";
-          var url = md.series.images[1].url;
+          let fileName = md.series.tvdbId + ".jpg";
+          let url = md.series.images[1].url;
           await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
         }
 
         // content rating and colour
-        var contentRating = "NR";
+        let contentRating = "NR";
         if (!(await util.isEmpty(md.series.certification))) {
           contentRating = md.series.certification;
         }
         medCard.contentRating = contentRating;
 
         // set colours for rating badges
-        var ratingColour = "";
+        let ratingColour = "";
         switch (contentRating.toLowerCase()) {
           case "nr":
             ratingColour = "badge-dark";

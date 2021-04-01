@@ -37,8 +37,8 @@ class Plex {
 
   async GetNowScreening(playGenenericThemes) {
     // get raw data first
-    var nsCards = [];
-    var nsRaw = await this.GetNowScreeningRawData();
+    let nsCards = [];
+    let nsRaw = await this.GetNowScreeningRawData();
 
     // reutrn an empty array if no results
     if (nsRaw != [] && nsRaw.MediaContainer != undefined && nsRaw.MediaContainer.Metadata != undefined ) {
@@ -48,7 +48,7 @@ class Plex {
       await nsRaw.MediaContainer.Metadata.reduce(async (memo, md) => {
         await memo;
         const medCard = new mediaCard();
-        var transcode = "direct";
+        let transcode = "direct";
 
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
@@ -60,11 +60,11 @@ class Plex {
               " - '" +
               md.title +
               "'";
-            var result = md.guid.split("/");
+              let result = md.guid.split("/");
             medCard.DBID = result[2];
 
             // download mp3 file to local server
-            var mp3 = result[2] + ".mp3";
+            let mp3 = result[2] + ".mp3";
             await core.CacheMP3(mp3);
             medCard.theme = "/mp3cache/" + mp3;
 
@@ -75,10 +75,10 @@ class Plex {
             }
 
             // download poster image to local server
-            var fileName = result[2] + ".jpg";
-            var prefix = "http://";
+            let fileName = result[2] + ".jpg";
+            let prefix = "http://";
             if (this.https) prefix = "https://";
-            var url =
+            let url =
               prefix +
               this.plexIP +
               ":" +
@@ -95,11 +95,11 @@ class Plex {
             break;
           case "movie":
             // cache movie poster
-            var movieFileName = md.updatedAt + ".jpg";
+            let movieFileName = md.updatedAt + ".jpg";
             medCard.genre = md.Genre;
-            var moviePlexPrefix = "http://";
+            let moviePlexPrefix = "http://";
             if (this.https) moviePlexPrefix = "https://";
-            var movieUrl =
+            let movieUrl =
               moviePlexPrefix +
               this.plexIP +
               ":" +
@@ -131,20 +131,20 @@ class Plex {
         if (md.Media[0].Part[0].decision == "transcode") {
           transcode = await util.emptyIfNull(md.Media[0].Part[0].decision);
           if (!(await util.isEmpty(md.TranscodeSession))) {
-            var audioTranscode = await util.emptyIfNull(
+            let audioTranscode = await util.emptyIfNull(
               md.TranscodeSession.audioDecision
             );
           }
         }
 
-        var contentRating = "NR";
+        let contentRating = "NR";
         if (!(await util.isEmpty(md.contentRating))) {
           contentRating = md.contentRating;
         }
         medCard.contentRating = contentRating;
 
         // set colours for rating badges
-        var ratingColour = "";
+        let ratingColour = "";
         switch (contentRating.toLowerCase()) {
           case "nr":
             ratingColour = "badge-dark";
@@ -238,8 +238,8 @@ class Plex {
 
   async GetOnDemand(onDemandLibraries, numberOnDemand, playGenenericThemes) {
     // get library keys
-    var odCards = [];
-    var odRaw = await this.GetOnDemandRawData(
+    let odCards = [];
+    let odRaw = await this.GetOnDemandRawData(
       onDemandLibraries,
       numberOnDemand
     );
@@ -255,11 +255,11 @@ class Plex {
           case "show":
             // console.log(md);
             medCard.tagLine = md.title;
-            var result = md.guid.split("/");
+            let result = md.guid.split("/");
             medCard.DBID = result[2].split("?")[0];
 
             // download mp3 from plex tv theme server
-            var mp3 = result[2].split("?")[0] + ".mp3";
+            let mp3 = result[2].split("?")[0] + ".mp3";
             await core.CacheMP3(mp3);
             medCard.theme = "/mp3cache/" + mp3;
 
@@ -270,10 +270,10 @@ class Plex {
             }
 
             // download poster image from plex server
-            var fileName = result[2].split("?")[0] + ".jpg";
-            var prefix = "http://";
+            let fileName = result[2].split("?")[0] + ".jpg";
+            let prefix = "http://";
             if (this.https) prefix = "https://";
-            var url =
+            let url =
               prefix +
               this.plexIP +
               ":" +
@@ -290,10 +290,10 @@ class Plex {
             break;
           case "movie":
             // cache movie poster
-            var movieFileName = md.updatedAt + ".jpg";
-            var moviePlexPrefix = "http://";
+            let movieFileName = md.updatedAt + ".jpg";
+            let moviePlexPrefix = "http://";
             if (this.https) moviePlexPrefix = "https://";
-            var movieUrl =
+            let movieUrl =
               moviePlexPrefix +
               this.plexIP +
               ":" +
@@ -328,14 +328,14 @@ class Plex {
         medCard.mediaType = md.type;
         medCard.cardType = cType.CardTypeEnum.OnDemand;
 
-        var contentRating = "NR";
+        let contentRating = "NR";
         if (!(await util.isEmpty(md.contentRating))) {
           contentRating = md.contentRating;
         }
         medCard.contentRating = contentRating;
 
         // set colours for rating badges
-        var ratingColour = "";
+        let ratingColour = "";
         switch (contentRating.toLowerCase()) {
           case "nr":
             ratingColour = "badge-dark";
@@ -413,7 +413,7 @@ class Plex {
       onDemandLibraries = " ";
     }
 
-    var keys = [];
+    let keys = [];
     return onDemandLibraries.split(",").reduce(async (acc, value) => {
       return await this.client.query("/library/sections/").then(
         function (result) {
@@ -433,7 +433,7 @@ class Plex {
   }
 
   async GetAllMediaForLibrary(libKey) {
-    var mediaCards = [];
+    let mediaCards = [];
     return await this.client.query("/library/sections/" + libKey + "/all").then(
       function (result) {
         // populate a complete list of all titles into an array
@@ -454,7 +454,7 @@ class Plex {
 
   async GetOnDemandRawData(onDemandLibraries, numberOnDemand) {
     // Get a list of random titles from selected libraries
-    var odSet = [];
+    let odSet = [];
     const keys = await this.GetLibraryKeys(onDemandLibraries);
     // console.log("Library key: " + keys);
     if (keys != undefined ) {
