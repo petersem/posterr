@@ -1,5 +1,5 @@
 /node_modules
 /public/mp3cache/**
-!/public/mp3cache/**/.gitkeep
+!**/.gitkeep
 /public/imagecache/**
-!/public/imagecache/**/.gitkeep
+!**/.gitkeep
