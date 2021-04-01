@@ -1,0 +1,137 @@
+/* hide mouse cursor */
+* {
+  cursor: none;
+}
+
+body {
+  background-color: #18180d;
+  /* color: #daa520; */
+  text-align: center;
+}
+
+h1 {
+  white-space: nowrap;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.tagLine {
+  color: rgb(255, 255, 255);
+  font-size: 14px;
+  font-style: italic;
+  margin-bottom: 10px;
+  overflow: hidden;
+  word-wrap: break-word;
+  white-space: nowrap;
+}
+
+iframe {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  background-size: cover;
+}
+
+#myDiv {
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  display: block;
+  position: fixed;
+}
+
+.badge-pill {
+  margin-left: 2px;
+}
+
+.poster {
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  display: block;
+}
+
+.banners {
+  /* border-radius: 15px;
+  border: 2px solid goldenrod; */
+  max-height: 145px;
+  margin: auto;
+  display: block;
+  color: bisque;
+  /* margin-top: 5px; 
+  margin-bottom: 5px; */
+  width: 250px;
+  /* font-weight: 200; */
+}
+
+.bannerBigText {
+  font-size: 32px;
+  vertical-align: middle;
+}
+
+.bannerSmallText {
+  font-size: 10px;
+  margin-left: 5px;
+  color: lightgoldenrodyellow;
+}
+
+.spacer {
+  width: 100%;
+  height: 45px;
+}
+
+.bottomBanner {
+  color: lightgoldenrodyellow;
+  position: relative;
+  /* background-color: #212529; */
+}
+
+.vidBanner {
+  margin-top: 15px;
+  width: 75%;
+  color: lightgoldenrodyellow;
+}
+
+.star-rating {
+  line-height: 32px;
+  font-size: 1.25em;
+}
+
+.star-rating .fa-star {
+  color: whitesmoke;
+}
+
+.checked {
+  color: orange;
+}
+
+.transparent {
+  background: #7f7f7f;
+  background: #18180d;
+}
+
+.arrayImages {
+  width: 100px;
+}
+
+.progress {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.screening {
+  color: #daa520;
+  font-weight: 200;
+}
+
+.demand {
+  color: maroon;
+  font-weight: 600;
+}
