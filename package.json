@@ -4,6 +4,7 @@
   "description": "An digital display for your media",
   "main": "index.js",
   "scripts": {
+    "run" : "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matt Petersen",
