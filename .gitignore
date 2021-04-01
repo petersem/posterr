@@ -1,4 +1,5 @@
 /node_modules
 /public/mp3cache/**
 /public/imagecache/**
+# any excluded dir with a .keep file will stay in github, but all other files will not :)
 !.keep
