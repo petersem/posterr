@@ -1,5 +1,4 @@
 /node_modules
 /public/mp3cache/**
-!/public/mp3cache/.keep
 /public/imagecache/**
-!/public/imagecache/.keep
+!.keep
