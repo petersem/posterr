@@ -149,7 +149,7 @@ class Sonarr {
     }
     let now = new Date();
     if (csCards.length == 0) {
-      console.log(now.toLocaleString() + " No Coming soon titles found");
+      console.log(now.toLocaleString() + " No Coming soon 'tv' titles found");
     } else {
       console.log(now.toLocaleString() + " Coming soon 'tv' titles refreshed");
     }
