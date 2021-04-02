@@ -77,9 +77,9 @@ async function loadSonarrComingSoon() {
   // set up date range and date formats
   let today = new Date();
   let later = new Date();
-  console.log(today.toISOString().split("T")[0]);
+  //console.log(today.toISOString().split("T")[0]);
   later.setDate(later.getDate() + sonarrCalDays);
-  console.log(later.toISOString().split("T")[0]);
+  //console.log(later.toISOString().split("T")[0]);
   let now = today.toISOString().split("T")[0];
   let ltr = later.toISOString().split("T")[0];
 
