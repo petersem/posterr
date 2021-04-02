@@ -1,5 +1,9 @@
 const util = require("./../core/utility");
 
+/**
+ * @desc mediaCards base class for defining every card that is showed in the poster app
+ * @returns nothing
+ */
 class MediaCard {
   constructor() {
     this.ID = null;
@@ -30,6 +34,10 @@ class MediaCard {
     this.rendered = "";
   }
 
+  /**
+   * @desc renders the properties of the card into html, then sets this to the 'rendered' property
+   * @returns nothing
+   */
   async Render() {
     let hidden = "";
     if (this.cardType != "Now Screening") hidden = "hidden";

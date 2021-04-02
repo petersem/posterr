@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      TZ: Australia/Brisbane
+      TZ: "Australia/Brisbane"
       NODE_ENV: production
       PLEXTOKEN: ""
       PLEXIP: 192.168.1.135
@@ -29,7 +29,7 @@ services:
       RADARR_TOKEN: ""
       RADARR_CAL_DAYS: 15
     volumes:
-      - c:/code/poster/public/randomthemes:/usr/src/app/public/randomthemes
+      - ./poster/public/randomthemes:/usr/src/app/public/randomthemes
     ports:
       - 9876:3000
 

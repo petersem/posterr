@@ -4,6 +4,14 @@ const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
 
+/**
+ * @desc Used to communicate with Plex
+ * @param {string} HTTPS - set this to true if Plex only allows secure connections
+ * @param {string} plexIP - the IP or fqdn of the plex server
+ * @param {number} plexPort - the port number used by Plex
+ * @param {string} plexToken - the Plex token
+ * @returns {object} Plex API client object
+ */
 class Plex {
   constructor({ HTTPS, plexIP, plexPort, plexToken }) {
     this.https = HTTPS;
@@ -21,6 +29,10 @@ class Plex {
     });
   }
 
+/**
+ * @desc Get raw results for now screening
+ * @returns {object} JSON - Plex now screening results
+ */  
   async GetNowScreeningRawData() {
     this.nowScreening = await this.client
       .query("/status/sessions")
@@ -35,6 +47,11 @@ class Plex {
     return this.nowScreening;
   }
 
+/**
+ * @desc Gets now screening cards
+ * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
+ * @returns {object} mediaCard[] - Returns an array of mediaCards
+ */  
   async GetNowScreening(playGenenericThemes) {
     // get raw data first
     let nsCards = [];
@@ -236,6 +253,13 @@ class Plex {
     return nsCards;
   }
 
+/**
+ * @desc Gets random on-demand cards
+ * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
+ * @param {number} The number of titles to pull from each library
+ * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
+ * @returns {object} mediaCard[] - Returns an array of mediaCards
+ */  
   async GetOnDemand(onDemandLibraries, numberOnDemand, playGenenericThemes) {
     // get library keys
     let odCards = [];
@@ -407,12 +431,17 @@ class Plex {
     return odCards;
   }
 
-  // Get library keys for selected on-demand libraries
+ /**
+ * @desc Get Plex library keys for selected on-demand libraries
+ * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
+ * @returns {object} number[] - Returns an array of library key numbers
+ */ 
   async GetLibraryKeys(onDemandLibraries) {
     if (!onDemandLibraries || onDemandLibraries.length == 0) {
       onDemandLibraries = " ";
     }
 
+    // Get the key for each library and push into an array
     let keys = [];
     return onDemandLibraries.split(",").reduce(async (acc, value) => {
       return await this.client.query("/library/sections/").then(
@@ -432,6 +461,11 @@ class Plex {
     }, Promise.resolve(0));
   }
 
+ /**
+ * @desc Get a mediaCard array for all titles in a given library (all is needed so random selections can be chosen later)
+ * @param {number} libKey - The plex library key number
+ * @returns {object} mediaCard[] - Returns an array of mediaCards
+ */ 
   async GetAllMediaForLibrary(libKey) {
     let mediaCards = [];
     return await this.client.query("/library/sections/" + libKey + "/all").then(
@@ -452,6 +486,12 @@ class Plex {
     );
   }
 
+ /**
+ * @desc Gets the specified, random, number of titles from a specified set of libraries
+ * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
+ * @param {number} numberOnDemand - the number of results to return from each library
+ * @returns {object} mediaCard[] - Returns an array of on-demand mediaCards
+ */ 
   async GetOnDemandRawData(onDemandLibraries, numberOnDemand) {
     // Get a list of random titles from selected libraries
     let odSet = [];

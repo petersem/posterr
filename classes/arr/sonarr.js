@@ -4,15 +4,27 @@ const util = require("./../core/utility");
 const core = require("./../core/cache");
 const axios = require("axios");
 
+/**
+ * @desc Used to communicate with Sonarr to obtain a list of future releases
+ * @param sonarrUrl
+ * @param sonarrToken
+ */
 class Sonarr {
   constructor(sonarrUrl, sonarrToken) {
     this.sonarrUrl = sonarrUrl;
     this.sonarrToken = sonarrToken;
   }
 
+  /**
+   * @desc Gets the tv titles that fall within the range specified
+   * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
+   * @param {string} endDate - in yyyy-mm-dd format - future date
+   * @returns {Promise<object>} json results - results of search
+   */
   async GetComingSoonRawData(startDate, endDate) {
     let response;
 
+    // call sonarr API and return results
     try {
       response = await axios
         .get(
@@ -24,10 +36,11 @@ class Sonarr {
             "&end=" +
             endDate
         )
-        .catch(err => {
+        .catch((err) => {
           throw err;
         });
     } catch (err) {
+      // displpay error if call failed
       let d = new Date();
       console.log(d.toLocaleString() + " Sonarr error: ", err.message);
     }
@@ -35,6 +48,13 @@ class Sonarr {
     return response;
   }
 
+   /**
+   * @desc Get TV coming soon data and formats into mediaCard array
+   * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
+   * @param {string} endDate - in yyyy-mm-dd format - future date
+   * @param {string} premieres - boolean (string format) to show only season premieres
+   * @returns {Promise<object>} mediaCards array - results of search
+   */
   async GetComingSoon(startDate, endDate, premieres) {
     let csCards = [];
     // get raw data first

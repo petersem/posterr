@@ -1,0 +1,1 @@
+// TODO move script from poster.ejs file into this file

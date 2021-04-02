@@ -4,12 +4,23 @@ const util = require("./../core/utility");
 const core = require("./../core/cache");
 const axios = require("axios");
 
+/**
+ * @desc Used to communicate with Radarr to obtain a list of future releases
+ * @param radarrUrl
+ * @param radarrToken
+ */
 class Radarr {
   constructor(radarrUrl, radarrToken) {
     this.radarrUrl = radarrUrl;
     this.radarrToken = radarrToken;
   }
 
+  /**
+   * @desc Gets the movie titles that fall within the range specified
+   * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
+   * @param {string} endDate - in yyyy-mm-dd format - future date
+   * @returns {Promise<object>} json results - results of search
+   */
   async GetComingSoonRawData(startDate, endDate) {
     let response;
 
@@ -24,7 +35,7 @@ class Radarr {
             "&end=" +
             endDate
         )
-        .catch(err => {
+        .catch((err) => {
           throw err;
         });
     } catch (err) {
@@ -36,7 +47,15 @@ class Radarr {
   }
 
   // ******* TODO - not yet done below this point!!!!!
-  async GetComingSoon(startDate, endDate, premieres) {
+
+
+  /**
+   * @desc Get Movie coming soon data and formats into mediaCard array
+   * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
+   * @param {string} endDate - in yyyy-mm-dd format - future date
+   * @returns {Promise<object>} mediaCards array - results of search
+   */
+  async GetComingSoon(startDate, endDate) {
     let csCards = [];
     // get raw data first
     let raw = await this.GetComingSoonRawData(startDate, endDate);
@@ -152,7 +171,9 @@ class Radarr {
     if (csCards.length == 0) {
       console.log(now.toLocaleString() + " No Coming soon titles found");
     } else {
-      console.log(now.toLocaleString() + " Coming soon 'Movie' titles refreshed");
+      console.log(
+        now.toLocaleString() + " Coming soon 'Movie' titles refreshed"
+      );
     }
     return csCards;
   }
