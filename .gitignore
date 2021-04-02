@@ -1,8 +1,8 @@
-# any excluded dir with a .keep file. Will stay in github, but all other files will not :)
-!.keep
-
 # ignore the following folders
 /node_modules
 /public/mp3cache/**
 /public/imagecache/**
 docker-dompose.yaml
+
+# any excluded dir with a .keep file. Will stay in github, but all other files will not :)
+!.keep
