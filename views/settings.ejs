@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<!--
+***********************************************************
+* Poster - Your home media display                        *
+* Developed by Matt Petersen - Brisbane, Australia        *
+***********************************************************
+-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-control" content="public">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Additional js libs -->
+  <script src="/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+
+  <!--- CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/settings-styles.css">
+  <link rel="stylesheet" href="/css/light.min.css">
+
+  <!-- <script src="/js/script.js"></script> -->
+
+  <title>Poster - Settings</title>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="main-breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Poster</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Poster Settings</li>
+      </ol>
+    </nav>
+    <!-- /Breadcrumb -->
+    
+    <div class="row gutters-sm">
+      <div class="col-md-4 d-none d-md-block">
+        <div class="card">
+          <div class="card-body">
+            <nav class="nav flex-column nav-pills nav-gap-y-1">
+              <a href="#general" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
+                <i class="fal fa-cog"></i><span class="menu">General</span>
+              </a>
+              <a href="#plex" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                <i class="fal fa-server"></i><span class="menu">Plex</span>
+              </a>
+              <a href="#sonarr" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                <i class="fal fa-tv-retro"></i><span class="menu">Sonarr</span>
+              </a>
+              <a href="#radarr" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                <i class="fal fa-film-alt"></i><span class="menu">Radarr</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header border-bottom mb-3 d-flex d-md-none">
+            <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
+              <li class="nav-item">
+                <a href="#general" data-toggle="tab" class="nav-link has-icon active"><i class="fal fa-cog"></i>
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle></svg>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#plex" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-server"></i>
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                  </path>
+                  </svg>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#sonarr" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-tv-retro"></i>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#radarr" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-film-alt"></i>
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body tab-content">
+            <div class="tab-pane active" id="general">
+              <h6>GENERAL SETTINGS</h6>
+              <hr>
+              <form>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" aria-describedby="password"
+                    placeholder="Enter a password">
+                  <small id="passwordHelp" class="form-text text-muted">Enter a password to secure this page</small>
+                </div>
+                <div class="form-group">
+                  <label for="slideDuration">Slide Duration</label>
+                  <input type="text" class="form-control" id="slideDuration" aria-describedby="slideDuration"
+                    placeholder="Enter slide duration">
+                  <small id="slideDurationHelp" class="form-text text-muted">How many seconds that each slide will
+                    remain on the screen</small>
+                </div>
+                <div class="form-group">
+                  <label for="refreshPeriod">Refresh Period</label>
+                  <input type="text" class="form-control" id="refreshPeriod" aria-describedby="refreshPeriod"
+                    placeholder="Enter refresh period">
+                  <small id="refreshPeriodHelp" class="form-text text-muted">How many seconds before the browser
+                    refreshes the slide card data</small>
+                </div>
+                <label for="refreshPeriod">Theme Options</label>
+
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" id="themeSwitch">
+                    <label class="custom-control-label" for="themeSwitch">Play theme tunes</label>
+                    <small id="themeHelp" class="form-text text-muted">Enables theme tunes, when available</small>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" id="genericSwitch">
+                    <label class="custom-control-label" for="genericSwitch">Play generic themes if no theme
+                      present</label>
+
+                    <small id="randomThemeHelp" class="form-text text-muted">Requires 'play theme tunes' to be enabled
+                      also</small>
+                  </div>
+                </div>
+
+                <label for="refreshPeriod">Slide Transition</label>
+                <div class="form-group">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="slideRadio"
+                      value="false">
+                    <label class="form-check-label" for="slideRadio">Slide</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="fadeRadio" value="true">
+                    <label class="form-check-label" for="fadeRadio">Fade</label>
+                  </div>
+                  <small id="refreshPeriodHelp" class="form-text text-muted">The transition effect for when slides
+                    change</small>
+                  <div class="form-group small text-muted">
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary">Save Settings</button>
+                <button type="reset" class="btn btn-light">Restore to Saved Settings</button>
+              </form>
+            </div>
+            <div class="tab-pane" id="plex">
+              <h6>ACCOUNT SETTINGS</h6>
+              <hr>
+              <form>
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" class="form-control" id="username" aria-describedby="usernameHelp"
+                    placeholder="Enter your username" value="kennethvaldez">
+                  <small id="usernameHelp" class="form-text text-muted">After changing your username, your old username
+                    becomes available for anyone else to claim.</small>
+                </div>
+                <hr>
+                <div class="form-group">
+                  <label class="d-block text-danger">Delete Account</label>
+                  <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be
+                    certain.</p>
+                </div>
+                <button class="btn btn-danger" type="button">Delete Account</button>
+              </form>
+            </div>
+            <div class="tab-pane" id="sonarr">
+              <h6>SECURITY SETTINGS</h6>
+              <hr>
+              <form>
+                <div class="form-group">
+                  <label class="d-block">Change Password</label>
+                  <input type="text" class="form-control" placeholder="Enter your old password">
+                  <input type="text" class="form-control mt-1" placeholder="New password">
+                  <input type="text" class="form-control mt-1" placeholder="Confirm new password">
+                </div>
+              </form>
+              <hr>
+              <form>
+                <div class="form-group">
+                  <label class="d-block">Two Factor Authentication</label>
+                  <button class="btn btn-info" type="button">Enable two-factor authentication</button>
+                  <p class="small text-muted mt-2">Two-factor authentication adds an additional layer of security to
+                    your account by requiring more than just a password to log in.</p>
+                </div>
+              </form>
+              <hr>
+              <form>
+                <div class="form-group mb-0">
+                  <label class="d-block">Sessions</label>
+                  <p class="font-size-sm text-secondary">This is a list of devices that have logged into your account.
+                    Revoke any sessions that you do not recognize.</p>
+                  <ul class="list-group list-group-sm">
+                    <li class="list-group-item has-icon">
+                      <div>
+                        <h6 class="mb-0">San Francisco City 190.24.335.55</h6>
+                        <small class="text-muted">Your current session seen in United States</small>
+                      </div>
+                      <button class="btn btn-light btn-sm ml-auto" type="button">More info</button>
+                    </li>
+                  </ul>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane" id="radarr">
+              <h6>NOTIFICATION SETTINGS</h6>
+              <hr>
+              <form>
+                <div class="form-group">
+                  <label class="d-block mb-0">Security Alerts</label>
+                  <div class="small text-muted mb-3">Receive security alert notifications via email</div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
+                    <label class="custom-control-label" for="customCheck1">Email each time a vulnerability is
+                      found</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
+                    <label class="custom-control-label" for="customCheck2">Email a digest summary of
+                      vulnerability</label>
+                  </div>
+                </div>
+                <div class="form-group mb-0">
+                  <label class="d-block">SMS Notifications</label>
+                  <ul class="list-group list-group-sm">
+                    <li class="list-group-item has-icon">
+                      Comments
+                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="">
+                        <label class="custom-control-label" for="customSwitch1"></label>
+                      </div>
+                    </li>
+                    <li class="list-group-item has-icon">
+                      Updates From People
+                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                        <label class="custom-control-label" for="customSwitch2"></label>
+                      </div>
+                    </li>
+                    <li class="list-group-item has-icon">
+                      Reminders
+                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch3" checked="">
+                        <label class="custom-control-label" for="customSwitch3"></label>
+                      </div>
+                    </li>
+                    <li class="list-group-item has-icon">
+                      Events
+                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch4" checked="">
+                        <label class="custom-control-label" for="customSwitch4"></label>
+                      </div>
+                    </li>
+                    <li class="list-group-item has-icon">
+                      Pages You Follow
+                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch5">
+                        <label class="custom-control-label" for="customSwitch5"></label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script type="text/javascript">
+
+  </script>
+</body>
+
+</html>

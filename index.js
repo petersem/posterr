@@ -232,7 +232,7 @@ app.get("/health", (req, res) => {
 
 // settings page TODO
 app.get("/settings", (req, res) => {
-  res.json(app.locals.globals);
+  res.render("settings");
 });
 
 // start listening on port 3000
