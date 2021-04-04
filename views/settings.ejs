@@ -38,9 +38,10 @@
         <li class="breadcrumb-item active" aria-current="page">Poster Settings</li>
       </ol>
     </nav>
-    <!-- /Breadcrumb -->
 
+    <!-- Layout -->
     <div class="row gutters-sm">
+      <!-- Side Menu View -->
       <div class="col-md-4 d-none d-md-block">
         <div class="card">
           <div class="card-body">
@@ -57,12 +58,18 @@
               <a href="#radarr" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
                 <i class="fal fa-film-alt"></i><span class="menu">Radarr</span>
               </a>
+              <a href="#about" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+                <i class="fal fa-person-sign"></i><span class="menu">About</span>
+              </a>
             </nav>
           </div>
         </div>
       </div>
+
+
       <div class="col-md-8">
         <div class="card">
+          <!-- Mobile Menu View -->
           <div class="card-header border-bottom mb-3 d-flex d-md-none">
             <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
               <li class="nav-item">
@@ -92,9 +99,20 @@
                   </svg>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="#about" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-person-sign"></i>
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                </a>
+              </li>
             </ul>
           </div>
+
+          <!-- Tab Content -->
           <div class="card-body tab-content">
+
+            <!-- General Settings -->
             <div class="tab-pane active" id="general">
               <h6>GENERAL SETTINGS</h6>
               <hr>
@@ -157,10 +175,11 @@
                   </div>
                 </div>
                 <button type="button" class="btn btn-primary">Save All Settings</button>
-                <button type="reset" class="btn btn-light">Restore to Saved Settings</button>
+                <button type="reset" class="btn btn-light">Cancel</button>
               </form>
             </div>
 
+            <!-- Plex Settings -->
             <div class="tab-pane" id="plex">
               <h6>PLEX SETTINGS</h6>
               <hr>
@@ -169,153 +188,161 @@
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" id="plexHTTPSSwitch">
                     <label class="custom-control-label" for="plexHTTPSSwitch">HTTPS Connection</label>
-                    <small id="plexHTTPSHelp" class="form-text text-muted">Enable if Plex requires a HTTPS 'secure' connection.</small>
-                    </div>
+                    <small id="plexHTTPSHelp" class="form-text text-muted">Enable if Plex requires a HTTPS 'secure'
+                      connection.</small>
+                  </div>
                 </div>
 
                 <div class="form-group">
                   <label for="plexIP">Server IP or Domain Name</label>
                   <input type="text" class="form-control" id="plexIP" aria-describedby="plexIPHelp"
-                    placeholder="n.n.n.n" >
+                    placeholder="n.n.n.n">
                   <small id="plexIPHelp" class="form-text text-muted">Enter the Plex IP or Domain Name.</small>
                 </div>
 
                 <div class="form-group">
                   <label for="plexIP">Server Port</label>
-                  <input type="text" class="form-control" id="plexIPort aria-describedby="plexPortHelp"
-                    placeholder="usually port 32400" >
+                  <input type="text" class="form-control" id="plexIPort aria-describedby=" plexPortHelp"
+                    placeholder="usually port 32400">
                   <small id="plexPortHelp" class="form-text text-muted">Enter the server port. (usually 32400).</small>
                 </div>
 
                 <div class="form-group">
                   <label for="plexToken">Plex Token</label>
                   <input type="text" class="form-control" id="plexToken" aria-describedby="plexToken"
-                    placeholder="Plex Token" >
-                  <small id="plexTokenHelp" class="form-text text-muted">Needed to communicate with your Plex server. (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/" target="_blank">details</a>)</small>
+                    placeholder="Plex Token">
+                  <small id="plexTokenHelp" class="form-text text-muted">Needed to communicate with your Plex server.
+                    (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
+                      target="_blank">details</a>)</small>
                 </div>
 
-                <hr/>
+                <hr />
 
                 <div class="form-group">
                   <label for="plexToken">Plex Libraries for On-Demand Title</label>
                   <input type="text" class="form-control" id="plexLibraries" aria-describedby="plexLibraries"
-                    placeholder="suggestions -> movies,tv shows,anime" >
-                  <small id="plexTokenHelp" class="form-text text-muted">(optional) Enter one or more Plex library names (comma seperated)</small>
+                    placeholder="suggestions -> movies,tv shows,anime">
+                  <small id="plexTokenHelp" class="form-text text-muted">(optional) Enter one or more Plex library names
+                    (comma seperated)</small>
                 </div>
                 <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
                   <input type="text" class="form-control" id="numberOnDemand" aria-describedby="numberOnDemand"
-                    placeholder="suggest 2 or 3" >
-                  <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to pull from each specified Plex library</small>
+                    placeholder="suggest 2 or 3">
+                  <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to pull from
+                    each specified Plex library</small>
                 </div>
 
-                <hr/>
+                <hr />
                 <button type="button" class="btn btn-primary">Save All Settings</button>
-                <button type="reset" class="btn btn-light">Restore to Saved Settings</button>
+                <button type="reset" class="btn btn-light">Cancel</button>
               </form>
             </div>
+
+            <!-- Sonarr Settings -->
             <div class="tab-pane" id="sonarr">
-              <h6>SECURITY SETTINGS</h6>
+              <h6>SONARR SETTINGS</h6>
+              <small id="sonarrHelp" class="form-text text-muted">The following settings allow for comming soon 'TV'
+                titles to be included.</small>
               <hr>
               <form>
                 <div class="form-group">
-                  <label class="d-block">Change Password</label>
-                  <input type="text" class="form-control" placeholder="Enter your old password">
-                  <input type="text" class="form-control mt-1" placeholder="New password">
-                  <input type="text" class="form-control mt-1" placeholder="Confirm new password">
+                  <label for="sonarrUrl">Sonarr URL</label>
+                  <small id="sonarrInfo" class="form-text text-muted">The following settings allow for comming soon 'TV'
+                    titles to be included.</small>
+                  <input type="text" class="form-control" id="sonarrUrl" aria-describedby="sonarrUrlHelp"
+                    placeholder="http://n.n.n.n:8989">
+                  <small id="sonarUrlHelp" class="form-text text-muted">Enter the ful URL and port for Sonarr.</small>
                 </div>
-              </form>
-              <hr>
-              <form>
                 <div class="form-group">
-                  <label class="d-block">Two Factor Authentication</label>
-                  <button class="btn btn-info" type="button">Enable two-factor authentication</button>
-                  <p class="small text-muted mt-2">Two-factor authentication adds an additional layer of security to
-                    your account by requiring more than just a password to log in.</p>
+                  <label for="sonarrDays">Days ahead</label>
+                  <input type="text" class="form-control" id="sonarrDays" aria-describedby="sonarrDays" placeholder="3">
+                  <small id="sonarUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Sonarr
+                    calendar.
+                    (Use a low number (2-3) if 'premieres' is off, otherwise 90-175 is fine)</small>
                 </div>
-              </form>
-              <hr>
-              <form>
-                <div class="form-group mb-0">
-                  <label class="d-block">Sessions</label>
-                  <p class="font-size-sm text-secondary">This is a list of devices that have logged into your account.
-                    Revoke any sessions that you do not recognize.</p>
-                  <ul class="list-group list-group-sm">
-                    <li class="list-group-item has-icon">
-                      <div>
-                        <h6 class="mb-0">San Francisco City 190.24.335.55</h6>
-                        <small class="text-muted">Your current session seen in United States</small>
-                      </div>
-                      <button class="btn btn-light btn-sm ml-auto" type="button">More info</button>
-                    </li>
-                  </ul>
+
+                <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                  <input type="checkbox" class="custom-control-input" id="premiereSwitch">
+                  <label class="custom-control-label" for="premiereSwitch">Show premieres</label>
+                  <small id="plexHTTPSHelp" class="form-text text-muted">Only show season premieres.</small>
                 </div>
+                <hr />
+                <button type="button" class="btn btn-primary">Save All Settings</button>
+                <button type="reset" class="btn btn-light">Cancel</button>
               </form>
             </div>
+
+            <!-- Radarr Settings -->
             <div class="tab-pane" id="radarr">
-              <h6>NOTIFICATION SETTINGS</h6>
+              <h6>RADARR SETTINGS</h6>
+              <small id="radarrInfo" class="form-text text-muted">The following settings allow for comming soon 'Movie'
+                titles to be included.</small>
               <hr>
               <form>
                 <div class="form-group">
-                  <label class="d-block mb-0">Security Alerts</label>
-                  <div class="small text-muted mb-3">Receive security alert notifications via email</div>
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
-                    <label class="custom-control-label" for="customCheck1">Email each time a vulnerability is
-                      found</label>
-                  </div>
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
-                    <label class="custom-control-label" for="customCheck2">Email a digest summary of
-                      vulnerability</label>
-                  </div>
+                  <label for="radarrUrl">Radarr URL</label>
+                  <input type="text" class="form-control" id="radarrUrl" aria-describedby="radarrUrlHelp"
+                    placeholder="http://n.n.n.n:7878">
+                  <small id="radarUrlHelp" class="form-text text-muted">Enter the ful URL and port for Radarr.</small>
                 </div>
-                <div class="form-group mb-0">
-                  <label class="d-block">SMS Notifications</label>
-                  <ul class="list-group list-group-sm">
-                    <li class="list-group-item has-icon">
-                      Comments
-                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="">
-                        <label class="custom-control-label" for="customSwitch1"></label>
-                      </div>
-                    </li>
-                    <li class="list-group-item has-icon">
-                      Updates From People
-                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" id="customSwitch2">
-                        <label class="custom-control-label" for="customSwitch2"></label>
-                      </div>
-                    </li>
-                    <li class="list-group-item has-icon">
-                      Reminders
-                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" id="customSwitch3" checked="">
-                        <label class="custom-control-label" for="customSwitch3"></label>
-                      </div>
-                    </li>
-                    <li class="list-group-item has-icon">
-                      Events
-                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" id="customSwitch4" checked="">
-                        <label class="custom-control-label" for="customSwitch4"></label>
-                      </div>
-                    </li>
-                    <li class="list-group-item has-icon">
-                      Pages You Follow
-                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" id="customSwitch5">
-                        <label class="custom-control-label" for="customSwitch5"></label>
-                      </div>
-                    </li>
-                  </ul>
+                <div class="form-group">
+                  <label for="radarrDays">Days ahead</label>
+                  <input type="text" class="form-control" id="radarrDays" aria-describedby="radarrDays" placeholder="3">
+                  <small id="radarrUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Radarr
+                    calendar.</small>
                 </div>
-              </form>
+
+                <hr />
+                <button type="button" class="btn btn-primary">Save All Settings</button>
+                <button type="reset" class="btn btn-light">Cancel</button>              </form>
+            </div>
+
+            <!-- About -->
+            <div class="tab-pane" id="about">
+              <h6>ABOUT POSTER</h6>
+              <hr>
+              <p>
+                POSTER was initially born from a desire for me to learn Node. Over time, I decided to
+                 take it from an excercise to being a full product.
+              </p>
+              <p>
+                My goals were simple: </p>
+              <ul>
+                <li>Make it open source</li>
+                <li>Make it free</li>
+                <li>Make it cross-platform</li>
+                <li>Make it better, or at least a bit different to the other apps out there.</li>
+              </ul>
+              <p>
+                I've nailed the first three, and I will leave the last one for you to decide yourself. :)
+              </p>
+              <p>
+                I'd like to thank everyone for their suggestions and feedback. Keep it coming!
+                I'd also like to thank those that have contributed to the project. Im learning as much from you as
+                I have from building this.
+              </p>
+              <P>Thanks everyone!</P>
+              <P>Matt Petersen (April, 2021)</P>
+              <hr />
+              <label class="d-block" style="text-decoration: underline;">Project Details</label>
+              <p>
+                Find this project on GitHub <a href="https://github.com/petersem/poster" target="_blank">here</a>.
+              </p>
+              <p>
+                Get involved in the discussion groups and have your say. Contribe to the code, where you can add value.
+              </p>
+              <p>
+                If you want to install this with Docker, find the image at
+                <a href="https://hub.docker.com/repository/docker/petersem/poster" target="_blank">petersem/poster</a>
+                on Docker Hub.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
   </div>
   <script type="text/javascript">
