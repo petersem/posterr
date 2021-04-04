@@ -39,7 +39,7 @@
       </ol>
     </nav>
     <!-- /Breadcrumb -->
-    
+
     <div class="row gutters-sm">
       <div class="col-md-4 d-none d-md-block">
         <div class="card">
@@ -108,19 +108,19 @@
                 <div class="form-group">
                   <label for="slideDuration">Slide Duration</label>
                   <input type="text" class="form-control" id="slideDuration" aria-describedby="slideDuration"
-                    placeholder="Enter slide duration">
+                    placeholder="Suggest no less than 10">
                   <small id="slideDurationHelp" class="form-text text-muted">How many seconds that each slide will
                     remain on the screen</small>
                 </div>
                 <div class="form-group">
                   <label for="refreshPeriod">Refresh Period</label>
                   <input type="text" class="form-control" id="refreshPeriod" aria-describedby="refreshPeriod"
-                    placeholder="Enter refresh period">
+                    placeholder="suggest 120 or more">
                   <small id="refreshPeriodHelp" class="form-text text-muted">How many seconds before the browser
                     refreshes the slide card data</small>
                 </div>
-                <label for="refreshPeriod">Theme Options</label>
 
+                <label class="d-block">Theme Options</label>
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" id="themeSwitch">
@@ -140,7 +140,7 @@
                   </div>
                 </div>
 
-                <label for="refreshPeriod">Slide Transition</label>
+                <label class="d-block">Slide Transitions</label>
                 <div class="form-group">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="slideRadio"
@@ -156,28 +156,62 @@
                   <div class="form-group small text-muted">
                   </div>
                 </div>
-                <button type="button" class="btn btn-primary">Save Settings</button>
+                <button type="button" class="btn btn-primary">Save All Settings</button>
                 <button type="reset" class="btn btn-light">Restore to Saved Settings</button>
               </form>
             </div>
+
             <div class="tab-pane" id="plex">
-              <h6>ACCOUNT SETTINGS</h6>
+              <h6>PLEX SETTINGS</h6>
               <hr>
               <form>
                 <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" class="form-control" id="username" aria-describedby="usernameHelp"
-                    placeholder="Enter your username" value="kennethvaldez">
-                  <small id="usernameHelp" class="form-text text-muted">After changing your username, your old username
-                    becomes available for anyone else to claim.</small>
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" id="plexHTTPSSwitch">
+                    <label class="custom-control-label" for="plexHTTPSSwitch">HTTPS Connection</label>
+                    <small id="plexHTTPSHelp" class="form-text text-muted">Enable if Plex requires a HTTPS 'secure' connection.</small>
+                    </div>
                 </div>
-                <hr>
+
                 <div class="form-group">
-                  <label class="d-block text-danger">Delete Account</label>
-                  <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be
-                    certain.</p>
+                  <label for="plexIP">Server IP or Domain Name</label>
+                  <input type="text" class="form-control" id="plexIP" aria-describedby="plexIPHelp"
+                    placeholder="n.n.n.n" >
+                  <small id="plexIPHelp" class="form-text text-muted">Enter the Plex IP or Domain Name.</small>
                 </div>
-                <button class="btn btn-danger" type="button">Delete Account</button>
+
+                <div class="form-group">
+                  <label for="plexIP">Server Port</label>
+                  <input type="text" class="form-control" id="plexIPort aria-describedby="plexPortHelp"
+                    placeholder="usually port 32400" >
+                  <small id="plexPortHelp" class="form-text text-muted">Enter the server port. (usually 32400).</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="plexToken">Plex Token</label>
+                  <input type="text" class="form-control" id="plexToken" aria-describedby="plexToken"
+                    placeholder="Plex Token" >
+                  <small id="plexTokenHelp" class="form-text text-muted">Needed to communicate with your Plex server. (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/" target="_blank">details</a>)</small>
+                </div>
+
+                <hr/>
+
+                <div class="form-group">
+                  <label for="plexToken">Plex Libraries for On-Demand Title</label>
+                  <input type="text" class="form-control" id="plexLibraries" aria-describedby="plexLibraries"
+                    placeholder="suggestions -> movies,tv shows,anime" >
+                  <small id="plexTokenHelp" class="form-text text-muted">(optional) Enter one or more Plex library names (comma seperated)</small>
+                </div>
+                <div class="form-group">
+                  <label for="numberOnDemand">Number to Display</label>
+                  <input type="text" class="form-control" id="numberOnDemand" aria-describedby="numberOnDemand"
+                    placeholder="suggest 2 or 3" >
+                  <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to pull from each specified Plex library</small>
+                </div>
+
+                <hr/>
+                <button type="button" class="btn btn-primary">Save All Settings</button>
+                <button type="reset" class="btn btn-light">Restore to Saved Settings</button>
               </form>
             </div>
             <div class="tab-pane" id="sonarr">
