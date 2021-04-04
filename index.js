@@ -1,10 +1,16 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const { check, validationResult } = require('express-validator');
+//const user = require('./routes/user.routes');
 const pms = require("./classes/mediaservers/plex.js");
 const glb = require("./classes/core/globalPage");
 const core = require("./classes/core/cache");
 const sonr = require("./classes/arr/sonarr");
+
 
 // TODO - to implement
 //const jms = require("./classes/jellyfin.js");
@@ -217,6 +223,20 @@ startup();
 //use ejs templating engine
 app.set("view engine", "ejs");
 
+// Express settings
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: false
+}));
+app.use(cors());
+
+app.use(cookieParser());
+app.use(session({
+    secret: 'positronx',
+    saveUninitialized: false,
+    resave: false
+}));
+
 // sets public folder for assets
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -232,8 +252,43 @@ app.get("/health", (req, res) => {
 
 // settings page TODO
 app.get("/settings", (req, res) => {
-  res.render("settings");
+  res.render('settings', {
+    success: req.session.success,
+    errors: req.session.errors
 });
+req.session.errors = null;
+});
+
+app.post('/save',
+    [
+        check('slideDuration')
+            .not()
+            .isEmpty()
+            .withMessage('Slide duration is required')
+        // check('email', 'Email is required')
+        //     .isEmail(),
+        // check('password', 'Password is requried')
+        //     .isLength({ min: 1 })
+        //     .custom((val, { req, loc, path }) => {
+        //         if (val !== req.body.confirm_password) {
+        //             throw new Error("Passwords don't match");
+        //         } else {
+        //             return value;
+        //         }
+        //     }),
+    ], (req, res) => {
+        var errors = validationResult(req).array();
+        if (errors) {
+            req.session.errors = errors;
+            req.session.success = false;
+            res.redirect('/settings');
+            
+        } else {
+            req.session.success = true;
+            // TODO Now go and save the data and reload forms
+            res.redirect('/settings');
+        }
+    });
 
 // start listening on port 3000
 app.listen(3000, () => {
@@ -242,3 +297,4 @@ app.listen(3000, () => {
     `
   );
 });
+

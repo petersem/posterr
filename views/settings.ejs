@@ -116,7 +116,12 @@
             <div class="tab-pane active" id="general">
               <h6>GENERAL SETTINGS</h6>
               <hr>
-              <form>
+              <% 
+              if(errors){
+              errors.forEach(function(e) { %>
+                <p class="alert alert-warning"><%=e.msg %></p>
+              <%});}%>
+              <form method="POST" action="/save">
                 <div class="form-group">
                   <label for="password">Password</label>
                   <input type="password" class="form-control" id="password" aria-describedby="password"
@@ -125,7 +130,7 @@
                 </div>
                 <div class="form-group">
                   <label for="slideDuration">Slide Duration</label>
-                  <input type="text" class="form-control" id="slideDuration" aria-describedby="slideDuration"
+                  <input type="text" class="form-control" id="slideDuration" name="slideDuration" aria-describedby="slideDuration"
                     placeholder="Suggest no less than 10">
                   <small id="slideDurationHelp" class="form-text text-muted">How many seconds that each slide will
                     remain on the screen</small>
@@ -174,7 +179,7 @@
                   <div class="form-group small text-muted">
                   </div>
                 </div>
-                <button type="button" class="btn btn-primary">Save All Settings</button>
+                <button type="submit" class="btn btn-primary">Save All Settings</button>
                 <button type="reset" class="btn btn-light">Cancel</button>
               </form>
             </div>
