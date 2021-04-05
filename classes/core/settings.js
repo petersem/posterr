@@ -1,5 +1,5 @@
 const fs = require("fs");
-const fsp = require('fs').promises;
+const fsp = require("fs").promises;
 
 /**
  * @desc settings object is used to get and set all settings for poster
@@ -33,10 +33,16 @@ class Settings {
   }
 
   async GetSettings() {
+    // check if file exists before downloading
+    if (!fs.existsSync("config/settings.json")) {
+      //file not present, so create it with defaults
+
+      this.SaveSettings();
+      console.log("✅ Config file created");
+    }
     const data = await fsp.readFile("config/settings.json", "utf-8");
     return JSON.parse(data.toString());
   }
-
 
   async SaveSettings() {
     // convert JSON object to string (pretty format)
@@ -47,7 +53,7 @@ class Settings {
       if (err) {
         throw err;
       }
-      console.log("Settings saved.");
+      // console.log("Settings saved.");
     });
     return;
   }
