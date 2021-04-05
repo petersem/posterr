@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A digital display for your media",
   "main": "index.js",
+  "nodemonConfig": {
+    "ignore": ["test/*", "docs/*", "settings.json"]
+  },
   "scripts": {
     "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"

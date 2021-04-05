@@ -30,7 +30,6 @@
 <body>
 
   <div class="container">
-
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
@@ -118,27 +117,29 @@
               <hr>
               <% 
               if(errors){
-              errors.forEach(function(e) { %>
-                <p class="alert alert-warning"><%=e.msg %></p>
-              <%});}%>
-              <form method="POST" action="/save">
+                // display validation errors
+                errors.forEach(function(e) { %>
+                  <p class="alert alert-warning"><%=e.msg %></p>
+                <%});%>
+              <%}%>
+              <form method="POST" action="/settings">
                 <div class="form-group">
                   <label for="password">Password</label>
-                  <input type="password" class="form-control" id="password" aria-describedby="password"
-                    placeholder="Enter a password">
+                  <input type="password" class="form-control" id="password" name="password" aria-describedby="password"
+                    placeholder="Enter a password" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.password%><%}%>">
                   <small id="passwordHelp" class="form-text text-muted">Enter a password to secure this page</small>
                 </div>
                 <div class="form-group">
                   <label for="slideDuration">Slide Duration</label>
                   <input type="text" class="form-control" id="slideDuration" name="slideDuration" aria-describedby="slideDuration"
-                    placeholder="Suggest no less than 10">
+                    placeholder="Suggest no less than 10" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.slideDuration%><%}%>">
                   <small id="slideDurationHelp" class="form-text text-muted">How many seconds that each slide will
                     remain on the screen</small>
                 </div>
                 <div class="form-group">
                   <label for="refreshPeriod">Refresh Period</label>
-                  <input type="text" class="form-control" id="refreshPeriod" aria-describedby="refreshPeriod"
-                    placeholder="suggest 120 or more">
+                  <input type="text" class="form-control" id="refreshPeriod" name="refreshPeriod" aria-describedby="refreshPeriod"
+                    placeholder="suggest 120 or more" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.refreshPeriod%><%}%>">
                   <small id="refreshPeriodHelp" class="form-text text-muted">How many seconds before the browser
                     refreshes the slide card data</small>
                 </div>
@@ -146,7 +147,8 @@
                 <label class="d-block">Theme Options</label>
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" id="themeSwitch">
+                    <input type="checkbox" class="custom-control-input" name="themeSwitch" id="themeSwitch" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.themeSwitch ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="themeSwitch">Play theme tunes</label>
                     <small id="themeHelp" class="form-text text-muted">Enables theme tunes, when available</small>
                   </div>
@@ -154,10 +156,9 @@
 
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" id="genericSwitch">
-                    <label class="custom-control-label" for="genericSwitch">Play generic themes if no theme
-                      present</label>
-
+                    <input type="checkbox" class="custom-control-input" name="genericSwitch" id="genericSwitch" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.genericSwitch ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="genericSwitch">Play generic themes if no theme present</label>
                     <small id="randomThemeHelp" class="form-text text-muted">Requires 'play theme tunes' to be enabled
                       also</small>
                   </div>
@@ -166,15 +167,16 @@
                 <label class="d-block">Slide Transitions</label>
                 <div class="form-group">
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="slideRadio"
-                      value="false">
+                    <input class="form-check-input" type="radio" name="fadeOption" id="slideRadio" value="false" 
+                    <% if(typeof formData !== 'undefined' && errors){%><%=(formData.fadeOption=='false') ? 'checked' : '' %><%}%>>
                     <label class="form-check-label" for="slideRadio">Slide</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="fadeRadio" value="true">
+                    <input class="form-check-input" type="radio" name="fadeOption" id="fadeRadio" value="true" 
+                    <% if(typeof formData !== 'undefined' && errors){%><%=(formData.fadeOption=='true') ? 'checked' : '' %><%}%>>
                     <label class="form-check-label" for="fadeRadio">Fade</label>
                   </div>
-                  <small id="refreshPeriodHelp" class="form-text text-muted">The transition effect for when slides
+                  <small id="fadeRadioHelp" class="form-text text-muted">The transition effect for when slides
                     change</small>
                   <div class="form-group small text-muted">
                   </div>

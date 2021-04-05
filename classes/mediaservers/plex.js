@@ -13,7 +13,7 @@ const core = require("./../core/cache");
  * @returns {object} Plex API client object
  */
 class Plex {
-  constructor({ HTTPS, plexIP, plexPort, plexToken }) {
+  constructor( {HTTPS, plexIP, plexPort, plexToken }) {
     this.https = HTTPS;
     this.plexIP = plexIP;
     this.plexPort = plexPort;
