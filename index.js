@@ -124,7 +124,7 @@ async function loadNowScreening() {
   globalPage.refreshPeriod = loadedSettings.refreshPeriod * 1000;
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
   globalPage.playThemes = loadedSettings.playThemes;
-  globalPage.playGenericThemes = loadedSettings.genenericThemes;
+  globalPage.playGenericThemes = loadedSettings.genericThemes;
   globalPage.fadeTransition = (loadedSettings.fade=="true") ? "carousel-fade" : "";
 
   // restart the clock
@@ -151,7 +151,7 @@ async function loadOnDemand() {
   odCards = await ms.GetOnDemand(
     loadedSettings.onDemandLibraries,
     loadedSettings.numberOnDemand,
-    loadedSettings.playGenenericThemes
+    loadedSettings.genericThemes
   );
 
   // restart interval timer
