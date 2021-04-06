@@ -4,7 +4,11 @@
   "description": "A digital display for your media",
   "main": "index.js",
   "nodemonConfig": {
-    "ignore": ["test/*", "docs/*", "settings.json"]
+    "ignore": [
+      "test/*",
+      "docs/*",
+      "settings.json"
+    ]
   },
   "scripts": {
     "start": "nodemon index.js",

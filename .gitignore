@@ -3,7 +3,7 @@
 /public/mp3cache/**
 /public/imagecache/**
 docker-dompose.yaml
-settings.json
+/config/*.json
 
 # any excluded dir with a .keep file. Will stay in github, but all other files will not :)
 !.keep
