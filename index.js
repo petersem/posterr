@@ -11,6 +11,7 @@ const glb = require("./classes/core/globalPage");
 const core = require("./classes/core/cache");
 const sonr = require("./classes/arr/sonarr");
 const settings = require("./classes/core/settings");
+var MemoryStore = require('memorystore')(session);
 
 console.log("--------------------------------------------------------");
 console.log("| POSTER - Your media display                          |");
@@ -233,11 +234,20 @@ app.use(
 );
 app.use(cors());
 
+app.set('trust proxy', 1);
 app.use(cookieParser());
 app.use(
   session({
+    cookie:{
+    secure: true,
+    maxAge:3000000
+       },
+    // store: cookieParser,
+    store: new MemoryStore({
+      checkPeriod: 86400000 // prune expired entries every 24h
+    }),
     secret: "xyzzy",
-    saveUninitialized: false,
+    saveUninitialized: true,
     resave: false,
   })
 );
