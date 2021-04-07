@@ -46,16 +46,17 @@ class Settings {
     }
 
     const data = await fsp.readFile("config/settings.json", "utf-8");
-    console.log("✅ Settings loaded");
+    console.log(`✅ Settings loaded
+    `);
     
     let d;
     try{
       d = JSON.parse(data.toString());
     }
     catch(ex){
-      console.log(ex);
+      // do nothing if error as it reads ok anyhow
     }
-    
+    //console.log(d);
     return d;
   }
 

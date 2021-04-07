@@ -194,7 +194,7 @@ async function loadSettings() {
 async function startup() {
   // load settings object
   loadedSettings = await loadSettings();
-  console.log(loadedSettings);
+  //console.log(loadedSettings);
   // initial load of card providers
   await loadSonarrComingSoon();
   await loadOnDemand();
@@ -392,7 +392,6 @@ app.post(
 // start listening on port 3000
 app.listen(3000, () => {
   console.log(
-    `✅ Web server started on internal port 3000 
-    `
+    `✅ Web server started on internal port 3000 `
   );
 });
