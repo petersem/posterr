@@ -1,0 +1,22 @@
+{
+    "password": "raidisnotabackup",
+    "slideDuration": 10,
+    "refreshPeriod": 120,
+    "playThemes": "true",
+    "genericThemes": "true",
+    "fade": "true",
+    "plexIP": "192.168.1.135",
+    "plexHTTPS": "false",
+    "plexPort": 32400,
+    "plexToken": "oSpk-s1xaKcEMASwNi33",
+    "onDemandLibraries": "movies",
+    "numberOnDemand": 2,
+    "onDemandRefresh": 120,
+    "sonarrURL": "http://192.168.1.135:8989",
+    "sonarrToken": "640ff22346fa44beadb987ba16b9ee3f",
+    "sonarrCalDays": 175,
+    "sonarrPremieres": "true",
+    "radarrURL": "http://192.168.1.135:7878",
+    "radarrToken": "",
+    "radarrCalDays": 30
+}
