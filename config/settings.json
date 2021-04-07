@@ -1,22 +1,21 @@
 {
     "password": "raidisnotabackup",
-    "slideDuration": 10,
+    "slideDuration": 7,
     "refreshPeriod": 120,
     "playThemes": "true",
     "genericThemes": "true",
     "fade": "true",
     "plexIP": "192.168.1.135",
-    "plexHTTPS": "false",
     "plexPort": 32400,
     "plexToken": "",
-    "onDemandLibraries": "",
-    "numberOnDemand": 2,
-    "onDemandRefresh": 120,
+    "onDemandLibraries": "movies,tv shows,anime",
+    "numberOnDemand": 6,
+    "onDemandRefresh": 30,
     "sonarrURL": "http://192.168.1.135:8989",
     "sonarrToken": "",
-    "sonarrCalDays": 175,
+    "sonarrCalDays": 30,
     "sonarrPremieres": "true",
     "radarrURL": "http://192.168.1.135:7878",
     "radarrToken": "",
-    "radarrCalDays": 30
+    "radarrCalDays": 15
 }
