@@ -7,15 +7,27 @@
     "fade": "true",
     "plexIP": "192.168.1.135",
     "plexPort": 32400,
+<<<<<<< HEAD
     "plexToken": "",
+=======
+    "plexToken": "",
+>>>>>>> 01bf317697c9f5214018825d238ad7666d1b0634
     "onDemandLibraries": "movies,tv shows,anime",
     "numberOnDemand": 6,
     "onDemandRefresh": 30,
     "sonarrURL": "http://192.168.1.135:8989",
+<<<<<<< HEAD
     "sonarrToken": "",
     "sonarrCalDays": 30,
     "sonarrPremieres": "true",
     "radarrURL": "http://192.168.1.135:7878",
     "radarrToken": "",
+=======
+    "sonarrToken": "",
+    "sonarrCalDays": 30,
+    "sonarrPremieres": "true",
+    "radarrURL": "http://192.168.1.135:7878",
+    "radarrToken": "",
+>>>>>>> 01bf317697c9f5214018825d238ad7666d1b0634
     "radarrCalDays": 15
 }
