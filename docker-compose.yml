@@ -10,24 +10,6 @@ services:
     environment:
       TZ: "Australia/Brisbane"
       NODE_ENV: production
-      PLEXTOKEN: ""
-      PLEXIP: 192.168.1.135
-      PLEX_HTTPS: "false"
-      PLEX_PORT: 32400
-      SLIDE_DURATION: 7
-      REFRESH_PERIOD: 120
-      PLAY_THEMES: "true"
-      PLAY_GENERIC_THEMES: "true"
-      ON_DEMAND_LIBRARIES: "movies,anime,tv shows"
-      NUMBER_ON_DEMAND: 2
-      ON_DEMAND_REFRESH: 30
-      SONARR_URL: "http://192.168.1.135:8989"
-      SONARR_TOKEN: ""
-      SONARR_CAL_DAYS: 175
-      SONARR_PREMIERES: "true"
-      RADARR_URL: "http://192.168.1.135:7878"
-      RADARR_TOKEN: ""
-      RADARR_CAL_DAYS: 15
     volumes:
       - c:/docker/poster/randomthemes:/usr/src/app/public/randomthemes
       - c:/docker/poster/config:/usr/src/app/config

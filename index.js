@@ -194,6 +194,7 @@ async function loadSettings() {
 async function startup() {
   // load settings object
   loadedSettings = await loadSettings();
+  console.log(loadedSettings);
   // initial load of card providers
   await loadSonarrComingSoon();
   await loadOnDemand();
@@ -217,6 +218,15 @@ async function startup() {
   houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
 
   return;
+}
+
+/**
+ * @desc Saves settings and calls startup
+ * @returns nothing
+ */
+async function saveReset(formObject) {
+  await setng.SaveSettingsJSON(formObject);
+  await startup();
 }
 
 // call all card providers - initial card loads and sets scheduled runs
@@ -269,7 +279,8 @@ app.get("/health", (req, res) => {
 app.get("/settings", (req, res) => {
   res.render("settings", {
     success: req.session.success,
-    errors: req.session.errors,
+    settings: loadedSettings,
+    errors: req.session.errors
   });
   req.session.errors = null;
 });
@@ -280,11 +291,44 @@ app.post(
     check("slideDuration")
       .not()
       .isEmpty()
-      .withMessage("Slide duration is required"),
+      .custom((value) => {
+        if (parseInt(value) === "NaN") {
+          throw new Error('Slide duration must be a number');
+        }
+        // Indicates the success of this synchronous custom validator
+        return true;
+      })
+      .withMessage("Slide Duration is required"),
     check("refreshPeriod")
       .not()
       .isEmpty()
-      .withMessage("Refresh period is required"),
+      .custom((value) => {
+        if (parseInt(value) === "NaN") {
+          throw new Error('Refresh period must be a number');
+        }
+        // Indicates the success of this synchronous custom validator
+        return true;
+      })
+      .withMessage("Refresh Period is required"),
+    check("plexIP")
+      .not()
+      .isEmpty()
+      .withMessage("Plex IP is required"),
+    check("plexPort")
+      .not()
+      .isEmpty()
+      .custom((value) => {
+        if (parseInt(value) === "NaN") {
+          throw new Error('Plex Port must be a number');
+        }
+        // Indicates the success of this synchronous custom validator
+        return true;
+      })
+      .withMessage("Plex Port number is required"),
+    check("plexToken")
+      .not()
+      .isEmpty()
+      .withMessage("Plex token is required"),
     // check('email', 'Email is required')
     //     .isEmail(),
     // check('password', 'Password is requried')
@@ -298,19 +342,33 @@ app.post(
     //     }),
   ],
   (req, res) => {
-    console.log(req.body);
-    var errors = validationResult(req).array();
-    if (errors) {
       //fields value holder
       let form = {
         password: req.body.password,
-        slideDuration: req.body.slideDuration,
-        refreshPeriod: req.body.refreshPeriod,
+        slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : 10,
+        refreshPeriod: req.body.refreshPeriod ? parseInt(req.body.refreshPeriod) : 120,
         themeSwitch: req.body.themeSwitch,
         genericSwitch: req.body.genericSwitch,
         fadeOption: req.body.fadeOption,
+        plexToken: req.body.plexToken,
+        plexIP: req.body.plexIP,
+        plexHTTPSSwitch: req.body.plexHTTPSSwitch,
+        plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : 32400,
+        plexLibraries: req.body.plexLibraries,
+        numberOnDemand: parseInt(req.body.numberOnDemand) ? parseInt(req.body.numberOnDemand) : 2,
+        onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : 30,
+        sonarrUrl: req.body.sonarrUrl,
+        sonarrToken: req.body.sonarrToken,
+        sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : 30,
+        premiereSwitch: req.body.premiereSwitch,
+        radarrUrl: req.body.radarrUrl,
+        radarrToken: req.body.radarrToken,
+        radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : 30,
+        saved: false
       };
 
+    var errors = validationResult(req).array();
+    if (errors.length > 0) {
       req.session.errors = errors;
       req.session.success = false;
       res.render("settings", {
@@ -318,9 +376,15 @@ app.post(
         formData: form,
       });
     } else {
+      // save settings 
+      req.session.errors = errors;
       req.session.success = true;
-      // TODO Now go and save the data and reload forms
-      res.redirect("settings");
+      form.saved = true;
+      saveReset(form);
+      res.render("settings", {
+        errors: req.session.errors,
+        formData: form
+      });
     }
   }
 );

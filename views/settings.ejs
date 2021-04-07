@@ -28,7 +28,6 @@
 </head>
 
 <body>
-
   <div class="container">
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="main-breadcrumb">
@@ -37,7 +36,9 @@
         <li class="breadcrumb-item active" aria-current="page">Poster Settings</li>
       </ol>
     </nav>
-
+    <%if(typeof formData !== 'undefined' && formData.saved == true) {%><script language='javascript'>
+      alert("Poster Settings Saved");
+    </script><%}%>
     <!-- Layout -->
     <div class="row gutters-sm">
       <!-- Side Menu View -->
@@ -45,18 +46,10 @@
         <div class="card">
           <div class="card-body">
             <nav class="nav flex-column nav-pills nav-gap-y-1">
-              <a href="#general" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
-                <i class="fal fa-cog"></i><span class="menu">General</span>
+              <a href="#settings" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
+                <i class="fal fa-cog"></i><span class="menu">Settings</span>
               </a>
-              <a href="#plex" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-server"></i><span class="menu">Plex</span>
-              </a>
-              <a href="#sonarr" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-tv-retro"></i><span class="menu">Sonarr</span>
-              </a>
-              <a href="#radarr" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-film-alt"></i><span class="menu">Radarr</span>
-              </a>
+
               <a href="#about" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
                 <i class="fal fa-person-sign"></i><span class="menu">About</span>
               </a>
@@ -112,11 +105,12 @@
           <div class="card-body tab-content">
 
             <!-- General Settings -->
-            <div class="tab-pane active" id="general">
-              <h6>GENERAL SETTINGS</h6>
+            <div class="tab-pane active" id="settings">
+              <h6>POSTER SETTINGS</h6>
               <hr>
+              <!-- show validation errors -->
               <% 
-              if(errors){
+              if(typeof errors !== 'undefined'){
                 // display validation errors
                 errors.forEach(function(e) { %>
                   <p class="alert alert-warning"><%=e.msg %></p>
@@ -126,20 +120,20 @@
                 <div class="form-group">
                   <label for="password">Password</label>
                   <input type="password" class="form-control" id="password" name="password" aria-describedby="password"
-                    placeholder="Enter a password" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.password%><%}%>">
+                    placeholder="Enter a password" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.password%>"<%}else{%><%=settings.password%>"<%}%>>
                   <small id="passwordHelp" class="form-text text-muted">Enter a password to secure this page</small>
                 </div>
                 <div class="form-group">
                   <label for="slideDuration">Slide Duration</label>
                   <input type="text" class="form-control" id="slideDuration" name="slideDuration" aria-describedby="slideDuration"
-                    placeholder="Suggest no less than 10" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.slideDuration%><%}%>">
+                    placeholder="Suggest no less than 10" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.slideDuration%>"<%}else{%><%=settings.slideDuration%>"<%}%>>
                   <small id="slideDurationHelp" class="form-text text-muted">How many seconds that each slide will
                     remain on the screen</small>
                 </div>
                 <div class="form-group">
                   <label for="refreshPeriod">Refresh Period</label>
                   <input type="text" class="form-control" id="refreshPeriod" name="refreshPeriod" aria-describedby="refreshPeriod"
-                    placeholder="suggest 120 or more" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.refreshPeriod%><%}%>">
+                    placeholder="suggest 120 or more" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.refreshPeriod%>"<%}else{%><%=settings.refreshPeriod%>"<%}%>>
                   <small id="refreshPeriodHelp" class="form-text text-muted">How many seconds before the browser
                     refreshes the slide card data</small>
                 </div>
@@ -148,7 +142,7 @@
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="themeSwitch" id="themeSwitch" 
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.themeSwitch ? 'checked' : '' %><%}%>>
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.themeSwitch ? 'checked' : '' %><%}else{%><%=(settings.playThemes == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="themeSwitch">Play theme tunes</label>
                     <small id="themeHelp" class="form-text text-muted">Enables theme tunes, when available</small>
                   </div>
@@ -157,7 +151,7 @@
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="genericSwitch" id="genericSwitch" 
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.genericSwitch ? 'checked' : '' %><%}%>>
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.genericSwitch ? 'checked' : '' %><%}else{%><%=(settings.genericThemes == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="genericSwitch">Play generic themes if no theme present</label>
                     <small id="randomThemeHelp" class="form-text text-muted">Requires 'play theme tunes' to be enabled
                       also</small>
@@ -168,12 +162,12 @@
                 <div class="form-group">
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="fadeOption" id="slideRadio" value="false" 
-                    <% if(typeof formData !== 'undefined' && errors){%><%=(formData.fadeOption=='false') ? 'checked' : '' %><%}%>>
+                    <% if(typeof formData !== 'undefined' && errors){%><%=(formData.fadeOption=='false') ? 'checked' : '' %><%}else{%><%=(settings.fade == 'false') ? 'checked' : '' %><%}%>>
                     <label class="form-check-label" for="slideRadio">Slide</label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="fadeOption" id="fadeRadio" value="true" 
-                    <% if(typeof formData !== 'undefined' && errors){%><%=(formData.fadeOption=='true') ? 'checked' : '' %><%}%>>
+                    <input class="form-check-input" type="radio" name="fadeOption" id="fadeOption" value="true" 
+                    <% if(typeof formData !== 'undefined' && errors){%><%=(formData.fadeOption=='true') ? 'checked' : '' %><%}else{%><%=(settings.fade == 'true') ? 'checked' : '' %><%}%>>
                     <label class="form-check-label" for="fadeRadio">Fade</label>
                   </div>
                   <small id="fadeRadioHelp" class="form-text text-muted">The transition effect for when slides
@@ -181,19 +175,14 @@
                   <div class="form-group small text-muted">
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Save All Settings</button>
-                <button type="reset" class="btn btn-light">Cancel</button>
-              </form>
-            </div>
 
-            <!-- Plex Settings -->
-            <div class="tab-pane" id="plex">
+              </br>
               <h6>PLEX SETTINGS</h6>
               <hr>
-              <form>
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" id="plexHTTPSSwitch">
+                    <input type="checkbox" class="custom-control-input" name="plexHTTPSSwitch" id="plexHTTPSSwitch"
+                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.plexHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.plexHTTPS == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="plexHTTPSSwitch">HTTPS Connection</label>
                     <small id="plexHTTPSHelp" class="form-text text-muted">Enable if Plex requires a HTTPS 'secure'
                       connection.</small>
@@ -202,107 +191,113 @@
 
                 <div class="form-group">
                   <label for="plexIP">Server IP or Domain Name</label>
-                  <input type="text" class="form-control" id="plexIP" aria-describedby="plexIPHelp"
-                    placeholder="n.n.n.n">
+                  <input type="text" class="form-control" id="plexIP" name="plexIP" aria-describedby="plexIPHelp"
+                    placeholder="n.n.n.n" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexIP%>"<%}else{%><%=settings.plexIP%>"<%}%>>
                   <small id="plexIPHelp" class="form-text text-muted">Enter the Plex IP or Domain Name.</small>
                 </div>
 
                 <div class="form-group">
                   <label for="plexIP">Server Port</label>
-                  <input type="text" class="form-control" id="plexIPort aria-describedby=" plexPortHelp"
-                    placeholder="usually port 32400">
+                  <input type="text" class="form-control" id="plexIPort" name="plexPort" aria-describedby=" plexPortHelp"
+                    placeholder="usually port 32400" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexPort%>"<%}else{%><%=settings.plexPort%>"<%}%>>
                   <small id="plexPortHelp" class="form-text text-muted">Enter the server port. (usually 32400).</small>
                 </div>
 
                 <div class="form-group">
                   <label for="plexToken">Plex Token</label>
-                  <input type="text" class="form-control" id="plexToken" aria-describedby="plexToken"
-                    placeholder="Plex Token">
+                  <input type="text" class="form-control" name="plexToken" id="plexToken" aria-describedby="plexToken"
+                    placeholder="Plex Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexToken%>"<%}else{%><%=settings.plexToken%>"<%}%>>
                   <small id="plexTokenHelp" class="form-text text-muted">Needed to communicate with your Plex server.
                     (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
                       target="_blank">details</a>)</small>
                 </div>
-
-                <hr />
-
                 <div class="form-group">
-                  <label for="plexToken">Plex Libraries for On-Demand Title</label>
-                  <input type="text" class="form-control" id="plexLibraries" aria-describedby="plexLibraries"
-                    placeholder="suggestions -> movies,tv shows,anime">
-                  <small id="plexTokenHelp" class="form-text text-muted">(optional) Enter one or more Plex library names
+                  <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
+                  <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
+                    placeholder="suggestions -> movies,tv shows,anime" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
+                  <small id="plexLibrariesHelp" class="form-text text-muted">(optional) Enter one or more Plex library names
                     (comma seperated)</small>
                 </div>
                 <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
-                  <input type="text" class="form-control" id="numberOnDemand" aria-describedby="numberOnDemand"
-                    placeholder="suggest 2 or 3">
-                  <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to pull from
+                  <input type="text" class="form-control" id="numberOnDemand" name="numberOnDemand" aria-describedby="numberOnDemand"
+                    placeholder="suggest 2 or 3" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
+                  <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to display from
                     each specified Plex library</small>
                 </div>
+                <div class="form-group">
+                  <label for="onDemandRefresh">On-demand Refresh Period</label>
+                  <input type="text" class="form-control" id="onDemandRefresh" name="onDemandRefresh" aria-describedby="onDemandRefresh"
+                    placeholder="suggest 30" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.onDemandRefresh%>"<%}else{%><%=settings.onDemandRefresh%>"<%}%>>
+                  <small id="onDemandRefresh" class="form-text text-muted">How often, in minutes, on-demand titles are refreshed</small>
+                </div>
 
-                <hr />
-                <button type="button" class="btn btn-primary">Save All Settings</button>
-                <button type="reset" class="btn btn-light">Cancel</button>
-              </form>
-            </div>
-
-            <!-- Sonarr Settings -->
-            <div class="tab-pane" id="sonarr">
+              </br>
               <h6>SONARR SETTINGS</h6>
               <small id="sonarrHelp" class="form-text text-muted">The following settings allow for comming soon 'TV'
                 titles to be included.</small>
               <hr>
-              <form>
+              <div class="form-group">
+                <label for="sonarrToken">Sonarr Token</label>
+                <input type="text" class="form-control" id="sonarrToken" name="sonarrToken" aria-describedby="sonarrTokenlHelp"
+                  placeholder="Sonarr API Token`" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sonarrToken%>"<%}else{%><%=settings.sonarrToken%>"<%}%>>
+                <small id="sonarTokenHelp" class="form-text text-muted">Enter the Sonarr API token. (Leave blank if coming soon 'TV' not wanted)</small>
+              </div>
                 <div class="form-group">
                   <label for="sonarrUrl">Sonarr URL</label>
                   <small id="sonarrInfo" class="form-text text-muted">The following settings allow for comming soon 'TV'
                     titles to be included.</small>
-                  <input type="text" class="form-control" id="sonarrUrl" aria-describedby="sonarrUrlHelp"
-                    placeholder="http://n.n.n.n:8989">
+                  <input type="text" class="form-control" id="sonarrUrl" name="sonarrUrl" aria-describedby="sonarrUrlHelp"
+                    placeholder="http://n.n.n.n:8989" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sonarrUrl%>"<%}else{%><%=settings.sonarrURL%>"<%}%>>
                   <small id="sonarUrlHelp" class="form-text text-muted">Enter the ful URL and port for Sonarr.</small>
                 </div>
                 <div class="form-group">
                   <label for="sonarrDays">Days ahead</label>
-                  <input type="text" class="form-control" id="sonarrDays" aria-describedby="sonarrDays" placeholder="3">
+                  <input type="text" class="form-control" id="sonarrDays" aria-describedby="sonarrDays" name="sonarrDays" placeholder="" 
+                  value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sonarrDays%>"<%}else{%><%=settings.sonarrCalDays%>"<%}%>>
                   <small id="sonarUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Sonarr
                     calendar.
                     (Use a low number (2-3) if 'premieres' is off, otherwise 90-175 is fine)</small>
                 </div>
 
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                  <input type="checkbox" class="custom-control-input" id="premiereSwitch">
+                  <input type="checkbox" class="custom-control-input" id="premiereSwitch" name="premiereSwitch"
+                  value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.premiereSwitch ? 'checked' : '' %>
+                    <%}else{%><%=(settings.sonarrPremieres == 'true') ? 'checked' : '' %><%}%>>
                   <label class="custom-control-label" for="premiereSwitch">Show premieres</label>
-                  <small id="plexHTTPSHelp" class="form-text text-muted">Only show season premieres.</small>
+                  <small id="premiereSwitchHelp" class="form-text text-muted">Only show season premieres.</small>
                 </div>
-                <hr />
-                <button type="button" class="btn btn-primary">Save All Settings</button>
-                <button type="reset" class="btn btn-light">Cancel</button>
-              </form>
-            </div>
-
-            <!-- Radarr Settings -->
-            <div class="tab-pane" id="radarr">
+                
+              </br>
               <h6>RADARR SETTINGS</h6>
               <small id="radarrInfo" class="form-text text-muted">The following settings allow for comming soon 'Movie'
                 titles to be included.</small>
               <hr>
-              <form>
+              <div class="form-group">
+                <label for="radarrToken">Radarr Token</label>
+                <input type="text" class="form-control" id="radarrToken" name="radarrToken" aria-describedby="radarrTokenHelp"
+                  placeholder="Radarr API Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.radarrToken%>"<%}else{%><%=settings.radarrToken%>"<%}%>>
+                <small id="radarrTokenHelp" class="form-text text-muted">Enter the Radarr API token. (Leave blank if coming soon 'Movies' not wanted)</small>
+              </div>
                 <div class="form-group">
                   <label for="radarrUrl">Radarr URL</label>
-                  <input type="text" class="form-control" id="radarrUrl" aria-describedby="radarrUrlHelp"
-                    placeholder="http://n.n.n.n:7878">
+                  <input type="text" class="form-control" id="radarrUrl" name="radarrUrl" aria-describedby="radarrUrlHelp"
+                    placeholder="http://n.n.n.n:7878" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.radarrUrl%>"<%}else{%><%=settings.radarrURL%>"<%}%>>
                   <small id="radarUrlHelp" class="form-text text-muted">Enter the ful URL and port for Radarr.</small>
                 </div>
                 <div class="form-group">
                   <label for="radarrDays">Days ahead</label>
-                  <input type="text" class="form-control" id="radarrDays" aria-describedby="radarrDays" placeholder="3">
+                  <input type="text" class="form-control" id="radarrDays" name="radarrDays" aria-describedby="radarrDays" placeholder="Suggest 90-175"
+                   value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.radarrDays%>"<%}else{%><%=settings.radarrCalDays%>"<%}%>>
                   <small id="radarrUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Radarr
                     calendar.</small>
                 </div>
 
                 <hr />
-                <button type="button" class="btn btn-primary">Save All Settings</button>
-                <button type="reset" class="btn btn-light">Cancel</button>              </form>
+                <button type="reset" class="btn btn-success" onclick="location.href = '/settings';">Cancel</button>&nbsp;&nbsp;&nbsp;
+                <button type="reset" class="btn btn-info"    onclick="location.href = '/';">Main Page</button>
+                <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
+              </form>
             </div>
 
             <!-- About -->
@@ -321,9 +316,6 @@
                 <li>Make it cross-platform</li>
                 <li>Make it better, or at least a bit different to the other apps out there.</li>
               </ul>
-              <p>
-                I've nailed the first three, and I will leave the last one for you to decide yourself. :)
-              </p>
               <p>
                 I'd like to thank everyone for their suggestions and feedback. Keep it coming!
                 I'd also like to thank those that have contributed to the project. Im learning as much from you as
