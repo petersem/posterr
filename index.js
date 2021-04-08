@@ -205,8 +205,9 @@ async function startup() {
     now.toLocaleString() + " Now screening titles refreshed (First run only)"
   );
   console.log(" ");
-  console.log("✅ Application ready on http://hostIP:3000");
-  console.log(" ");
+  console.log(`✅ Application ready on http://hostIP:3000
+   Goto http://hostIP:3000/settings to get to setup page.
+  `);
 
   // set intervals for timers
   nowScreeningClock = setInterval(loadNowScreening, 30000); // every 30 seconds

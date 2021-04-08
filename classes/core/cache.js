@@ -33,7 +33,6 @@ class Cache {
     const savePath = "./public/mp3cache/" + fileName;
     const url = "http://tvthemes.plexapp.com/" + fileName;
     await this.download(url, savePath, fileName);
-
     return;
   }
 
@@ -78,6 +77,18 @@ class Cache {
     } else {
       // console.log("✘ " + fileName + " exists, DL aborted");
     }
+  }
+
+  static async CheckFileSize(savePath){
+    let small=false;
+    var stats = fs.statSync(savePath);
+    var fileSizeInBytes = stats.size;
+    // Convert the file size to megabytes (optional)
+    var fileSizeInKbytes = fileSizeInBytes / 1024;
+
+    if(fileSizeInKbytes <= 1) small = true;
+    console.log(savePath + ' - ' + fileSizeInKbytes + 'kb - ' + small);
+
   }
 
   /**

@@ -126,16 +126,16 @@
                 <div class="form-group">
                   <label for="slideDuration">Slide Duration</label>
                   <input type="text" class="form-control" id="slideDuration" name="slideDuration" aria-describedby="slideDuration"
-                    placeholder="Suggest no less than 10" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.slideDuration%>"<%}else{%><%=settings.slideDuration%>"<%}%>>
+                    placeholder="Suggest no less than 10 and around 20-30 seconds" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.slideDuration%>"<%}else{%><%=settings.slideDuration%>"<%}%>>
                   <small id="slideDurationHelp" class="form-text text-muted">How many seconds that each slide will
                     remain on the screen</small>
                 </div>
                 <div class="form-group">
                   <label for="refreshPeriod">Refresh Period</label>
                   <input type="text" class="form-control" id="refreshPeriod" name="refreshPeriod" aria-describedby="refreshPeriod"
-                    placeholder="suggest 120 or more" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.refreshPeriod%>"<%}else{%><%=settings.refreshPeriod%>"<%}%>>
+                    placeholder="suggest 120-300" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.refreshPeriod%>"<%}else{%><%=settings.refreshPeriod%>"<%}%>>
                   <small id="refreshPeriodHelp" class="form-text text-muted">How many seconds before the browser
-                    refreshes the slide card data</small>
+                    refreshes the slide card data (consider how many slides you have and slide duration)</small>
                 </div>
 
                 <label class="d-block">Theme Options</label>
@@ -221,9 +221,9 @@
                 <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
                   <input type="text" class="form-control" id="numberOnDemand" name="numberOnDemand" aria-describedby="numberOnDemand"
-                    placeholder="suggest 2 or 3" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
+                    placeholder="suggest no more than 10" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
                   <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to display from
-                    each specified Plex library</small>
+                    each specified Plex library.</small>
                 </div>
                 <div class="form-group">
                   <label for="onDemandRefresh">On-demand Refresh Period</label>
