@@ -40,11 +40,13 @@ iframe {
 }
 
 #myDiv {
-  max-width: 100%;
-  max-height: 100%;
-  margin: auto;
-  display: block;
-  position: fixed;
+  min-height: 100%;
+  width:100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+
 }
 
 .badge-pill {
@@ -53,23 +55,43 @@ iframe {
 
 .poster {
   max-width: 100%;
-  max-height: 100%;
-  margin: auto;
-  display: block;
-  object-fit: cover;
+  /* max-height: 85%; */
+  /* margin: auto; */
+  /* display: block; */
+  /* object-fit: cover; */
+
+  vertical-align: top;
+  /* top: 10%;  */
+
+  color: white;
+  vertical-align: top;
+  top: 10%;
+  position: fixed;
+  height: 85%;
+  max-height: 85%;
+  width:100%;
+  background-position: 50% 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .banners {
   /* border-radius: 15px;
   border: 2px solid goldenrod; */
-  max-height: 145px;
-  margin: auto;
-  display: block;
+  max-height: 5%;
+  /* margin: auto; */
+  /* display: block; */
   color: bisque;
   /* margin-top: 5px; 
   margin-bottom: 5px; */
-  width: 250px;
   /* font-weight: 200; */
+
+  position: fixed;
+  width: 100%;
+  vertical-align: top;
+  top: 0;
+  height: 5%;
+  max-height: 5%;
 }
 
 .bannerBigText {
@@ -85,12 +107,16 @@ iframe {
 
 .spacer {
   width: 100%;
-  height: 45px;
+  /* height: 45px; */
 }
 
 .bottomBanner {
   color: lightgoldenrodyellow;
-  position: relative;
+  bottom: 0;
+  position: fixed;
+  height: 10%;
+  max-height: 10%;
+  width: 100%;
   /* background-color: #212529; */
 }
 
@@ -125,6 +151,7 @@ iframe {
 .progress {
   margin-left: auto;
   margin-right: auto;
+  z-index: 1000;
 }
 
 .screening {

@@ -3,6 +3,7 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
+const sizeOf = require('image-size');
 
 /**
  * @desc Used to communicate with Plex
@@ -90,7 +91,7 @@ class Plex {
             medCard.DBID = result[2];
 
             // download poster image to local server
-            fileName = result[2] + ".jpg";
+            fileName = result[3] + ".jpg";
             prefix = "http://";
             if (this.https) prefix = "https://";
             url =
@@ -103,6 +104,14 @@ class Plex {
               this.plexToken;
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
+
+            // get and save image aspect ratio for rendering later on - set to 1 until this is fixed
+            // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
+            //   medCard.posterAR = (dimensions.height / dimensions.width);
+            //   console.log(dimensions.width, dimensions.height);
+            // });
+            medCard.posterAR = 1.02;
+
             medCard.cardType = cType.CardTypeEnum.Playing;
             // resize image to fit aspect ratio of 680x1000
 
@@ -144,6 +153,13 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
+            // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
+            // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
+            //   medCard.posterAR = (dimensions.height / dimensions.width);
+            //   console.log(dimensions.width, dimensions.height);
+            // });
+            medCard.posterAR=1.5;
+
             medCard.title = md.grandparentTitle;
             medCard.genre = md.genre;
             medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
@@ -171,6 +187,13 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
+
+            // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
+            // sizeOf('/imagecache/' + movieFileName, function (err, dimensions) {
+            //   medCard.posterAR = (dimensions.height / dimensions.width);
+            //   console.log(dimensions.width, dimensions.height);
+            // });
+            medCard.posterAR = 1.5;
 
             medCard.title = md.title;
             medCard.tagLine = await util.emptyIfNull(md.tagline);
@@ -359,6 +382,13 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
+            // get and save image aspect ratio for rendering later on - set to 1.5 until fixed
+            // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
+            //   medCard.posterAR = (dimensions.height / dimensions.width);
+            //   console.log(dimensions.width, dimensions.height);
+            // });
+            medCard.posterAR = 1.5;
+
             medCard.runTime = Math.round(md.duration / 60000);
             medCard.title = md.grandparentTitle;
 
@@ -378,6 +408,13 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
+
+            // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
+            sizeOf('/imagecache/' + movieFileName, function (err, dimensions) {
+              medCard.posterAR = (dimensions.height / dimensions.width);
+              console.log(dimensions.width, dimensions.height);
+            });
+            medCard.posterAR = 1.5;
 
             // other data
             medCard.title = md.title;

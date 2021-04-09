@@ -13,6 +13,7 @@ class MediaCard {
     this.title = "";
     this.year = "";
     this.posterURL = "";
+    this.posterAR = "";
     this.contentRating = "";
     this.ratingColour = "";
     this.rating = "";
@@ -103,13 +104,18 @@ class MediaCard {
       <div class="myDiv">
         <div class="banners">
           <div class="bannerBigText ` +
-      this.typeClass +
+      this.cardType +
       `">` +
       this.cardType +
       `</div>
         </div> 
 
-        <div class="progress ` +
+      <div id="poster` +
+      this.ID +
+      `" class="poster" style="color: white; vertical-align: top; top: 10%; position: fixed; height: 85%; max-height: 85%; width:100%; background-position: 50% 50%; background-size: contain; background-repeat: no-repeat; background-image: url('` +
+      this.posterURL + `">
+
+      <div class="progress ` +
       hidden +
       `" style="height: 5px; width: 0px; background-color: darkslategrey;" id="progress` +
       this.ID +
@@ -125,14 +131,9 @@ class MediaCard {
       this.runTime +
       `"></div>
         </div>
-        <img alt="" title="" class="poster" id="poster` +
-      this.ID +
-      `"
-          src='` +
-      this.posterURL +
-      `' />
+      <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>
       </div>
-      <div class="spacer"></div>
+
       <div class="bottomBanner mx-auto transparent" id="bottomBanner` +
       this.ID +
       `">
@@ -146,6 +147,7 @@ class MediaCard {
       runTimePill +
       ratingPill +
       `</div>
+      </div>
       </div>
     </div>`;
     return;

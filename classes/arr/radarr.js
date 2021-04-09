@@ -4,6 +4,7 @@ const util = require("./../core/utility");
 const core = require("./../core/cache");
 const axios = require("axios");
 const { cache } = require("ejs");
+const sizeOf = require('image-size');
 
 /**
  * @desc Used to communicate with Radarr to obtain a list of future releases
@@ -82,6 +83,13 @@ class Radarr {
         let url = md.images[0].url;
         await core.CacheImage(url, fileName);
         medCard.posterURL = "/imagecache/" + fileName;
+
+        // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
+        // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
+        //   medCard.posterAR = (dimensions.height / dimensions.width);
+        //   console.log(dimensions.width, dimensions.height);
+        // });
+        medCard.posterAR = 1.5;
 
         // content rating and colour
         let contentRating = "NR";

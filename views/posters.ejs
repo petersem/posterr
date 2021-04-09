@@ -29,7 +29,7 @@
 
         // resize for initial page load
         $('.myDiv').css({
-            'height': (($(window).height()) - 115) + 'px'
+            'height': (($(window).height()) - 120) + 'px'
         });
         //console.log('Refresh posters');
 
@@ -75,13 +75,19 @@
     }
 
     function Resize(id) {
-        var posterWidth = $('#poster' + id).width();
+        var height = ($('#' + id).height()* .94); 
+        //console.log(height);
+        var width = (height / ($('#poster' + id + 'AR').text()) );
+        //console.log(width);
+
+
+        var posterWidth = width;
         //console.log(posterWidth);
         if (posterWidth > 0) {
             // $('#bottomBanner' + id).css({
             //     'width': posterWidth + 'px'
             // });
-            console.log('Check if hidden');
+            //console.log('Check if hidden');
             if ($('#progress' + id).hasClass('hidden')) {
             } else {
                 $('#progress' + id).css({
@@ -94,7 +100,7 @@
     // resize when window resizes
     $(window).bind('resize', function () {
         $('.myDiv').css({
-            'height': (($(window).height()) - 115) + 'px'
+            'height': (($(window).height()) - 120) + 'px'
         });
 
         var posterWidth = $('.poster').width();

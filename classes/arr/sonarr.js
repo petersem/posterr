@@ -3,6 +3,7 @@ const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
 const axios = require("axios");
+const sizeOf = require('image-size');
 
 /**
  * @desc Used to communicate with Sonarr to obtain a list of future releases
@@ -85,6 +86,7 @@ class Sonarr {
         medCard.mediaType = "episode";
         medCard.cardType = cType.CardTypeEnum.ComingSoon;
 
+        let fileName;
         // dont bother to download if only looking for premiers
         if (premieres == "true" && md.episodeNumber != 1) {
           // dont get cached files
@@ -95,10 +97,11 @@ class Sonarr {
           medCard.theme = "/mp3cache/" + mp3;
 
           // cache image
-          let fileName = md.series.tvdbId + ".jpg";
+          fileName = md.series.tvdbId + ".jpg";
           let url = md.series.images[1].url;
           await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
+
         }
 
         // content rating and colour
@@ -156,6 +159,12 @@ class Sonarr {
             break;
         }
         medCard.ratingColour = ratingColour;
+
+          // get and save image aspect ratio for rendering later on (set to 1.5) until this works
+          // const dimensions = sizeOf(__dirname + '/../../public/imagecache/' + fileName);
+          // console.log(dimensions.width, dimensions.height);
+          medCard.posterAR = 1.5;
+
 
         // add media card to array (taking into account premieres option)
         if (premieres && md.episodeNumber == 1) {
