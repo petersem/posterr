@@ -10,6 +10,7 @@ const pms = require("./classes/mediaservers/plex");
 const glb = require("./classes/core/globalPage");
 const core = require("./classes/core/cache");
 const sonr = require("./classes/arr/sonarr");
+const radr = require("./classes/arr/radarr");
 const settings = require("./classes/core/settings");
 var MemoryStore = require('memorystore')(session);
 
@@ -29,13 +30,51 @@ core.DeleteImageCache();
 let odCards = [];
 let nsCards = [];
 let csCards = [];
+let csrCards = [];
 let globalPage = new glb();
 let nowScreeningClock;
 let onDemandClock;
 let sonarrClock;
+let radarrClock;
 let houseKeepingClock;
 let setng = new settings();
 let loadedSettings;
+
+/**
+ * @desc Wrapper function to call Radarr coming soon.
+ * @returns {Promise<object>} mediaCards array - coming soon
+ */
+ async function loadRadarrComingSoon() {
+  // stop the clock
+  clearInterval(radarrClock);
+
+  // instatntiate sonarr class
+  let radarr = new radr(
+    loadedSettings.radarrURL,
+    loadedSettings.radarrToken,
+    loadedSettings.radarrPremieres
+  );
+  // set up date range and date formats
+  let today = new Date();
+  let later = new Date();
+  //console.log(today.toISOString().split("T")[0]);
+  later.setDate(later.getDate() + loadedSettings.sonarrCalDays);
+  //console.log(later.toISOString().split("T")[0]);
+  let now = today.toISOString().split("T")[0];
+  let ltr = later.toISOString().split("T")[0];
+
+  // call sonarr coming soon
+  csrCards = await radarr.GetComingSoon(
+    now,
+    ltr,
+    loadedSettings.genericThemes
+  );
+
+  // restart the 24 hour timer
+  radarrClock = setInterval(loadRadarrComingSoon, 86400000); // daily
+
+  return csrCards;
+}
 
 /**
  * @desc Wrapper function to call Sonarr coming soon.
@@ -98,17 +137,24 @@ async function loadNowScreening() {
   if (nsCards.length > 0) {
     mCards = nsCards.concat(odCards);
     mCards = mCards.concat(csCards);
+    mCards = mCards.concat(csrCards);
     globalPage.cards = mCards;
-    // console.log("m:" +mCards.length);
   } else {
     if (odCards.length > 0) {
       mCards = odCards.concat(csCards);
+      mCards = mCards.concat(csrCards);
       globalPage.cards = mCards;
-      // console.log("m:" + mCards.length);
     } else {
       if (csCards.length > 0) {
-        globalPage.cards = csCards;
+        mCards = csCards.concat(csrCards);
+        globalPage.cards = mCards;
         // console.log("CS:" +csCards.length);
+      }
+      else {
+        if (csrCards.length > 0) {
+          globalPage.cards = csrCards;
+          // console.log("CSR:" +csrCards.length);
+        }
       }
     }
   }
@@ -197,6 +243,7 @@ async function startup() {
   //console.log(loadedSettings);
   // initial load of card providers
   await loadSonarrComingSoon();
+  await loadRadarrComingSoon();
   await loadOnDemand();
   await loadNowScreening();
 
@@ -210,12 +257,13 @@ async function startup() {
   `);
 
   // set intervals for timers
-  nowScreeningClock = setInterval(loadNowScreening, 30000); // every 30 seconds
+  nowScreeningClock = setInterval(loadNowScreening, 20000); // every 20 seconds
   onDemandClock = setInterval(
     loadOnDemand,
     loadedSettings.onDemandRefresh * 60000
   );
   sonarrClock = setInterval(loadSonarrComingSoon, 86400000); // daily
+  radarrClock = setInterval(loadRadarrComingSoon, 86400000); // daily
   houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
 
   return;

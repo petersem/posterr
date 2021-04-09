@@ -40,8 +40,7 @@ class MediaCard {
    */
   async Render() {
     let hidden = "";
-    if (this.cardType != "Now Screening") hidden = "hidden";
-
+    if (this.cardType != "Now Screening" && this.cardType != "Playing") hidden = "hidden";
     // pill variables
     let contentRatingPill = "";
     let resCodecPill = "";
