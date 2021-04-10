@@ -19,9 +19,9 @@ h1 {
 
 .tagLine {
   color: rgb(255, 255, 255);
-  font-size: 14px;
+  /* font-size: 14px; */
   font-style: italic;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   overflow: hidden;
   word-wrap: break-word;
   white-space: nowrap;
@@ -39,6 +39,17 @@ iframe {
   background-size: cover;
 }
 
+.badge-pill {
+  margin-left: 2px;
+}
+
+
+.banners,
+.bottomBanner {
+  height: 8%;
+  /* padding: 2px; */
+}
+
 #myDiv {
   min-height: 100%;
   width:100%;
@@ -48,54 +59,69 @@ iframe {
   left: 0;
 
 }
-
 .badge-pill {
   margin-left: 2px;
 }
 
+
 .poster {
   max-width: 100%;
-  /* max-height: 85%; */
-  /* margin: auto; */
-  /* display: block; */
-  /* object-fit: cover; */
 
   vertical-align: top;
-  /* top: 10%;  */
-
   color: white;
   vertical-align: top;
-  top: 10%;
+  top: 8%;
   position: fixed;
-  height: 85%;
-  max-height: 85%;
-  width:100%;
+  height: 84%;
+  max-height: 84%;
+  min-height: 545px;
+  width: 100%;
   background-position: 50% 50%;
   background-size: contain;
   background-repeat: no-repeat;
 }
 
 .banners {
-  /* border-radius: 15px;
-  border: 2px solid goldenrod; */
-  max-height: 5%;
-  /* margin: auto; */
-  /* display: block; */
-  color: bisque;
-  /* margin-top: 5px; 
-  margin-bottom: 5px; */
-  /* font-weight: 200; */
-
   position: fixed;
   width: 100%;
-  vertical-align: top;
   top: 0;
-  height: 5%;
-  max-height: 5%;
+  max-height: 8%;
+}
+
+/* If the screen size is 851px high or more */
+@media screen and (min-height: 856px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .bannerBigText {
+    font-size: 50px;
+  }
+
+  .bottomBanner {
+    font-size: 18px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 850px high or less */
+@media screen and (max-height: 855px) {
+  .banners {
+    padding-top: 5px;
+  }
+
+  .bottomBanner {
+    font-size: 14px;
+    padding-bottom: 10px;
+  }
+
+  .bannerBigText {
+    font-size: 30px;
+  }
 }
 
 .bannerBigText {
-  font-size: 32px;
+  color: lightgoldenrodyellow;
   vertical-align: middle;
 }
 
@@ -114,8 +140,8 @@ iframe {
   color: lightgoldenrodyellow;
   bottom: 0;
   position: fixed;
-  height: 10%;
-  max-height: 10%;
+  height: 8%;
+  max-height: 8%;
   width: 100%;
   /* background-color: #212529; */
 }

@@ -112,7 +112,7 @@ class MediaCard {
 
       <div id="poster` +
       this.ID +
-      `" class="poster" style="color: white; vertical-align: top; top: 10%; position: fixed; height: 85%; max-height: 85%; width:100%; background-position: 50% 50%; background-size: contain; background-repeat: no-repeat; background-image: url('` +
+      `" class="poster" style="background-image: url('` +
       this.posterURL + `">
 
       <div class="progress ` +
