@@ -65,30 +65,9 @@
           <div class="card-header border-bottom mb-3 d-flex d-md-none">
             <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
               <li class="nav-item">
-                <a href="#general" data-toggle="tab" class="nav-link has-icon active"><i class="fal fa-cog"></i>
+                <a href="#settings" data-toggle="tab" class="nav-link has-icon active"><i class="fal fa-cog"></i>
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle></svg>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#plex" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-server"></i>
-                  <path
-                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                  </path>
-                  </svg>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#sonarr" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-tv-retro"></i>
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  </svg>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#radarr" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-film-alt"></i>
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
                 </a>
               </li>
               <li class="nav-item">
@@ -205,7 +184,7 @@
 
                 <div class="form-group">
                   <label for="plexToken">Plex Token</label>
-                  <input type="text" class="form-control" name="plexToken" id="plexToken" aria-describedby="plexToken"
+                  <input type="password" class="form-control" name="plexToken" id="plexToken" aria-describedby="plexToken"
                     placeholder="Plex Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexToken%>"<%}else{%><%=settings.plexToken%>"<%}%>>
                   <small id="plexTokenHelp" class="form-text text-muted">Needed to communicate with your Plex server.
                     (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
@@ -239,7 +218,7 @@
               <hr>
               <div class="form-group">
                 <label for="sonarrToken">Sonarr Token</label>
-                <input type="text" class="form-control" id="sonarrToken" name="sonarrToken" aria-describedby="sonarrTokenlHelp"
+                <input type="password" class="form-control" id="sonarrToken" name="sonarrToken" aria-describedby="sonarrTokenlHelp"
                   placeholder="Sonarr API Token`" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sonarrToken%>"<%}else{%><%=settings.sonarrToken%>"<%}%>>
                 <small id="sonarTokenHelp" class="form-text text-muted">Enter the Sonarr API token. (Leave blank if coming soon 'TV' not wanted)</small>
               </div>
@@ -275,7 +254,7 @@
               <hr>
               <div class="form-group">
                 <label for="radarrToken">Radarr Token</label>
-                <input type="text" class="form-control" id="radarrToken" name="radarrToken" aria-describedby="radarrTokenHelp"
+                <input type="password" class="form-control" id="radarrToken" name="radarrToken" aria-describedby="radarrTokenHelp"
                   placeholder="Radarr API Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.radarrToken%>"<%}else{%><%=settings.radarrToken%>"<%}%>>
                 <small id="radarrTokenHelp" class="form-text text-muted">Enter the Radarr API token. (Leave blank if coming soon 'Movies' not wanted)</small>
               </div>
@@ -323,6 +302,7 @@
               </p>
               <P>Thanks everyone!</P>
               <P>Matt Petersen (April, 2021)</P>
+              <p>Support my efforts and continued development.</br> <a href="https://paypal.me/thanksmp" target="_blank">Buy me a coffee to say thanks.</a></p>
               <hr />
               <label class="d-block" style="text-decoration: underline;">Project Details</label>
               <p>
