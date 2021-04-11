@@ -21,6 +21,8 @@ class MediaCard {
     this.tagLine = "";
     this.runTime = "";
     this.resCodec = "";
+    this.studio = "";
+    this.network = "";
     this.audioCodec = "";
     this.playerDevice = "";
     this.playerIP = "";
@@ -33,6 +35,8 @@ class MediaCard {
     this.decision = "";
     this.theme = "";
     this.rendered = "";
+    this.user ="";
+    this.ip ="";
   }
 
   /**
@@ -48,6 +52,10 @@ class MediaCard {
     let audioCodecPill = "";
     let runTimePill = "";
     let ratingPill = "";
+    let networkPill = "";
+    let studioPill = "";
+    let ipPill = "";
+    let userPill = "";
 
     // include if value present
     if (!(await util.isEmpty(this.contentRating))) {
@@ -59,10 +67,38 @@ class MediaCard {
         "</span>";
     }
 
+    if (!(await util.isEmpty(this.ip))) {
+      ipPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.ip +
+        "</span>";
+    }
+
+    if (!(await util.isEmpty(this.user))) {
+      userPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.user +
+        "</span>";
+    }
+
     if (!(await util.isEmpty(this.resCodec))) {
       resCodecPill =
         "<span class='badge badge-pill badge-dark'> " +
         this.resCodec +
+        "</span>";
+    }
+
+    if (!(await util.isEmpty(this.network))) {
+      networkPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.network +
+        "</span>";
+    }
+
+    if (!(await util.isEmpty(this.studio))) {
+      studioPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.studio +
         "</span>";
     }
 
@@ -142,9 +178,13 @@ class MediaCard {
         <div class="tagDetails">` +
       contentRatingPill +
       resCodecPill +
+      networkPill +
+      studioPill +
       audioCodecPill +
       runTimePill +
       ratingPill +
+      userPill +
+      ipPill +
       `</div>
       </div>
       </div>

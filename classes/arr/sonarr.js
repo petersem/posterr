@@ -61,6 +61,7 @@ class Sonarr {
     // get raw data first
     let raw = await this.GetComingSoonRawData(startDate, endDate);
     // reutrn an empty array if no results
+//  console.log(raw.data[0]);
     if (raw != null) {
       // move through results and populate media cards
       await raw.data.reduce(async (memo, md) => {
@@ -85,6 +86,7 @@ class Sonarr {
         medCard.summary = await util.emptyIfNull(md.overview);
         medCard.mediaType = "episode";
         medCard.cardType = cType.CardTypeEnum.ComingSoon;
+        medCard.network = md.series.network;
 
         let fileName;
         // dont bother to download if only looking for premiers

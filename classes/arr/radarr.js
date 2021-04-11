@@ -25,7 +25,6 @@ class Radarr {
    */
   async GetComingSoonRawData(startDate, endDate) {
     let response;
-
     try {
       response = await axios
         .get(
@@ -55,18 +54,32 @@ class Radarr {
    */
   async GetComingSoon(startDate, endDate,playGenenericThemes) {
     let csrCards = [];
+    let raw;
     // get raw data first
-    let raw = await this.GetComingSoonRawData(startDate, endDate);
+    try{
+      raw = await this.GetComingSoonRawData(startDate, endDate);
+    }
+    catch(err){
+      console.log('radarr error: ' + err);
+      throw err;
+    }
+//    console.log(raw);
     // reutrn an empty array if no results
     if (raw != null) {
       // move through results and populate media cards
       await raw.data.reduce(async (memo, md) => {
         await memo;
         const medCard = new mediaCard();
-
-        let digitalRelease = new Date(md.digitalRelease);
+        let releaseDate;
+        if(!await util.isEmpty(md.digitalRelease)){
+          let digitalRelease = new Date(md.digitalRelease);
+          releaseDate = digitalRelease.toISOString().split("T")[0];
+        }
+        else {
+          releaseDate = "No release date";
+        }
         medCard.tagLine =
-          md.title + " (" + digitalRelease.toISOString().split("T")[0] + ")";
+          md.title + " (" + releaseDate + ")";
         medCard.title = md.title;
         medCard.DBID = md.tmdbId;
         medCard.year = md.year;
@@ -75,15 +88,22 @@ class Radarr {
         medCard.summary = await util.emptyIfNull(md.overview);
         medCard.mediaType = "movie";
         medCard.cardType = cType.CardTypeEnum.ComingSoon;
+        medCard.studio = md.studio;
 
         medCard.theme = "";
 
         // cache image
         let fileName = md.tmdbId + ".jpg";
-        let url = md.images[0].url;
-        await core.CacheImage(url, fileName);
-        medCard.posterURL = "/imagecache/" + fileName;
 
+      // if no poster available, use the generic one
+        if(await util.isEmpty(md.images[0])){
+          medCard.posterURL="/images/no-poster-available.png";
+        }
+        else{
+          let url = md.images[0].url;
+          await core.CacheImage(url, fileName);
+          medCard.posterURL = "/imagecache/" + fileName;
+        }
         // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
         // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
         //   medCard.posterAR = (dimensions.height / dimensions.width);
@@ -153,17 +173,17 @@ class Radarr {
         }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)
-        if (md.status != "released") csrCards.push(medCard);
+        if (md.status != "released" && md.status != "announced") csrCards.push(medCard);
       }, undefined);
     }
     let now = new Date();
     if (csrCards.length == 0) {
       console.log(
-        now.toLocaleString() + " No Coming soon 'Movie' titles found"
+        now.toLocaleString() + " No Coming soon 'movie' titles found"
       );
     } else {
       console.log(
-        now.toLocaleString() + " Coming soon 'Movie' titles refreshed"
+        now.toLocaleString() + " Coming soon 'movie' titles refreshed"
       );
     }
     return csrCards;

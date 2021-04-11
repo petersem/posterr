@@ -58,7 +58,7 @@ let loadedSettings;
   let today = new Date();
   let later = new Date();
   //console.log(today.toISOString().split("T")[0]);
-  later.setDate(later.getDate() + loadedSettings.sonarrCalDays);
+  later.setDate(later.getDate() + loadedSettings.radarrCalDays);
   //console.log(later.toISOString().split("T")[0]);
   let now = today.toISOString().split("T")[0];
   let ltr = later.toISOString().split("T")[0];

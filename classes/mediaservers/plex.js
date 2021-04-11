@@ -68,6 +68,7 @@ class Plex {
       throw err;
     }
     // reutrn an empty array if no results
+  console.log(nsRaw);
     if (
       nsRaw != [] &&
       nsRaw.MediaContainer != undefined &&
@@ -121,6 +122,8 @@ class Plex {
             // });
             medCard.posterAR = 1;
 
+            medCard.audioCodec = md.Media[0].audioCodec;
+            medCard.runTime = Math.round(md.Media[0].duration / 60000);
             medCard.cardType = cType.CardTypeEnum.Playing;
             // resize image to fit aspect ratio of 680x1000
 
@@ -224,6 +227,8 @@ class Plex {
 
         // populate common data
         medCard.mediaType = md.type;
+        medCard.user = md.User.title;
+        medCard.ip = md.Player.address;
 
         medCard.runTime = Math.round(md.Media[0].duration / 60000);
         medCard.progress = Math.round(md.viewOffset / 60000);
