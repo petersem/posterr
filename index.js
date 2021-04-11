@@ -129,8 +129,12 @@ async function loadNowScreening() {
   });
 
   // call now screening method
+  try{
   nsCards = await ms.GetNowScreening(loadedSettings.playGenenericThemes);
-
+  }
+  catch(err){
+    console.log(err.message);
+  }
   // Concatenate cards for all objects load now showing and on-demand cards, else just on-demand (if present)
   // TODO - move this into its own function!
   let mCards = [];

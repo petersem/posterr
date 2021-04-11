@@ -163,7 +163,7 @@ class Sonarr {
           // get and save image aspect ratio for rendering later on (set to 1.5) until this works
           // const dimensions = sizeOf(__dirname + '/../../public/imagecache/' + fileName);
           // console.log(dimensions.width, dimensions.height);
-          medCard.posterAR = 1.5;
+          medCard.posterAR = 1.47;
 
 
         // add media card to array (taking into account premieres option)

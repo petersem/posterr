@@ -89,7 +89,7 @@ class Radarr {
         //   medCard.posterAR = (dimensions.height / dimensions.width);
         //   console.log(dimensions.width, dimensions.height);
         // });
-        medCard.posterAR = 1.5;
+        medCard.posterAR = 1.47;
 
         // content rating and colour
         let contentRating = "NR";

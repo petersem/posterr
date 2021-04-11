@@ -6,7 +6,7 @@ i.fab {
 }
 
 .breadcrumb {
-    background: #272E48;
+    background: #1c2133;
 }
 
 /* .d-block {
@@ -20,7 +20,7 @@ span.menu {
 
 body{margin-top:20px;
     color: #bcd0f7;
-        background: #1A233A;
+        background: #18180d;
     }
     .account-settings .user-profile {
         margin: 0 0 1rem 0;
@@ -51,7 +51,7 @@ body{margin-top:20px;
         text-align: center;
     }
     .card {
-        background: #272E48;
+        background: #1c2133;
         -webkit-border-radius: 5px;
         -moz-border-radius: 5px;
         border-radius: 5px;
@@ -64,6 +64,6 @@ body{margin-top:20px;
         -moz-border-radius: 2px;
         border-radius: 2px;
         font-size: .825rem;
-        background: #1A233A;
+        background: #0d111d;
         color: #bcd0f7;
     }

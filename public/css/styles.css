@@ -17,6 +17,10 @@ h1 {
   visibility: hidden;
 }
 
+#warning {
+  background-color: red;
+}
+
 .tagLine {
   color: rgb(255, 255, 255);
   /* font-size: 14px; */
@@ -66,7 +70,6 @@ iframe {
 
 .poster {
   max-width: 100%;
-
   vertical-align: top;
   color: white;
   vertical-align: top;
@@ -88,14 +91,18 @@ iframe {
   max-height: 8%;
 }
 
-/* If the screen size is 851px high or more */
-@media screen and (min-height: 856px) {
+/* If the screen size is 871px high or more */
+@media screen and (min-height: 871px) {
   .banners {
     padding-top: 0px;
   }
 
+  .progress {
+    height: 10px; 
+  }
+
   .bannerBigText {
-    font-size: 50px;
+    font-size: 49px;
   }
 
   .bottomBanner {
@@ -104,19 +111,23 @@ iframe {
   }
 }
 
-/* If the screen size is 850px high or less */
-@media screen and (max-height: 855px) {
+/* If the screen size is 870px high or less */
+@media screen and (max-height: 870px) {
   .banners {
     padding-top: 5px;
+  }
+
+  .progress {
+    height: 5px; 
+  }
+
+  .bannerBigText {
+    font-size: 30px;
   }
 
   .bottomBanner {
     font-size: 14px;
     padding-bottom: 10px;
-  }
-
-  .bannerBigText {
-    font-size: 30px;
   }
 }
 
@@ -178,6 +189,8 @@ iframe {
   margin-left: auto;
   margin-right: auto;
   z-index: 1000;
+  width: 0px; 
+  background-color: darkslategrey;
 }
 
 .screening {

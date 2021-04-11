@@ -3,7 +3,7 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
-const sizeOf = require('image-size');
+const sizeOf = require("image-size");
 
 /**
  * @desc Used to communicate with Plex
@@ -35,16 +35,20 @@ class Plex {
    * @returns {object} JSON - Plex now screening results
    */
   async GetNowScreeningRawData() {
+    try{
     this.nowScreening = await this.client.query("/status/sessions").then(
       function (result) {
         return result;
       },
       function (err) {
-        console.log("*Now screening - Get titles: " + err);
-        return [];
+        throw err;
       }
     );
-
+    }
+    catch(err){
+      console.log("*Now screening - Get titles: " + err);
+      throw err;
+    }
     return this.nowScreening;
   }
 
@@ -56,8 +60,13 @@ class Plex {
   async GetNowScreening(playGenenericThemes) {
     // get raw data first
     let nsCards = [];
-    let nsRaw = await this.GetNowScreeningRawData();
-
+    let nsRaw;
+    try{
+      nsRaw =await this.GetNowScreeningRawData();
+    }
+    catch(err){
+      throw err;
+    }
     // reutrn an empty array if no results
     if (
       nsRaw != [] &&
@@ -110,7 +119,7 @@ class Plex {
             //   medCard.posterAR = (dimensions.height / dimensions.width);
             //   console.log(dimensions.width, dimensions.height);
             // });
-            medCard.posterAR = 1.02;
+            medCard.posterAR = 1;
 
             medCard.cardType = cType.CardTypeEnum.Playing;
             // resize image to fit aspect ratio of 680x1000
@@ -158,7 +167,7 @@ class Plex {
             //   medCard.posterAR = (dimensions.height / dimensions.width);
             //   console.log(dimensions.width, dimensions.height);
             // });
-            medCard.posterAR=1.5;
+            medCard.posterAR = 1.47;
 
             medCard.title = md.grandparentTitle;
             medCard.genre = md.genre;
@@ -193,7 +202,7 @@ class Plex {
             //   medCard.posterAR = (dimensions.height / dimensions.width);
             //   console.log(dimensions.width, dimensions.height);
             // });
-            medCard.posterAR = 1.5;
+            medCard.posterAR = 1.47;
 
             medCard.title = md.title;
             medCard.tagLine = await util.emptyIfNull(md.tagline);
@@ -313,13 +322,11 @@ class Plex {
         }
 
         // add media card to array
-        if(md.type=='episode' || md.type=='movie' || md.type=='track'){
+        if (md.type == "episode" || md.type == "movie" || md.type == "track") {
           nsCards.push(medCard);
+        } else {
+          console.log("Unknown media type playing: " + md.type);
         }
-        else{
-          console.log('Unknown media type playing: ' + md.type);
-        }
-
       }, undefined);
     }
 
@@ -337,10 +344,12 @@ class Plex {
   async GetOnDemand(onDemandLibraries, numberOnDemand, playGenenericThemes) {
     // get library keys
     let odCards = [];
-    let odRaw = await this.GetOnDemandRawData(
-      onDemandLibraries,
-      numberOnDemand
-    );
+    let odRaw;
+    try {
+      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand);
+    } catch (err) {
+      console.log("** ERROR: " + err);
+    }
 
     // reutrn an empty array if no results
     if (odRaw.length != null) {
@@ -387,7 +396,7 @@ class Plex {
             //   medCard.posterAR = (dimensions.height / dimensions.width);
             //   console.log(dimensions.width, dimensions.height);
             // });
-            medCard.posterAR = 1.5;
+            medCard.posterAR = 1.47;
 
             medCard.runTime = Math.round(md.duration / 60000);
             medCard.title = md.grandparentTitle;
@@ -410,11 +419,11 @@ class Plex {
             medCard.posterURL = "/imagecache/" + movieFileName;
 
             // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
-            sizeOf('/imagecache/' + movieFileName, function (err, dimensions) {
-              medCard.posterAR = (dimensions.height / dimensions.width);
+            sizeOf("/imagecache/" + movieFileName, function (err, dimensions) {
+              medCard.posterAR = dimensions.height / dimensions.width;
               console.log(dimensions.width, dimensions.height);
             });
-            medCard.posterAR = 1.5;
+            medCard.posterAR = 1.47;
 
             // other data
             medCard.title = md.title;
@@ -531,6 +540,7 @@ class Plex {
     // Get the key for each library and push into an array
     let keys = [];
     return onDemandLibraries.split(",").reduce(async (acc, value) => {
+      try {
       return await this.client.query("/library/sections/").then(
         function (result) {
           result.MediaContainer.Directory.forEach((lib) => {
@@ -542,9 +552,12 @@ class Plex {
           return keys;
         },
         function (err) {
-          console.log("*On-demand - Get library key: " + err);
+          throw err;
         }
       );
+    }
+    catch(err){
+      console.log("*On-demand - Get library key: " + err);    }
     }, Promise.resolve(0));
   }
 
@@ -568,6 +581,7 @@ class Plex {
       },
       function (err) {
         console.log("*On-demand - Get titles: " + err);
+        throw err;
       },
       Promise.resolve(0)
     );
@@ -582,19 +596,23 @@ class Plex {
   async GetOnDemandRawData(onDemandLibraries, numberOnDemand) {
     // Get a list of random titles from selected libraries
     let odSet = [];
-    const keys = await this.GetLibraryKeys(onDemandLibraries);
-    // console.log("Library key: " + keys);
-    if (keys != undefined) {
-      odSet = await keys.reduce(async (acc, value) => {
-        const all = await acc;
-        return await this.GetAllMediaForLibrary(value).then(async function (
-          result
-        ) {
-          // TODO - need to address issue where only one library is getting returned (not concatenating results)
-          return await util.build_random_od_set(numberOnDemand, result);
-        },
-        Promise.resolve(0));
-      }, Promise.resolve(0));
+    try {
+      const keys = await this.GetLibraryKeys(onDemandLibraries);
+      // console.log("Library key: " + keys);
+      if (keys != undefined) {
+        odSet = await keys.reduce(async (acc, value) => {
+          const all = await acc;
+          return await this.GetAllMediaForLibrary(value).then(async function (
+            result
+          ) {
+            // TODO - need to address issue where only one library is getting returned (not concatenating results)
+            return await util.build_random_od_set(numberOnDemand, result);
+          },
+          Promise.resolve(0));
+        }, Promise.resolve(0));
+      }
+    } catch (err) {
+      console.log("** ERROR!!: " + err);
     }
     //console.log(odSet);
     return await odSet;

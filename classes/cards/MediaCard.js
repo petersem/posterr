@@ -117,9 +117,8 @@ class MediaCard {
 
       <div class="progress ` +
       hidden +
-      `" style="height: 5px; width: 0px; background-color: darkslategrey;" id="progress` +
-      this.ID +
-      `">
+      `" id="progress` +
+      this.ID + `">
           <div class="progress-bar ` +
       this.decision +
       `" role="progressbar" style="width: ` +
