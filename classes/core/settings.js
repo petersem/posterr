@@ -1,6 +1,6 @@
 const fs = require("fs");
 const fsp = require("fs").promises;
-
+const DEFAULT_SETTINGS = require('../../consts.js')
 /**
  * @desc settings object is used to get and set all settings for poster
  * @returns {<object>} settings
@@ -8,28 +8,49 @@ const fsp = require("fs").promises;
 class Settings {
   constructor() {
     // default values
-    this.password = "raidisnotabackup";
-    this.slideDuration = 10;
-    this.refreshPeriod = 120;
-    this.playThemes = "true";
-    this.genericThemes = "true";
-    this.fade = "true";
-    this.plexIP = "";
-    this.plexHTTPS = "false";
-    this.plexPort = 32400;
-    this.plexToken = "";
-    this.onDemandLibraries = "";
-    this.numberOnDemand = 2;
-    this.onDemandRefresh = 120;
-    this.sonarrURL = "";
-    this.sonarrToken = "";
-    this.sonarrCalDays = 175;
-    this.sonarrPremieres = "true";
-    this.radarrURL = "";
-    this.radarrToken = "";
-    this.radarrCalDays = 30;
+    this.password = DEFAULT_SETTINGS.password;
+    this.slideDuration = DEFAULT_SETTINGS.slideDuration;
+    this.refreshPeriod = DEFAULT_SETTINGS.refreshPeriod;
+    this.playThemes = DEFAULT_SETTINGS.playThemes;
+    this.genericThemes = DEFAULT_SETTINGS.genericThemes;
+    this.fade = DEFAULT_SETTINGS.fade;
+    this.plexIP = DEFAULT_SETTINGS.plexIP;
+    this.plexHTTPS = DEFAULT_SETTINGS.plexHTTPS;
+    this.plexPort = DEFAULT_SETTINGS.plexPort;
+    this.plexToken = DEFAULT_SETTINGS.plexToken;
+    this.onDemandLibraries = DEFAULT_SETTINGS.onDemandLibraries;
+    this.numberOnDemand = DEFAULT_SETTINGS.numberOnDemand;
+    this.onDemandRefresh = DEFAULT_SETTINGS.onDemandRefresh;
+    this.sonarrURL = DEFAULT_SETTINGS.sonarrURL;
+    this.sonarrToken = DEFAULT_SETTINGS.sonarrToken;
+    this.sonarrCalDays = DEFAULT_SETTINGS.sonarrCalDays;
+    this.sonarrPremieres = DEFAULT_SETTINGS.sonarrPremieres;
+    this.radarrURL = DEFAULT_SETTINGS.radarrURL;
+    this.radarrToken = DEFAULT_SETTINGS.radarrToken;
+    this.radarrCalDays = DEFAULT_SETTINGS.radarrCalDays;
 
     return;
+  }
+
+  /**
+   * @desc Returns if settings have been changed from default values
+   * @returns {<boolean>} true / false if any value is chagned
+   */
+  GetChanged() {
+    let hasChanged = false
+
+    try {
+      Object.keys(DEFAULT_SETTINGS).forEach((setting)=>{
+        if (this[setting]!==DEFAULT_SETTINGS[setting]) {
+          hasChanged = true
+          throw SettingChanged
+        }
+      })
+    } catch (e) {
+      if (e !== SettingChanged) throw e;
+    }
+
+    return hasChanged
   }
 
   /**
@@ -48,7 +69,7 @@ class Settings {
     const data = await fsp.readFile("config/settings.json", "utf-8");
     console.log(`✅ Settings loaded
     `);
-    
+
     let d;
     try{
       d = JSON.parse(data.toString());
