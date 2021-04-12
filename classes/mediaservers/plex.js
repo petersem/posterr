@@ -3,7 +3,16 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
+// const sizeOf = require("image-size");
 
+/**
+ * @desc Used to communicate with Plex
+ * @param {string} HTTPS - set this to true if Plex only allows secure connections
+ * @param {string} plexIP - the IP or fqdn of the plex server
+ * @param {number} plexPort - the port number used by Plex
+ * @param {string} plexToken - the Plex token
+ * @returns {object} Plex API client object
+ */
 class Plex {
   constructor({ HTTPS, plexIP, plexPort, plexToken }) {
     this.https = HTTPS;
@@ -19,39 +28,99 @@ class Plex {
       https: HTTPS,
       token: plexToken,
     });
+    this.client.timeout=0;
   }
 
+  /**
+   * @desc Get raw results for now screening
+   * @returns {object} JSON - Plex now screening results
+   */
   async GetNowScreeningRawData() {
-    this.nowScreening = await this.client
-      .query("/status/sessions")
-      .then(function (result) {
+    try{
+    this.nowScreening = await this.client.query("/status/sessions").then(
+      function (result) {
         return result;
       },
       function (err) {
-        console.log("*Now screening - Get titles: " + err);
-        return [];
+        throw err;
       }
     );
+    }
+    catch(err){
+      let now = new Date();
+      console.log(now.toLocaleString() + " *Now screening - Get titles: " + err);
+      throw err;
+    }
     return this.nowScreening;
   }
 
+  /**
+   * @desc Gets now screening cards
+   * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
+   * @returns {object} mediaCard[] - Returns an array of mediaCards
+   */
   async GetNowScreening(playGenenericThemes) {
     // get raw data first
     let nsCards = [];
-    let nsRaw = await this.GetNowScreeningRawData();
-
+    let nsRaw;
+    try{
+      nsRaw =await this.GetNowScreeningRawData();
+    }
+    catch(err){
+      throw err;
+    }
     // reutrn an empty array if no results
-    if (nsRaw != [] && nsRaw.MediaContainer != undefined && nsRaw.MediaContainer.Metadata != undefined ) {
-      // console.log(nsRaw.MediaContainer.Metadata[2]);
-
+    if (
+      nsRaw != [] &&
+      nsRaw.MediaContainer != undefined &&
+      nsRaw.MediaContainer.Metadata != undefined
+    ) {
       // move through results and populate media cards
       await nsRaw.MediaContainer.Metadata.reduce(async (memo, md) => {
         await memo;
         const medCard = new mediaCard();
         let transcode = "direct";
 
+        let result;
+        let fileName;
+        let prefix;
+        let url;
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
+          case "track":
+            medCard.tagLine =
+              md.title +
+              ", " +
+              md.grandparentTitle +
+              " (" +
+              md.parentTitle +
+              ")";
+            result = md.guid.split("/");
+            medCard.DBID = result[2];
+
+            // download poster image to local server
+            fileName = result[3] + ".jpg";
+            prefix = "http://";
+            if (this.https) prefix = "https://";
+            url =
+              prefix +
+              this.plexIP +
+              ":" +
+              this.plexPort +
+              md.parentThumb +
+              "&" +
+              this.plexToken;
+            await core.CacheImage(url, fileName);
+            medCard.posterURL = "/imagecache/" + fileName;
+
+            medCard.posterAR = 1;
+
+            medCard.audioCodec = md.Media[0].audioCodec;
+            medCard.runTime = Math.round(md.Media[0].duration / 60000);
+            medCard.cardType = cType.CardTypeEnum.Playing;
+            // resize image to fit aspect ratio of 680x1000
+
+            break;
           case "episode":
             medCard.tagLine =
               md.parentTitle +
@@ -60,7 +129,7 @@ class Plex {
               " - '" +
               md.title +
               "'";
-              let result = md.guid.split("/");
+            result = md.guid.split("/");
             medCard.DBID = result[2];
 
             // download mp3 file to local server
@@ -75,10 +144,10 @@ class Plex {
             }
 
             // download poster image to local server
-            let fileName = result[2] + ".jpg";
-            let prefix = "http://";
+            fileName = result[2] + ".jpg";
+            prefix = "http://";
             if (this.https) prefix = "https://";
-            let url =
+            url =
               prefix +
               this.plexIP +
               ":" +
@@ -89,9 +158,18 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
+            medCard.posterAR = 1.47;
+
             medCard.title = md.grandparentTitle;
             medCard.genre = md.genre;
-
+            medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
+              .replace("(", "")
+              .replace(")", "");
+            medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
+              .replace("Unknown ", "")
+              .replace("(", "")
+              .replace(")", "");
+            medCard.cardType = cType.CardTypeEnum.NowScreening;
             break;
           case "movie":
             // cache movie poster
@@ -110,6 +188,8 @@ class Plex {
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
 
+            medCard.posterAR = 1.47;
+
             medCard.title = md.title;
             medCard.tagLine = await util.emptyIfNull(md.tagline);
             if (await util.isEmpty(md.audienceRating)) {
@@ -117,12 +197,22 @@ class Plex {
             } else {
               medCard.rating = md.audienceRating * 10 + "%";
             }
+            medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
+              .replace("(", "")
+              .replace(")", "");
+            medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
+              .replace("Unknown ", "")
+              .replace("(", "")
+              .replace(")", "");
+            medCard.cardType = cType.CardTypeEnum.NowScreening;
             break;
         }
 
         // populate common data
         medCard.mediaType = md.type;
-        medCard.cardType = cType.CardTypeEnum.NowScreening;
+        medCard.user = md.User.title;
+        medCard.ip = md.Player.address;
+
         medCard.runTime = Math.round(md.Media[0].duration / 60000);
         medCard.progress = Math.round(md.viewOffset / 60000);
         medCard.progressPercent = Math.round(
@@ -211,24 +301,20 @@ class Plex {
         medCard.playerIP = md.Player.address;
         medCard.playerLocal = md.Player.local;
         medCard.user = md.User.title;
-        medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
-          .replace("(", "")
-          .replace(")", "");
-        medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
-          .replace("Unknown ", "")
-          .replace("(", "")
-          .replace(")", "");
 
-          let now = new Date();
-          if(nsCards.length==0){
-           // console.log(now.toLocaleString() + " Nothing playing");
-          }
-          else {
-           // console.log(now.toLocaleString() + " Now showing titles refreshed");
-          }
+        let now = new Date();
+        if (nsCards.length == 0) {
+          // console.log(now.toLocaleString() + " Nothing playing");
+        } else {
+          // console.log(now.toLocaleString() + " Now showing titles refreshed");
+        }
 
         // add media card to array
-        nsCards.push(medCard);
+        if (md.type == "episode" || md.type == "movie" || md.type == "track") {
+          nsCards.push(medCard);
+        } else {
+          console.log("Unknown media type playing: " + md.type);
+        }
       }, undefined);
     }
 
@@ -236,13 +322,23 @@ class Plex {
     return nsCards;
   }
 
+  /**
+   * @desc Gets random on-demand cards
+   * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
+   * @param {number} The number of titles to pull from each library
+   * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
+   * @returns {object} mediaCard[] - Returns an array of mediaCards
+   */
   async GetOnDemand(onDemandLibraries, numberOnDemand, playGenenericThemes) {
     // get library keys
     let odCards = [];
-    let odRaw = await this.GetOnDemandRawData(
-      onDemandLibraries,
-      numberOnDemand
-    );
+    let odRaw;
+    try {
+      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand);
+    } catch (err) {
+      let now = new Date();
+      console.log(now.toLocaleString() + " ** ERROR: " + err);
+    }
 
     // reutrn an empty array if no results
     if (odRaw.length != null) {
@@ -253,7 +349,6 @@ class Plex {
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
           case "show":
-            // console.log(md);
             medCard.tagLine = md.title;
             let result = md.guid.split("/");
             medCard.DBID = result[2].split("?")[0];
@@ -284,6 +379,8 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
+            medCard.posterAR = 1.47;
+
             medCard.runTime = Math.round(md.duration / 60000);
             medCard.title = md.grandparentTitle;
 
@@ -303,6 +400,8 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
+
+            medCard.posterAR = 1.47;
 
             // other data
             medCard.title = md.title;
@@ -389,7 +488,7 @@ class Plex {
 
         // add generic random theme if applicable
         if (medCard.theme == "" && playGenenericThemes) {
-          medCard.theme = "/randomthemes/" + (await core.GetRandomMP3());
+          medCard.theme = "/randomthemes/" + core.GetRandomMP3();
         }
 
         // add media card to array
@@ -397,24 +496,29 @@ class Plex {
       }, undefined);
     }
     let now = new Date();
-    if(odCards.length==0){
+    if (odCards.length == 0) {
       console.log(now.toLocaleString() + " No On-demand titles available");
-    }
-    else {
+    } else {
       console.log(now.toLocaleString() + " On-demand titles refreshed");
     }
     // return populated array
     return odCards;
   }
 
-  // Get library keys for selected on-demand libraries
+  /**
+   * @desc Get Plex library keys for selected on-demand libraries
+   * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
+   * @returns {object} number[] - Returns an array of library key numbers
+   */
   async GetLibraryKeys(onDemandLibraries) {
     if (!onDemandLibraries || onDemandLibraries.length == 0) {
       onDemandLibraries = " ";
     }
 
+    // Get the key for each library and push into an array
     let keys = [];
     return onDemandLibraries.split(",").reduce(async (acc, value) => {
+      try {
       return await this.client.query("/library/sections/").then(
         function (result) {
           result.MediaContainer.Directory.forEach((lib) => {
@@ -426,12 +530,21 @@ class Plex {
           return keys;
         },
         function (err) {
-          console.log("*On-demand - Get library key: " + err);
+          throw err;
         }
       );
+    }
+    catch(err){
+      let now = new Data();
+      console.log(now.toLocaleString() + " *On-demand - Get library key: " + err);    }
     }, Promise.resolve(0));
   }
 
+  /**
+   * @desc Get a mediaCard array for all titles in a given library (all is needed so random selections can be chosen later)
+   * @param {number} libKey - The plex library key number
+   * @returns {object} mediaCard[] - Returns an array of mediaCards
+   */
   async GetAllMediaForLibrary(libKey) {
     let mediaCards = [];
     return await this.client.query("/library/sections/" + libKey + "/all").then(
@@ -439,37 +552,48 @@ class Plex {
         // populate a complete list of all titles into an array
         if (result.MediaContainer.size > 0) {
           result.MediaContainer.Metadata.forEach((mt) => {
-            // console.log(mt);
             mediaCards.push(mt);
           });
         }
         return mediaCards;
       },
       function (err) {
-        console.log("*On-demand - Get titles: " + err);
+        let now = new Date();
+        console.log(now.toLocaleString() + " *On-demand - Get titles: " + err);
+        throw err;
       },
       Promise.resolve(0)
     );
   }
 
+  /**
+   * @desc Gets the specified, random, number of titles from a specified set of libraries
+   * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
+   * @param {number} numberOnDemand - the number of results to return from each library
+   * @returns {object} mediaCard[] - Returns an array of on-demand mediaCards
+   */
   async GetOnDemandRawData(onDemandLibraries, numberOnDemand) {
     // Get a list of random titles from selected libraries
     let odSet = [];
-    const keys = await this.GetLibraryKeys(onDemandLibraries);
-    // console.log("Library key: " + keys);
-    if (keys != undefined ) {
-      odSet = await keys.reduce(async (acc, value) => {
-        const all = await acc;
-        return await this.GetAllMediaForLibrary(value).then(async function (
-          result
-        ) {
-          // TODO - need to address issue where only one library is getting returned (not concatenating results)
-          return await util.build_random_od_set(numberOnDemand, result);
-        },
-        Promise.resolve(0));
-      }, Promise.resolve(0));
+    try {
+      const keys = await this.GetLibraryKeys(onDemandLibraries);
+      // console.log("Library key: " + keys);
+      if (keys != undefined) {
+        odSet = await keys.reduce(async (acc, value) => {
+          const all = await acc;
+          return await this.GetAllMediaForLibrary(value).then(async function (
+            result
+          ) {
+            // TODO - need to address issue where only one library is getting returned (not concatenating results)
+            return await util.build_random_od_set(numberOnDemand, result);
+          },
+          Promise.resolve(0));
+        }, Promise.resolve(0));
+      }
+    } catch (err) {
+      let now = new Date();
+      console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
     }
-    //console.log(odSet);
     return await odSet;
   }
 }

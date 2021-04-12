@@ -3,16 +3,29 @@ const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
 const axios = require("axios");
+const sizeOf = require('image-size');
 
+/**
+ * @desc Used to communicate with Sonarr to obtain a list of future releases
+ * @param sonarrUrl
+ * @param sonarrToken
+ */
 class Sonarr {
   constructor(sonarrUrl, sonarrToken) {
     this.sonarrUrl = sonarrUrl;
     this.sonarrToken = sonarrToken;
   }
 
+  /**
+   * @desc Gets the tv titles that fall within the range specified
+   * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
+   * @param {string} endDate - in yyyy-mm-dd format - future date
+   * @returns {Promise<object>} json results - results of search
+   */
   async GetComingSoonRawData(startDate, endDate) {
     let response;
 
+    // call sonarr API and return results
     try {
       response = await axios
         .get(
@@ -24,10 +37,11 @@ class Sonarr {
             "&end=" +
             endDate
         )
-        .catch(err => {
+        .catch((err) => {
           throw err;
         });
     } catch (err) {
+      // displpay error if call failed
       let d = new Date();
       console.log(d.toLocaleString() + " Sonarr error: ", err.message);
     }
@@ -35,6 +49,13 @@ class Sonarr {
     return response;
   }
 
+   /**
+   * @desc Get TV coming soon data and formats into mediaCard array
+   * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
+   * @param {string} endDate - in yyyy-mm-dd format - future date
+   * @param {string} premieres - boolean (string format) to show only season premieres
+   * @returns {Promise<object>} mediaCards array - results of search
+   */
   async GetComingSoon(startDate, endDate, premieres) {
     let csCards = [];
     // get raw data first
@@ -64,7 +85,9 @@ class Sonarr {
         medCard.summary = await util.emptyIfNull(md.overview);
         medCard.mediaType = "episode";
         medCard.cardType = cType.CardTypeEnum.ComingSoon;
+        medCard.network = md.series.network;
 
+        let fileName;
         // dont bother to download if only looking for premiers
         if (premieres == "true" && md.episodeNumber != 1) {
           // dont get cached files
@@ -75,10 +98,11 @@ class Sonarr {
           medCard.theme = "/mp3cache/" + mp3;
 
           // cache image
-          let fileName = md.series.tvdbId + ".jpg";
+          fileName = md.series.tvdbId + ".jpg";
           let url = md.series.images[1].url;
           await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
+
         }
 
         // content rating and colour
@@ -136,6 +160,8 @@ class Sonarr {
             break;
         }
         medCard.ratingColour = ratingColour;
+
+        medCard.posterAR = 1.47;
 
         // add media card to array (taking into account premieres option)
         if (premieres && md.episodeNumber == 1) {

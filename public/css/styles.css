@@ -1,7 +1,5 @@
 /* hide mouse cursor */
-* {
-  cursor: none;
-}
+
 
 body {
   background-color: #18180d;
@@ -17,11 +15,15 @@ h1 {
   visibility: hidden;
 }
 
+#warning {
+  background-color: red;
+}
+
 .tagLine {
   color: rgb(255, 255, 255);
-  font-size: 14px;
+  /* font-size: 14px; */
   font-style: italic;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   overflow: hidden;
   word-wrap: break-word;
   white-space: nowrap;
@@ -39,40 +41,96 @@ iframe {
   background-size: cover;
 }
 
-#myDiv {
-  max-width: 100%;
-  max-height: 100%;
-  margin: auto;
-  display: block;
-  position: fixed;
-}
-
 .badge-pill {
   margin-left: 2px;
 }
 
+
+.banners,
+.bottomBanner {
+  height: 8%;
+  /* padding: 2px; */
+}
+
+#myDiv {
+  min-height: 100%;
+  width:100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+}
+.badge-pill {
+  margin-left: 2px;
+}
+
+
 .poster {
   max-width: 100%;
-  max-height: 100%;
-  margin: auto;
-  display: block;
+  vertical-align: top;
+  color: white;
+  vertical-align: top;
+  top: 8%;
+  position: fixed;
+  height: 84%;
+  max-height: 84%;
+  min-height: 545px;
+  width: 100%;
+  background-position: 50% 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .banners {
-  /* border-radius: 15px;
-  border: 2px solid goldenrod; */
-  max-height: 145px;
-  margin: auto;
-  display: block;
-  color: bisque;
-  /* margin-top: 5px; 
-  margin-bottom: 5px; */
-  width: 250px;
-  /* font-weight: 200; */
+  position: fixed;
+  width: 100%;
+  top: 0;
+  max-height: 8%;
+}
+
+/* If the screen size is 871px high or more */
+@media screen and (min-height: 871px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 10px; 
+  }
+
+  .bannerBigText {
+    font-size: 49px;
+  }
+
+  .bottomBanner {
+    font-size: 18px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 870px high or less */
+@media screen and (max-height: 870px) {
+  .banners {
+    padding-top: 5px;
+  }
+
+  .progress {
+    height: 5px; 
+  }
+
+  .bannerBigText {
+    font-size: 30px;
+  }
+
+  .bottomBanner {
+    font-size: 14px;
+    padding-bottom: 10px;
+  }
 }
 
 .bannerBigText {
-  font-size: 32px;
+  color: lightgoldenrodyellow;
   vertical-align: middle;
 }
 
@@ -84,13 +142,17 @@ iframe {
 
 .spacer {
   width: 100%;
-  height: 45px;
+  /* height: 45px; */
 }
 
 .bottomBanner {
   color: lightgoldenrodyellow;
-  position: relative;
-  /* background-color: #212529; */
+  bottom: 0;
+  position: fixed;
+  height: 8%;
+  max-height: 8%;
+  width: 100%;
+  cursor: none;
 }
 
 .vidBanner {
@@ -124,6 +186,9 @@ iframe {
 .progress {
   margin-left: auto;
   margin-right: auto;
+  z-index: 1000;
+  width: 0px; 
+  background-color: darkslategrey;
 }
 
 .screening {

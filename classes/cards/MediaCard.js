@@ -1,5 +1,9 @@
 const util = require("./../core/utility");
 
+/**
+ * @desc mediaCards base class for defining every card that is showed in the poster app
+ * @returns nothing
+ */
 class MediaCard {
   constructor() {
     this.ID = null;
@@ -9,6 +13,7 @@ class MediaCard {
     this.title = "";
     this.year = "";
     this.posterURL = "";
+    this.posterAR = "";
     this.contentRating = "";
     this.ratingColour = "";
     this.rating = "";
@@ -16,6 +21,8 @@ class MediaCard {
     this.tagLine = "";
     this.runTime = "";
     this.resCodec = "";
+    this.studio = "";
+    this.network = "";
     this.audioCodec = "";
     this.playerDevice = "";
     this.playerIP = "";
@@ -28,18 +35,27 @@ class MediaCard {
     this.decision = "";
     this.theme = "";
     this.rendered = "";
+    this.user ="";
+    this.ip ="";
   }
 
+  /**
+   * @desc renders the properties of the card into html, then sets this to the 'rendered' property
+   * @returns nothing
+   */
   async Render() {
     let hidden = "";
-    if (this.cardType != "Now Screening") hidden = "hidden";
-
+    if (this.cardType != "Now Screening" && this.cardType != "Playing") hidden = "hidden";
     // pill variables
     let contentRatingPill = "";
     let resCodecPill = "";
     let audioCodecPill = "";
     let runTimePill = "";
     let ratingPill = "";
+    let networkPill = "";
+    let studioPill = "";
+    let ipPill = "";
+    let userPill = "";
 
     // include if value present
     if (!(await util.isEmpty(this.contentRating))) {
@@ -51,10 +67,38 @@ class MediaCard {
         "</span>";
     }
 
+    if (!(await util.isEmpty(this.ip))) {
+      ipPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.ip +
+        "</span>";
+    }
+
+    if (!(await util.isEmpty(this.user))) {
+      userPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.user +
+        "</span>";
+    }
+
     if (!(await util.isEmpty(this.resCodec))) {
       resCodecPill =
         "<span class='badge badge-pill badge-dark'> " +
         this.resCodec +
+        "</span>";
+    }
+
+    if (!(await util.isEmpty(this.network))) {
+      networkPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.network +
+        "</span>";
+    }
+
+    if (!(await util.isEmpty(this.studio))) {
+      studioPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.studio +
         "</span>";
     }
 
@@ -96,17 +140,21 @@ class MediaCard {
       <div class="myDiv">
         <div class="banners">
           <div class="bannerBigText ` +
-      this.typeClass +
+      this.cardType +
       `">` +
       this.cardType +
       `</div>
         </div> 
 
-        <div class="progress ` +
-      hidden +
-      `" style="height: 5px; width: 0px; background-color: darkslategrey;" id="progress` +
+      <div id="poster` +
       this.ID +
-      `">
+      `" class="poster" style="background-image: url('` +
+      this.posterURL + `">
+
+      <div class="progress ` +
+      hidden +
+      `" id="progress` +
+      this.ID + `">
           <div class="progress-bar ` +
       this.decision +
       `" role="progressbar" style="width: ` +
@@ -118,14 +166,9 @@ class MediaCard {
       this.runTime +
       `"></div>
         </div>
-        <img alt="" title="" class="poster" id="poster` +
-      this.ID +
-      `"
-          src='` +
-      this.posterURL +
-      `' />
+      <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>
       </div>
-      <div class="spacer"></div>
+
       <div class="bottomBanner mx-auto transparent" id="bottomBanner` +
       this.ID +
       `">
@@ -135,10 +178,15 @@ class MediaCard {
         <div class="tagDetails">` +
       contentRatingPill +
       resCodecPill +
+      networkPill +
+      studioPill +
       audioCodecPill +
       runTimePill +
       ratingPill +
+      userPill +
+      ipPill +
       `</div>
+      </div>
       </div>
     </div>`;
     return;

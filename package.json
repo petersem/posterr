@@ -1,22 +1,37 @@
 {
   "name": "poster",
   "version": "1.0.0",
-  "description": "An digital display for your media",
+  "description": "A digital display for your media",
   "main": "index.js",
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*",
+      "settings.json"
+    ]
+  },
   "scripts": {
-    "start" : "node index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matt Petersen",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "ejs": "^3.1.2",
     "express": "^4.17.1",
+    "express-hbs": "^2.3.4",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.10.0",
     "fs-extra": "^9.1.0",
+    "image-size": "^0.9.7",
+    "memorystore": "^1.6.6",
     "plex-api": "^5.3.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.7"
   }
 }

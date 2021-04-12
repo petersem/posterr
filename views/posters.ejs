@@ -2,6 +2,7 @@
 
 <!-- TODO -Make this nice later on -->
 <div>No content to display</div>
+<div>Click <a href='/settings'>HERE</a> for settings?</div>
 <script lang="javascript">
     // reload every 5 seconds to check for content
     const interval = setInterval(function () {
@@ -23,14 +24,13 @@
 
 <script language='javascript'>
     var initialLoadTime = new Date().getTime();
-    //console.log('initial load time:' + initialLoadTime)
+
     $(function () {
 
         // resize for initial page load
         $('.myDiv').css({
-            'height': (($(window).height()) - 115) + 'px'
+            'height': (($(window).height()) - 120) + 'px'
         });
-        //console.log('Refresh posters');
 
         StopAllAudio();
         //trigger initial audio play if present
@@ -43,17 +43,15 @@
         }
 
         // pause on itial slide for 4 seconds to allow poster load
-        waitforload(4000, 1);
+        waitforload(1000, 1);
 
         // check if on single card
         var numOfCards;
         numOfCards = <%=globals.cards.length %> ;
         // if on 1 or less cards then we need to trigger a manual refresh every slide transition period
         if (numOfCards < 2) {
-            //console.log('On single card');
             // check every 5 seconds to see if ready for refresh
             const interval = setInterval(function () {
-                //console.log((new Date().getTime() - initialLoadTime) / 1000);
                 if (new Date().getTime() - initialLoadTime > <%=globals.slideDuration %> ) {
                     window.location.reload();
                 }
@@ -65,26 +63,57 @@
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // generic sleep function
     async function waitforload(delay, id) {
-        // console.log('Waiting for '+delay+' seconds...');
         await sleep(delay);
 
         // resize banner and progress bar based upon poster size
         Resize(id);
     }
 
+    // Calculate width and placement of progress bar
     function Resize(id) {
-        var posterWidth = $('#poster' + id).width();
-        //console.log(posterWidth);
+        // assign vars and get middle panel dimensions
+        var midHeight = window.innerHeight * .84;
+        var midWidth = window.innerWidth;
+        var posterHeight;
+        var posterWidth;
+        var ar = parseFloat($('#poster' + id + 'AR').text());
+        var progressOffset;
+
+        // Calculate poster width for progress indicator and top offset position
+        switch (ar) {
+            case 1: // album art
+                if(midWidth >= midHeight){
+                    posterHeight = midHeight;
+                    posterWidth = midHeight;
+                    progressOffset = 0;
+                }
+                else {
+                    posterHeight = midWidth;
+                    posterWidth = midWidth;
+                    progressOffset = (midHeight - posterHeight) / 2;
+                }
+                break;
+            case 1.47: // Most movie / tv posters
+                posterHeight = midHeight;
+                posterWidth = midHeight / ar;
+                progressOffset = 0;
+                break;
+            default: // default to less used movie/tv poster size (often 1.5, but 1.47 still ok to use)
+                posterHeight = midHeight;
+                posterWidth = midHeight / ar;
+                progressOffset = 0;
+                break;
+        }
+
         if (posterWidth > 0) {
-            // $('#bottomBanner' + id).css({
-            //     'width': posterWidth + 'px'
-            // });
-            console.log('Check if hidden');
             if ($('#progress' + id).hasClass('hidden')) {
             } else {
                 $('#progress' + id).css({
-                    'width': posterWidth - 2 + 'px'
+                    'width': posterWidth + 'px',
+                    'position': 'relative',
+                    'top': progressOffset + 'px'
                 });
             }
         }
@@ -92,18 +121,16 @@
 
     // resize when window resizes
     $(window).bind('resize', function () {
-        $('.myDiv').css({
-            'height': (($(window).height()) - 115) + 'px'
-        });
-
-        var posterWidth = $('.poster').width();
-        if (posterWidth > 0) {
-            // $('.bottomBanner').css({
-            //     'width': posterWidth + 'px'
-            // });
-            $('.progress').css({
-                'width': posterWidth - 2 + 'px'
-            });
+        if(window.innerHeight <= 650) {
+            $('.banners').css({
+                'background-color': 'red'
+            })
+        }
+        else {
+            $('.banners').css({
+                'background-color': '#18180d'
+            })
+            location.reload();
         }
     });
 
