@@ -63,7 +63,6 @@ class Radarr {
       console.log('radarr error: ' + err);
       throw err;
     }
-//    console.log(raw);
     // reutrn an empty array if no results
     if (raw != null) {
       // move through results and populate media cards
@@ -104,11 +103,7 @@ class Radarr {
           await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
         }
-        // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
-        // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
-        //   medCard.posterAR = (dimensions.height / dimensions.width);
-        //   console.log(dimensions.width, dimensions.height);
-        // });
+
         medCard.posterAR = 1.47;
 
         // content rating and colour

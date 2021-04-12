@@ -3,7 +3,7 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
-const sizeOf = require("image-size");
+// const sizeOf = require("image-size");
 
 /**
  * @desc Used to communicate with Plex
@@ -28,6 +28,7 @@ class Plex {
       https: HTTPS,
       token: plexToken,
     });
+    this.client.timeout=0;
   }
 
   /**
@@ -46,7 +47,8 @@ class Plex {
     );
     }
     catch(err){
-      console.log("*Now screening - Get titles: " + err);
+      let now = new Date();
+      console.log(now.toLocaleString() + " *Now screening - Get titles: " + err);
       throw err;
     }
     return this.nowScreening;
@@ -68,14 +70,11 @@ class Plex {
       throw err;
     }
     // reutrn an empty array if no results
-  console.log(nsRaw);
     if (
       nsRaw != [] &&
       nsRaw.MediaContainer != undefined &&
       nsRaw.MediaContainer.Metadata != undefined
     ) {
-      // console.log(nsRaw.MediaContainer.Metadata[2]);
-
       // move through results and populate media cards
       await nsRaw.MediaContainer.Metadata.reduce(async (memo, md) => {
         await memo;
@@ -89,7 +88,6 @@ class Plex {
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
           case "track":
-            console.log(md);
             medCard.tagLine =
               md.title +
               ", " +
@@ -115,11 +113,6 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
-            // get and save image aspect ratio for rendering later on - set to 1 until this is fixed
-            // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
-            //   medCard.posterAR = (dimensions.height / dimensions.width);
-            //   console.log(dimensions.width, dimensions.height);
-            // });
             medCard.posterAR = 1;
 
             medCard.audioCodec = md.Media[0].audioCodec;
@@ -165,11 +158,6 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
-            // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
-            // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
-            //   medCard.posterAR = (dimensions.height / dimensions.width);
-            //   console.log(dimensions.width, dimensions.height);
-            // });
             medCard.posterAR = 1.47;
 
             medCard.title = md.grandparentTitle;
@@ -200,11 +188,6 @@ class Plex {
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
 
-            // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
-            // sizeOf('/imagecache/' + movieFileName, function (err, dimensions) {
-            //   medCard.posterAR = (dimensions.height / dimensions.width);
-            //   console.log(dimensions.width, dimensions.height);
-            // });
             medCard.posterAR = 1.47;
 
             medCard.title = md.title;
@@ -353,7 +336,8 @@ class Plex {
     try {
       odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand);
     } catch (err) {
-      console.log("** ERROR: " + err);
+      let now = new Date();
+      console.log(now.toLocaleString() + " ** ERROR: " + err);
     }
 
     // reutrn an empty array if no results
@@ -365,7 +349,6 @@ class Plex {
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
           case "show":
-            // console.log(md);
             medCard.tagLine = md.title;
             let result = md.guid.split("/");
             medCard.DBID = result[2].split("?")[0];
@@ -396,11 +379,6 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
-            // get and save image aspect ratio for rendering later on - set to 1.5 until fixed
-            // sizeOf('/imagecache/' + fileName, function (err, dimensions) {
-            //   medCard.posterAR = (dimensions.height / dimensions.width);
-            //   console.log(dimensions.width, dimensions.height);
-            // });
             medCard.posterAR = 1.47;
 
             medCard.runTime = Math.round(md.duration / 60000);
@@ -423,11 +401,6 @@ class Plex {
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
 
-            // get and save image aspect ratio for rendering later on - set to 1.5 until this is fixed
-            sizeOf("/imagecache/" + movieFileName, function (err, dimensions) {
-              medCard.posterAR = dimensions.height / dimensions.width;
-              console.log(dimensions.width, dimensions.height);
-            });
             medCard.posterAR = 1.47;
 
             // other data
@@ -562,7 +535,8 @@ class Plex {
       );
     }
     catch(err){
-      console.log("*On-demand - Get library key: " + err);    }
+      let now = new Data();
+      console.log(now.toLocaleString() + " *On-demand - Get library key: " + err);    }
     }, Promise.resolve(0));
   }
 
@@ -578,14 +552,14 @@ class Plex {
         // populate a complete list of all titles into an array
         if (result.MediaContainer.size > 0) {
           result.MediaContainer.Metadata.forEach((mt) => {
-            // console.log(mt);
             mediaCards.push(mt);
           });
         }
         return mediaCards;
       },
       function (err) {
-        console.log("*On-demand - Get titles: " + err);
+        let now = new Date();
+        console.log(now.toLocaleString() + " *On-demand - Get titles: " + err);
         throw err;
       },
       Promise.resolve(0)
@@ -617,9 +591,9 @@ class Plex {
         }, Promise.resolve(0));
       }
     } catch (err) {
-      console.log("** ERROR!!: " + err);
+      let now = new Date();
+      console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
     }
-    //console.log(odSet);
     return await odSet;
   }
 }

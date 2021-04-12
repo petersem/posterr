@@ -39,6 +39,7 @@ let radarrClock;
 let houseKeepingClock;
 let setng = new settings();
 let loadedSettings;
+let nsCheckSeconds = 30000; // how often now screening checks are performed. (not available in setup screen as running too often can cause network issues)
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -57,9 +58,7 @@ let loadedSettings;
   // set up date range and date formats
   let today = new Date();
   let later = new Date();
-  //console.log(today.toISOString().split("T")[0]);
   later.setDate(later.getDate() + loadedSettings.radarrCalDays);
-  //console.log(later.toISOString().split("T")[0]);
   let now = today.toISOString().split("T")[0];
   let ltr = later.toISOString().split("T")[0];
 
@@ -93,9 +92,7 @@ async function loadSonarrComingSoon() {
   // set up date range and date formats
   let today = new Date();
   let later = new Date();
-  //console.log(today.toISOString().split("T")[0]);
   later.setDate(later.getDate() + loadedSettings.sonarrCalDays);
-  //console.log(later.toISOString().split("T")[0]);
   let now = today.toISOString().split("T")[0];
   let ltr = later.toISOString().split("T")[0];
 
@@ -130,7 +127,7 @@ async function loadNowScreening() {
 
   // call now screening method
   try{
-  nsCards = await ms.GetNowScreening(loadedSettings.playGenenericThemes);
+    nsCards = await ms.GetNowScreening(loadedSettings.playGenenericThemes);
   }
   catch(err){
     console.log(err.message);
@@ -179,7 +176,7 @@ async function loadNowScreening() {
   globalPage.fadeTransition = (loadedSettings.fade=="true") ? "carousel-fade" : "";
 
   // restart the clock
-  nowScreeningClock = setInterval(loadNowScreening, 60000); // every minute
+  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds); 
   return nsCards;
 }
 
@@ -261,7 +258,7 @@ async function startup() {
   `);
 
   // set intervals for timers
-  nowScreeningClock = setInterval(loadNowScreening, 20000); // every 20 seconds
+  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds); 
   onDemandClock = setInterval(
     loadOnDemand,
     loadedSettings.onDemandRefresh * 60000
@@ -269,7 +266,6 @@ async function startup() {
   sonarrClock = setInterval(loadSonarrComingSoon, 86400000); // daily
   radarrClock = setInterval(loadRadarrComingSoon, 86400000); // daily
   houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
-
   return;
 }
 
@@ -328,7 +324,7 @@ app.get("/health", (req, res) => {
   res.json(app.locals.globals);
 });
 
-// settings page TODO
+// settings page TODO - password
 app.get("/settings", (req, res) => {
   res.render("settings", {
     success: req.session.success,
@@ -395,7 +391,7 @@ app.post(
     //     }),
   ],
   (req, res) => {
-      //fields value holder
+      //fields value holder. Also sets default values in form passed without them.
       let form = {
         password: req.body.password,
         slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : 10,
@@ -412,7 +408,7 @@ app.post(
         onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : 30,
         sonarrUrl: req.body.sonarrUrl,
         sonarrToken: req.body.sonarrToken,
-        sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : 30,
+        sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : 3,
         premiereSwitch: req.body.premiereSwitch,
         radarrUrl: req.body.radarrUrl,
         radarrToken: req.body.radarrToken,

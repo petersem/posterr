@@ -1,7 +1,5 @@
 /* hide mouse cursor */
-/* * {
-  cursor: none;
-} */
+
 
 body {
   background-color: #18180d;
@@ -154,7 +152,7 @@ iframe {
   height: 8%;
   max-height: 8%;
   width: 100%;
-  /* background-color: #212529; */
+  cursor: none;
 }
 
 .vidBanner {

@@ -61,7 +61,6 @@ class Sonarr {
     // get raw data first
     let raw = await this.GetComingSoonRawData(startDate, endDate);
     // reutrn an empty array if no results
-//  console.log(raw.data[0]);
     if (raw != null) {
       // move through results and populate media cards
       await raw.data.reduce(async (memo, md) => {
@@ -162,11 +161,7 @@ class Sonarr {
         }
         medCard.ratingColour = ratingColour;
 
-          // get and save image aspect ratio for rendering later on (set to 1.5) until this works
-          // const dimensions = sizeOf(__dirname + '/../../public/imagecache/' + fileName);
-          // console.log(dimensions.width, dimensions.height);
-          medCard.posterAR = 1.47;
-
+        medCard.posterAR = 1.47;
 
         // add media card to array (taking into account premieres option)
         if (premieres && md.episodeNumber == 1) {
