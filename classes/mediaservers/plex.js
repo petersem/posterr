@@ -3,6 +3,7 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
+const { playThemes } = require("../../consts");
 // const sizeOf = require("image-size");
 
 /**
@@ -59,7 +60,7 @@ class Plex {
    * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetNowScreening(playGenenericThemes) {
+  async GetNowScreening(playThemes, playGenenericThemes) {
     // get raw data first
     let nsCards = [];
     let nsRaw;
@@ -132,10 +133,13 @@ class Plex {
             result = md.guid.split("/");
             medCard.DBID = result[2];
 
-            // download mp3 file to local server
-            let mp3 = result[2] + ".mp3";
-            await core.CacheMP3(mp3);
-            medCard.theme = "/mp3cache/" + mp3;
+            // only downlad mp3 if playThemes enabled
+            if(playThemes == 'true'){
+              // download mp3 file to local server
+              let mp3 = result[2] + ".mp3";
+              await core.CacheMP3(mp3);
+              medCard.theme = "/mp3cache/" + mp3;
+            }
 
             if (await util.isEmpty(md.rating)) {
               medCard.rating = "";
@@ -189,6 +193,10 @@ class Plex {
             medCard.posterURL = "/imagecache/" + movieFileName;
 
             medCard.posterAR = 1.47;
+            // add generic random theme if applicable
+            if (playGenenericThemes == 'true') {
+              medCard.theme = "/randomthemes/" + (await core.GetRandomMP3());
+            }
 
             medCard.title = md.title;
             medCard.tagLine = await util.emptyIfNull(md.tagline);
@@ -289,11 +297,6 @@ class Plex {
         }
         medCard.decision = transcode;
 
-        // add generic random theme if applicable
-        if (medCard.theme == "" && playGenenericThemes == "true") {
-          medCard.theme = "/randomthemes/" + (await core.GetRandomMP3());
-        }
-
         medCard.year = md.year;
         medCard.genre = await util.emptyIfNull(md.Genre);
         medCard.summary = md.summary;
@@ -329,7 +332,7 @@ class Plex {
    * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetOnDemand(onDemandLibraries, numberOnDemand, playGenenericThemes) {
+  async GetOnDemand(onDemandLibraries, numberOnDemand, playThemes, playGenenericThemes) {
     // get library keys
     let odCards = [];
     let odRaw;
@@ -353,10 +356,13 @@ class Plex {
             let result = md.guid.split("/");
             medCard.DBID = result[2].split("?")[0];
 
-            // download mp3 from plex tv theme server
-            let mp3 = result[2].split("?")[0] + ".mp3";
-            await core.CacheMP3(mp3);
-            medCard.theme = "/mp3cache/" + mp3;
+            // include if playThemes is enabled
+            if(playThemes == 'true'){
+              // download mp3 from plex tv theme server
+              let mp3 = result[2].split("?")[0] + ".mp3";
+              await core.CacheMP3(mp3);
+              medCard.theme = "/mp3cache/" + mp3;
+            }
 
             if (await util.isEmpty(md.rating)) {
               medCard.rating = "";
@@ -400,6 +406,11 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
+
+            // add generic random theme if applicable
+            if (playGenenericThemes == 'true') {
+              medCard.theme = "/randomthemes/" + await core.GetRandomMP3();
+            }
 
             medCard.posterAR = 1.47;
 
@@ -486,11 +497,6 @@ class Plex {
         medCard.genre = await util.emptyIfNull(md.Genre);
         medCard.summary = md.summary;
 
-        // add generic random theme if applicable
-        if (medCard.theme == "" && playGenenericThemes) {
-          medCard.theme = "/randomthemes/" + core.GetRandomMP3();
-        }
-
         // add media card to array
         odCards.push(medCard);
       }, undefined);
@@ -514,6 +520,8 @@ class Plex {
     if (!onDemandLibraries || onDemandLibraries.length == 0) {
       onDemandLibraries = " ";
     }
+
+    // this should only have ONE on-demand library set in settings, due to connection issues being experienced. (TODO - resolve)
 
     // Get the key for each library and push into an array
     let keys = [];

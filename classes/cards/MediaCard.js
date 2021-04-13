@@ -43,7 +43,7 @@ class MediaCard {
    * @desc renders the properties of the card into html, then sets this to the 'rendered' property
    * @returns nothing
    */
-  async Render() {
+  async Render(playThemes,playGenericThemes) {
     let hidden = "";
     if (this.cardType != "Now Screening" && this.cardType != "Playing") hidden = "hidden";
     // pill variables

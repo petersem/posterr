@@ -52,7 +52,7 @@ class Radarr {
    * @param {string} endDate - in yyyy-mm-dd format - future date
    * @returns {Promise<object>} mediaCards array - results of search
    */
-  async GetComingSoon(startDate, endDate,playGenenericThemes) {
+  async GetComingSoon(startDate, endDate, playGenenericThemes) {
     let csrCards = [];
     let raw;
     // get raw data first
@@ -161,9 +161,10 @@ class Radarr {
             break;
         }
         medCard.ratingColour = ratingColour;
-
+        
         // add generic random theme if applicable
-        if (medCard.theme == "" && playGenenericThemes) {
+
+        if (playGenenericThemes == 'true') {
           medCard.theme = "/randomthemes/" + (await core.GetRandomMP3());
         }
 

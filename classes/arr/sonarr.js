@@ -56,7 +56,7 @@ class Sonarr {
    * @param {string} premieres - boolean (string format) to show only season premieres
    * @returns {Promise<object>} mediaCards array - results of search
    */
-  async GetComingSoon(startDate, endDate, premieres) {
+  async GetComingSoon(startDate, endDate, premieres, playThemes) {
     let csCards = [];
     // get raw data first
     let raw = await this.GetComingSoonRawData(startDate, endDate);
@@ -92,10 +92,13 @@ class Sonarr {
         if (premieres == "true" && md.episodeNumber != 1) {
           // dont get cached files
         } else {
-          // cache mp3 file
-          let mp3 = md.series.tvdbId + ".mp3";
-          await core.CacheMP3(mp3);
-          medCard.theme = "/mp3cache/" + mp3;
+          // only downlad mp3 if playThemes enabled
+          if(playThemes == 'true'){
+            // cache mp3 file
+            let mp3 = md.series.tvdbId + ".mp3";
+            await core.CacheMP3(mp3);
+            medCard.theme = "/mp3cache/" + mp3;
+          }
 
           // cache image
           fileName = md.series.tvdbId + ".jpg";

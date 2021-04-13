@@ -40,6 +40,10 @@ let houseKeepingClock;
 let setng = new settings();
 let loadedSettings;
 let nsCheckSeconds = 30000; // how often now screening checks are performed. (not available in setup screen as running too often can cause network issues)
+let isSonarrEnabled = false;
+let isRadarrEnabled = false;
+let isOnDemandEnabled = false;
+let isPlexEnabled = false;
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -49,6 +53,14 @@ let nsCheckSeconds = 30000; // how often now screening checks are performed. (no
   // stop the clock
   clearInterval(radarrClock);
 
+  // dont run if disabled
+  if(!isRadarrEnabled) {
+    // restart the 24 hour timer
+    radarrClock = setInterval(loadRadarrComingSoon, 86400000); // daily
+
+    return csrCards;
+  } 
+  
   // instatntiate sonarr class
   let radarr = new radr(
     loadedSettings.radarrURL,
@@ -83,6 +95,15 @@ async function loadSonarrComingSoon() {
   // stop the clock
   clearInterval(sonarrClock);
 
+  // dont run if disabled
+  if(!isSonarrEnabled) {
+    // restart the 24 hour timer
+    sonarrClock = setInterval(loadSonarrComingSoon, 86400000); // daily
+
+    return csCards;
+  } 
+
+
   // instatntiate sonarr class
   let sonarr = new sonr(
     loadedSettings.sonarrURL,
@@ -100,7 +121,8 @@ async function loadSonarrComingSoon() {
   csCards = await sonarr.GetComingSoon(
     now,
     ltr,
-    loadedSettings.sonarrPremieres
+    loadedSettings.sonarrPremieres,
+    loadedSettings.playThemes
   );
 
   // restart the 24 hour timer
@@ -117,6 +139,15 @@ async function loadNowScreening() {
   // stop the clock
   clearInterval(nowScreeningClock);
 
+  // dont run if disabled
+  if(!isPlexEnabled) {
+    // restart the clock
+    nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds);
+    return nsCards;
+  } 
+
+
+
   // load MediaServer(s) (switch statement for different server settings server option - TODO)
   let ms = new pms({
     plexHTTPS: loadedSettings.plexHTTPS,
@@ -127,7 +158,7 @@ async function loadNowScreening() {
 
   // call now screening method
   try{
-    nsCards = await ms.GetNowScreening(loadedSettings.playGenenericThemes);
+    nsCards = await ms.GetNowScreening(loadedSettings.playThemes, loadedSettings.genericThemes);
   }
   catch(err){
     console.log(err.message);
@@ -188,6 +219,16 @@ async function loadOnDemand() {
   // stop the clock
   clearInterval(onDemandClock);
 
+  // dont run if disabled
+  if(!isOnDemandEnabled) {
+    // restart interval timer
+    onDemandClock = setInterval(
+      loadOnDemand,
+      loadedSettings.onDemandRefresh * 60000
+    );
+    return odCards;
+  } 
+
   // load MediaServer(s) (switch statement for different server settings server option - TODO)
   let ms = new pms({
     plexHTTPS: loadedSettings.plexHTTPS,
@@ -199,6 +240,7 @@ async function loadOnDemand() {
   odCards = await ms.GetOnDemand(
     loadedSettings.onDemandLibraries,
     loadedSettings.numberOnDemand,
+    loadedSettings.playThemes,
     loadedSettings.genericThemes
   );
 
@@ -235,13 +277,37 @@ async function loadSettings() {
 }
 
 /**
+ * @desc check if Now Screening/Playing, On-Demand, Sonarr or Radarr options are empty/disabled
+ * @returns nothing
+ */
+function checkEnabled(){
+
+  // check Plex
+  if(loadedSettings.plexIP !== undefined && loadedSettings.plexToken !== undefined && loadedSettings.plexPort !== undefined) { isPlexEnabled = true;}
+  // check on-demand
+  if((loadedSettings.onDemandLibraries !== undefined && loadedSettings.numberOnDemand !== 0 && loadedSettings.numberOnDemand !== undefined) && isPlexEnabled) { isOnDemandEnabled = true;}
+  // check Sonarr
+  if(loadedSettings.sonarrURL !== undefined && loadedSettings.sonarrCalDays !== undefined && loadedSettings.sonarrToken !== undefined) { isSonarrEnabled = true;}
+  // check Radarr
+  if(loadedSettings.radarrURL !== undefined && loadedSettings.radarrCalDays !== undefined && loadedSettings.radarrToken !== undefined) { isRadarrEnabled = true;}
+  let now = new Date();
+  console.log(`--- Enabled Status ---
+   Plex: ` + isPlexEnabled + `
+   On-demand: ` + isOnDemandEnabled + `
+   Sonarr: ` + isSonarrEnabled + `
+   Radarr: ` + isRadarrEnabled + `
+   `);
+}
+
+/**
  * @desc Starts everything - calls coming soon 'tv', on-demand and now screening functions. Then initialises timers
  * @returns nothing
  */
 async function startup() {
   // load settings object
   loadedSettings = await loadSettings();
-  //console.log(loadedSettings);
+  // check status of card providers
+  checkEnabled();
   // initial load of card providers
   await loadSonarrComingSoon();
   await loadRadarrComingSoon();

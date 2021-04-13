@@ -11,12 +11,14 @@ const DEFAULT_SETTINGS = {
   plexToken : "",
   onDemandLibraries : "",
   numberOnDemand : 2,
-  onDemandRefresh : 120,
+  onDemandRefresh : 60,
   sonarrURL : "",
   sonarrToken : "",
   sonarrCalDays : 175,
   sonarrPremieres : "true",
   radarrURL : "",
   radarrToken : "",
-  radarrCalDays : 30,
-}
+  radarrCalDays : 30
+};
+
+module.exports = DEFAULT_SETTINGS;

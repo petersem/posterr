@@ -122,8 +122,8 @@
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="themeSwitch" id="themeSwitch" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.themeSwitch ? 'checked' : '' %><%}else{%><%=(settings.playThemes == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="themeSwitch">Play theme tunes</label>
-                    <small id="themeHelp" class="form-text text-muted">Enables theme tunes, when available</small>
+                    <label class="custom-control-label" for="themeSwitch">TV theme tunes</label>
+                    <small id="themeHelp" class="form-text text-muted">Enables TV theme tunes, *when available*</small>
                   </div>
                 </div>
 
@@ -131,9 +131,8 @@
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="genericSwitch" id="genericSwitch" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.genericSwitch ? 'checked' : '' %><%}else{%><%=(settings.genericThemes == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="genericSwitch">Play generic themes if no theme present</label>
-                    <small id="randomThemeHelp" class="form-text text-muted">Requires 'play theme tunes' to be enabled
-                      also</small>
+                    <label class="custom-control-label" for="genericSwitch">Generic movie themes</label>
+                    <small id="randomThemeHelp" class="form-text text-muted">Plays a random mp3 from the '/randomthemes' directory</small>
                   </div>
                 </div>
 
@@ -193,8 +192,8 @@
                 <div class="form-group">
                   <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
                   <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
-                    placeholder="suggestions -> movies,tv shows,anime" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
-                  <small id="plexLibrariesHelp" class="form-text text-muted">(optional) Enter one or more Plex library names
+                    placeholder="suggestions -> movies or tv shows" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
+                  <small id="plexLibrariesHelp" class="form-text text-muted">(optional) Enter 'one' Plex library name to use
                     (comma seperated)</small>
                 </div>
                 <div class="form-group">

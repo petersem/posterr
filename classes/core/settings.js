@@ -1,6 +1,8 @@
 const fs = require("fs");
 const fsp = require("fs").promises;
-const DEFAULT_SETTINGS = require('../../consts.js')
+const DEFAULT_SETTINGS = require('../../consts');
+const util = require('../core/utility');
+
 /**
  * @desc settings object is used to get and set all settings for poster
  * @returns {<object>} settings
@@ -28,7 +30,6 @@ class Settings {
     this.radarrURL = DEFAULT_SETTINGS.radarrURL;
     this.radarrToken = DEFAULT_SETTINGS.radarrToken;
     this.radarrCalDays = DEFAULT_SETTINGS.radarrCalDays;
-
     return;
   }
 
@@ -37,20 +38,23 @@ class Settings {
    * @returns {<boolean>} true / false if any value is chagned
    */
   GetChanged() {
-    let hasChanged = false
-
+    let hasChanged = false;
+    let SettingChanged;
     try {
-      Object.keys(DEFAULT_SETTINGS).forEach((setting)=>{
-        if (this[setting]!==DEFAULT_SETTINGS[setting]) {
-          hasChanged = true
-          throw SettingChanged
-        }
-      })
+      // only worry about required Plex settings. (other settings can remain default or be blank)
+      if(this.plexIP !== '' &&  this.plexPort !== '' && this.plexToken !== ''){
+        hasChanged = true;
+        throw SettingChanged;
+      }
+      else{
+        let now = new Date();
+        console.log(now.toISOString().split("T")[0] + ' INVALID PLEX SERVER SETTINGS - Please visit setup page to resolve');
+      }
     } catch (e) {
       if (e !== SettingChanged) throw e;
     }
 
-    return hasChanged
+    return hasChanged;
   }
 
   /**
@@ -61,7 +65,6 @@ class Settings {
     // check if file exists before downloading
     if (!fs.existsSync("config/settings.json")) {
       //file not present, so create it with defaults
-
       await this.SaveSettings();
       console.log("✅ Config file created");
     }
@@ -70,15 +73,20 @@ class Settings {
     console.log(`✅ Settings loaded
     `);
 
-    let d;
+
+
+    let readSettings;
     try{
-      d = JSON.parse(data.toString());
+      readSettings = JSON.parse(data.toString());
     }
     catch(ex){
       // do nothing if error as it reads ok anyhow
     }
-    //console.log(d);
-    return d;
+
+    // populate settings object with settings from json file
+    Object.assign(this, readSettings);
+
+    return readSettings;
   }
 
   /**
@@ -168,7 +176,7 @@ class Settings {
       }
 
       let d = new Date();
-      console.log(d.toLocaleString() + " Settings saved.");
+      console.log(d.toISOString().split("T")[0] + " Settings saved.");
     });
 
 
