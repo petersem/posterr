@@ -96,7 +96,7 @@ iframe {
   }
 
   .progress {
-    height: 10px; 
+    height: 10px;
   }
 
   .bannerBigText {
@@ -116,7 +116,7 @@ iframe {
   }
 
   .progress {
-    height: 5px; 
+    height: 5px;
   }
 
   .bannerBigText {
@@ -187,7 +187,7 @@ iframe {
   margin-left: auto;
   margin-right: auto;
   z-index: 1000;
-  width: 0px; 
+  width: 0px;
   background-color: darkslategrey;
 }
 
@@ -199,4 +199,9 @@ iframe {
 .demand {
   color: maroon;
   font-weight: 600;
+}
+
+.no-content {
+  height: 80vh;
+  color: #6c757d;
 }

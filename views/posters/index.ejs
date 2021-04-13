@@ -1,0 +1,15 @@
+<% if (!hasConfig) { %>
+
+    <div class="alert alert-warning" role="alert">
+        Missing necessary settings. Click <a href="/settings" class="alert-link">here</a> to setup.
+    </div>
+
+<% } %>
+
+<%if(globals===undefined || globals==null || globals==="" || globals.cards.length===0){%>
+    <%- include('no-content.ejs') %>
+<%}
+else
+{%>
+    <%- include('posters.ejs') %>
+<%}%>

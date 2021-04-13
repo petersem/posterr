@@ -176,7 +176,7 @@ async function loadNowScreening() {
   globalPage.fadeTransition = (loadedSettings.fade=="true") ? "carousel-fade" : "";
 
   // restart the clock
-  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds); 
+  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds);
   return nsCards;
 }
 
@@ -258,7 +258,7 @@ async function startup() {
   `);
 
   // set intervals for timers
-  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds); 
+  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds);
   onDemandClock = setInterval(
     loadOnDemand,
     loadedSettings.onDemandRefresh * 60000
@@ -316,8 +316,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // set routes
 app.get("/", (req, res) => {
-  res.render("index", { globals: globalPage }); // index refers to index.ejs
+  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged() }); // index refers to index.ejs
 });
+
+
 
 // health check - TODO
 app.get("/health", (req, res) => {
@@ -425,7 +427,7 @@ app.post(
         formData: form,
       });
     } else {
-      // save settings 
+      // save settings
       req.session.errors = errors;
       req.session.success = true;
       form.saved = true;
