@@ -417,14 +417,20 @@ class Plex {
             // other data
             medCard.title = md.title;
             medCard.runTime = Math.round(md.Media[0].duration / 60000);
-            medCard.resCodec =
-              md.Media[0].videoResolution +
-              " " +
-              md.Media[0].videoCodec.toUpperCase();
-            medCard.audioCodec =
+
+            if(!await util.isEmpty(medCard.resCodec)){
+              medCard.resCodec =
+                md.Media[0].videoResolution +
+                " " +
+                md.Media[0].videoCodec.toUpperCase();
+            }
+            if(!await util.isEmpty(medCard.audioCodec)){
+              medCard.audioCodec =
               md.Media[0].audioCodec.toUpperCase() +
               " " +
               md.Media[0].audioChannels;
+            }
+
             medCard.tagLine = await util.emptyIfNull(md.tagline);
             if (await util.isEmpty(md.audienceRating)) {
               medCard.rating = "";
