@@ -30,6 +30,7 @@ class Plex {
       token: plexToken,
     });
     this.client.timeout=0;
+    this.client.options = {'product': 'Poster'};
   }
 
   /**
