@@ -1,7 +1,9 @@
 # poster
 Media display software for Plex, Sonarr and Radarr.
 
-
+![alt text](http://url/to/img.png)
+![plot](./directory_1/directory_2/.../directory_n/plot.png)
+![Music playing](doco/music.png)![Shows](doco/shows.png)![Settings](doco/settings.png)
 
 
 
