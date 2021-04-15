@@ -14,11 +14,10 @@ version: '2.4'
 
 services:
   poster:
-    image: poster
+    image: petersem/poster
     container_name: poster
     environment:
       TZ: Australia/Brisbane
-      NODE_ENV: production
     volumes:
       - ./docker/poster/public/randomthemes:/usr/src/app/public/randomthemes
       - ./docker/poster/config:/usr/src/app/config
