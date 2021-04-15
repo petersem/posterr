@@ -194,7 +194,7 @@
                   <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
                     placeholder="suggestions -> movies or tv shows" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
                   <small id="plexLibrariesHelp" class="form-text text-muted">(optional) Enter 'one' Plex library name to use
-                    (comma seperated)</small>
+                    (Leave blank to disable)</small>
                 </div>
                 <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
@@ -219,7 +219,7 @@
                 <label for="sonarrToken">Sonarr Token</label>
                 <input type="password" class="form-control" id="sonarrToken" name="sonarrToken" aria-describedby="sonarrTokenlHelp"
                   placeholder="Sonarr API Token`" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sonarrToken%>"<%}else{%><%=settings.sonarrToken%>"<%}%>>
-                <small id="sonarTokenHelp" class="form-text text-muted">Enter the Sonarr API token. (Leave blank if coming soon 'TV' not wanted)</small>
+                <small id="sonarTokenHelp" class="form-text text-muted">Enter the Sonarr API token. (Leave blank to disable)</small>
               </div>
                 <div class="form-group">
                   <label for="sonarrUrl">Sonarr URL</label>
@@ -235,7 +235,7 @@
                   value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sonarrDays%>"<%}else{%><%=settings.sonarrCalDays%>"<%}%>>
                   <small id="sonarUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Sonarr
                     calendar.
-                    (Use a low number (2-3) if 'premieres' is off, otherwise 90-175 is fine)</small>
+                    (Use a low number like 2-3 if 'premieres' off, otherwise 30-60)</small>
                 </div>
 
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
@@ -255,7 +255,7 @@
                 <label for="radarrToken">Radarr Token</label>
                 <input type="password" class="form-control" id="radarrToken" name="radarrToken" aria-describedby="radarrTokenHelp"
                   placeholder="Radarr API Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.radarrToken%>"<%}else{%><%=settings.radarrToken%>"<%}%>>
-                <small id="radarrTokenHelp" class="form-text text-muted">Enter the Radarr API token. (Leave blank if coming soon 'Movies' not wanted)</small>
+                <small id="radarrTokenHelp" class="form-text text-muted">Enter the Radarr API token. (Leave blank to disable)</small>
               </div>
                 <div class="form-group">
                   <label for="radarrUrl">Radarr URL</label>
