@@ -13,6 +13,7 @@ const sonr = require("./classes/arr/sonarr");
 const radr = require("./classes/arr/radarr");
 const settings = require("./classes/core/settings");
 var MemoryStore = require('memorystore')(session);
+const DEFAULT_SETTINGS = require('./consts');
 
 console.log("--------------------------------------------------------");
 console.log("| POSTER - Your media display                          |");
@@ -35,7 +36,7 @@ let radarrClock;
 let houseKeepingClock;
 let setng = new settings();
 let loadedSettings;
-let nsCheckSeconds = 30000; // how often now screening checks are performed. (not available in setup screen as running too often can cause network issues)
+let nsCheckSeconds = 10000; // how often now screening checks are performed. (not available in setup screen as running too often can cause network issues)
 let isSonarrEnabled = false;
 let isRadarrEnabled = false;
 let isOnDemandEnabled = false;
@@ -262,15 +263,23 @@ async function loadSettings() {
  * @desc check if Now Screening/Playing, On-Demand, Sonarr or Radarr options are empty/disabled
  * @returns nothing
  */
-function checkEnabled(){
+async function checkEnabled(){
+  // reset all enabled variables
+  isOnDemandEnabled = false;
+  isPlexEnabled = false;
+  isSonarrEnabled = false;
+  isRadarrEnabled = false;
+
   // check Plex
   if(loadedSettings.plexIP !== undefined && loadedSettings.plexToken !== undefined && loadedSettings.plexPort !== undefined) { isPlexEnabled = true;}
   // check on-demand
-  if((loadedSettings.onDemandLibraries !== undefined && loadedSettings.numberOnDemand !== 0 && loadedSettings.numberOnDemand !== undefined) && isPlexEnabled) { isOnDemandEnabled = true;}
+  if((loadedSettings.onDemandLibraries !== undefined) && isPlexEnabled) { isOnDemandEnabled = true;}
   // check Sonarr
   if(loadedSettings.sonarrURL !== undefined && loadedSettings.sonarrCalDays !== undefined && loadedSettings.sonarrToken !== undefined) { isSonarrEnabled = true;}
   // check Radarr
   if(loadedSettings.radarrURL !== undefined && loadedSettings.radarrCalDays !== undefined && loadedSettings.radarrToken !== undefined) { isRadarrEnabled = true;}
+  
+  // display status
   let now = new Date();
   console.log(`--- Enabled Status ---
    Plex: ` + isPlexEnabled + `
@@ -298,7 +307,7 @@ async function startup() {
   // load settings object
   loadedSettings = await loadSettings();
   // check status of card providers
-  checkEnabled();
+  await checkEnabled();
   // initial load of card providers
   await loadSonarrComingSoon();
   await loadRadarrComingSoon();
@@ -444,31 +453,32 @@ app.post(
       //fields value holder. Also sets default values in form passed without them.
       let form = {
         password: req.body.password,
-        slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : 10,
-        refreshPeriod: req.body.refreshPeriod ? parseInt(req.body.refreshPeriod) : 120,
+        slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : DEFAULT_SETTINGS.slideDuration,
+        refreshPeriod: req.body.refreshPeriod ? parseInt(req.body.refreshPeriod) : DEFAULT_SETTINGS.refreshPeriod,
         themeSwitch: req.body.themeSwitch,
         genericSwitch: req.body.genericSwitch,
         fadeOption: req.body.fadeOption,
         plexToken: req.body.plexToken,
         plexIP: req.body.plexIP,
         plexHTTPSSwitch: req.body.plexHTTPSSwitch,
-        plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : 32400,
+        plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : DEFAULT_SETTINGS.plexPort,
         plexLibraries: req.body.plexLibraries,
-        numberOnDemand: parseInt(req.body.numberOnDemand) ? parseInt(req.body.numberOnDemand) : 2,
-        onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : 30,
+        numberOnDemand: (!isNaN(parseInt(req.body.numberOnDemand))) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
+        onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
         sonarrUrl: req.body.sonarrUrl,
         sonarrToken: req.body.sonarrToken,
-        sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : 3,
+        sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : DEFAULT_SETTINGS.sonarrCalDays,
         premiereSwitch: req.body.premiereSwitch,
         radarrUrl: req.body.radarrUrl,
         radarrToken: req.body.radarrToken,
-        radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : 30,
+        radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : DEFAULT_SETTINGS.radarrCalDays,
         saved: false
       };
 
     var errors = validationResult(req).array();
     if (errors.length > 0) {
       req.session.errors = errors;
+      form.saved= false;
       req.session.success = false;
       res.render("settings", {
         errors: req.session.errors,
