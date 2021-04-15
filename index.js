@@ -22,10 +22,6 @@ console.log("| *App under development and considered alpha quality  |");
 console.log("|                                                      |");
 console.log("--------------------------------------------------------");
 
-// clear image and mp3 cache on start-up
-core.DeleteMP3Cache();
-core.DeleteImageCache();
-
 // global variables
 let odCards = [];
 let nsCards = [];
@@ -53,15 +49,12 @@ let isPlexEnabled = false;
   // stop the clock
   clearInterval(radarrClock);
 
-  // dont run if disabled
+  // stop timers and dont run if disabled
   if(!isRadarrEnabled) {
-    // restart the 24 hour timer
-    radarrClock = setInterval(loadRadarrComingSoon, 86400000); // daily
-
     return csrCards;
   } 
   
-  // instatntiate sonarr class
+  // instatntiate radarr class
   let radarr = new radr(
     loadedSettings.radarrURL,
     loadedSettings.radarrToken,
@@ -95,11 +88,8 @@ async function loadSonarrComingSoon() {
   // stop the clock
   clearInterval(sonarrClock);
 
-  // dont run if disabled
+  // stop timers and dont run if disabled
   if(!isSonarrEnabled) {
-    // restart the 24 hour timer
-    sonarrClock = setInterval(loadSonarrComingSoon, 86400000); // daily
-
     return csCards;
   } 
 
@@ -139,14 +129,11 @@ async function loadNowScreening() {
   // stop the clock
   clearInterval(nowScreeningClock);
 
-  // dont run if disabled
+  // stop timers dont run if disabled
   if(!isPlexEnabled) {
     // restart the clock
-    nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds);
     return nsCards;
   } 
-
-
 
   // load MediaServer(s) (switch statement for different server settings server option - TODO)
   let ms = new pms({
@@ -219,13 +206,8 @@ async function loadOnDemand() {
   // stop the clock
   clearInterval(onDemandClock);
 
-  // dont run if disabled
+  // dont restart clock and dont run if disabled
   if(!isOnDemandEnabled) {
-    // restart interval timer
-    onDemandClock = setInterval(
-      loadOnDemand,
-      loadedSettings.onDemandRefresh * 60000
-    );
     return odCards;
   } 
 
@@ -281,7 +263,6 @@ async function loadSettings() {
  * @returns nothing
  */
 function checkEnabled(){
-
   // check Plex
   if(loadedSettings.plexIP !== undefined && loadedSettings.plexToken !== undefined && loadedSettings.plexPort !== undefined) { isPlexEnabled = true;}
   // check on-demand
@@ -304,6 +285,16 @@ function checkEnabled(){
  * @returns nothing
  */
 async function startup() {
+  // stop all clocks
+  clearInterval(nowScreeningClock);
+  clearInterval(onDemandClock);
+  clearInterval(sonarrClock);
+  clearInterval(radarrClock);
+  clearInterval(houseKeepingClock);
+
+  // run housekeeping job
+  await houseKeeping();
+
   // load settings object
   loadedSettings = await loadSettings();
   // check status of card providers
@@ -323,15 +314,6 @@ async function startup() {
    Goto http://hostIP:3000/settings to get to setup page.
   `);
 
-  // set intervals for timers
-  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds);
-  onDemandClock = setInterval(
-    loadOnDemand,
-    loadedSettings.onDemandRefresh * 60000
-  );
-  sonarrClock = setInterval(loadSonarrComingSoon, 86400000); // daily
-  radarrClock = setInterval(loadRadarrComingSoon, 86400000); // daily
-  houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
   return;
 }
 
