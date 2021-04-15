@@ -176,7 +176,7 @@ class Settings {
       }
 
       let d = new Date();
-      console.log(d.toISOString().split("T")[0] + " Settings saved.");
+      //console.log(d.toISOString().split("T")[0] + " Settings saved.");
     });
 
 
