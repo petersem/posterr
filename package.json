@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "A digital display for your media",
   "main": "index.js",
+  "bin": "index.js",
+  "pkg": {
+    "scripts": "public/**/*.js",
+    "assets": "public/**/*"
+  },
   "nodemonConfig": {
     "ignore": [
       "test/*",
