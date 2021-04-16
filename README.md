@@ -43,7 +43,7 @@ Installation options are as follows:
 
 ### Node
  - Ensure you have the latest version of Node installed
- - Clone this repo to youur local disk
+ - Clone this repo to your local disk
  - Open the directory from a command prompt / terminal
  - Run 'npm start'
 
