@@ -14,7 +14,7 @@ Media display software for Plex, Sonarr and Radarr.
  - Coming Soon: Shows in Sonarr that are releasing in a given number of days (or Season premieres).
  - Coming Soon: Movies in Radarr that are releasing in a given number of days.
  - Option to play TV themes (when theme available)
- - Option to play a random MP3 of your choice for movies
+ - Option to play a random MP3 of your choice for movies (add your own MP3 files)
  - Setup page (dark theme)
  - Built in Node and packaged as a Docker image. (included image health check)
  - Now Screening / Playing shows a progress bar (green for direct play and red for transcoding)
