@@ -12,7 +12,7 @@ This software is still considered `ALPHA` quality. (Still not feature complete)
 
 Limitations:
  - Can only specify 1 library for on-demand slides
- - Slide transitions have a UI issue and dont look good yet
+ - The 'Slide effect' transitions has a UI issue and doesn't look good yet (fade is fine)
  - There is no password for the settings page yet
  - Software has not been rigorously tested
  - The are still some layout issues for tag lines and the progress bar
