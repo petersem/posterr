@@ -80,7 +80,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 Option|Desciption  |
 |--|--|
 |password |Settings page password|
-|*Slide duration|How long (in seconds) that each slide will be shown for.|
+|*Slide duration|How long (in seconds) that each slide will be shown for. (suggest 20-30 seconds)|
 |*Refresh period|How long ( in seconds) before the browser auto-refreshes all slides (suggested 120-300 seconds)|
 |TV theme tunes|`ON|OFF` Enable to play them tunes for slides that show TV shows. (note that in rare cases, some TV themes are unavaible) |
 |Generic movie themes|`ON|OFF` Enable to play random tunes for slides that show movies. (Supplied MP3's are royalty free from https://www.bensound.com/ ) |
