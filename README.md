@@ -2,10 +2,10 @@
 Media display software for Plex, Sonarr and Radarr.
 
 ![Music playing](https://github.com/petersem/poster/blob/master/doco/music.png)
-![Music playing](https://github.com/petersem/poster/blob/master/doco/ns.png)
-![Music playing](https://github.com/petersem/poster/blob/master/doco/od.png)
-![Music playing](https://github.com/petersem/poster/blob/master/doco/cs.png)
-![Music playing](https://github.com/petersem/poster/blob/master/doco/settings.png)
+![Now screening](https://github.com/petersem/poster/blob/master/doco/ns.png)
+![On-demand](https://github.com/petersem/poster/blob/master/doco/od.png)
+![Coming soon](https://github.com/petersem/poster/blob/master/doco/cs.png)
+![Settings](https://github.com/petersem/poster/blob/master/doco/settings.png)
 
 ## Alpha software
 This software is still considered `ALPHA` quality. (Still not feature complete) 
