@@ -7,6 +7,16 @@ Media display software for Plex, Sonarr and Radarr.
 ![Music playing](https://github.com/petersem/poster/blob/master/doco/cs.png)
 ![Music playing](https://github.com/petersem/poster/blob/master/doco/settings.png)
 
+## Alpha software
+This software is still considered `ALPHA` quality. (Still not feature complete) 
+
+Limitations:
+ - Can only specify 1 library for on-demand slides
+ - Slide transitions have a UI issue and dont look good yet
+ - There is no password for the settings page yet
+ - Software has not been rigorously tested
+ - The are still some layout issues for tag lines and the progress bar
+
 ## Features
  - Now Screening: Shows and movies from Plex.
  - Playing: Music from Plex.
@@ -99,6 +109,16 @@ Option|Desciption  |
 |Radarr token|The Radarr API key required for accessing Sonarr. *(**Leave this blank** if you do not want coming soon Movie titles to show)*|
 |Radarr url|The full URL and Port for your Radarr installation.|
 |Days ahead|The number of days to look ahead in the Radarr calendar for titles. |
+
+## Support
+There is no official support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.
+
+Support my efforts and continued development. Buy me a coffee to say thanks.
+[Thanks](https://paypal.me/thanksmp))
+
+Thanks,
+
+Matt Petersen (April 2021)
 
 ## License
 
