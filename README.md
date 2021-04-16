@@ -3,6 +3,7 @@ Media display software for Plex, Sonarr and Radarr.
 
 ![Music playing](doco/music.png)![Shows](doco/shows.png)![Settings](doco/settings.png)
 
+![alt text](http://url/to/img.png)
 
 
 ### Installation
