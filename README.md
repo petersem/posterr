@@ -113,8 +113,9 @@ Option|Desciption  |
 ## Support
 There is no official support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.
 
-Support my efforts and continued development. Buy me a coffee to say thanks.
-[Thanks](https://paypal.me/thanksmp))
+Support my efforts and continued development. Click this link to Buy me a coffee: 
+
+[Thanks Matt!](https://paypal.me/thanksmp)
 
 Thanks,
 
