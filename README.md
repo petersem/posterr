@@ -115,7 +115,7 @@ There is no official support for this product, however should you encounter issu
 
 Support my efforts and continued development. Click this link to Buy me a coffee: 
 
-[Thanks Matt!](https://paypal.me/thanksmp)
+ - [Make a donation](https://paypal.me/thanksmp)
 
 Thanks,
 
