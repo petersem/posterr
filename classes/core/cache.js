@@ -52,7 +52,8 @@ class Cache {
             .pipe(fs.createWriteStream(savePath, { autoClose: true }))
             .on("close", callback)
             .on("error", (err) => {
-              console.log("download failed: " + err.message);
+              //console.log("download failed: " + err.message);
+              throw err;
             })
             .on("finish", () => {
               //console.log("Download Completed");
@@ -61,7 +62,8 @@ class Cache {
         });
       } catch (err) {
         console.log(" ");
-        console.error("✘ Could not download file", err);
+        console.error("✘ Could not download file:", savepath, err);
+        throw err;
       }
 
       return;
