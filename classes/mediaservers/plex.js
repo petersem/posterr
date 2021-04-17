@@ -113,6 +113,7 @@ class Plex {
               "&" +
               this.plexToken;
             await core.CacheImage(url, fileName);
+
             medCard.posterURL = "/imagecache/" + fileName;
 
             medCard.posterAR = 1;
@@ -407,7 +408,7 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
-
+            console.log('--->' + movieUrl);
             // add generic random theme if applicable
             if (playGenenericThemes == 'true') {
               medCard.theme = "/randomthemes/" + await core.GetRandomMP3();
