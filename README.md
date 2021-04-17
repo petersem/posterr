@@ -41,13 +41,14 @@ Limitations:
 ## Installation
 Installation options are as follows:
 
-### Node
+### Node (for non production use)
  - Ensure you have the latest version of Node installed
  - Clone this repo to your local disk
  - Open the directory from a command prompt / terminal
+ - Run 'npm install'
  - Run 'npm start'
 
-### Docker Compose
+### Docker Compose (preferred)
 ```ya
 version: '2.4'
 
@@ -63,6 +64,17 @@ services:
     ports:
       - 3000:3000
 ```
+#### Details
+|Variable|Details|
+|--|--|
+|TZ|Your local timezone. Look this up on [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
+|/docker/poster/config|This is required to save your Poster settings|
+|/docker/poster/randomthemes|This is optional. If you leave it out then there are a few royaly free movies tunes that are made available. If you choose to add this, then you need to populate this directory with your own MP3 files that will play for movie slides|
+|Ports|If you have a conflict with port 3000 already in use then you can change this to a different port. e.g. 9876:3000 (second value must always be 3000)|
+
+## Updates
+ - If installed with Docker, then use containrr/watchtower to auto-update
+ - If you cloned this repo locally, then it is on you to manually watch for updates and download new versions
 
 ## Setup
 Once running, open a browser to http://host_machine_ip:3000'. From here you will see a screen with a link to the setup page. (alternatively open your browser with 'http://host_machine_ip:3000/settings')
@@ -110,12 +122,21 @@ Option|Desciption  |
 |Radarr url|The full URL and Port for your Radarr installation.|
 |Days ahead|The number of days to look ahead in the Radarr calendar for titles. |
 
+## Troubleshooting
+Should you encounter a problem, it may be listed here:
+### Container not starting
+Check your yaml against what is in the example here. It could be as simple as a formatting issue with spaces or tabs in your yaml file. 
+### Container crashing after start
+Check the container logs and see what they say. Ensure that there are no firewalls enabled that are blocking docker bridge networks. 
+### Container started but cannot access the app in a browser
+This could be that the default port `3000` is in use already. Try setting it to another port, like 9876.
+
 ## Support
 There is no official support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.
 
 Support my efforts and continued development. Click this link to Buy me a coffee: 
 
- - [Make a donation](https://paypal.me/thanksmp)
+ - [Support development](https://paypal.me/thanksmp)
 
 Thanks,
 
