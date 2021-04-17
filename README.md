@@ -16,6 +16,7 @@ Limitations:
  - There is no password for the settings page yet
  - Software has not been rigorously tested
  - The are still some layout issues for tag lines and the progress bar
+ - Supported browsers are Chrome and MS Edge. It is possible to get working with Firefox, but for now, im leaving that off the list. 
 
 ## Features
  - Now Screening: Shows and movies from Plex.
