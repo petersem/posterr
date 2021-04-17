@@ -20,7 +20,7 @@ class Cache {
    */
   static async CacheImage(url, fileName) {
     const savePath = "./public/imagecache/" + fileName;
-    await this.download(url, savePath, fileName);
+      await this.download(url, savePath, fileName);
     return;
   }
 
@@ -32,7 +32,7 @@ class Cache {
   static async CacheMP3(fileName) {
     const savePath = "./public/mp3cache/" + fileName;
     const url = "http://tvthemes.plexapp.com/" + fileName;
-    await this.download(url, savePath, fileName);
+      await this.download(url, savePath);
     return;
   }
 
@@ -43,7 +43,7 @@ class Cache {
    * @param {string} fileName - the filename to save the asset as
    * @returns nothing
    */
-  static async download(url, savePath, fileName) {
+  static async download(url, savePath) {
     // download file function
     const download = (url, savePath, callback) => {
       try {
@@ -81,16 +81,15 @@ class Cache {
     }
   }
 
-  static async CheckFileSize(savePath){
-    let small=false;
+  static async CheckFileSize(savePath) {
+    let small = false;
     var stats = fs.statSync(savePath);
     var fileSizeInBytes = stats.size;
     // Convert the file size to megabytes (optional)
     var fileSizeInKbytes = fileSizeInBytes / 1024;
 
-    if(fileSizeInKbytes <= 1) small = true;
-    console.log(savePath + ' - ' + fileSizeInKbytes + 'kb - ' + small);
-
+    if (fileSizeInKbytes <= 1) small = true;
+    console.log(savePath + " - " + fileSizeInKbytes + "kb - " + small);
   }
 
   /**

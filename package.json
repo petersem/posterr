@@ -6,7 +6,10 @@
   "bin": "index.js",
   "pkg": {
     "scripts": "public/**/*.js",
-    "assets": ["views/**/*","public/**/*"]
+    "assets": [
+      "views/**/*",
+      "public/**/*"
+    ]
   },
   "nodemonConfig": {
     "ignore": [
