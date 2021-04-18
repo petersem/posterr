@@ -2,7 +2,7 @@
 Media display software for Plex, Sonarr and Radarr.
 
 ![Music playing](https://github.com/petersem/poster/blob/master/doco/music.png?raw=true)
-![Now screening](https://github.com/petersem/poster/master/doco/ns.png?raw=true)
+![Now screening](https://github.com/petersem/poster/blob/master/doco/ns.png?raw=true)
 ![On-demand](https://github.com/petersem/poster/blob/master/doco/od.png?raw=true)
 ![Coming soon](https://github.com/petersem/poster/blob/master/doco/cs.png?raw=true)
 ![Settings](https://github.com/petersem/poster/blob/master/doco/settings.png?raw=true)
