@@ -192,8 +192,8 @@
                 <div class="form-group">
                   <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
                   <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
-                    placeholder="suggestions -> movies or tv shows" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
-                  <small id="plexLibrariesHelp" class="form-text text-muted">(optional) Enter 'one' Plex library name to use
+                    placeholder="suggestions -> movies,tv shows,anime" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
+                  <small id="plexLibrariesHelp" class="form-text text-muted">Enter Plex library names to use (comma seperated and no spaces, except in the name)
                     (Leave blank to disable)</small>
                 </div>
                 <div class="form-group">
@@ -272,7 +272,7 @@
                 </div>
 
                 <hr />
-                <button type="reset" class="btn btn-info" onclick="location.href = '/settings';">Reload Saved Settings</button>&nbsp;&nbsp;&nbsp;
+                <button type="reset" class="btn btn-info" onclick="location.href = '/settings';">Reload Saved</button>&nbsp;&nbsp;&nbsp;
                 <button type="reset" class="btn btn-info"    onclick="location.href = '/';">Main Page</button>
                 <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
               </form>
