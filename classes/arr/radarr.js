@@ -63,6 +63,7 @@ class Radarr {
       console.log('radarr error: ' + err);
       throw err;
     }
+
     // reutrn an empty array if no results
     if (raw != null) {
       // move through results and populate media cards
@@ -169,7 +170,11 @@ class Radarr {
         }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)
-        if (md.status != "released" && md.status != "announced") csrCards.push(medCard);
+        if (md.status != "released" && !await util.isEmpty(md.digitalRelease) ) {
+          csrCards.push(medCard);
+          console.log(md);
+        }
+
       }, undefined);
     }
     let now = new Date();
@@ -182,6 +187,7 @@ class Radarr {
         now.toLocaleString() + " Coming soon 'movie' titles refreshed"
       );
     }
+
     return csrCards;
   }
 }
