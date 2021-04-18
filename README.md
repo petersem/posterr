@@ -11,7 +11,6 @@ Media display software for Plex, Sonarr and Radarr.
 This software is still considered `ALPHA` quality. (Still not feature complete) 
 
 Limitations:
- - Can only specify 1 library for on-demand slides
  - The 'Slide effect' transitions has a UI issue and doesn't look good yet (fade is fine)
  - There is no password for the settings page yet
  - Software has not been rigorously tested
@@ -109,7 +108,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |*Server IP|The IP or domain name for plex (exclude http/https)|
 |*Server port|The port Plex uses (default is 32400)|
 |*Plex token|Token required to access Plex. ([Finding a Plex token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))|
-|Plex Libraries for On-demand titles|Enter a Plex library name to use for on-demand slides. *(**Leave this blank** if you do not want on-demand slides)* |
+|Plex Libraries for On-demand titles|Enter the Plex library name(s) to use for on-demand slides. Comma-seperated if multiple libraries. *(**Leave this blank** if you do not want on-demand slides)* |
 |Number to display |The number of random titles to show for on-demand slides |
 |On-demand refresh period|The refresh period in minutes before new random titles are loaded |
 #### Sonarr Options

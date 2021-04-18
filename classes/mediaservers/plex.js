@@ -417,7 +417,7 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
-  console.log('--->' + movieUrl);
+//  console.log('--->' + movieUrl);
             // add generic random theme if applicable
             if (playGenenericThemes == 'true') {
               medCard.theme = "/randomthemes/" + await core.GetRandomMP3();
@@ -522,7 +522,7 @@ class Plex {
     if (odCards.length == 0) {
       console.log(now.toLocaleString() + " No On-demand titles available");
     } else {
-      console.log(now.toLocaleString() + " On-demand titles refreshed");
+      console.log(now.toLocaleString() + " On-demand titles refreshed (" + onDemandLibraries + ")");
     }
     // return populated array
     return odCards;
@@ -538,20 +538,25 @@ class Plex {
       onDemandLibraries = " ";
     }
 
-    // this should only have ONE on-demand library set in settings, due to connection issues being experienced. (TODO - resolve)
-
     // Get the key for each library and push into an array
     let keys = [];
     return onDemandLibraries.split(",").reduce(async (acc, value) => {
       try {
       return await this.client.query("/library/sections/").then(
         function (result) {
+          let found = false;
           result.MediaContainer.Directory.forEach((lib) => {
+
             if (value.toLowerCase() == lib.title.toLowerCase()) {
               keys.push(lib.key);
+              found = true;
               //console.log(" - " + lib.title + " - ID: " + lib.key);
             }
           });
+          if(!found){
+            let d = new Date();
+            console.log("✘✘ WARNING ✘✘ - On-demand library '" + value + "' not found");
+          }
           return keys;
         },
         function (err) {
@@ -600,17 +605,23 @@ class Plex {
   async GetOnDemandRawData(onDemandLibraries, numberOnDemand) {
     // Get a list of random titles from selected libraries
     let odSet = [];
+    let x = [];
     try {
       const keys = await this.GetLibraryKeys(onDemandLibraries);
       // console.log("Library key: " + keys);
       if (keys != undefined) {
-        odSet = await keys.reduce(async (acc, value) => {
+
+        const p = await keys.reduce(async (acc, value) => {
           const all = await acc;
           return await this.GetAllMediaForLibrary(value).then(async function (
             result
           ) {
-            // TODO - need to address issue where only one library is getting returned (not concatenating results)
-            return await util.build_random_od_set(numberOnDemand, result);
+            //console.log('my id:', value);
+            const od = await util.build_random_od_set(numberOnDemand, result);
+            await od.reduce(async (aee, c) => {
+              odSet.push(c);
+            },
+            Promise.resolve(0));
           },
           Promise.resolve(0));
         }, Promise.resolve(0));
@@ -619,7 +630,8 @@ class Plex {
       let now = new Date();
       console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
     }
-    return await odSet;
+
+    return odSet;
   }
 }
 
