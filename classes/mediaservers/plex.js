@@ -87,9 +87,12 @@ class Plex {
         let fileName;
         let prefix;
         let url;
+        let contentRating;
+
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
           case "track":
+            contentRating = "";
             medCard.tagLine =
               md.title +
               ", " +
@@ -176,6 +179,12 @@ class Plex {
               .replace("(", "")
               .replace(")", "");
             medCard.cardType = cType.CardTypeEnum.NowScreening;
+
+            contentRating = "NR";
+            if (!(await util.isEmpty(md.contentRating))) {
+              contentRating = md.contentRating;
+            }
+            medCard.contentRating = contentRating;            
             break;
           case "movie":
             // cache movie poster
@@ -215,13 +224,19 @@ class Plex {
               .replace("(", "")
               .replace(")", "");
             medCard.cardType = cType.CardTypeEnum.NowScreening;
+
+            contentRating = "NR";
+            if (!(await util.isEmpty(md.contentRating))) {
+              contentRating = md.contentRating;
+            }
+            medCard.contentRating = contentRating;
             break;
         }
 
         // populate common data
         medCard.mediaType = md.type;
         medCard.user = md.User.title;
-        medCard.ip = md.Player.address;
+        medCard.device = md.Player.device;
 
         medCard.runTime = Math.round(md.Media[0].duration / 60000);
         medCard.progress = Math.round(md.viewOffset / 60000);
@@ -236,12 +251,6 @@ class Plex {
             );
           }
         }
-
-        let contentRating = "NR";
-        if (!(await util.isEmpty(md.contentRating))) {
-          contentRating = md.contentRating;
-        }
-        medCard.contentRating = contentRating;
 
         // set colours for rating badges
         let ratingColour = "";
@@ -408,7 +417,7 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
-            console.log('--->' + movieUrl);
+  console.log('--->' + movieUrl);
             // add generic random theme if applicable
             if (playGenenericThemes == 'true') {
               medCard.theme = "/randomthemes/" + await core.GetRandomMP3();

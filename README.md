@@ -74,7 +74,7 @@ services:
 |--|--|
 |TZ|Your local timezone. Look this up on [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
 |/docker/poster/config|This is required to save your Poster settings|
-|/docker/poster/randomthemes|This is optional. If you leave it out then there are a few royaly free movies tunes that are made available. If you choose to add this, then you need to populate this directory with your own MP3 files that will play for movie slides|
+|/docker/poster/randomthemes|This is optional. If you leave it out then there are a few royaly free movie tunes that are made available. If you choose to add this, then you need to populate this directory with your own MP3 files that will play for movie slides|
 |Ports|If you have a conflict with port 3000 already in use then you can change this to a different port. e.g. 9876:3000 (second value must always be 3000)|
 
 ## Updates
@@ -135,6 +135,8 @@ Check your yaml against what is in the example here. It could be as simple as a 
 Check the container logs and see what they say. Ensure that there are no firewalls enabled that are blocking docker bridge networks. 
 ### Container started but cannot access the app in a browser
 This could be that the default port `3000` is in use already. Try setting it to another port, like 9876.
+### The poster image doesn't load
+Try refreshing your browser. Images are cached locally and dependant on your internet speed, may take a few seconds to initially load.
 
 ## Support
 There is no official support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.

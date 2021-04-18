@@ -121,7 +121,17 @@ class Cache {
 
     // calls radom_items function to return a random item from an array
     let randomFile = await util.random_item(fs.readdirSync(directory));
+    // try again up to 3 times
+    let tryCount = 0;
+    if((randomFile == undefined || !randomFile.includes("mp3")) && tryCount !== 3) {
+      console.log('-->' + randomFile);
+      
+      tryCount++;
+      randomFile = await util.random_item(fs.readdirSync(directory));
+    }
     return randomFile;
   }
+
+
 }
 module.exports = Cache;

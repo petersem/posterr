@@ -26,6 +26,7 @@ class MediaCard {
     this.audioCodec = "";
     this.playerDevice = "";
     this.playerIP = "";
+    this.device = ""
     this.playerLocal = "";
     this.user = "";
     this.genre = [];
@@ -56,6 +57,7 @@ class MediaCard {
     let studioPill = "";
     let ipPill = "";
     let userPill = "";
+    let devicePill = "";
 
     // include if value present
     if (!(await util.isEmpty(this.contentRating))) {
@@ -71,6 +73,13 @@ class MediaCard {
       ipPill =
         "<span class='badge badge-pill badge-dark'> " +
         this.ip +
+        "</span>";
+    }
+
+    if (!(await util.isEmpty(this.device))) {
+      devicePill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.device +
         "</span>";
     }
 
@@ -184,6 +193,7 @@ class MediaCard {
       runTimePill +
       ratingPill +
       userPill +
+      devicePill + 
       ipPill +
       `</div>
       </div>
