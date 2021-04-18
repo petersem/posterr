@@ -2,11 +2,10 @@
 Media display software for Plex, Sonarr and Radarr.
 
 ![Music playing](https://github.com/petersem/poster/blob/master/doco/music.png?raw=true)
-![Now screening](https://raw.githubusercontent.com/petersem/poster/master/doco/ns.png)
-)
-![On-demand](https://github.com/petersem/poster/blob/master/doco/od.png)
-![Coming soon](https://github.com/petersem/poster/blob/master/doco/cs.png)
-![Settings](https://github.com/petersem/poster/blob/master/doco/settings.png)
+![Now screening](https://github.com/petersem/poster/master/doco/ns.png?raw=true)
+![On-demand](https://github.com/petersem/poster/blob/master/doco/od.png?raw=true)
+![Coming soon](https://github.com/petersem/poster/blob/master/doco/cs.png?raw=true)
+![Settings](https://github.com/petersem/poster/blob/master/doco/settings.png?raw=true)
 
 ## Alpha software
 This software is still considered `ALPHA` quality. (Still not feature complete) 
@@ -95,7 +94,7 @@ Buttons are:
 Following is a description of each setup option. Options with a **'*'** are mandatory.
 
 #### General Options
-Option|Desciption  |
+|Option|Desciption  |
 |--|--|
 |password |Settings page password|
 |*Slide duration|How long (in seconds) that each slide will be shown for. (suggest 20-30 seconds)|
@@ -104,7 +103,7 @@ Option|Desciption  |
 |Generic movie themes|`ON|OFF` Enable to play random tunes for slides that show movies. (Supplied MP3's are royalty free from https://www.bensound.com/ ) |
 |Slide Transitions|`Slide|Fade`The slide transition effect.|
 #### Plex Options
-Option|Desciption  |
+|Option|Desciption  |
 |--|--|
 |*HTTPS connection|`ON|OFF` If your Plex server only allows secure connections|
 |*Server IP|The IP or domain name for plex (exclude http/https)|
@@ -115,14 +114,14 @@ Option|Desciption  |
 |On-demand refresh period|The refresh period in minutes before new random titles are loaded |
 #### Sonarr Options
 *Note that only Sonarr v3 is currently supported*
-Option|Desciption  |
+|Option|Desciption  |
 |--|--|
 |Sonarr token|The Sonarr API key required for accessing Sonarr. *(**Leave this blank** if you do not want coming soon TV titles to show)*|
 |Sonarr url|The full URL and Port for your Sonarr installation.|
 |Days ahead|The number of days to look ahead in the Sonarr calendar for titles. Set this less to a low number, like 3-5, if 'Show Premieres' is off. Alternatively, up to 60 days is fine if on.|
 |Show premieres|`ON|OFF` Only season premieres will be shown |
 #### Radarr Options
-Option|Desciption  |
+|Option|Desciption  |
 |--|--|
 |Radarr token|The Radarr API key required for accessing Sonarr. *(**Leave this blank** if you do not want coming soon Movie titles to show)*|
 |Radarr url|The full URL and Port for your Radarr installation.|
