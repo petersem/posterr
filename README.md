@@ -1,8 +1,9 @@
 # Poster
 Media display software for Plex, Sonarr and Radarr.
 
-![Music playing](https://github.com/petersem/poster/blob/master/doco/music.png)
-![Now screening](https://github.com/petersem/poster/blob/master/doco/ns.png)
+![Music playing](https://github.com/petersem/poster/blob/master/doco/music.png?raw=true)
+![Now screening](https://raw.githubusercontent.com/petersem/poster/master/doco/ns.png)
+)
 ![On-demand](https://github.com/petersem/poster/blob/master/doco/od.png)
 ![Coming soon](https://github.com/petersem/poster/blob/master/doco/cs.png)
 ![Settings](https://github.com/petersem/poster/blob/master/doco/settings.png)
