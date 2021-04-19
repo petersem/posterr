@@ -138,6 +138,8 @@ Check the `Refresh Duration` and `Slide Duration` values. Its likely that this i
 This could be that the default port `3000` is in use already. Try setting it to another port, like 9876.
 ### The poster image doesn't load
 Try refreshing your browser. Images are cached locally and dependant on your internet speed, may take a few seconds to initially load.
+### The poster image looks to be the wrong size
+Posters for Now screening and on-demand, come from your plex library. Find the media item in your library and update the poster art. 
 ### No TV theme being played
 Provided that you have enabled the TV theme option, then this *is normal*. Most, but *not all*, TV shows have themes available.
 ### Not getting music when a movie title is displayed (or music repetative)
