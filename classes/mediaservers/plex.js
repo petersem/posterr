@@ -541,6 +541,7 @@ class Plex {
     // Get the key for each library and push into an array
     let keys = [];
     return onDemandLibraries.split(",").reduce(async (acc, value) => {
+      await acc;
       try {
       return await this.client.query("/library/sections/").then(
         function (result) {
@@ -567,7 +568,7 @@ class Plex {
     catch(err){
       let now = new Data();
       console.log(now.toLocaleString() + " *On-demand - Get library key: " + err);    }
-    }, Promise.resolve(0));
+    },0);
   }
 
   /**
@@ -605,26 +606,24 @@ class Plex {
   async GetOnDemandRawData(onDemandLibraries, numberOnDemand) {
     // Get a list of random titles from selected libraries
     let odSet = [];
-    let x = [];
+
+    const sleep = (n) => new Promise((res) => setTimeout(res, n));
+
     try {
       const keys = await this.GetLibraryKeys(onDemandLibraries);
       // console.log("Library key: " + keys);
-      if (keys != undefined) {
-
+      if (keys !== undefined) {
         const p = await keys.reduce(async (acc, value) => {
-          const all = await acc;
-          return await this.GetAllMediaForLibrary(value).then(async function (
+          return (await acc) + await this.GetAllMediaForLibrary(value).then(async function (
             result
           ) {
-            //console.log('my id:', value);
             const od = await util.build_random_od_set(numberOnDemand, result);
-            await od.reduce(async (aee, c) => {
-              odSet.push(c);
-            },
-            Promise.resolve(0));
-          },
-          Promise.resolve(0));
-        }, Promise.resolve(0));
+            await od.reduce(async (cb, odc) => {
+              odSet.push(odc);
+              return await cb;
+            },0);
+          },0);
+        }, 0);
       }
     } catch (err) {
       let now = new Date();
