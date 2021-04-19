@@ -140,6 +140,12 @@ class Cache {
     return randomFile;
   }
 
+    /**
+   * @desc Returns a boolean if a theme is present in a card array
+   * @param {array} cardArray - the card array that has been built thus far (needed to be able to check for duplicates)
+   * @param {string} fileName - the filename to check for
+   * @returns {boolean} - true if in array
+   */
   static async themeUsed(cardArray, fileName){
     let result = await cardArray.some(card => card.theme.includes(fileName) == true);
 //if(result) console.log('Dupe: '+ fileName, result);
