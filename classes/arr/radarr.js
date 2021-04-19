@@ -82,7 +82,6 @@ class Radarr {
           md.title + " (" + releaseDate + ")";
         medCard.title = md.title;
         medCard.DBID = md.tmdbId;
-        medCard.year = md.year;
         medCard.runTime = md.runtime;
         medCard.genre = md.genres;
         medCard.summary = await util.emptyIfNull(md.overview);
