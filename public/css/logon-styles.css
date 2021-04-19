@@ -1,0 +1,69 @@
+ /* custom styling for all FA icons  */
+i.fas,
+i.fal,
+i.fab {
+    font-size: 24px;
+}
+
+.breadcrumb {
+    background: #1c2133;
+}
+
+/* .d-block {
+    text-decoration: underline;
+} */
+
+span.menu {
+    padding-left: 12px;
+    vertical-align: top;
+}
+
+body{margin-top:20px;
+    color: #4336fd;
+        background: #1c2133;
+    }
+    .account-settings .user-profile {
+        margin: 0 0 1rem 0;
+        padding-bottom: 1rem;
+        text-align: center;
+    }
+    .account-settings .user-profile .user-avatar {
+        margin: 0 0 1rem 0;
+    }
+    .account-settings .user-profile .user-avatar img {
+        width: 90px;
+        height: 90px;
+        -webkit-border-radius: 100px;
+        -moz-border-radius: 100px;
+        border-radius: 100px;
+    }
+    .account-settings .user-profile h5.user-name {
+        margin: 0 0 0.5rem 0;
+    }
+    .account-settings .user-profile h6.user-email {
+        margin: 0;
+        font-size: 0.8rem;
+        font-weight: 400;
+    }
+    .account-settings .about {
+        margin: 1rem 0 0 0;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+    .card {
+        background: #1c2133;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        border: 0;
+        margin-bottom: 1rem;
+    }
+    .form-control {
+        border: 1px solid #596280;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        font-size: .825rem;
+        background: #0d111d;
+        color: #bcd0f7;
+    }

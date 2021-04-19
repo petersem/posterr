@@ -383,10 +383,55 @@ app.get("/health", (req, res) => {
   res.json(app.locals.globals);
 });
 
-// settings page TODO - password
+// password for settings section
+let userData = { valid: false, expires: 10 };
+
+// settings page
+app.get("/logon", (req, res) => {
+  res.render("logon", {
+    success: req.session.success,
+  });
+  req.session.errors = null;
+});
+
+app.post(
+  "/logon",
+  [
+    check("password")
+      .custom((value) => {
+        if (loadedSettings.password !== value) {
+          throw new Error("Invalid Password!!");
+        }
+        userData.valid = true;
+        return true;
+      })
+      .withMessage("Invalid password"),
+  ],
+  (req, res) => {
+    var errors = validationResult(req).array();
+    if (errors.length > 0) {
+      req.session.errors = errors;
+      req.session.success = false;
+      res.render("logon", {
+        errors: req.session.errors,
+        user: { valid: false },
+      });
+    } else {
+      res.render("settings", {
+        user: userData,
+        success: req.session.success,
+        settings: loadedSettings,
+        errors: req.session.errors,
+      });
+      }
+  }
+);
+
+// settings page 
 app.get("/settings", (req, res) => {
   res.render("settings", {
     success: req.session.success,
+    user: {valid: false},
     settings: loadedSettings,
     errors: req.session.errors
   });
@@ -396,6 +441,10 @@ app.get("/settings", (req, res) => {
 app.post(
   "/settings",
   [
+    check("password")
+      .not()
+      .isEmpty()
+      .withMessage("Password cannot be blank"),
     check("slideDuration")
       .not()
       .isEmpty()
@@ -482,6 +531,7 @@ app.post(
       req.session.success = false;
       res.render("settings", {
         errors: req.session.errors,
+        user: {valid: true},
         formData: form,
       });
     } else {
@@ -492,6 +542,7 @@ app.post(
       saveReset(form);
       res.render("settings", {
         errors: req.session.errors,
+        user: {valid: true},
         formData: form
       });
     }

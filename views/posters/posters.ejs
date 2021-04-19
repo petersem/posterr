@@ -11,6 +11,13 @@
   var initialLoadTime = new Date().getTime();
 
   $(function () {
+    
+    // make banner link to settings
+    $(".bannerBigText").click(function() {
+      window.location = "/settings"; 
+      return false;
+    });
+
 
     // resize for initial page load
     $('.myDiv').css({
