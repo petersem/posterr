@@ -117,45 +117,33 @@ class Cache {
    * @param {array} cardArray - the card array that has been built thus far (needed to be able to check for duplicates)
    * @returns {string} fileName - a random filename
    */
-  static async GetRandomMP3(cardArray, uniqueTryCount) {
+  static async GetRandomMP3(cardArray) {
     let directory = "./public/randomthemes";
-
+    // get all mp3 files from directory
+    let fileArr = fs.readdirSync(directory);
+    let mp3Files = fileArr.filter( function( elm ) {return elm.match(/.*\.(mp3)/ig);});
+   
     // calls random_items function to return a random item from an array
-    let randomFile = await util.random_item(fs.readdirSync(directory));
-
-    // set to zero for initial call
-    if(uniqueTryCount == undefined) uniqueTryCount = 0;
+    let randomFile = await util.random_item(mp3Files);
 
     let tryCount = 0;
-    // try again up to 5 times to get a valid MP3 file
-    while((randomFile == undefined || !randomFile.includes("mp3")) && tryCount !== 5) {
-      tryCount++;
-      randomFile = await util.random_item(fs.readdirSync(directory));
-    }
 
+  //console.log('in use: ' + cardArray.some(card => card.theme.includes(randomFile) == true), tryCount);
     // now try to get a unique file (try 5 times)
-    if(cardArray.some(card => card.theme.includes(randomFile) == true) && uniqueTryCount !== 5) {
+    while(await this.themeUsed(cardArray, randomFile) && tryCount < 5) {
       // try again if the MP3 has already been used
-      uniqueTryCount++;
-  console.log(randomFile + ' already in use - trying again', uniqueTryCount);
-      this.GetRandomMP3(cardArray,uniqueTryCount);
-    }
-
-    if(uniqueTryCount==5){
-  console.log("Couldn't get a unique MP3 - sorry!!" );
+      tryCount++;
+      randomFile = await util.random_item(mp3Files);
     }
 
     // return whatever MP3 we ended up selecting
     return randomFile;
   }
 
-  static async GetRandomUniqueMP3(cardArray){
-    let randomFile = await this.GetRandomMP3();  
-    let tryCount = 0;
-    if(cardArray.some((card => card.theme.includes === randomFile) && tryCount !== 5)) {
-      tryCount++;
-      randomFile =1;
-    }
+  static async themeUsed(cardArray, fileName){
+    let result = await cardArray.some(card => card.theme.includes(fileName) == true);
+//if(result) console.log('Dupe: '+ fileName, result);
+    return result;
   }
 
 }
