@@ -188,6 +188,14 @@ class Plex {
               contentRating = md.contentRating;
             }
             medCard.contentRating = contentRating;            
+            if (md.Media[1].Part[0].Stream[0].decision == "transcode") {
+              transcode = await util.emptyIfNull(md.Media[1].Part[0].decision);
+              if (!(await util.isEmpty(md.TranscodeSession))) {
+                let audioTranscode = await util.emptyIfNull(
+                  md.TranscodeSession.audioDecision
+                );
+              }
+            }
             break;
           case "movie":
             // cache movie poster
@@ -233,6 +241,10 @@ class Plex {
               contentRating = md.contentRating;
             }
             medCard.contentRating = contentRating;
+
+            if (md.TranscodeSession.videoDecision == "transcode" || md.TranscodeSession.audioDecision == "transcode") {
+              transcode = "transcode";
+            }
             break;
         }
 
@@ -246,14 +258,7 @@ class Plex {
         medCard.progressPercent = Math.round(
           (md.viewOffset / md.Media[0].duration) * 100
         );
-        if (md.Media[1].Part[0].Stream[0].decision == "transcode") {
-          transcode = await util.emptyIfNull(md.Media[1].Part[0].decision);
-          if (!(await util.isEmpty(md.TranscodeSession))) {
-            let audioTranscode = await util.emptyIfNull(
-              md.TranscodeSession.audioDecision
-            );
-          }
-        }
+
 
         // set colours for rating badges
         let ratingColour = "";
