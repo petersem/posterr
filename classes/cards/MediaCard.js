@@ -26,7 +26,7 @@ class MediaCard {
     this.audioCodec = "";
     this.playerDevice = "";
     this.playerIP = "";
-    this.device = ""
+    this.device = "";
     this.playerLocal = "";
     this.user = "";
     this.genre = [];
