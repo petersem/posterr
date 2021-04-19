@@ -49,7 +49,21 @@ class utility {
     for await (let i of Array(numberOnDemand).keys()) {
       let odc;
       odc = await this.random_item(mediaCards);
-      onDemandCards.push(odc);
+      let tryCount = 0;
+      // try at least five times to get unique random titles. If not, then ommit
+      while(onDemandCards.includes(odc) && tryCount < 5){
+        //console.log('Dupe found:' + odc.title);
+        tryCount++;
+        odc = await this.random_item(mediaCards);
+      }
+      // finally, if card still a duplicate, then ommit from display
+      if(!onDemandCards.includes(odc)){
+        onDemandCards.push(odc);
+      }
+      else{
+        let d = new Date();
+        console.log(d.toLocaleString() + " ✘✘ WARNING ✘✘ On-demand library not large enough to get consistent unique random titles. Requested titles reduced. Reduce the 'number to display'");
+      }
     }
     return onDemandCards;
   }

@@ -611,7 +611,7 @@ class Plex {
     // Get a list of random titles from selected libraries
     let odSet = [];
 
-    const sleep = (n) => new Promise((res) => setTimeout(res, n));
+    //const sleep = (n) => new Promise((res) => setTimeout(res, n));
 
     try {
       const keys = await this.GetLibraryKeys(onDemandLibraries);
