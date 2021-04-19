@@ -112,20 +112,19 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |Plex Libraries for On-demand titles|Enter the Plex library name(s) to use for on-demand slides. Comma-seperated if multiple libraries. *(**Leave this blank** if you do not want on-demand slides)* |
 |Number to display |The number of random titles to show for on-demand slides |
 |On-demand refresh period|The refresh period in minutes before new random titles are loaded |
-#### Sonarr Options
-*Note that only Sonarr v3 is currently supported*
+#### Sonarr Options (v3 only)
 |Option|Description  |
 |--|--|
 |Sonarr token|The Sonarr API key required for accessing Sonarr. *(**Leave this blank** if you do not want coming soon TV titles to show)*|
 |Sonarr url|The full URL and Port for your Sonarr installation.|
-|Days ahead|The number of days to look ahead in the Sonarr calendar for titles. Set this to a low number, like 3-5 if 'Show Premieres' is off. Alternatively, up to 60 days is fine if on.|
+|Days ahead|The number of days to look ahead in the Sonarr calendar for titles. Set this low number, like `3-5`, if `Show Premieres` is off. Alternatively, up to `60+` days is fine if on.|
 |Show premieres|`ON / OFF` Only season premieres will be shown |
 #### Radarr Options
 |Option|Description  |
 |--|--|
-|Radarr token|The Radarr API key required for accessing Sonarr. *(**Leave this blank** if you do not want coming soon Movie titles to show)*|
+|Radarr token|The Radarr API key required for accessing Radarr. *(**Leave this blank** if you do not want coming soon Movie titles to show)*|
 |Radarr url|The full URL and Port for your Radarr installation.|
-|Days ahead|The number of days to look ahead in the Radarr calendar for titles. |
+|Days ahead|The number of days to look ahead in the Radarr calendar for titles.|
 
 ## Troubleshooting
 Should you encounter a problem, it may be listed here:
@@ -133,6 +132,8 @@ Should you encounter a problem, it may be listed here:
 Check your yaml against what is in the example here. It could be as simple as a formatting issue with spaces or tabs. (tabs not allowed in yaml) 
 ### Container crashing after start
 Check the container logs and see what they say. Ensure that there are no firewalls enabled that are blocking docker bridge networks. 
+### Not all the expected slides are showing
+Check the `Refresh Duration` and `Slide Duration` values. Its likely that this is too low if you have a lot playing or a large `number of on-demand` being selected.
 ### Container started but cannot access the app in a browser
 This could be that the default port `3000` is in use already. Try setting it to another port, like 9876.
 ### The poster image doesn't load
