@@ -131,13 +131,20 @@ Following is a description of each setup option. Options with a **'*'** are mand
 ## Troubleshooting
 Should you encounter a problem, it may be listed here:
 ### Container not starting
-Check your yaml against what is in the example here. It could be as simple as a formatting issue with spaces or tabs in your yaml file. 
+Check your yaml against what is in the example here. It could be as simple as a formatting issue with spaces or tabs. (tabs not allowed in yaml) 
 ### Container crashing after start
 Check the container logs and see what they say. Ensure that there are no firewalls enabled that are blocking docker bridge networks. 
 ### Container started but cannot access the app in a browser
 This could be that the default port `3000` is in use already. Try setting it to another port, like 9876.
 ### The poster image doesn't load
 Try refreshing your browser. Images are cached locally and dependant on your internet speed, may take a few seconds to initially load.
+### No TV theme being played
+Provided that you have enabled the TV theme option, then this *is normal*. Most, but *not all*, TV shows have themes available.
+### Not getting music when a movie title is displayed (or music repetative)
+Providing you have enabled the Movie themes option, then there are two choices for music to play with movies. (In either case, if you don't have enough themes, then there will be duplication)
+ - Use the provided royalty-free titles. (Leave out the volume mount for /randomthemes in your YAML)
+ - Provide your own MP3 files. (Set the randomthemes volume mount and add your own MP3's)
+ > Adding additional MP3 files to your `randomthemes` folder will decrease potential repitition of music
 
 ## Support
 There is no official support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.
