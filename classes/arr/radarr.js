@@ -165,7 +165,7 @@ class Radarr {
         // add generic random theme if applicable
 
         if (playGenenericThemes == 'true') {
-          medCard.theme = "/randomthemes/" + (await core.GetRandomMP3());
+          medCard.theme = "/randomthemes/" + (await core.GetRandomMP3(csrCards));
         }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)

@@ -113,23 +113,50 @@ class Cache {
   }
 
   /**
-   * @desc Returns a single random mp3 filename from the randomthemese folder
+   * @desc Returns a single random mp3 filename from the randomthemese folder. (tries to make MP3 unique)
+   * @param {array} cardArray - the card array that has been built thus far (needed to be able to check for duplicates)
    * @returns {string} fileName - a random filename
    */
-  static async GetRandomMP3() {
+  static async GetRandomMP3(cardArray, uniqueTryCount) {
     let directory = "./public/randomthemes";
 
-    // calls radom_items function to return a random item from an array
+    // calls random_items function to return a random item from an array
     let randomFile = await util.random_item(fs.readdirSync(directory));
-    // try again up to 3 times
+
+    // set to zero for initial call
+    if(uniqueTryCount == undefined) uniqueTryCount = 0;
+
     let tryCount = 0;
-    if((randomFile == undefined || !randomFile.includes("mp3")) && tryCount !== 3) {
+    // try again up to 5 times to get a valid MP3 file
+    while((randomFile == undefined || !randomFile.includes("mp3")) && tryCount !== 5) {
       tryCount++;
       randomFile = await util.random_item(fs.readdirSync(directory));
     }
+
+    // now try to get a unique file (try 5 times)
+    if(cardArray.some(card => card.theme.includes(randomFile) == true) && uniqueTryCount !== 5) {
+      // try again if the MP3 has already been used
+      uniqueTryCount++;
+  console.log(randomFile + ' already in use - trying again', uniqueTryCount);
+      this.GetRandomMP3(cardArray,uniqueTryCount);
+    }
+
+    if(uniqueTryCount==5){
+  console.log("Couldn't get a unique MP3 - sorry!!" );
+    }
+
+    // return whatever MP3 we ended up selecting
     return randomFile;
   }
 
+  static async GetRandomUniqueMP3(cardArray){
+    let randomFile = await this.GetRandomMP3();  
+    let tryCount = 0;
+    if(cardArray.some((card => card.theme.includes === randomFile) && tryCount !== 5)) {
+      tryCount++;
+      randomFile =1;
+    }
+  }
 
 }
 module.exports = Cache;

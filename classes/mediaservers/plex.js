@@ -206,7 +206,7 @@ class Plex {
             medCard.posterAR = 1.47;
             // add generic random theme if applicable
             if (playGenenericThemes == 'true') {
-              medCard.theme = "/randomthemes/" + (await core.GetRandomMP3());
+              medCard.theme = "/randomthemes/" + (await core.GetRandomMP3(nsCards));
             }
 
             medCard.title = md.title;
@@ -420,7 +420,7 @@ class Plex {
 //  console.log('--->' + movieUrl);
             // add generic random theme if applicable
             if (playGenenericThemes == 'true') {
-              medCard.theme = "/randomthemes/" + await core.GetRandomMP3();
+              medCard.theme = "/randomthemes/" + await core.GetRandomMP3(odCards);
             }
 
             medCard.posterAR = 1.47;
