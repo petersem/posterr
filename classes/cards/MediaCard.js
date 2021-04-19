@@ -58,8 +58,16 @@ class MediaCard {
     let ipPill = "";
     let userPill = "";
     let devicePill = "";
+    let yearPill = "";
 
     // include if value present
+    if (!(await util.isEmpty(this.year))) {
+      yearPill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.year +
+        "</span>";
+    }
+
     if (!(await util.isEmpty(this.contentRating))) {
       contentRatingPill =
         "<span class='badge badge-pill " +
@@ -195,6 +203,7 @@ class MediaCard {
       userPill +
       devicePill + 
       ipPill +
+      yearPill +
       `</div>
       </div>
       </div>

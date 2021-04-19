@@ -308,7 +308,7 @@ class Plex {
         }
         medCard.decision = transcode;
 
-        medCard.year = md.year;
+        //medCard.year = md.year;
         medCard.genre = await util.emptyIfNull(md.Genre);
         medCard.summary = md.summary;
         medCard.playerDevice = md.Player.title;
@@ -450,7 +450,7 @@ class Plex {
             }
             break;
         }
-//console.log(md);
+
         // populate common data
         if (!(await util.isEmpty(md.studio))) {
           medCard.studio = md.studio;
