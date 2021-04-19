@@ -171,13 +171,16 @@ class Plex {
 
             medCard.title = md.grandparentTitle;
             medCard.genre = md.genre;
+            if(md.Media[0].Part[0].Stream !== undefined){
             medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
               .replace("(", "")
               .replace(")", "");
+
             medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
               .replace("Unknown ", "")
               .replace("(", "")
               .replace(")", "");
+            }
             medCard.cardType = cType.CardTypeEnum.NowScreening;
 
             contentRating = "NR";
@@ -625,9 +628,9 @@ class Plex {
             await od.reduce(async (cb, odc) => {
               odSet.push(odc);
               return await cb;
-            },0);
-          },0);
-        }, 0);
+            },Promise.resolve(0));
+          }, Promise.resolve(0));
+        }, Promise.resolve(0));
       }
     } catch (err) {
       let now = new Date();
