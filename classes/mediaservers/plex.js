@@ -171,16 +171,16 @@ class Plex {
 
             medCard.title = md.grandparentTitle;
             medCard.genre = md.genre;
-            if(md.Media[0].Part[0].Stream !== undefined){
-            medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
+
+            medCard.resCodec = md.Media[1].Part[0].Stream[0].displayTitle
               .replace("(", "")
               .replace(")", "");
 
-            medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
+            medCard.audioCodec = md.Media[1].Part[0].Stream[1].displayTitle
               .replace("Unknown ", "")
               .replace("(", "")
               .replace(")", "");
-            }
+
             medCard.cardType = cType.CardTypeEnum.NowScreening;
 
             contentRating = "NR";
@@ -246,8 +246,8 @@ class Plex {
         medCard.progressPercent = Math.round(
           (md.viewOffset / md.Media[0].duration) * 100
         );
-        if (md.Media[0].Part[0].decision == "transcode") {
-          transcode = await util.emptyIfNull(md.Media[0].Part[0].decision);
+        if (md.Media[1].Part[0].Stream[0].decision == "transcode") {
+          transcode = await util.emptyIfNull(md.Media[1].Part[0].decision);
           if (!(await util.isEmpty(md.TranscodeSession))) {
             let audioTranscode = await util.emptyIfNull(
               md.TranscodeSession.audioDecision
