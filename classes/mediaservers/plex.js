@@ -450,8 +450,12 @@ class Plex {
             }
             break;
         }
-
+//console.log(md);
         // populate common data
+        if (!(await util.isEmpty(md.studio))) {
+          medCard.studio = md.studio;
+        }        
+
         medCard.mediaType = md.type;
         medCard.cardType = cType.CardTypeEnum.OnDemand;
 
