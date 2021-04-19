@@ -421,7 +421,6 @@ app.post(
         user: userData,
         success: req.session.success,
         settings: loadedSettings,
-        errors: req.session.errors,
       });
       }
   }
