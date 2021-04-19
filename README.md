@@ -12,7 +12,6 @@ This software is still considered `ALPHA` quality. (Still not feature complete)
 
 Limitations:
  - The 'Slide effect' transitions has a UI issue and doesn't look good yet (fade is fine)
- - There is no password for the settings page yet
  - Software has not been rigorously tested
  - The are still some layout issues for tag lines and the progress bar
  - Supported browsers are Chrome and MS Edge. It is possible to get working with Firefox, but for now, im leaving that off the list. (other browsers may work, but have not been tested)
@@ -83,7 +82,7 @@ services:
  - If you cloned this repo locally, then it is on you to manually watch for updates and download new versions
 
 ## Setup
-Once running, open a browser to http://host_machine_ip:3000'. From here you will see a screen with a link to the setup page. (alternatively open your browser with 'http://host_machine_ip:3000/settings')
+Once running, open a browser to http://host_machine_ip:3000'. From here you will see a screen with a link to the setup page. (Once you have the system configured, return to settings by clicking on the top banner title of any slide)
 
 *The default settings page password is:* **raidisnotabackup**
 
@@ -97,7 +96,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 #### General Options
 |Option|Desciption  |
 |--|--|
-|password |Settings page password|
+|*Password |Settings page password|
 |*Slide duration|How long (in seconds) that each slide will be shown for. (suggest 20-30 seconds)|
 |*Refresh period|How long ( in seconds) before the browser auto-refreshes all slides (suggested 120-300 seconds)|
 |TV theme tunes|`ON / OFF` Enable to play them tunes for slides that show TV shows. (note that in rare cases, some TV themes are unavaible) |
