@@ -9,6 +9,7 @@ Media display software for Plex, Sonarr and Radarr.
 
 ## Alpha software
 This software is still considered `ALPHA` quality. (Still not feature complete) 
+- **Check this page often for updates**
 
 Limitations:
  - The 'Slide effect' transitions has a UI issue and doesn't look good yet (fade is fine)
@@ -17,7 +18,7 @@ Limitations:
  - Supported browsers are Chrome and MS Edge. It is possible to get working with Firefox, but for now, im leaving that off the list. (other browsers may work, but have not been tested)
  - Not all screen sizes and resolutions will scale and look correct at this stage.
  - See the issues section on GitHub for a full list of defect and enhancement requests.
-
+ 
 ## Features
  - Now Screening: Shows and movies from Plex.
  - Playing: Music from Plex.
