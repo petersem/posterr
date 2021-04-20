@@ -34,6 +34,7 @@ Limitations:
  - Move the mouse cursor to the bottom footer of the page to hide it
  - Low resource usage. Memory: 20-35mb, Diskspace: 175mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
  - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser `refresh period` is reached)
+ - Browser-based, so can run the app on one machine and a browser on another.
 
 ## Possible Uses
  - Mount a monitor on your wall (extra points if framed) and showcase your home media setup
