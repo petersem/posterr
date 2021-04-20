@@ -3,7 +3,6 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
-const { playThemes } = require("../../consts");
 // const sizeOf = require("image-size");
 
 /**
@@ -172,11 +171,26 @@ class Plex {
             medCard.title = md.grandparentTitle;
             medCard.genre = md.genre;
 
-            medCard.resCodec = md.Media[1].Part[0].Stream[0].displayTitle
+            // work out where transcode data is in the returned media item
+            let mediaPart = 0;
+
+            if(md.Media[0] !== undefined) {
+              if(md.Media[0].Part[0].Stream != undefined) {
+                mediaPart = 0;
+              }
+            }
+
+            if(md.Media[1] !== undefined) {
+              if(md.Media[1].Part[0].Stream != undefined) {
+                mediaPart = 1;
+              }
+            }
+
+            medCard.resCodec = md.Media[mediaPart].Part[0].Stream[0].displayTitle
               .replace("(", "")
               .replace(")", "");
 
-            medCard.audioCodec = md.Media[1].Part[0].Stream[1].displayTitle
+            medCard.audioCodec = md.Media[mediaPart].Part[0].Stream[1].displayTitle
               .replace("Unknown ", "")
               .replace("(", "")
               .replace(")", "");
@@ -187,14 +201,11 @@ class Plex {
             if (!(await util.isEmpty(md.contentRating))) {
               contentRating = md.contentRating;
             }
-            medCard.contentRating = contentRating;            
-            if (md.Media[1].Part[0].Stream[0].decision == "transcode") {
-              transcode = await util.emptyIfNull(md.Media[1].Part[0].decision);
-              if (!(await util.isEmpty(md.TranscodeSession))) {
-                let audioTranscode = await util.emptyIfNull(
-                  md.TranscodeSession.audioDecision
-                );
-              }
+            medCard.contentRating = contentRating;    
+            
+            // check transcode status (set transcode if audio or video transcoding)
+            if (md.Media[mediaPart].Part[0].decision == "transcode") {
+              transcode = "transcode";
             }
             break;
           case "movie":
@@ -227,10 +238,10 @@ class Plex {
             } else {
               medCard.rating = md.audienceRating * 10 + "%";
             }
-            medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
+            medCard.resCodec = md.Media[mediaPart].Part[0].Stream[0].displayTitle
               .replace("(", "")
               .replace(")", "");
-            medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
+            medCard.audioCodec = md.Media[mediaPart].Part[0].Stream[1].displayTitle
               .replace("Unknown ", "")
               .replace("(", "")
               .replace(")", "");
