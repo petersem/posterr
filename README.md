@@ -21,17 +21,17 @@ Limitations:
 ## Features
  - Now Screening: Shows and movies from Plex.
  - Playing: Music from Plex.
- - On-demand: Random on-demand titles from a specified Plex library.
+ - On-demand: Random on-demand titles from multiple specified Plex libraries.
  - Coming Soon: Shows in Sonarr that are releasing in a given number of days (or Season premieres).
  - Coming Soon: Movies in Radarr that are releasing in a given number of days.
- - Option to play TV themes (when theme available)
+ - Option to play TV themes (available for most shows)
  - Option to play a random MP3 of your choice for movies (add your own MP3 files)
  - Setup page (dark theme)
- - Built in Node and packaged as a Docker image. (included image health check)
- - Now Screening / Playing shows a progress bar (green for direct play and red for transcoding)
- - Shows information for media, such as run time, content rating, studio, etc. 
- - Move the mouse cursor to the bottom of the page to hide it
- - Low resource usage. (Memory: 20-35mb, Diskspace: 175mb, CPU: < 1%)
+ - Built in Node JS, and packaged as a Docker image. (included image health check)
+ - Now Screening / Playing displays a progress bar (green for direct play and red for transcoding)
+ - Displays information for media, such as run time, content rating, studio, etc. 
+ - Move the mouse cursor to the bottom footer of the page to hide it
+ - Low resource usage. Memory: 20-35mb, Diskspace: 175mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
 
 ## Possible Uses
  - Mount a monitor on your wall (extra points if framed) and showcase your home media setup
