@@ -112,7 +112,7 @@ class Plex {
               ":" +
               this.plexPort +
               md.parentThumb +
-              "&" +
+              "?X-Plex-Token=" +
               this.plexToken;
             await core.CacheImage(url, fileName);
 
