@@ -308,7 +308,7 @@ async function startup() {
   // load settings object
   loadedSettings = await loadSettings();
   // check status 
-  await healthCheck();
+  healthCheck();
   await checkEnabled();
 
   // initial load of card providers
