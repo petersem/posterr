@@ -308,7 +308,6 @@ async function startup() {
   // load settings object
   loadedSettings = await loadSettings();
   // check status 
-  healthCheck();
   await checkEnabled();
 
   // initial load of card providers
@@ -316,9 +315,7 @@ async function startup() {
   await loadRadarrComingSoon();
   await loadOnDemand();
   await loadNowScreening();
-  test = new health(loadedSettings);
-
-
+  
   let now = new Date();
   console.log(
     now.toLocaleString() + " Now screening titles refreshed (First run only)"
