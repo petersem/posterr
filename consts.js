@@ -1,6 +1,6 @@
 const DEFAULT_SETTINGS = {
   password : "raidisnotabackup",
-  slideDuration : 20,
+  slideDuration : 7,
   refreshPeriod : 180,
   playThemes : "true",
   genericThemes : "true",
