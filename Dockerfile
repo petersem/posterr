@@ -3,6 +3,7 @@ FROM node:12.18-alpine
 # tzdata for timzone
 RUN apk update 
 RUN apk add tzdata
+RUN apk add net-tools
 
 ENV NODE_ENV=production
 
