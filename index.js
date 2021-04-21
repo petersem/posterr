@@ -14,6 +14,7 @@ const radr = require("./classes/arr/radarr");
 const settings = require("./classes/core/settings");
 var MemoryStore = require('memorystore')(session);
 const DEFAULT_SETTINGS = require('./consts');
+const health = require("./classes/core/health");
 
 console.log("--------------------------------------------------------");
 console.log("| POSTER - Your media display                          |");
@@ -306,13 +307,17 @@ async function startup() {
 
   // load settings object
   loadedSettings = await loadSettings();
-  // check status of card providers
+  // check status 
+  await healthCheck();
   await checkEnabled();
+
   // initial load of card providers
   await loadSonarrComingSoon();
   await loadRadarrComingSoon();
   await loadOnDemand();
   await loadNowScreening();
+  test = new health(loadedSettings);
+
 
   let now = new Date();
   console.log(
@@ -333,6 +338,17 @@ async function startup() {
 async function saveReset(formObject) {
   await setng.SaveSettingsJSON(formObject);
   await startup();
+}
+
+/**
+ * @desc Checks system connectivity and settings
+ * @returns nothing
+ */
+function healthCheck() {
+  test = new health(loadedSettings);
+  test.TestAll();
+
+  return;
 }
 
 // call all card providers - initial card loads and sets scheduled runs
@@ -374,13 +390,6 @@ app.use(express.static(path.join(__dirname, "public")));
 // set routes
 app.get("/", (req, res) => {
   res.render("index", { globals: globalPage, hasConfig: setng.GetChanged() }); // index refers to index.ejs
-});
-
-
-
-// health check - TODO
-app.get("/health", (req, res) => {
-  res.json(app.locals.globals);
 });
 
 // password for settings section

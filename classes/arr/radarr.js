@@ -100,6 +100,7 @@ class Radarr {
         }
         else{
           let url = md.images[0].url;
+//console.log(url);
           await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
         }
