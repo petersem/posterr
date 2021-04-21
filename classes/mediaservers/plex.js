@@ -164,6 +164,7 @@ class Plex {
               "&" +
               this.plexToken;
             await core.CacheImage(url, fileName);
+            console.log(url);
             medCard.posterURL = "/imagecache/" + fileName;
 
             medCard.posterAR = 1.47;
