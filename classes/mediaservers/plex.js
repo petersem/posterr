@@ -161,7 +161,7 @@ class Plex {
               ":" +
               this.plexPort +
               md.grandparentThumb +
-              "&" +
+              "?X-Plex-Token=" +
               this.plexToken;
             await core.CacheImage(url, fileName);
 
@@ -221,8 +221,8 @@ class Plex {
               ":" +
               this.plexPort +
               md.thumb +
-              "&" +
-              this.plexToken;
+              "?X-Plex-Token=" +
+              this.plexToken; 
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
 
@@ -412,9 +412,9 @@ class Plex {
               ":" +
               this.plexPort +
               md.thumb +
-              "&" +
+              "?X-Plex-Token=" +
               this.plexToken;
-    console.log(url);
+
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
@@ -435,7 +435,7 @@ class Plex {
               ":" +
               this.plexPort +
               md.thumb +
-              "&" +
+              "?X-Plex-Token=" +
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
