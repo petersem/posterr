@@ -239,10 +239,11 @@ class Plex {
             } else {
               medCard.rating = md.audienceRating * 10 + "%";
             }
-            medCard.resCodec = md.Media[mediaPart].Part[0].Stream[0].displayTitle
+
+            medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
               .replace("(", "")
               .replace(")", "");
-            medCard.audioCodec = md.Media[mediaPart].Part[0].Stream[1].displayTitle
+            medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
               .replace("Unknown ", "")
               .replace("(", "")
               .replace(")", "");
@@ -254,7 +255,7 @@ class Plex {
             }
             medCard.contentRating = contentRating;
 
-            if (md.TranscodeSession.videoDecision == "transcode" || md.TranscodeSession.audioDecision == "transcode") {
+            if (md.Media[0].Part[0].decision == "transcode") {
               transcode = "transcode";
             }
             break;
