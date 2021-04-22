@@ -115,9 +115,23 @@ class Plex {
               "?X-Plex-Token=" +
               this.plexToken;
             await core.CacheImage(url, fileName);
-
             medCard.posterURL = "/imagecache/" + fileName;
 
+            // download artist art image to local server
+            fileName = result[3] + "-art.jpg";
+            prefix = "http://";
+            if (this.https) prefix = "https://";
+              url =
+                prefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.grandparentArt +
+                "?X-Plex-Token=" +
+                this.plexToken;
+              await core.CacheImage(url, fileName);
+              medCard.posterArtURL = "/imagecache/" + fileName;
+            
             medCard.posterAR = 1;
 
             medCard.audioCodec = md.Media[0].audioCodec;
