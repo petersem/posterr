@@ -13,6 +13,7 @@ class MediaCard {
     this.title = "";
     this.year = "";
     this.posterURL = "";
+    this.posterArtURL = "";
     this.posterAR = "";
     this.contentRating = "";
     this.ratingColour = "";
@@ -155,6 +156,9 @@ class MediaCard {
       this.ID +
       `">
       <div class="myDiv">
+      <div class="posterArt" style="background-image: url('` +
+      this.posterArtURL + `'">
+      </div>
         <div class="banners">
           <div class="bannerBigText ` +
       this.cardType +
@@ -166,7 +170,7 @@ class MediaCard {
       <div id="poster` +
       this.ID +
       `" class="poster" style="background-image: url('` +
-      this.posterURL + `">
+      this.posterURL + `'">
 
       <div class="progress ` +
       hidden +
