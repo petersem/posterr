@@ -54,7 +54,7 @@ Installation options are as follows:
  - Run 'npm start'
 
 ### Docker Compose (preferred)
-Create the follow directories in your docker folder:
+Create the following directories in your docker folder:
  - .../docker/poster/config
  - .../docker/poster/randomthemes
 
