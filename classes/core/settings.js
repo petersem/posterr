@@ -30,6 +30,7 @@ class Settings {
     this.radarrURL = DEFAULT_SETTINGS.radarrURL;
     this.radarrToken = DEFAULT_SETTINGS.radarrToken;
     this.radarrCalDays = DEFAULT_SETTINGS.radarrCalDays;
+    this.hasArt = DEFAULT_SETTINGS.hasArt;
     return;
   }
 
@@ -165,7 +166,8 @@ class Settings {
     else this.radarrToken = cs.radarrToken;
     if (jsonObject.radarrDays) this.radarrCalDays = jsonObject.radarrDays;
     else this.radarrCalDays = cs.radarrCalDays;
-
+    if (jsonObject.hasArt) this.hasArt = jsonObject.hasArt;
+    else this.hasArt = cs.hasArt;
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
 

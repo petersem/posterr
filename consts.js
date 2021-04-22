@@ -18,7 +18,8 @@ const DEFAULT_SETTINGS = {
   sonarrPremieres : "false",
   radarrURL : "",
   radarrToken : "",
-  radarrCalDays : 30
+  radarrCalDays : 30,
+  hasArt : "false"
 };
 
 module.exports = DEFAULT_SETTINGS;

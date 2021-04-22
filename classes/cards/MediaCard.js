@@ -45,7 +45,7 @@ class MediaCard {
    * @desc renders the properties of the card into html, then sets this to the 'rendered' property
    * @returns nothing
    */
-  async Render(playThemes,playGenericThemes) {
+  async Render(hasArt) {
     let hidden = "";
     if (this.cardType != "Now Screening" && this.cardType != "Playing") hidden = "hidden";
     // pill variables
@@ -60,6 +60,8 @@ class MediaCard {
     let userPill = "";
     let devicePill = "";
     let yearPill = "";
+    console.log(hasArt);
+    if(hasArt=="false") this.posterArtURL = "";
 
     // include if value present
     if (!(await util.isEmpty(this.year))) {

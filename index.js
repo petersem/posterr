@@ -192,7 +192,7 @@ async function loadNowScreening() {
 
   // put everything into global class, ready to be passed to poster.ejs
   // render html for all cards
-  await globalPage.OrderAndRenderCards(loadedSettings.playGenenericThemes);
+  await globalPage.OrderAndRenderCards(loadedSettings.hasArt);
   globalPage.refreshPeriod = loadedSettings.refreshPeriod * 1000;
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
   globalPage.playThemes = loadedSettings.playThemes;

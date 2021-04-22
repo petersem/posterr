@@ -91,18 +91,23 @@ class Radarr {
 
         medCard.theme = "";
 
-        // cache image
-        let fileName = md.tmdbId + ".jpg";
-
+      // cache image
       // if no poster available, use the generic one
         if(await util.isEmpty(md.images[0])){
           medCard.posterURL="/images/no-poster-available.png";
         }
         else{
+          // cache poster image
+          let fileName = md.tmdbId + ".jpg";
           let url = md.images[0].url;
-//console.log(url);
           await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
+
+          // cache art image
+          fileName = md.tmdbId + "-art.jpg";
+          url = md.images[1].url;
+          await core.CacheImage(url, fileName);
+          medCard.posterArtURL = "/imagecache/" + fileName;
         }
 
         medCard.posterAR = 1.47;

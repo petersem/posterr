@@ -25,7 +25,7 @@ class globalPage {
    * @desc Takes merged mediaCard set and applies card order number and active card slide, then generates the rendered HTML for each media card.
    * @returns nothing
    */
-  async OrderAndRenderCards() {
+  async OrderAndRenderCards(hasArt) {
     if (this.cards.length != 0) {
       let webID = 0;
       // move through cards and update ID's and active, then render
@@ -40,7 +40,7 @@ class globalPage {
           card.active = "";
         }
         // console.log(card);
-        await card.Render();
+        await card.Render(hasArt);
       }, undefined);
     }
     return;

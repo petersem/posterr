@@ -100,12 +100,17 @@ class Sonarr {
             medCard.theme = "/mp3cache/" + mp3;
           }
 
-          // cache image
+          // cache poster
           fileName = md.series.tvdbId + ".jpg";
           let url = md.series.images[1].url;
           await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
 
+          // cache image
+          fileName = md.series.tvdbId + "-art.jpg";
+          url = md.series.images[2].url;
+          await core.CacheImage(url, fileName);
+          medCard.posterArtURL = "/imagecache/" + fileName;
         }
 
         // content rating and colour
