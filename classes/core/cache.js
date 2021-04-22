@@ -52,8 +52,9 @@ class Cache {
             .pipe(fs.createWriteStream(savePath, { autoClose: true }))
             .on("close", callback)
             .on("error", (err) => {
-              //console.log("download failed: " + err.message);
+              console.log("download failed for: ",url, err.message);
               if(err.errno !== -4048) throw err;
+              return callback;
             })
             .on("finish", () => {
               //console.log("Download Completed");

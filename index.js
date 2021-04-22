@@ -298,7 +298,7 @@ async function checkEnabled(){
  * @desc Starts everything - calls coming soon 'tv', on-demand and now screening functions. Then initialises timers
  * @returns nothing
  */
-async function startup() {
+async function startup(clearCache) {
   // stop all clocks
   clearInterval(nowScreeningClock);
   clearInterval(onDemandClock);
@@ -306,8 +306,8 @@ async function startup() {
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
 
-  // run housekeeping job
-  await houseKeeping();
+  // run housekeeping job - but not on settings save
+  if(clearCache !== false) await houseKeeping();
 
   // load settings object
   loadedSettings = await loadSettings();
@@ -338,7 +338,17 @@ async function startup() {
  */
 async function saveReset(formObject) {
   await setng.SaveSettingsJSON(formObject);
-  await startup();
+  // cancel all clocks, then pause 5 seconds to ensure downloads finished
+  clearInterval(nowScreeningClock);
+  clearInterval(onDemandClock);
+  clearInterval(sonarrClock);
+  clearInterval(radarrClock);
+  clearInterval(houseKeepingClock);
+  console.log('Restarting. Please wait while current jobs complete');
+  // clear old cards
+  globalPage.cards=[];
+  // dont clear cached files if restarting after settings saved
+  startup(false);
 }
 
 /**
