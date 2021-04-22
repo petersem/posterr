@@ -315,9 +315,9 @@ async function startup() {
   await checkEnabled();
 
   // initial load of card providers
-  await loadSonarrComingSoon();
-  await loadRadarrComingSoon();
-  await loadOnDemand();
+  if(isSonarrEnabled) await loadSonarrComingSoon();
+  if(isRadarrEnabled) await loadRadarrComingSoon();
+  if(isOnDemandEnabled) await loadOnDemand();
   await loadNowScreening();
 
   let now = new Date();
