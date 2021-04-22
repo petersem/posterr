@@ -252,7 +252,7 @@ async function houseKeeping() {
   await core.DeleteMP3Cache();
   await core.DeleteImageCache();
   // restart timer
-  setInterval(houseKeeping, 86400000); // daily
+  setInterval(houseKeeping, 86400000); // daily 
 }
 
 /**
