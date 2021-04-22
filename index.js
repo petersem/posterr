@@ -16,13 +16,13 @@ var MemoryStore = require('memorystore')(session);
 const DEFAULT_SETTINGS = require('./consts');
 const health = require("./classes/core/health");
 
-console.log("--------------------------------------------------------");
-console.log("| POSTER - Your media display                          |");
-console.log("| Developed by Matt Petersen - Brisbane Australia      |");
-console.log("|                                                      |");
-console.log("| *App under development and considered alpha quality  |");
-console.log("|                                                      |");
-console.log("--------------------------------------------------------");
+console.log("-------------------------------------------------------");
+console.log(" POSTER - Your media display                          ");
+console.log(" Developed by Matt Petersen - Brisbane Australia      ");
+console.log("                                                      ");
+console.log(" *App under development and considered alpha quality  ");
+console.log(" Version: " + process.env.npm_package_version);
+console.log("-------------------------------------------------------");
 
 // global variables
 let odCards = [];
@@ -42,6 +42,10 @@ let isSonarrEnabled = false;
 let isRadarrEnabled = false;
 let isOnDemandEnabled = false;
 let isPlexEnabled = false;
+let version = {
+  "versionLabel": "Alpha",
+  "version": process.env.npm_package_version
+}
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -315,7 +319,7 @@ async function startup() {
   await loadRadarrComingSoon();
   await loadOnDemand();
   await loadNowScreening();
-  
+
   let now = new Date();
   console.log(
     now.toLocaleString() + " Now screening titles refreshed (First run only)"
@@ -427,6 +431,7 @@ app.post(
         user: userData,
         success: req.session.success,
         settings: loadedSettings,
+        version: version
       });
       }
   }
@@ -438,7 +443,8 @@ app.get("/settings", (req, res) => {
     success: req.session.success,
     user: {valid: false},
     settings: loadedSettings,
-    errors: req.session.errors
+    errors: req.session.errors,
+    version: version
   });
   req.session.errors = null;
 });
@@ -538,6 +544,7 @@ app.post(
         errors: req.session.errors,
         user: {valid: true},
         formData: form,
+        version: version
       });
     } else {
       // save settings
@@ -547,6 +554,7 @@ app.post(
       saveReset(form);
       res.render("settings", {
         errors: req.session.errors,
+        version: version,
         user: {valid: true},
         formData: form
       });
