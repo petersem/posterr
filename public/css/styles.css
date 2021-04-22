@@ -53,18 +53,31 @@ iframe {
 }
 
 #myDiv {
+  opacity: 1;
   min-height: 100%;
   width:100%;
   overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
-
+  z-index: 900;
 }
 .badge-pill {
   margin-left: 2px;
 }
 
+.posterArt {
+  z-index: 0;
+  position: fixed;
+  position:fixed;
+  width:100%;
+  height:100%;
+  size: 100% 100%;
+  background-position: center middle;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: .1;
+}
 
 .poster {
   max-width: 100%;
@@ -80,6 +93,7 @@ iframe {
   background-position: 50% 50%;
   background-size: contain;
   background-repeat: no-repeat;
+  z-index: 1000;
 }
 
 .banners {
@@ -87,6 +101,7 @@ iframe {
   width: 100%;
   top: 0;
   max-height: 8%;
+  z-index: 1000;
 }
 
 /* If the screen size is 871px high or more */
@@ -147,12 +162,14 @@ iframe {
 
 .bottomBanner {
   color: lightgoldenrodyellow;
+  background-color: inherit !important;
   bottom: 0;
   position: fixed;
   height: 8%;
   max-height: 8%;
   width: 100%;
   cursor: none;
+  z-index: 1000;
 }
 
 .vidBanner {
@@ -204,4 +221,16 @@ iframe {
 .no-content {
   height: 80vh;
   color: #6c757d;
+}
+
+.alert-link:hover {
+  color: white;
+  text-decoration: none;
+  opacity: 1;
+}
+
+a.alert-link {
+  height: 80vh;
+  color: #6c757d;
+  opacity: .5;
 }
