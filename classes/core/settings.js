@@ -166,7 +166,7 @@ class Settings {
     else this.radarrToken = cs.radarrToken;
     if (jsonObject.radarrDays) this.radarrCalDays = jsonObject.radarrDays;
     else this.radarrCalDays = cs.radarrCalDays;
-    if (jsonObject.hasArt) this.hasArt = jsonObject.hasArt;
+    if (jsonObject.artSwitch) this.hasArt = jsonObject.artSwitch;
     else this.hasArt = cs.hasArt;
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

@@ -118,6 +118,15 @@
                     refreshes the slide card data (consider how many slides you have and slide duration)</small>
                 </div>
 
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="artSwitch" id="artSwitch" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.artSwitch ? 'checked' : '' %><%}else{%><%=(settings.hasArt == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="artSwitch">Enable background artwork</label>
+                    <small id="themeHelp" class="form-text text-muted">Shows background art behind the poster, *when available*</small>
+                  </div>
+                </div>
+
                 <label class="d-block">Theme Options</label>
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">

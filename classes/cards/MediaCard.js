@@ -60,8 +60,14 @@ class MediaCard {
     let userPill = "";
     let devicePill = "";
     let yearPill = "";
-    console.log(hasArt);
-    if(hasArt=="false") this.posterArtURL = "";
+
+    // toggle background art as per settings
+    if(hasArt=="true") {
+      // leave art if present
+    }
+    else{
+      this.posterArtURL = "";
+    }
 
     // include if value present
     if (!(await util.isEmpty(this.year))) {

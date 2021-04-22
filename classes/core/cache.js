@@ -53,7 +53,7 @@ class Cache {
             .on("close", callback)
             .on("error", (err) => {
               //console.log("download failed: " + err.message);
-              throw err;
+              if(err.errno !== -4048) throw err;
             })
             .on("finish", () => {
               //console.log("Download Completed");

@@ -515,6 +515,7 @@ app.post(
         password: req.body.password,
         slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : DEFAULT_SETTINGS.slideDuration,
         refreshPeriod: req.body.refreshPeriod ? parseInt(req.body.refreshPeriod) : DEFAULT_SETTINGS.refreshPeriod,
+        artSwitch: req.body.artSwitch,
         themeSwitch: req.body.themeSwitch,
         genericSwitch: req.body.genericSwitch,
         fadeOption: req.body.fadeOption,
