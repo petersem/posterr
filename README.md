@@ -1,11 +1,11 @@
 # Poster
 Media display software for Plex, Sonarr and Radarr.
 
-![Music playing](https://github.com/petersem/poster/blob/master/doco/music.png?raw=true)
-![Now screening](https://github.com/petersem/poster/blob/master/doco/ns.png?raw=true)
-![On-demand](https://github.com/petersem/poster/blob/master/doco/od.png?raw=true)
-![Coming soon](https://github.com/petersem/poster/blob/master/doco/cs.png?raw=true)
-![Settings](https://github.com/petersem/poster/blob/master/doco/settings.png?raw=true)
+![Music playing](https://github.com/petersem/posterr/blob/master/doco/music.png?raw=true)
+![Now screening](https://github.com/petersem/posterr/blob/master/doco/ns.png?raw=true)
+![On-demand](https://github.com/petersem/posterr/blob/master/doco/od.png?raw=true)
+![Coming soon](https://github.com/petersem/posterr/blob/master/doco/cs.png?raw=true)
+![Settings](https://github.com/petersem/posterr/blob/master/doco/settings.png?raw=true)
 
 ## Alpha software
 This software is still considered `ALPHA` quality. (Still not feature complete) 
@@ -61,9 +61,9 @@ Create the follow directories in your docker folder:
 version: '2.4'
 
 services:
-  poster:
+  posterr:
     image: petersem/poster
-    container_name: poster
+    container_name: posterr
     environment:
       TZ: Australia/Brisbane
     volumes:
@@ -76,7 +76,7 @@ services:
 |Variable|Details|
 |--|--|
 |TZ|Your local timezone. Look this up on [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
-|/docker/poster/config|This is required to save your Poster settings|
+|/docker/poster/config|This is required to save your Posterr settings|
 |/docker/poster/randomthemes|This is optional. If you leave it out then there are a few royaly free movie tunes that are made available. If you choose to add this, then you need to populate this directory with your own MP3 files that will play for movie slides|
 |Ports|If you have a conflict with port 3000 already in use then you can change this to a different port. e.g. 9876:3000 (second value must always be 3000)|
 
@@ -91,7 +91,7 @@ Once running, open a browser to http://host_machine_ip:3000'. From here you will
 
 Buttons are:
  - `Reload Saved Settings` - Discards any changes and reloads last saved settings
- - `Main Page` - Navigates to main Poster page (Any unsaved settings are discarded)
+ - `Main Page` - Navigates to main Posterr page (Any unsaved settings are discarded)
  - `Save` - Saves all fields and restarts the application
 
 Following is a description of each setup option. Options with a **'*'** are mandatory.
