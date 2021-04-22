@@ -17,10 +17,10 @@ const DEFAULT_SETTINGS = require('./consts');
 const health = require("./classes/core/health");
 
 console.log("-------------------------------------------------------");
-console.log(" POSTER - Your media display                          ");
-console.log(" Developed by Matt Petersen - Brisbane Australia      ");
-console.log("                                                      ");
-console.log(" *App under development and considered alpha quality  ");
+console.log(" POSTERR - Your media display");
+console.log(" Developed by Matt Petersen - Brisbane Australia");
+console.log(" ");
+console.log(" *App under development and considered alpha quality");
 console.log(" Version: " + process.env.npm_package_version);
 console.log("-------------------------------------------------------");
 
@@ -45,7 +45,7 @@ let isPlexEnabled = false;
 let version = {
   "versionLabel": "Alpha",
   "version": process.env.npm_package_version
-}
+};
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
