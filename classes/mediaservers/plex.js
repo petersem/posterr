@@ -28,8 +28,8 @@ class Plex {
       https: HTTPS,
       token: plexToken,
     });
-    this.client.timeout=0;
-    this.client.options = {'product': 'Poster'};
+    this.client.timeout = 0;
+    this.client.options = { product: "Poster" };
   }
 
   /**
@@ -37,19 +37,20 @@ class Plex {
    * @returns {object} JSON - Plex now screening results
    */
   async GetNowScreeningRawData() {
-    try{
-    this.nowScreening = await this.client.query("/status/sessions").then(
-      function (result) {
-        return result;
-      },
-      function (err) {
-        throw err;
-      }
-    );
-    }
-    catch(err){
+    try {
+      this.nowScreening = await this.client.query("/status/sessions").then(
+        function (result) {
+          return result;
+        },
+        function (err) {
+          throw err;
+        }
+      );
+    } catch (err) {
       let now = new Date();
-      console.log(now.toLocaleString() + " *Now screening - Get titles: " + err);
+      console.log(
+        now.toLocaleString() + " *Now screening - Get titles: " + err
+      );
       throw err;
     }
     return this.nowScreening;
@@ -64,10 +65,9 @@ class Plex {
     // get raw data first
     let nsCards = [];
     let nsRaw;
-    try{
-      nsRaw =await this.GetNowScreeningRawData();
-    }
-    catch(err){
+    try {
+      nsRaw = await this.GetNowScreeningRawData();
+    } catch (err) {
       throw err;
     }
     // reutrn an empty array if no results
@@ -138,7 +138,7 @@ class Plex {
             medCard.DBID = result[2];
 
             // only downlad mp3 if playThemes enabled
-            if(playThemes == 'true'){
+            if (playThemes == "true") {
               // download mp3 file to local server
               let mp3 = result[2] + ".mp3";
               await core.CacheMP3(mp3);
@@ -164,8 +164,22 @@ class Plex {
               "?X-Plex-Token=" +
               this.plexToken;
             await core.CacheImage(url, fileName);
-
             medCard.posterURL = "/imagecache/" + fileName;
+
+            //download poster art
+            fileName = result[2].split("?")[0] + "-art.jpg";
+            if (this.https) prefix = "https://";
+            url =
+              prefix +
+              this.plexIP +
+              ":" +
+              this.plexPort +
+              md.art +
+              "?X-Plex-Token=" +
+              this.plexToken;
+
+            await core.CacheImage(url, fileName);
+            medCard.posterArtURL = "/imagecache/" + fileName;
 
             medCard.posterAR = 1.47;
 
@@ -175,23 +189,27 @@ class Plex {
             // work out where transcode data is in the returned media item
             let mediaPart = 0;
 
-            if(md.Media[0] !== undefined) {
-              if(md.Media[0].Part[0].Stream != undefined) {
+            if (md.Media[0] !== undefined) {
+              if (md.Media[0].Part[0].Stream != undefined) {
                 mediaPart = 0;
               }
             }
 
-            if(md.Media[1] !== undefined) {
-              if(md.Media[1].Part[0].Stream != undefined) {
+            if (md.Media[1] !== undefined) {
+              if (md.Media[1].Part[0].Stream != undefined) {
                 mediaPart = 1;
               }
             }
 
-            medCard.resCodec = md.Media[mediaPart].Part[0].Stream[0].displayTitle
+            medCard.resCodec = md.Media[
+              mediaPart
+            ].Part[0].Stream[0].displayTitle
               .replace("(", "")
               .replace(")", "");
 
-            medCard.audioCodec = md.Media[mediaPart].Part[0].Stream[1].displayTitle
+            medCard.audioCodec = md.Media[
+              mediaPart
+            ].Part[0].Stream[1].displayTitle
               .replace("Unknown ", "")
               .replace("(", "")
               .replace(")", "");
@@ -202,8 +220,8 @@ class Plex {
             if (!(await util.isEmpty(md.contentRating))) {
               contentRating = md.contentRating;
             }
-            medCard.contentRating = contentRating;    
-            
+            medCard.contentRating = contentRating;
+
             // check transcode status (set transcode if audio or video transcoding)
             if (md.Media[mediaPart].Part[0].decision == "transcode") {
               transcode = "transcode";
@@ -222,14 +240,30 @@ class Plex {
               this.plexPort +
               md.thumb +
               "?X-Plex-Token=" +
-              this.plexToken; 
+              this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
 
+            //download poster art
+            movieFileName = md.updatedAt + "-art.jpg";
+            if (this.https) moviePlexPrefix = "https://";
+              movieUrl =
+                moviePlexPrefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.art +
+                "?X-Plex-Token=" +
+                this.plexToken;
+            
+            await core.CacheImage(movieUrl, movieFileName);
+            medCard.posterArtURL = "/imagecache/" + movieFileName;
+
             medCard.posterAR = 1.47;
             // add generic random theme if applicable
-            if (playGenenericThemes == 'true') {
-              medCard.theme = "/randomthemes/" + (await core.GetRandomMP3(nsCards));
+            if (playGenenericThemes == "true") {
+              medCard.theme =
+                "/randomthemes/" + (await core.GetRandomMP3(nsCards));
             }
 
             medCard.title = md.title;
@@ -271,7 +305,6 @@ class Plex {
         medCard.progressPercent = Math.round(
           (md.viewOffset / md.Media[0].duration) * 100
         );
-
 
         // set colours for rating badges
         let ratingColour = "";
@@ -364,7 +397,12 @@ class Plex {
    * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetOnDemand(onDemandLibraries, numberOnDemand, playThemes, playGenenericThemes) {
+  async GetOnDemand(
+    onDemandLibraries,
+    numberOnDemand,
+    playThemes,
+    playGenenericThemes
+  ) {
     // get library keys
     let odCards = [];
     let odRaw;
@@ -389,7 +427,7 @@ class Plex {
             medCard.DBID = result[2].split("?")[0];
 
             // include if playThemes is enabled
-            if(playThemes == 'true'){
+            if (playThemes == "true") {
               // download mp3 from plex tv theme server
               let mp3 = result[2].split("?")[0] + ".mp3";
               await core.CacheMP3(mp3);
@@ -418,6 +456,21 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
+            //download poster art
+            fileName = result[2].split("?")[0] + "-art.jpg";
+            if (this.https) prefix = "https://";
+            url =
+              prefix +
+              this.plexIP +
+              ":" +
+              this.plexPort +
+              md.art +
+              "?X-Plex-Token=" +
+              this.plexToken;
+
+            await core.CacheImage(url, fileName);
+            medCard.posterArtURL = "/imagecache/" + fileName;
+
             medCard.posterAR = 1.47;
 
             medCard.runTime = Math.round(md.duration / 60000);
@@ -439,29 +492,44 @@ class Plex {
               this.plexToken;
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
-//  console.log('--->' + movieUrl);
-            // add generic random theme if applicable
-            if (playGenenericThemes == 'true') {
-              medCard.theme = "/randomthemes/" + await core.GetRandomMP3(odCards);
+
+            //download poster art
+            movieFileName = md.updatedAt + "-art.jpg";
+            if (this.https) moviePlexPrefix = "https://";
+            movieUrl =
+            moviePlexPrefix +
+              this.plexIP +
+              ":" +
+              this.plexPort +
+              md.art +
+              "?X-Plex-Token=" +
+              this.plexToken;
+
+            await core.CacheImage(movieUrl, movieFileName);
+            medCard.posterArtURL = "/imagecache/" + movieFileName;
+
+            if (playGenenericThemes == "true") {
+              medCard.theme =
+                "/randomthemes/" + (await core.GetRandomMP3(odCards));
             }
 
             medCard.posterAR = 1.47;
-
+            
             // other data
             medCard.title = md.title;
             medCard.runTime = Math.round(md.Media[0].duration / 60000);
 
-            if(!await util.isEmpty(medCard.resCodec)){
+            if (!(await util.isEmpty(medCard.resCodec))) {
               medCard.resCodec =
                 md.Media[0].videoResolution +
                 " " +
                 md.Media[0].videoCodec.toUpperCase();
             }
-            if(!await util.isEmpty(medCard.audioCodec)){
+            if (!(await util.isEmpty(medCard.audioCodec))) {
               medCard.audioCodec =
-              md.Media[0].audioCodec.toUpperCase() +
-              " " +
-              md.Media[0].audioChannels;
+                md.Media[0].audioCodec.toUpperCase() +
+                " " +
+                md.Media[0].audioChannels;
             }
 
             medCard.tagLine = await util.emptyIfNull(md.tagline);
@@ -476,7 +544,7 @@ class Plex {
         // populate common data
         if (!(await util.isEmpty(md.studio))) {
           medCard.studio = md.studio;
-        }        
+        }
 
         medCard.mediaType = md.type;
         medCard.cardType = cType.CardTypeEnum.OnDemand;
@@ -548,7 +616,12 @@ class Plex {
     if (odCards.length == 0) {
       console.log(now.toLocaleString() + " No On-demand titles available");
     } else {
-      console.log(now.toLocaleString() + " On-demand titles refreshed (" + onDemandLibraries + ")");
+      console.log(
+        now.toLocaleString() +
+          " On-demand titles refreshed (" +
+          onDemandLibraries +
+          ")"
+      );
     }
     // return populated array
     return odCards;
@@ -569,32 +642,35 @@ class Plex {
     return onDemandLibraries.split(",").reduce(async (acc, value) => {
       await acc;
       try {
-      return await this.client.query("/library/sections/").then(
-        function (result) {
-          let found = false;
-          result.MediaContainer.Directory.forEach((lib) => {
-
-            if (value.toLowerCase() == lib.title.toLowerCase()) {
-              keys.push(lib.key);
-              found = true;
-              //console.log(" - " + lib.title + " - ID: " + lib.key);
+        return await this.client.query("/library/sections/").then(
+          function (result) {
+            let found = false;
+            result.MediaContainer.Directory.forEach((lib) => {
+              if (value.toLowerCase() == lib.title.toLowerCase()) {
+                keys.push(lib.key);
+                found = true;
+                //console.log(" - " + lib.title + " - ID: " + lib.key);
+              }
+            });
+            if (!found) {
+              let d = new Date();
+              console.log(
+                "✘✘ WARNING ✘✘ - On-demand library '" + value + "' not found"
+              );
             }
-          });
-          if(!found){
-            let d = new Date();
-            console.log("✘✘ WARNING ✘✘ - On-demand library '" + value + "' not found");
+            return keys;
+          },
+          function (err) {
+            throw err;
           }
-          return keys;
-        },
-        function (err) {
-          throw err;
-        }
-      );
-    }
-    catch(err){
-      let now = new Data();
-      console.log(now.toLocaleString() + " *On-demand - Get library key: " + err);    }
-    },0);
+        );
+      } catch (err) {
+        let now = new Data();
+        console.log(
+          now.toLocaleString() + " *On-demand - Get library key: " + err
+        );
+      }
+    }, 0);
   }
 
   /**
@@ -640,15 +716,19 @@ class Plex {
       // console.log("Library key: " + keys);
       if (keys !== undefined) {
         const p = await keys.reduce(async (acc, value) => {
-          return (await acc) + await this.GetAllMediaForLibrary(value).then(async function (
-            result
-          ) {
-            const od = await util.build_random_od_set(numberOnDemand, result);
-            await od.reduce(async (cb, odc) => {
-              odSet.push(odc);
-              return await cb;
-            },Promise.resolve(0));
-          }, Promise.resolve(0));
+          return (
+            (await acc) +
+            (await this.GetAllMediaForLibrary(value).then(async function (
+              result
+            ) {
+              const od = await util.build_random_od_set(numberOnDemand, result);
+              await od.reduce(async (cb, odc) => {
+                odSet.push(odc);
+                return await cb;
+              }, Promise.resolve(0));
+            },
+            Promise.resolve(0)))
+          );
         }, Promise.resolve(0));
       }
     } catch (err) {
