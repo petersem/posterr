@@ -108,9 +108,12 @@ class Sonarr {
 
           // cache image
           fileName = md.series.tvdbId + "-art.jpg";
+          // check art exists
+          if(md.series.images[2] !== undefined){
           url = md.series.images[2].url;
-          await core.CacheImage(url, fileName);
-          medCard.posterArtURL = "/imagecache/" + fileName;
+            await core.CacheImage(url, fileName);
+            medCard.posterArtURL = "/imagecache/" + fileName;
+          }
         }
 
         // content rating and colour

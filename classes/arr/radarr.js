@@ -104,10 +104,12 @@ class Radarr {
           medCard.posterURL = "/imagecache/" + fileName;
 
           // cache art image
-          fileName = md.tmdbId + "-art.jpg";
-          url = md.images[1].url;
-          await core.CacheImage(url, fileName);
-          medCard.posterArtURL = "/imagecache/" + fileName;
+          if(md.images[1] !== undefined){
+            fileName = md.tmdbId + "-art.jpg";
+            url = md.images[1].url;
+            await core.CacheImage(url, fileName);
+            medCard.posterArtURL = "/imagecache/" + fileName;
+          }
         }
 
         medCard.posterAR = 1.47;
