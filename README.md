@@ -85,7 +85,11 @@ services:
  - If you cloned this repo locally, then it is on you to manually watch for updates and download new versions
 
 ## Setup
-Once running, open a browser to http://host_machine_ip:3000'. From here you will see a screen with a link to the setup page. (Once you have the system configured, return to settings by clicking on the top banner title of any slide)
+Get to the settings page in a number of ways:
+ - On initial load, you will be prompted
+ - Change the URL to _'http://hostIP:3000/settings'_
+ - Clicking on the top banner title of any slide)
+ - If on the 'no content' page, then click this text
 
 *The default settings page password is:* **raidisnotabackup**
 
