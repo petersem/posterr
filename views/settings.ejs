@@ -2,7 +2,7 @@
 <html lang="en">
 <!--
 ***********************************************************
-* Poster - Your home media display                        *
+* Posterr - Your home media display                       *
 * Developed by Matt Petersen - Brisbane, Australia        *
 ***********************************************************
 -->
@@ -24,7 +24,7 @@
 
   <!-- <script src="/js/script.js"></script> -->
 
-  <title>Poster - Settings</title>
+  <title>Posterr - Settings</title>
 </head>
 
 <body>
@@ -33,12 +33,12 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Poster</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Poster Settings</li>
+        <li class="breadcrumb-item"><a href="/">Posterr</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Posterr Settings</li>
       </ol>
     </nav>
     <%if(typeof formData !== 'undefined' && formData.saved == true) {%><script language='javascript'>
-      alert("Poster Settings Saved");
+      alert("Posterr Settings Saved");
     </script><%}%>
     <!-- Layout -->
     <div class="row gutters-sm">
@@ -86,7 +86,7 @@
 
             <!-- General Settings -->
             <div class="tab-pane active" id="settings">
-              <h6>POSTER SETTINGS</h6>
+              <h6>POSTERR SETTINGS</h6>
               <hr>
               <!-- show validation errors -->
               <% 
@@ -281,11 +281,11 @@
 
             <!-- About -->
             <div class="tab-pane" id="about">
-              <h6>ABOUT POSTER</h6>
+              <h6>ABOUT POSTERR</h6>
               <p><%=version.versionLabel + " - v" + version.version%></p>
               <hr>
               <p>
-                POSTER was initially born from a desire for me to learn Node. Over time, I decided to
+                POSTERR was initially born from a desire for me to learn Node. Over time, I decided to
                  take it from an excercise to being a full product.
               </p>
               <p>
@@ -307,7 +307,7 @@
               <hr />
               <label class="d-block" style="text-decoration: underline;">Project Details</label>
               <p>
-                Find this project on GitHub <a href="https://github.com/petersem/poster" target="_blank">here</a>.
+                Find this project on GitHub <a href="https://github.com/petersem/posterr" target="_blank">here</a>.
               </p>
               <p>
                 Get involved in the discussion groups and have your say. Contribe to the code, where you can add value.
