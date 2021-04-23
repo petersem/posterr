@@ -100,10 +100,11 @@ class Sonarr {
             medCard.theme = "/mp3cache/" + mp3;
           }
 
+          let url;
           // cache poster
           fileName = md.series.tvdbId + ".jpg";
           if(md.series.images[1] !== undefined){
-            let url = md.series.images[1].url;
+            url = md.series.images[1].url;
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
           }
