@@ -105,7 +105,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |Option|Description  |
 |--|--|
 |*Password |Settings page password|
-|*Slide duration|How long (in seconds) that each slide will be shown for. (suggest 20-30 seconds)|
+|*Slide duration|How long (in seconds) that each slide will be shown for. (suggest 5-30 seconds)|
 |*Refresh period|How long ( in seconds) before the browser auto-refreshes all slides (suggested 120-300 seconds)|
 |Enable background artwork|Shows media artwork in a faded background behind the poster|
 |TV theme tunes|`ON / OFF` Enable to play theme tunes for slides that show TV shows. (note that in rare cases, some TV themes are unavaible) |
@@ -119,7 +119,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |*Server port|The port Plex uses (default is 32400)|
 |*Plex token|Token required to access Plex. ([Finding a Plex token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))|
 |Plex Libraries for On-demand titles|Enter the Plex library name(s) to use for on-demand slides. Comma-seperated if multiple libraries. *(**Leave this blank** if you do not want on-demand slides)* |
-|Number to display |The number of random titles to show for on-demand slides |
+|Number to display |The number of random titles to show for on-demand slides (avoid going over 200 combined slides for all libraries)  |
 |On-demand refresh period|The refresh period in minutes before new random titles are loaded |
 #### Sonarr Options (v3 only)
 |Option|Description  |
