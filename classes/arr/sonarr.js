@@ -102,9 +102,14 @@ class Sonarr {
 
           // cache poster
           fileName = md.series.tvdbId + ".jpg";
-          let url = md.series.images[1].url;
-          await core.CacheImage(url, fileName);
-          medCard.posterURL = "/imagecache/" + fileName;
+          if(md.series.images[1] !== undefined){
+            let url = md.series.images[1].url;
+            await core.CacheImage(url, fileName);
+            medCard.posterURL = "/imagecache/" + fileName;
+          }
+          else{
+            medCard.posterUrl = "/images/no-poster-available.png";
+          }
 
           // cache image
           fileName = md.series.tvdbId + "-art.jpg";
