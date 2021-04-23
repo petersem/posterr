@@ -95,7 +95,7 @@ Get to the settings page in a number of ways:
 *The default settings page password is:* **raidisnotabackup**
 
 Buttons are:
- - `Reload Saved Settings` - Discards any changes and reloads last saved settings
+ - `Reload Saved` - Discards any changes and reloads last saved settings
  - `Main Page` - Navigates to main Posterr page (Any unsaved settings are discarded)
  - `Save` - Saves all fields and restarts the application
 
@@ -108,7 +108,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |*Slide duration|How long (in seconds) that each slide will be shown for. (suggest 20-30 seconds)|
 |*Refresh period|How long ( in seconds) before the browser auto-refreshes all slides (suggested 120-300 seconds)|
 |Enable background artwork|Shows media artwork in a faded background behind the poster|
-|TV theme tunes|`ON / OFF` Enable to play them tunes for slides that show TV shows. (note that in rare cases, some TV themes are unavaible) |
+|TV theme tunes|`ON / OFF` Enable to play theme tunes for slides that show TV shows. (note that in rare cases, some TV themes are unavaible) |
 |Generic movie themes|`ON / OFF` Enable to play random tunes for slides that show movies. (Supplied MP3's are royalty free from https://www.bensound.com/ ) |
 |Slide Transitions|`Slide / Fade`The slide transition effect.|
 #### Plex Options
