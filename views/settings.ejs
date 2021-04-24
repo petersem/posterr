@@ -106,7 +106,7 @@
                 <div class="form-group">
                   <label for="slideDuration">Slide Duration</label>
                   <input type="text" class="form-control" id="slideDuration" name="slideDuration" aria-describedby="slideDuration"
-                    placeholder="Suggest no less than 10 and around 20-30 seconds" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.slideDuration%>"<%}else{%><%=settings.slideDuration%>"<%}%>>
+                    placeholder="Suggest no less than 5 and no more than 20-30 seconds" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.slideDuration%>"<%}else{%><%=settings.slideDuration%>"<%}%>>
                   <small id="slideDurationHelp" class="form-text text-muted">How many seconds that each slide will
                     remain on the screen</small>
                 </div>
