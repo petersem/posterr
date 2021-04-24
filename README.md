@@ -119,7 +119,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |*Server port|The port Plex uses (default is 32400)|
 |*Plex token|Token required to access Plex. ([Finding a Plex token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))|
 |Plex Libraries for On-demand titles|Enter the Plex library name(s) to use for on-demand slides. Comma-seperated if multiple libraries. *(**Leave this blank** if you do not want on-demand slides)* |
-|Number to display |The number of random titles to show for on-demand slides (avoid going over 200 combined slides for all libraries)  |
+|Number to display |The number of random titles to show for on-demand slides (avoid going over 200 _'combined'_ slides for all libraries, or may cause excessive polling on Plex server.)  |
 |On-demand refresh period|The refresh period in minutes before new random titles are loaded |
 #### Sonarr Options (v3 only)
 |Option|Description  |
@@ -167,6 +167,15 @@ Support my efforts and continued development. Click this link to Buy me a coffee
 Thanks,
 
 Matt Petersen (April 2021)
+
+## Technical Details
+Posterr uses the following:
+ - Node & Node Express
+ - The awesome [PlexAPi](https://github.com/phillipj/node-plex-api)
+ - Jquery
+ - Bootstrap
+ - Popper.js
+ - Font-Awesome
 
 ## License
 
