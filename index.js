@@ -12,10 +12,11 @@ const core = require("./classes/core/cache");
 const sonr = require("./classes/arr/sonarr");
 const radr = require("./classes/arr/radarr");
 const settings = require("./classes/core/settings");
-var MemoryStore = require('memorystore')(session);
+const MemoryStore = require("memorystore")(session);
+const util = require("./classes/core/utility");
 const DEFAULT_SETTINGS = require('./consts');
 const health = require("./classes/core/health");
-var pjson = require('./package.json');
+var pjson = require("./package.json");
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
@@ -514,7 +515,7 @@ app.post(
       }),
   check("numberOnDemand")
    .custom((value) => {
-      if (parseInt(value) !== "NaN") {
+      if (!util.isEmpty(value) && parseInt(value) !== "NaN") {
         if (parseInt(value) > 100) {
           throw new Error("'Number to Display' cannot be more than 100");
         }
