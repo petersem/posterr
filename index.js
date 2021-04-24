@@ -15,13 +15,14 @@ const settings = require("./classes/core/settings");
 var MemoryStore = require('memorystore')(session);
 const DEFAULT_SETTINGS = require('./consts');
 const health = require("./classes/core/health");
+var pjson = require('./package.json');
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
 console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" *App under development and considered alpha quality");
-console.log(" Version: " + process.env.npm_package_version);
+console.log(" Version: " + pjson.version);
 console.log("-------------------------------------------------------");
 
 // global variables
@@ -44,7 +45,7 @@ let isOnDemandEnabled = false;
 let isPlexEnabled = false;
 let version = {
   "versionLabel": "Alpha",
-  "version": process.env.npm_package_version
+  "version": pjson.version
 };
 
 /**
@@ -469,55 +470,62 @@ app.post(
     check("slideDuration")
       .not()
       .isEmpty()
+      .withMessage("'Slide Duration' cannot be blank. (setting default)")
       .custom((value) => {
         if (parseInt(value) === "NaN") {
-          throw new Error('Slide duration must be a number');
+          throw new Error("'Slide duration' must be a number");
+        }
+        if (parseInt(value) < 5){
+          throw new Error("'Slide duration' cannot be less than 5 seconds");
         }
         // Indicates the success of this synchronous custom validator
         return true;
       })
-      .withMessage("Slide Duration is required"),
+      .withMessage("'Slide Duration' is required and must be 5 or more"),
     check("refreshPeriod")
       .not()
       .isEmpty()
+      .withMessage("'Refresh period' cannot be blank. (setting default)")
       .custom((value) => {
         if (parseInt(value) === "NaN") {
-          throw new Error('Refresh period must be a number');
+          throw new Error("'Refresh period' must be a number");
+        }
+        if(parseInt(value) < 60){
+          throw new Error("'Refresh period' cannot be less than 60 seconds");
         }
         // Indicates the success of this synchronous custom validator
         return true;
       })
-      .withMessage("Refresh Period is required"),
+      .withMessage("'Refresh Period' is required"),
     check("plexIP")
       .not()
       .isEmpty()
-      .withMessage("Plex IP is required"),
+      .withMessage("'Plex IP' is required"),
     check("plexPort")
       .not()
       .isEmpty()
+      .withMessage("'Plex port' is required. (setting default)")
       .custom((value) => {
         if (parseInt(value) === "NaN") {
-          throw new Error('Plex Port must be a number');
+          throw new Error("'Plex Port' must be a number");
         }
         // Indicates the success of this synchronous custom validator
         return true;
-      })
-      .withMessage("Plex Port number is required"),
+      }),
+  check("numberOnDemand")
+   .custom((value) => {
+      if (parseInt(value) !== "NaN") {
+        if (parseInt(value) > 100) {
+          throw new Error("'Number to Display' cannot be more than 100");
+        }
+      }
+      // Indicates the success of this synchronous custom validator
+      return true;
+    }),
     check("plexToken")
       .not()
       .isEmpty()
-      .withMessage("Plex token is required"),
-    // check('email', 'Email is required')
-    //     .isEmail(),
-    // check('password', 'Password is requried')
-    //     .isLength({ min: 1 })
-    //     .custom((val, { req, loc, path }) => {
-    //         if (val !== req.body.confirm_password) {
-    //             throw new Error("Passwords don't match");
-    //         } else {
-    //             return value;
-    //         }
-    //     }),
+      .withMessage("'Plex token' is required"),
   ],
   (req, res) => {
       //fields value holder. Also sets default values in form passed without them.
