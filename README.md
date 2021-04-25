@@ -12,13 +12,7 @@ Media display software for Plex, Sonarr and Radarr.
 This software is still considered `ALPHA` quality. (Still not feature complete) 
 - **Check this page often for updates**
 
-Limitations:
- - The 'Slide effect' transitions has a UI issue and doesn't look good yet (fade is fine)
- - Software has not been rigorously tested
- - The are still some layout issues for tag lines and the progress bar
- - Supported browsers are Chrome and MS Edge. It is possible to get working with Firefox, but for now, im leaving that off the list. (other browsers may work, but have not been tested)
- - Not all screen sizes and resolutions will scale and look correct at this stage.
- - See the issues section on GitHub for a full list of defect and enhancement requests.
+Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
  
 ## Features
  - Now Screening: Shows and movies from Plex.
@@ -47,14 +41,7 @@ Limitations:
 ## Installation
 Installation options are as follows:
 
-### Node (for development use)
- - Ensure you have the latest version of Node installed
- - Clone this repo to your local disk
- - Open the directory from a command prompt / terminal
- - Run 'npm install'
- - Run 'npm start'
-
-### Docker Compose (preferred)
+### Docker Compose
 Create the following directories in your docker folder:
  - .../docker/poster/config
  - .../docker/poster/randomthemes
@@ -75,30 +62,29 @@ services:
       - 3000:3000
 ```
 #### Details
-|Variable|Details|
+|Option|Details|
 |--|--|
-|TZ|Your local timezone. Look this up on [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
+|TZ|Your local timezone. Go to [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
 |/docker/poster/config|This is required to save your Posterr settings|
-|/docker/poster/randomthemes|This is optional. If you leave it out then there are a few royaly free movie tunes that are made available. If you choose to add this, then you need to populate this directory with your own MP3 files that will play for movie slides|
-|Ports|If you have a conflict with port 3000 already in use then you can change this to a different port. e.g. 9876:3000 (second value must always be 3000)|
+|/docker/poster/randomthemes|This is optional. If you leave it out, there are a few royalty-free tunes available. If you add this, then you must populate this directory with your own MP3 files, which will play for movie slides. (Supplied MP3's are royalty free from https://www.bensound.com/)|
+|Ports|Change first part to a different port if needed. e.g. 9876:3000|
 
 ## Updates
- - If installed with Docker, then use containrr/watchtower to auto-update
- - If you cloned this repo locally, then it is on you to manually watch for updates and download new versions
-
+ - Use containrr/watchtower to auto-update Posterr.
+ 
 ## Setup
 Get to the settings page in a number of ways:
- - On initial load, you will be prompted
+ - On initial load, you will be prompted.
  - Change the URL to _'http://hostIP:3000/settings'_
  - Clicking on the top banner title of any slide)
  - If on the 'no content' page, then click this text
 
-*The default settings page password is:* **raidisnotabackup**
+*The default password is:* **raidisnotabackup**
 
 Buttons are:
  - `Reload Saved` - Discards any changes and reloads last saved settings
- - `Main Page` - Navigates to main Posterr page (Any unsaved settings are discarded)
- - `Save` - Saves all fields and restarts the application
+ - `Main Page` - Navigates to main Posterr page (unsaved changes lost)
+ - `Save` - Saves and restarts the application
 
 Following is a description of each setup option. Options with a **'*'** are mandatory.
 
@@ -106,22 +92,22 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |Option|Description  |
 |--|--|
 |*Password |Settings page password|
-|*Slide duration|How long (in seconds) that each slide will be shown for. (suggest 5-30 seconds)|
-|*Refresh period|How long ( in seconds) before the browser auto-refreshes all slides (suggested 120-300 seconds)|
+|*Slide duration|How long (in seconds) a slide will be shown for. (suggest 5-30 seconds)|
+|*Refresh period|How long (in seconds) before the browser auto-refreshes all slides (suggested 120-300 seconds)|
 |Enable background artwork|Shows media artwork in a faded background behind the poster|
-|TV theme tunes|`ON / OFF` Enable to play theme tunes for slides that show TV shows. (note that in rare cases, some TV themes are unavaible) |
-|Generic movie themes|`ON / OFF` Enable to play random tunes for slides that show movies. (Supplied MP3's are royalty free from https://www.bensound.com/ ) |
-|Slide Transitions|`Slide / Fade`The slide transition effect.|
+|TV theme tunes|`ON / OFF` Enable to play TV theme tunes. (note: some TV themes are unavaible) |
+|Generic movie themes|`ON / OFF` Enable to play random tunes for slides that show movies.|
+|Slide Transitions|`Slide / Fade` The slide transition effect.|
 #### Plex Options
 |Option|Description  |
 |--|--|
-|*HTTPS connection|`ON / OFF` If your Plex server only allows secure connections|
+|*HTTPS connection|`ON / OFF` If your Plex server requires a secure connections|
 |*Server IP|The IP or domain name for plex (exclude http/https)|
 |*Server port|The port Plex uses (default is 32400)|
 |*Plex token|Token required to access Plex. ([Finding a Plex token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))|
 |Plex Libraries for On-demand titles|Enter the Plex library name(s) to use for on-demand slides. Comma-seperated if multiple libraries. *(**Leave this blank** if you do not want on-demand slides)* |
-|Number to display |The number of random titles to show for on-demand slides (avoid going over 200 _'combined'_ slides for all libraries, or may cause excessive polling on Plex server.)  |
-|On-demand refresh period|The refresh period in minutes before new random titles are loaded |
+|Number to display |The number of random titles to display, per-library, for on-demand slides (avoid going over 200 _'combined'_ slides for all libraries, or may cause excessive polling on Plex server.)|
+|On-demand refresh period|The refresh period in minutes before a new set of random titles are loaded|
 #### Sonarr Options (v3 only)
 |Option|Description  |
 |--|--|
@@ -140,9 +126,9 @@ Following is a description of each setup option. Options with a **'*'** are mand
 Should you encounter a problem, it may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
 
 ## Support
-There is no _'official'_ support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.
+There is no _'official'_ support for this product, however should you encounter issues, raise a defect on the github page.
 
-Support my efforts and continued development. Click this link to Buy me a coffee: 
+*Support my efforts and continued development* - Click this link to Buy me a coffee: 
 
  - [Support development](https://paypal.me/thanksmp)
 
@@ -153,7 +139,7 @@ Matt Petersen (April 2021)
 ## Technical Details
 Posterr uses the following:
  - Node & Node Express
- - The awesome [PlexAPi](https://github.com/phillipj/node-plex-api)
+ - The awesome [Node-Plex-APi](https://github.com/phillipj/node-plex-api)
  - Jquery
  - Bootstrap
  - Popper.js
@@ -161,6 +147,7 @@ Posterr uses the following:
  - Plex (via PlexAPI)
  - Sonarr (via API)
  - Radarr (via API)
+ - Posters and artwork from Plex, TVDB and TMDB.
 
 ## License
 
