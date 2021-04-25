@@ -5,6 +5,7 @@ Media display software for Plex, Sonarr and Radarr.
 ![Now screening](https://github.com/petersem/posterr/blob/master/doco/ns.png?raw=true)
 ![On-demand](https://github.com/petersem/posterr/blob/master/doco/od.png?raw=true)
 ![Coming soon](https://github.com/petersem/posterr/blob/master/doco/cs.png?raw=true)
+![Landscape - background art mode](https://github.com/petersem/posterr/blob/master/doco/artmode.png?raw=true)
 ![Settings](https://github.com/petersem/posterr/blob/master/doco/settings.png?raw=true)
 
 ## Alpha software
