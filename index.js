@@ -262,7 +262,7 @@ async function houseKeeping() {
  * @returns {object} json - settings details
  */
 async function loadSettings() {
-  const ls = await setng.GetSettings();
+  const ls = setng.GetSettings();
   return ls;
 }
 
@@ -277,6 +277,7 @@ async function checkEnabled(){
   isSonarrEnabled = false;
   isRadarrEnabled = false;
 
+  
   // check Plex
   if(loadedSettings.plexIP !== undefined && loadedSettings.plexToken !== undefined && loadedSettings.plexPort !== undefined) { isPlexEnabled = true;}
   // check on-demand
@@ -287,13 +288,14 @@ async function checkEnabled(){
   if(loadedSettings.radarrURL !== undefined && loadedSettings.radarrCalDays !== undefined && loadedSettings.radarrToken !== undefined) { isRadarrEnabled = true;}
   
   // display status
-  let now = new Date();
   console.log(`--- Enabled Status ---
    Plex: ` + isPlexEnabled + `
    On-demand: ` + isOnDemandEnabled + `
    Sonarr: ` + isSonarrEnabled + `
    Radarr: ` + isRadarrEnabled + `
    `);
+
+   return;
 }
 
 /**
@@ -313,6 +315,7 @@ async function startup(clearCache) {
 
   // load settings object
   loadedSettings = await loadSettings();
+
   // check status 
   await checkEnabled();
 
