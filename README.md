@@ -177,6 +177,9 @@ Posterr uses the following:
  - Bootstrap
  - Popper.js
  - Font-Awesome
+ - Plex (via PlexAPI)
+ - Sonarr (via API)
+ - Radarr (via API)
 
 ## License
 
