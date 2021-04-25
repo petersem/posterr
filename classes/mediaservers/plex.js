@@ -675,7 +675,7 @@ class Plex {
           function (result) {
             let found = false;
             result.MediaContainer.Directory.forEach((lib) => {
-              if (value.toLowerCase() == lib.title.toLowerCase()) {
+              if (value.trim().toLowerCase() == lib.title.toLowerCase()) {
                 keys.push(lib.key);
                 found = true;
                 //console.log(" - " + lib.title + " - ID: " + lib.key);
