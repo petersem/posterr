@@ -1,7 +1,7 @@
 const fs = require("fs");
 const fsp = require("fs").promises;
-const DEFAULT_SETTINGS = require('../../consts');
-const util = require('../core/utility');
+const DEFAULT_SETTINGS = require("../../consts");
+const util = require("../core/utility");
 
 /**
  * @desc settings object is used to get and set all settings for poster
@@ -43,13 +43,15 @@ class Settings {
     let SettingChanged;
     try {
       // only worry about required Plex settings. (other settings can remain default or be blank)
-      if(this.plexIP !== '' &&  this.plexPort !== '' && this.plexToken !== ''){
+      if (this.plexIP !== "" && this.plexPort !== "" && this.plexToken !== "") {
         hasChanged = true;
         throw SettingChanged;
-      }
-      else{
+      } else {
         let now = new Date();
-        console.log(now.toISOString().split("T")[0] + ' INVALID PLEX SERVER SETTINGS - Please visit setup page to resolve');
+        console.log(
+          now.toISOString().split("T")[0] +
+            " INVALID PLEX SERVER SETTINGS - Please visit setup page to resolve"
+        );
       }
     } catch (e) {
       if (e !== SettingChanged) throw e;
@@ -74,20 +76,22 @@ class Settings {
     console.log(`✅ Settings loaded
     `);
 
-
-
     let readSettings;
-    try{
+    try {
       readSettings = JSON.parse(data.toString());
-    }
-    catch(ex){
+    } catch (ex) {
       // do nothing if error as it reads ok anyhow
     }
 
     // populate settings object with settings from json file
     Object.assign(this, readSettings);
 
-    return readSettings;
+    // ensure settings loaded before returning
+    return new Promise((resolve) => {
+      setTimeout(function () {
+        resolve(readSettings);
+      }, 2000);
+    });
   }
 
   /**
@@ -180,7 +184,6 @@ class Settings {
       let d = new Date();
       //console.log(d.toISOString().split("T")[0] + " Settings saved.");
     });
-
 
     return;
   }
