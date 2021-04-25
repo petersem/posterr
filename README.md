@@ -137,29 +137,10 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |Days ahead|The number of days to look ahead in the Radarr calendar for titles.|
 
 ## Troubleshooting
-Should you encounter a problem, it may be listed here:
-### Container not starting
-Check your yaml against what is in the example here. It could be as simple as a formatting issue with spaces or tabs. (tabs not allowed in yaml) 
-### Container crashing after start
-Check the container logs and see what they say. Ensure that there are no firewalls enabled that are blocking docker bridge networks. 
-### Not all the expected slides are showing
-Check the `Refresh Duration` and `Slide Duration` values. Its likely that this is too low if you have a lot playing or a large `number of on-demand` being selected.
-### Container started but cannot access the app in a browser
-This could be that the default port `3000` is in use already. Try setting it to another port, like 9876.
-### The poster image doesn't load
-Try refreshing your browser. Images are cached locally and dependant on your internet speed, may take a few seconds to initially load.
-### The poster image looks to be the wrong size
-Posters for Now screening and on-demand, come from your plex library. Find the media item in your library and update the poster art. 
-### No TV theme being played
-Provided that you have enabled the TV theme option, then this *is normal*. Most, but *not all*, TV shows have themes available.
-### Not getting music when a movie title is displayed (or music repetative)
-Providing you have enabled the Movie themes option, then there are two choices for music to play with movies. (In either case, if you don't have enough themes, then there will be duplication)
- - Use the provided royalty-free titles. (Leave out the volume mount for /randomthemes in your YAML)
- - Provide your own MP3 files. (Set the randomthemes volume mount and add your own MP3's)
- > Adding additional MP3 files to your `randomthemes` folder will decrease potential repitition of music
+Should you encounter a problem, it may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
 
 ## Support
-There is no official support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.
+There is no _'official'_ support for this product, however should you encounter issues, raise a defect on the github page and I will prioritise and address it.
 
 Support my efforts and continued development. Click this link to Buy me a coffee: 
 
