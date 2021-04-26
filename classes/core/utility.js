@@ -46,6 +46,7 @@ class utility {
    */
   static async build_random_od_set(numberOnDemand, mediaCards) {
     let onDemandCards = [];
+    let libTooSmall = false;
     for await (let i of Array(numberOnDemand).keys()) {
       let odc;
       odc = await this.random_item(mediaCards);
@@ -61,9 +62,13 @@ class utility {
         onDemandCards.push(odc);
       }
       else{
-        let d = new Date();
-        console.log(d.toLocaleString() + " ✘✘ WARNING ✘✘ On-demand library not large enough to get consistent unique random titles. Requested titles reduced. Reduce the 'number to display'");
+        libTooSmall = true;
       }
+    }
+    // display a warning if 'number to display' was too large for library size.
+    if(libTooSmall){
+      let d = new Date();
+      console.log(d.toLocaleString() + " ✘✘ WARNING ✘✘ On-demand library too small to get consistent unique titles. Requested titles reduced. (Reduce the 'number to display')");
     }
     return onDemandCards;
   }
