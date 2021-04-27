@@ -123,7 +123,7 @@ Following is a description of each setup option. Options with a **'*'** are mand
 |Days ahead|The number of days to look ahead in the Radarr calendar for titles.|
 
 ## Troubleshooting
-Should you encounter a problem, it may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
+Should you encounter a problem, the solution may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
 
 ## Support
 There is no _'official'_ support for this product, however should you encounter issues, raise a defect on the github page.
