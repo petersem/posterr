@@ -28,7 +28,7 @@ class Plex {
       https: HTTPS,
       token: plexToken,
     });
-    this.client.timeout = 0;
+    //this.client.timeout = 0;
     this.client.options = { product: "Poster" };
   }
 
@@ -49,7 +49,7 @@ class Plex {
     } catch (err) {
       let now = new Date();
       console.log(
-        now.toLocaleString() + " *Now screening - Get titles: " + err
+        now.toLocaleString() + " *Now Scrn. - Get sessions: " + err
       );
       throw err;
     }
@@ -68,6 +68,10 @@ class Plex {
     try {
       nsRaw = await this.GetNowScreeningRawData();
     } catch (err) {
+      let now = new Date();
+      console.log(
+        now.toLocaleString() + " *Now Scrn. - Get raw data: " + err
+      );
       throw err;
     }
     // reutrn an empty array if no results
@@ -433,7 +437,8 @@ class Plex {
       odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand);
     } catch (err) {
       let now = new Date();
-      console.log(now.toLocaleString() + " ** ERROR: " + err);
+      console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
+      throw err;
     }
 
     // reutrn an empty array if no results
@@ -562,6 +567,7 @@ class Plex {
             }
 
             medCard.tagLine = await util.emptyIfNull(md.tagline);
+
             if (await util.isEmpty(md.audienceRating)) {
               medCard.rating = "";
             } else {
@@ -574,6 +580,9 @@ class Plex {
         if (!(await util.isEmpty(md.studio))) {
           medCard.studio = md.studio;
         }
+        
+
+        if(medCard.tagLine =="") medCard.tagLine = medCard.title;
 
         medCard.mediaType = md.type;
         medCard.cardType = cType.CardTypeEnum.OnDemand;
@@ -694,10 +703,11 @@ class Plex {
           }
         );
       } catch (err) {
-        let now = new Data();
+        let now = new Date();
         console.log(
           now.toLocaleString() + " *On-demand - Get library key: " + err
         );
+        throw err;
       }
     }, 0);
   }
@@ -709,23 +719,28 @@ class Plex {
    */
   async GetAllMediaForLibrary(libKey) {
     let mediaCards = [];
-    return await this.client.query("/library/sections/" + libKey + "/all").then(
-      function (result) {
-        // populate a complete list of all titles into an array
-        if (result.MediaContainer.size > 0) {
-          result.MediaContainer.Metadata.forEach((mt) => {
-            mediaCards.push(mt);
-          });
-        }
-        return mediaCards;
-      },
-      function (err) {
-        let now = new Date();
-        console.log(now.toLocaleString() + " *On-demand - Get titles: " + err);
-        throw err;
-      },
-      Promise.resolve(0)
-    );
+    try{
+      return await this.client.query("/library/sections/" + libKey + "/all").then(
+        function (result) {
+          // populate a complete list of all titles into an array
+          if (result.MediaContainer.size > 0) {
+            result.MediaContainer.Metadata.forEach((mt) => {
+              mediaCards.push(mt);
+            });
+          }
+          return mediaCards;
+        },
+        function (err) {
+          let now = new Date();
+          console.log(now.toLocaleString() + " *On-demand - Get titles: " + err);
+          throw err;
+        },
+        Promise.resolve(0)
+      );
+    }
+    catch (err) {
+      throw err;
+    }
   }
 
   /**
@@ -762,7 +777,8 @@ class Plex {
       }
     } catch (err) {
       let now = new Date();
-      console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
+      console.log(now.toLocaleString() + " *On-demand - Get library keys: " + err);
+      throw err;
     }
 
     return odSet;

@@ -16,7 +16,7 @@ const MemoryStore = require("memorystore")(session);
 const util = require("./classes/core/utility");
 const DEFAULT_SETTINGS = require('./consts');
 const health = require("./classes/core/health");
-var pjson = require("./package.json");
+const pjson = require("./package.json");
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
@@ -48,6 +48,7 @@ let version = {
   "versionLabel": "Alpha",
   "version": pjson.version
 };
+let isPlexUnavailable = false;
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -151,13 +152,26 @@ async function loadNowScreening() {
     plexToken: loadedSettings.plexToken,
   });
 
+  let pollInterval = nsCheckSeconds;
   // call now screening method
   try{
     nsCards = await ms.GetNowScreening(loadedSettings.playThemes, loadedSettings.genericThemes);
+    // restore defaults if plex now available after an error
+    if(isPlexUnavailable){
+      console.log("✅ Plex connection restored - defualt poll timers restored");
+      isPlexUnavailable = false;
+    }
   }
   catch(err){
-    console.log(err.message);
+    let now = new Date();
+    console.log(
+      now.toLocaleString() + " *Now Scrn. - Get full data: " + err
+    );
+    pollInterval = nsCheckSeconds + 60000;
+    console.log("✘✘ WARNING ✘✘ - Next Now Screening query will be delayed by a 'further' 1 minute:", "(" + pollInterval/1000 + " seconds)" );
+    isPlexUnavailable = true;
   }
+
   // Concatenate cards for all objects load now showing and on-demand cards, else just on-demand (if present)
   // TODO - move this into its own function!
   let mCards = [];
@@ -202,7 +216,7 @@ async function loadNowScreening() {
   globalPage.fadeTransition = (loadedSettings.fade=="true") ? "carousel-fade" : "";
 
   // restart the clock
-  nowScreeningClock = setInterval(loadNowScreening, nsCheckSeconds);
+  nowScreeningClock = setInterval(loadNowScreening, pollInterval);
   return nsCards;
 }
 
@@ -219,6 +233,20 @@ async function loadOnDemand() {
     return odCards;
   } 
 
+  // changing timings if plex unavailable or ns not working
+  let odCheckMinutes = loadedSettings.onDemandRefresh;
+  if(isPlexUnavailable){
+    odCheckMinutes =1;
+    console.log("✘✘ WARNING ✘✘ - Next on-demand query will run every minute.");
+    // restart interval timer
+    onDemandClock = setInterval(
+      loadOnDemand,
+      odCheckMinutes * 60000
+    );
+
+    return odCards;
+  }
+
   // load MediaServer(s) (switch statement for different server settings server option - TODO)
   let ms = new pms({
     plexHTTPS: loadedSettings.plexHTTPS,
@@ -227,17 +255,23 @@ async function loadOnDemand() {
     plexToken: loadedSettings.plexToken,
   });
 
-  odCards = await ms.GetOnDemand(
-    loadedSettings.onDemandLibraries,
-    loadedSettings.numberOnDemand,
-    loadedSettings.playThemes,
-    loadedSettings.genericThemes
-  );
+  try {
+    odCards = await ms.GetOnDemand(
+      loadedSettings.onDemandLibraries,
+      loadedSettings.numberOnDemand,
+      loadedSettings.playThemes,
+      loadedSettings.genericThemes
+    );
+  }
+  catch (err){
+    let d = new Date();
+    console.log(d.toLocaleString() + " *On-demand - Get full data: " + err);
+  }
 
   // restart interval timer
   onDemandClock = setInterval(
     loadOnDemand,
-    loadedSettings.onDemandRefresh * 60000
+    odCheckMinutes * 60000
   );
 
   return odCards;
@@ -262,8 +296,8 @@ async function houseKeeping() {
  * @returns {object} json - settings details
  */
 async function loadSettings() {
-  const ls = setng.GetSettings();
-  return ls;
+  const ls = await Promise.resolve(setng.GetSettings());
+  return await Promise.resolve(ls);
 }
 
 /**
@@ -325,10 +359,10 @@ async function startup(clearCache) {
   if(isOnDemandEnabled) await loadOnDemand();
   await loadNowScreening();
 
-  let now = new Date();
-  console.log(
-    now.toLocaleString() + " Now screening titles refreshed (First run only)"
-  );
+  // let now = new Date();
+  // console.log(
+  //   now.toLocaleString() + " Now screening titles refreshed (First run only)"
+  // );
   console.log(" ");
   console.log(`✅ Application ready on http://hostIP:3000
    Goto http://hostIP:3000/settings to get to setup page.
@@ -349,7 +383,7 @@ async function saveReset(formObject) {
   clearInterval(sonarrClock);
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
-  console.log('Restarting. Please wait while current jobs complete');
+  console.log("✘✘ WARNING ✘✘ - Restarting. Please wait while current jobs complete");
   // clear old cards
   globalPage.cards=[];
   // dont clear cached files if restarting after settings saved
