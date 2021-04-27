@@ -14,7 +14,7 @@ const radr = require("./classes/arr/radarr");
 const settings = require("./classes/core/settings");
 const MemoryStore = require("memorystore")(session);
 const util = require("./classes/core/utility");
-const DEFAULT_SETTINGS = require('./consts');
+const DEFAULT_SETTINGS = require("./consts");
 const health = require("./classes/core/health");
 const pjson = require("./package.json");
 
@@ -45,24 +45,27 @@ let isRadarrEnabled = false;
 let isOnDemandEnabled = false;
 let isPlexEnabled = false;
 let version = {
-  "versionLabel": "Alpha",
-  "version": pjson.version
+  versionLabel: "Alpha",
+  version: pjson.version,
 };
 let isPlexUnavailable = false;
+let isSonarrUnavailable = false;
+let isRadarrUnavailable = false;
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
  * @returns {Promise<object>} mediaCards array - coming soon
  */
- async function loadRadarrComingSoon() {
+async function loadRadarrComingSoon() {
   // stop the clock
   clearInterval(radarrClock);
+  let radarrTicks = 86400000; // daily
 
   // stop timers and dont run if disabled
-  if(!isRadarrEnabled) {
+  if (!isRadarrEnabled) {
     return csrCards;
-  } 
-  
+  }
+
   // instatntiate radarr class
   let radarr = new radr(
     loadedSettings.radarrURL,
@@ -77,14 +80,24 @@ let isPlexUnavailable = false;
   let ltr = later.toISOString().split("T")[0];
 
   // call sonarr coming soon
-  csrCards = await radarr.GetComingSoon(
-    now,
-    ltr,
-    loadedSettings.genericThemes
-  );
-
+  try {
+  csrCards = await radarr.GetComingSoon(now, ltr, loadedSettings.genericThemes);
+  if (isRadarrUnavailable) {
+    console.log(
+      "✅ Radarr connection restored - defualt poll timers restored"
+    );
+    isRadarrUnavailable = false;
+    radarrTicks = 86400000; // daily
+  }
+} catch (err) {
+  let now = new Date();
+  console.log(now.toLocaleString() + " *Coming Soon - Movies: " + err);
+  radarrTicks = 60000;
+  console.log("✘✘ WARNING ✘✘ - Next Radarr query will run in 1 minute.");
+  isRadarrUnavailable = true;
+}
   // restart the 24 hour timer
-  radarrClock = setInterval(loadRadarrComingSoon, 86400000); // daily
+  radarrClock = setInterval(loadRadarrComingSoon, radarrTicks); // daily
 
   return csrCards;
 }
@@ -96,12 +109,12 @@ let isPlexUnavailable = false;
 async function loadSonarrComingSoon() {
   // stop the clock
   clearInterval(sonarrClock);
+  let sonarrTicks = 86400000; // daily
 
   // stop timers and dont run if disabled
-  if(!isSonarrEnabled) {
+  if (!isSonarrEnabled) {
     return csCards;
-  } 
-
+  }
 
   // instatntiate sonarr class
   let sonarr = new sonr(
@@ -117,16 +130,30 @@ async function loadSonarrComingSoon() {
   let ltr = later.toISOString().split("T")[0];
 
   // call sonarr coming soon
-  csCards = await sonarr.GetComingSoon(
-    now,
-    ltr,
-    loadedSettings.sonarrPremieres,
-    loadedSettings.playThemes
-  );
+  try {
+    csCards = await sonarr.GetComingSoon(
+      now,
+      ltr,
+      loadedSettings.sonarrPremieres,
+      loadedSettings.playThemes
+    );
+    if (isSonarrUnavailable) {
+      console.log(
+        "✅ Sonarr connection restored - defualt poll timers restored"
+      );
+      isSonarrUnavailable = false;
+      sonarrTicks = 86400000; // daily
+    }
+  } catch (err) {
+    let now = new Date();
+    console.log(now.toLocaleString() + " *Coming Soon - TV: " + err);
+    sonarrTicks = 60000;
+    console.log("✘✘ WARNING ✘✘ - Next Sonarr query will run in 1 minute.");
+    isSonarrUnavailable = true;
+  }
 
   // restart the 24 hour timer
-  sonarrClock = setInterval(loadSonarrComingSoon, 86400000); // daily
-
+  sonarrClock = setInterval(loadSonarrComingSoon, sonarrTicks);
   return csCards;
 }
 
@@ -139,10 +166,9 @@ async function loadNowScreening() {
   clearInterval(nowScreeningClock);
 
   // stop timers dont run if disabled
-  if(!isPlexEnabled) {
-    // restart the clock
+  if (!isPlexEnabled) {
     return nsCards;
-  } 
+  }
 
   // load MediaServer(s) (switch statement for different server settings server option - TODO)
   let ms = new pms({
@@ -154,21 +180,24 @@ async function loadNowScreening() {
 
   let pollInterval = nsCheckSeconds;
   // call now screening method
-  try{
-    nsCards = await ms.GetNowScreening(loadedSettings.playThemes, loadedSettings.genericThemes);
+  try {
+    nsCards = await ms.GetNowScreening(
+      loadedSettings.playThemes,
+      loadedSettings.genericThemes
+    );
     // restore defaults if plex now available after an error
-    if(isPlexUnavailable){
+    if (isPlexUnavailable) {
       console.log("✅ Plex connection restored - defualt poll timers restored");
       isPlexUnavailable = false;
     }
-  }
-  catch(err){
+  } catch (err) {
     let now = new Date();
-    console.log(
-      now.toLocaleString() + " *Now Scrn. - Get full data: " + err
-    );
+    console.log(now.toLocaleString() + " *Now Scrn. - Get full data: " + err);
     pollInterval = nsCheckSeconds + 60000;
-    console.log("✘✘ WARNING ✘✘ - Next Now Screening query will be delayed by a 'further' 1 minute:", "(" + pollInterval/1000 + " seconds)" );
+    console.log(
+      "✘✘ WARNING ✘✘ - Next Now Screening query will be delayed by 1 minute:",
+      "(" + pollInterval / 1000 + " seconds)"
+    );
     isPlexUnavailable = true;
   }
 
@@ -190,8 +219,7 @@ async function loadNowScreening() {
         mCards = csCards.concat(csrCards);
         globalPage.cards = mCards;
         // console.log("CS:" +csCards.length);
-      }
-      else {
+      } else {
         if (csrCards.length > 0) {
           globalPage.cards = csrCards;
           // console.log("CSR:" +csrCards.length);
@@ -213,7 +241,8 @@ async function loadNowScreening() {
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
-  globalPage.fadeTransition = (loadedSettings.fade=="true") ? "carousel-fade" : "";
+  globalPage.fadeTransition =
+    loadedSettings.fade == "true" ? "carousel-fade" : "";
 
   // restart the clock
   nowScreeningClock = setInterval(loadNowScreening, pollInterval);
@@ -229,20 +258,17 @@ async function loadOnDemand() {
   clearInterval(onDemandClock);
 
   // dont restart clock and dont run if disabled
-  if(!isOnDemandEnabled) {
+  if (!isOnDemandEnabled) {
     return odCards;
-  } 
+  }
 
   // changing timings if plex unavailable or ns not working
   let odCheckMinutes = loadedSettings.onDemandRefresh;
-  if(isPlexUnavailable){
-    odCheckMinutes =1;
-    console.log("✘✘ WARNING ✘✘ - Next on-demand query will run every minute.");
+  if (isPlexUnavailable) {
+    odCheckMinutes = 1;
+    console.log("✘✘ WARNING ✘✘ - Next on-demand query will run in 1 minute.");
     // restart interval timer
-    onDemandClock = setInterval(
-      loadOnDemand,
-      odCheckMinutes * 60000
-    );
+    onDemandClock = setInterval(loadOnDemand, odCheckMinutes * 60000);
 
     return odCards;
   }
@@ -262,17 +288,13 @@ async function loadOnDemand() {
       loadedSettings.playThemes,
       loadedSettings.genericThemes
     );
-  }
-  catch (err){
+  } catch (err) {
     let d = new Date();
     console.log(d.toLocaleString() + " *On-demand - Get full data: " + err);
   }
 
   // restart interval timer
-  onDemandClock = setInterval(
-    loadOnDemand,
-    odCheckMinutes * 60000
-  );
+  onDemandClock = setInterval(loadOnDemand, odCheckMinutes * 60000);
 
   return odCards;
 }
@@ -288,7 +310,7 @@ async function houseKeeping() {
   await core.DeleteMP3Cache();
   await core.DeleteImageCache();
   // restart timer
-  setInterval(houseKeeping, 86400000); // daily 
+  setInterval(houseKeeping, 86400000); // daily
 }
 
 /**
@@ -304,32 +326,61 @@ async function loadSettings() {
  * @desc check if Now Screening/Playing, On-Demand, Sonarr or Radarr options are empty/disabled
  * @returns nothing
  */
-async function checkEnabled(){
+async function checkEnabled() {
   // reset all enabled variables
   isOnDemandEnabled = false;
   isPlexEnabled = false;
   isSonarrEnabled = false;
   isRadarrEnabled = false;
 
-  
   // check Plex
-  if(loadedSettings.plexIP !== undefined && loadedSettings.plexToken !== undefined && loadedSettings.plexPort !== undefined) { isPlexEnabled = true;}
+  if (
+    loadedSettings.plexIP !== undefined &&
+    loadedSettings.plexToken !== undefined &&
+    loadedSettings.plexPort !== undefined
+  ) {
+    isPlexEnabled = true;
+  }
   // check on-demand
-  if((loadedSettings.onDemandLibraries !== undefined) && isPlexEnabled) { isOnDemandEnabled = true;}
+  if (loadedSettings.onDemandLibraries !== undefined && isPlexEnabled) {
+    isOnDemandEnabled = true;
+  }
   // check Sonarr
-  if(loadedSettings.sonarrURL !== undefined && loadedSettings.sonarrCalDays !== undefined && loadedSettings.sonarrToken !== undefined) { isSonarrEnabled = true;}
+  if (
+    loadedSettings.sonarrURL !== undefined &&
+    loadedSettings.sonarrCalDays !== undefined &&
+    loadedSettings.sonarrToken !== undefined
+  ) {
+    isSonarrEnabled = true;
+  }
   // check Radarr
-  if(loadedSettings.radarrURL !== undefined && loadedSettings.radarrCalDays !== undefined && loadedSettings.radarrToken !== undefined) { isRadarrEnabled = true;}
-  
-  // display status
-  console.log(`--- Enabled Status ---
-   Plex: ` + isPlexEnabled + `
-   On-demand: ` + isOnDemandEnabled + `
-   Sonarr: ` + isSonarrEnabled + `
-   Radarr: ` + isRadarrEnabled + `
-   `);
+  if (
+    loadedSettings.radarrURL !== undefined &&
+    loadedSettings.radarrCalDays !== undefined &&
+    loadedSettings.radarrToken !== undefined
+  ) {
+    isRadarrEnabled = true;
+  }
 
-   return;
+  // display status
+  console.log(
+    `--- Enabled Status ---
+   Plex: ` +
+      isPlexEnabled +
+      `
+   On-demand: ` +
+      isOnDemandEnabled +
+      `
+   Sonarr: ` +
+      isSonarrEnabled +
+      `
+   Radarr: ` +
+      isRadarrEnabled +
+      `
+   `
+  );
+
+  return;
 }
 
 /**
@@ -345,18 +396,18 @@ async function startup(clearCache) {
   clearInterval(houseKeepingClock);
 
   // run housekeeping job - but not on settings save
-  if(clearCache !== false) await houseKeeping();
+  if (clearCache !== false) await houseKeeping();
 
   // load settings object
   loadedSettings = await loadSettings();
 
-  // check status 
+  // check status
   await checkEnabled();
 
   // initial load of card providers
-  if(isSonarrEnabled) await loadSonarrComingSoon();
-  if(isRadarrEnabled) await loadRadarrComingSoon();
-  if(isOnDemandEnabled) await loadOnDemand();
+  if (isSonarrEnabled) await loadSonarrComingSoon();
+  if (isRadarrEnabled) await loadRadarrComingSoon();
+  if (isOnDemandEnabled) await loadOnDemand();
   await loadNowScreening();
 
   // let now = new Date();
@@ -383,9 +434,11 @@ async function saveReset(formObject) {
   clearInterval(sonarrClock);
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
-  console.log("✘✘ WARNING ✘✘ - Restarting. Please wait while current jobs complete");
+  console.log(
+    "✘✘ WARNING ✘✘ - Restarting. Please wait while current jobs complete"
+  );
   // clear old cards
-  globalPage.cards=[];
+  globalPage.cards = [];
   // dont clear cached files if restarting after settings saved
   startup(false);
 }
@@ -416,17 +469,17 @@ app.use(
 );
 app.use(cors());
 
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 app.use(cookieParser());
 app.use(
   session({
-    cookie:{
-    secure: true,
-    maxAge:3000000
-       },
+    cookie: {
+      secure: true,
+      maxAge: 3000000,
+    },
     // store: cookieParser,
     store: new MemoryStore({
-      checkPeriod: 86400000 // prune expired entries every 24h
+      checkPeriod: 86400000, // prune expired entries every 24h
     }),
     secret: "xyzzy",
     saveUninitialized: true,
@@ -480,20 +533,20 @@ app.post(
         user: userData,
         success: req.session.success,
         settings: loadedSettings,
-        version: version
+        version: version,
       });
-      }
+    }
   }
 );
 
-// settings page 
+// settings page
 app.get("/settings", (req, res) => {
   res.render("settings", {
     success: req.session.success,
-    user: {valid: false},
+    user: { valid: false },
     settings: loadedSettings,
     errors: req.session.errors,
-    version: version
+    version: version,
   });
   req.session.errors = null;
 });
@@ -501,10 +554,7 @@ app.get("/settings", (req, res) => {
 app.post(
   "/settings",
   [
-    check("password")
-      .not()
-      .isEmpty()
-      .withMessage("Password cannot be blank"),
+    check("password").not().isEmpty().withMessage("Password cannot be blank"),
     check("slideDuration")
       .not()
       .isEmpty()
@@ -513,7 +563,7 @@ app.post(
         if (parseInt(value) === "NaN") {
           throw new Error("'Slide duration' must be a number");
         }
-        if (parseInt(value) < 5){
+        if (parseInt(value) < 5) {
           throw new Error("'Slide duration' cannot be less than 5 seconds");
         }
         // Indicates the success of this synchronous custom validator
@@ -528,17 +578,14 @@ app.post(
         if (parseInt(value) === "NaN") {
           throw new Error("'Refresh period' must be a number");
         }
-        if(parseInt(value) < 60){
+        if (parseInt(value) < 60) {
           throw new Error("'Refresh period' cannot be less than 60 seconds");
         }
         // Indicates the success of this synchronous custom validator
         return true;
       })
       .withMessage("'Refresh Period' is required"),
-    check("plexIP")
-      .not()
-      .isEmpty()
-      .withMessage("'Plex IP' is required"),
+    check("plexIP").not().isEmpty().withMessage("'Plex IP' is required"),
     check("plexPort")
       .not()
       .isEmpty()
@@ -550,8 +597,7 @@ app.post(
         // Indicates the success of this synchronous custom validator
         return true;
       }),
-  check("numberOnDemand")
-   .custom((value) => {
+    check("numberOnDemand").custom((value) => {
       if (!util.isEmpty(value) && parseInt(value) !== "NaN") {
         if (parseInt(value) > 100) {
           throw new Error("'Number to Display' cannot be more than 100");
@@ -560,48 +606,59 @@ app.post(
       // Indicates the success of this synchronous custom validator
       return true;
     }),
-    check("plexToken")
-      .not()
-      .isEmpty()
-      .withMessage("'Plex token' is required"),
+    check("plexToken").not().isEmpty().withMessage("'Plex token' is required"),
   ],
   (req, res) => {
-      //fields value holder. Also sets default values in form passed without them.
-      let form = {
-        password: req.body.password,
-        slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : DEFAULT_SETTINGS.slideDuration,
-        refreshPeriod: req.body.refreshPeriod ? parseInt(req.body.refreshPeriod) : DEFAULT_SETTINGS.refreshPeriod,
-        artSwitch: req.body.artSwitch,
-        themeSwitch: req.body.themeSwitch,
-        genericSwitch: req.body.genericSwitch,
-        fadeOption: req.body.fadeOption,
-        plexToken: req.body.plexToken,
-        plexIP: req.body.plexIP,
-        plexHTTPSSwitch: req.body.plexHTTPSSwitch,
-        plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : DEFAULT_SETTINGS.plexPort,
-        plexLibraries: req.body.plexLibraries,
-        numberOnDemand: (!isNaN(parseInt(req.body.numberOnDemand))) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
-        onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
-        sonarrUrl: req.body.sonarrUrl,
-        sonarrToken: req.body.sonarrToken,
-        sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : DEFAULT_SETTINGS.sonarrCalDays,
-        premiereSwitch: req.body.premiereSwitch,
-        radarrUrl: req.body.radarrUrl,
-        radarrToken: req.body.radarrToken,
-        radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : DEFAULT_SETTINGS.radarrCalDays,
-        saved: false
-      };
+    //fields value holder. Also sets default values in form passed without them.
+    let form = {
+      password: req.body.password,
+      slideDuration: req.body.slideDuration
+        ? parseInt(req.body.slideDuration)
+        : DEFAULT_SETTINGS.slideDuration,
+      refreshPeriod: req.body.refreshPeriod
+        ? parseInt(req.body.refreshPeriod)
+        : DEFAULT_SETTINGS.refreshPeriod,
+      artSwitch: req.body.artSwitch,
+      themeSwitch: req.body.themeSwitch,
+      genericSwitch: req.body.genericSwitch,
+      fadeOption: req.body.fadeOption,
+      plexToken: req.body.plexToken,
+      plexIP: req.body.plexIP,
+      plexHTTPSSwitch: req.body.plexHTTPSSwitch,
+      plexPort: req.body.plexPort
+        ? parseInt(req.body.plexPort)
+        : DEFAULT_SETTINGS.plexPort,
+      plexLibraries: req.body.plexLibraries,
+      numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand))
+        ? parseInt(req.body.numberOnDemand)
+        : DEFAULT_SETTINGS.numberOnDemand,
+      onDemandRefresh: parseInt(req.body.onDemandRefresh)
+        ? parseInt(req.body.onDemandRefresh)
+        : DEFAULT_SETTINGS.onDemandRefresh,
+      sonarrUrl: req.body.sonarrUrl,
+      sonarrToken: req.body.sonarrToken,
+      sonarrDays: req.body.sonarrDays
+        ? parseInt(req.body.sonarrDays)
+        : DEFAULT_SETTINGS.sonarrCalDays,
+      premiereSwitch: req.body.premiereSwitch,
+      radarrUrl: req.body.radarrUrl,
+      radarrToken: req.body.radarrToken,
+      radarrDays: req.body.radarrDays
+        ? parseInt(req.body.radarrDays)
+        : DEFAULT_SETTINGS.radarrCalDays,
+      saved: false,
+    };
 
     var errors = validationResult(req).array();
     if (errors.length > 0) {
       req.session.errors = errors;
-      form.saved= false;
+      form.saved = false;
       req.session.success = false;
       res.render("settings", {
         errors: req.session.errors,
-        user: {valid: true},
+        user: { valid: true },
         formData: form,
-        version: version
+        version: version,
       });
     } else {
       // save settings
@@ -612,8 +669,8 @@ app.post(
       res.render("settings", {
         errors: req.session.errors,
         version: version,
-        user: {valid: true},
-        formData: form
+        user: { valid: true },
+        formData: form,
       });
     }
   }
@@ -621,7 +678,5 @@ app.post(
 
 // start listening on port 3000
 app.listen(3000, () => {
-  console.log(
-    `✅ Web server started on internal port 3000 `
-  );
+  console.log(`✅ Web server started on internal port 3000 `);
 });
