@@ -41,7 +41,8 @@ class Radarr {
         });
     } catch (err) {
       let d = new Date();
-      console.log(d.toLocaleString() + " Radarr error: ", err.message);
+      console.log(d.toLocaleString() + " *Radarr - Get calendar data:", err.message);
+      throw err;
     }
     return response;
   }
@@ -60,7 +61,8 @@ class Radarr {
       raw = await this.GetComingSoonRawData(startDate, endDate);
     }
     catch(err){
-      console.log('radarr error: ' + err);
+      let d = new Date();
+      console.log(d.toLocaleString() + " *Radarr - Get Raw Data: " + err);
       throw err;
     }
 

@@ -3,7 +3,7 @@ const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
 const axios = require("axios");
-const sizeOf = require('image-size');
+const sizeOf = require("image-size");
 
 /**
  * @desc Used to communicate with Sonarr to obtain a list of future releases
@@ -43,13 +43,17 @@ class Sonarr {
     } catch (err) {
       // displpay error if call failed
       let d = new Date();
-      console.log(d.toLocaleString() + " Sonarr error: ", err.message);
+      console.log(
+        d.toLocaleString() + " *Sonarr - Get calendar data:",
+        err.message
+      );
+      throw err;
     }
 
     return response;
   }
 
-   /**
+  /**
    * @desc Get TV coming soon data and formats into mediaCard array
    * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
    * @param {string} endDate - in yyyy-mm-dd format - future date
@@ -59,7 +63,14 @@ class Sonarr {
   async GetComingSoon(startDate, endDate, premieres, playThemes) {
     let csCards = [];
     // get raw data first
-    let raw = await this.GetComingSoonRawData(startDate, endDate);
+    let raw;
+    try {
+      raw = await this.GetComingSoonRawData(startDate, endDate);
+    } catch (err) {
+      let d = new Date();
+      console.log(d.toLocaleString() + " *Sonarr - Get raw data: " + err);
+      throw err;
+    }
     // reutrn an empty array if no results
     if (raw != null) {
       // move through results and populate media cards
@@ -93,7 +104,7 @@ class Sonarr {
           // dont get cached files
         } else {
           // only downlad mp3 if playThemes enabled
-          if(playThemes == 'true'){
+          if (playThemes == "true") {
             // cache mp3 file
             let mp3 = md.series.tvdbId + ".mp3";
             await core.CacheMP3(mp3);
@@ -103,20 +114,19 @@ class Sonarr {
           let url;
           // cache poster
           fileName = md.series.tvdbId + ".jpg";
-          if(md.series.images[1] !== undefined){
+          if (md.series.images[1] !== undefined) {
             url = md.series.images[1].url;
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
-          }
-          else{
+          } else {
             medCard.posterUrl = "/images/no-poster-available.png";
           }
 
           // cache image
           fileName = md.series.tvdbId + "-art.jpg";
           // check art exists
-          if(md.series.images[2] !== undefined){
-          url = md.series.images[2].url;
+          if (md.series.images[2] !== undefined) {
+            url = md.series.images[2].url;
             await core.CacheImage(url, fileName);
             medCard.posterArtURL = "/imagecache/" + fileName;
           }
