@@ -660,7 +660,7 @@ app.post(
         errors: req.session.errors,
         user: { valid: true },
         formData: form,
-        version: version,
+        version: pjson.version
       });
     } else {
       // save settings
