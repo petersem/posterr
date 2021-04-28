@@ -22,7 +22,6 @@ console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
 console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
-console.log(" *App under development and considered alpha quality");
 console.log(" Version: " + pjson.version);
 console.log("-------------------------------------------------------");
 
@@ -44,10 +43,6 @@ let isSonarrEnabled = false;
 let isRadarrEnabled = false;
 let isOnDemandEnabled = false;
 let isPlexEnabled = false;
-let version = {
-  versionLabel: "Alpha",
-  version: pjson.version,
-};
 let isPlexUnavailable = false;
 let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
@@ -318,7 +313,7 @@ async function houseKeeping() {
  * @returns {object} json - settings details
  */
 async function loadSettings() {
-  const ls = await Promise.resolve(setng.GetSettings());
+  const ls = await Promise.resolve(await Promise.resolve(setng.GetSettings()));
   return await Promise.resolve(ls);
 }
 
@@ -399,7 +394,14 @@ async function startup(clearCache) {
   if (clearCache !== false) await houseKeeping();
 
   // load settings object
-  loadedSettings = await loadSettings();
+  loadedSettings = await Promise.resolve(await loadSettings());
+if(loadedSettings == 'undefined'){ 
+  console.load('settings not loaded!!');
+}
+else{
+  console.log(`✅ Settings loaded
+  `);
+}
 
   // check status
   await checkEnabled();
@@ -427,7 +429,7 @@ async function startup(clearCache) {
  * @returns nothing
  */
 async function saveReset(formObject) {
-  await setng.SaveSettingsJSON(formObject);
+  const saved = await setng.SaveSettingsJSON(formObject);
   // cancel all clocks, then pause 5 seconds to ensure downloads finished
   clearInterval(nowScreeningClock);
   clearInterval(onDemandClock);
@@ -533,7 +535,7 @@ app.post(
         user: userData,
         success: req.session.success,
         settings: loadedSettings,
-        version: version,
+        version: pjson.version
       });
     }
   }
@@ -546,7 +548,7 @@ app.get("/settings", (req, res) => {
     user: { valid: false },
     settings: loadedSettings,
     errors: req.session.errors,
-    version: version,
+    version: pjson.version
   });
   req.session.errors = null;
 });
@@ -668,7 +670,7 @@ app.post(
       saveReset(form);
       res.render("settings", {
         errors: req.session.errors,
-        version: version,
+        version: pjson.version,
         user: { valid: true },
         formData: form,
       });

@@ -72,19 +72,19 @@ class Settings {
       console.log("✅ Config file created");
     }
 
-    const data = await fsp.readFile("config/settings.json", "utf-8");
-    console.log(`✅ Settings loaded
-    `);
+    const data = fs.readFileSync("config/settings.json", "utf-8");
 
     let readSettings;
     try {
-      readSettings = JSON.parse(data.toString());
+      readSettings = await JSON.parse(data.toString());
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
+      let d = new Date();
+      console.log(d.toLocaleString() + " *Failed to load settings - GetSettings:", ex);
     }
 
     // populate settings object with settings from json file
-    Object.assign(this, readSettings);
+    await Object.assign(this, readSettings);
 
     // ensure settings loaded before returning
     return new Promise((resolve) => {
@@ -103,11 +103,13 @@ class Settings {
     const data = JSON.stringify(this, null, 4);
 
     // write JSON string to a file
-    fs.writeFile("config/settings.json", data, (err) => {
+    fs.writeFileSync("config/settings.json", data, (err) => {
       if (err) {
+        console.log('ERROR: failed to write settings file',err);
         throw err;
       }
-      // console.log("Settings saved.");
+      console.log(`✅ New settings file saved
+      `);
     });
     return;
   }
@@ -175,15 +177,16 @@ class Settings {
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
 
+    
     // write JSON string to a file
-    fs.writeFile("config/settings.json", data, (err) => {
+    fs.writeFileSync("config/settings.json", data, (err) => {
       if (err) {
+        console.log('Error - writing to settings file',err);
         throw err;
       }
-
-      let d = new Date();
-      //console.log(d.toISOString().split("T")[0] + " Settings saved.");
     });
+    console.log(`✅ Settings saved
+    `);
 
     return;
   }
