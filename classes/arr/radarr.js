@@ -53,7 +53,7 @@ class Radarr {
    * @param {string} endDate - in yyyy-mm-dd format - future date
    * @returns {Promise<object>} mediaCards array - results of search
    */
-  async GetComingSoon(startDate, endDate, playGenenericThemes) {
+  async GetComingSoon(startDate, endDate, playGenenericThemes, hasArt) {
     let csrCards = [];
     let raw;
     // get raw data first
@@ -106,11 +106,13 @@ class Radarr {
           medCard.posterURL = "/imagecache/" + fileName;
 
           // cache art image
-          if(md.images[1] !== undefined){
-            fileName = md.tmdbId + "-art.jpg";
-            url = md.images[1].url;
-            await core.CacheImage(url, fileName);
-            medCard.posterArtURL = "/imagecache/" + fileName;
+          if(hasArt=='true'){
+            if(md.images[1] !== undefined){
+              fileName = md.tmdbId + "-art.jpg";
+              url = md.images[1].url;
+              await core.CacheImage(url, fileName);
+              medCard.posterArtURL = "/imagecache/" + fileName;
+            }
           }
         }
 

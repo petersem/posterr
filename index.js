@@ -65,7 +65,8 @@ async function loadRadarrComingSoon() {
   let radarr = new radr(
     loadedSettings.radarrURL,
     loadedSettings.radarrToken,
-    loadedSettings.radarrPremieres
+    loadedSettings.radarrPremieres,
+    loadedSettings.hasArt
   );
   // set up date range and date formats
   let today = new Date();
@@ -74,9 +75,9 @@ async function loadRadarrComingSoon() {
   let now = today.toISOString().split("T")[0];
   let ltr = later.toISOString().split("T")[0];
 
-  // call sonarr coming soon
+  // call radarr coming soon
   try {
-  csrCards = await radarr.GetComingSoon(now, ltr, loadedSettings.genericThemes);
+  csrCards = await radarr.GetComingSoon(now, ltr, loadedSettings.genericThemes, loadedSettings.hasArt);
   if (isRadarrUnavailable) {
     console.log(
       "✅ Radarr connection restored - defualt poll timers restored"
@@ -130,7 +131,8 @@ async function loadSonarrComingSoon() {
       now,
       ltr,
       loadedSettings.sonarrPremieres,
-      loadedSettings.playThemes
+      loadedSettings.playThemes,
+      loadedSettings.hasArt
     );
     if (isSonarrUnavailable) {
       console.log(
@@ -178,7 +180,8 @@ async function loadNowScreening() {
   try {
     nsCards = await ms.GetNowScreening(
       loadedSettings.playThemes,
-      loadedSettings.genericThemes
+      loadedSettings.genericThemes,
+      loadedSettings.hasArt
     );
     // restore defaults if plex now available after an error
     if (isPlexUnavailable) {
@@ -281,7 +284,8 @@ async function loadOnDemand() {
       loadedSettings.onDemandLibraries,
       loadedSettings.numberOnDemand,
       loadedSettings.playThemes,
-      loadedSettings.genericThemes
+      loadedSettings.genericThemes,
+      loadedSettings.hasArt
     );
   } catch (err) {
     let d = new Date();

@@ -61,7 +61,7 @@ class Plex {
    * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetNowScreening(playThemes, playGenenericThemes) {
+  async GetNowScreening(playThemes, playGenenericThemes, hasArt) {
     // get raw data first
     let nsCards = [];
     let nsRaw;
@@ -123,7 +123,7 @@ class Plex {
 
             // download artist art image to local server
             // check art exists
-            if(md.grandparentArt !== undefined){
+            if(md.grandparentArt !== undefined && hasArt == 'true'){
               fileName = result[3] + "-art.jpg";
               prefix = "http://";
               if (this.https) prefix = "https://";
@@ -189,7 +189,7 @@ class Plex {
 
             //download poster 
             // check art exists
-            if(md.art !== undefined){
+            if(md.art !== undefined && hasArt == 'true'){
               fileName = result[2].split("?")[0] + "-art.jpg";
               if (this.https) prefix = "https://";
               url =
@@ -270,7 +270,7 @@ class Plex {
 
             //download poster 
             // check art exists
-            if(md.art !== undefined){
+            if(md.art !== undefined && hasArt == 'true'){
               movieFileName = md.updatedAt + "-art.jpg";
               if (this.https) moviePlexPrefix = "https://";
                 movieUrl =
@@ -428,7 +428,8 @@ class Plex {
     onDemandLibraries,
     numberOnDemand,
     playThemes,
-    playGenenericThemes
+    playGenenericThemes,
+    hasArt
   ) {
     // get library keys
     let odCards = [];
@@ -486,7 +487,7 @@ class Plex {
 
             //download poster art
             // check art exists
-            if(md.art !== undefined){
+            if(md.art !== undefined && hasArt == 'true'){
               fileName = result[2].split("?")[0] + "-art.jpg";
               if (this.https) prefix = "https://";
                 url =
@@ -526,7 +527,7 @@ class Plex {
 
             //download poster 
             // check art exists
-            if(md.art !== undefined){
+            if(md.art !== undefined && hasArt == 'true'){
               movieFileName = md.updatedAt + "-art.jpg";
               if (this.https) moviePlexPrefix = "https://";
                 movieUrl =

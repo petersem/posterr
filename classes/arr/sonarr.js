@@ -60,7 +60,7 @@ class Sonarr {
    * @param {string} premieres - boolean (string format) to show only season premieres
    * @returns {Promise<object>} mediaCards array - results of search
    */
-  async GetComingSoon(startDate, endDate, premieres, playThemes) {
+  async GetComingSoon(startDate, endDate, premieres, playThemes, hasArt) {
     let csCards = [];
     // get raw data first
     let raw;
@@ -123,12 +123,14 @@ class Sonarr {
           }
 
           // cache image
-          fileName = md.series.tvdbId + "-art.jpg";
-          // check art exists
-          if (md.series.images[2] !== undefined) {
-            url = md.series.images[2].url;
-            await core.CacheImage(url, fileName);
-            medCard.posterArtURL = "/imagecache/" + fileName;
+          if(hasArt=='true'){
+            fileName = md.series.tvdbId + "-art.jpg";
+            // check art exists
+            if (md.series.images[2] !== undefined) {
+              url = md.series.images[2].url;
+              await core.CacheImage(url, fileName);
+              medCard.posterArtURL = "/imagecache/" + fileName;
+            }
           }
         }
 
