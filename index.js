@@ -395,7 +395,8 @@ async function startup(clearCache) {
   clearInterval(houseKeepingClock);
 
   // run housekeeping job - but not on settings save
-  if (clearCache !== false) await houseKeeping();
+  //if (clearCache !== false) await 
+  houseKeeping();
 
   // load settings object
   loadedSettings = await Promise.resolve(await loadSettings());
@@ -446,7 +447,7 @@ async function saveReset(formObject) {
   // clear old cards
   globalPage.cards = [];
   // dont clear cached files if restarting after settings saved
-  startup(false);
+  startup(true);
 }
 
 /**
@@ -618,12 +619,8 @@ app.post(
     //fields value holder. Also sets default values in form passed without them.
     let form = {
       password: req.body.password,
-      slideDuration: req.body.slideDuration
-        ? parseInt(req.body.slideDuration)
-        : DEFAULT_SETTINGS.slideDuration,
-      refreshPeriod: req.body.refreshPeriod
-        ? parseInt(req.body.refreshPeriod)
-        : DEFAULT_SETTINGS.refreshPeriod,
+      slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : DEFAULT_SETTINGS.slideDuration,
+      refreshPeriod: req.body.refreshPeriod ? parseInt(req.body.refreshPeriod) : DEFAULT_SETTINGS.refreshPeriod,
       artSwitch: req.body.artSwitch,
       themeSwitch: req.body.themeSwitch,
       genericSwitch: req.body.genericSwitch,
@@ -631,27 +628,17 @@ app.post(
       plexToken: req.body.plexToken,
       plexIP: req.body.plexIP,
       plexHTTPSSwitch: req.body.plexHTTPSSwitch,
-      plexPort: req.body.plexPort
-        ? parseInt(req.body.plexPort)
-        : DEFAULT_SETTINGS.plexPort,
+      plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : DEFAULT_SETTINGS.plexPort,
       plexLibraries: req.body.plexLibraries,
-      numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand))
-        ? parseInt(req.body.numberOnDemand)
-        : DEFAULT_SETTINGS.numberOnDemand,
-      onDemandRefresh: parseInt(req.body.onDemandRefresh)
-        ? parseInt(req.body.onDemandRefresh)
-        : DEFAULT_SETTINGS.onDemandRefresh,
+      numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
+      onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
       sonarrUrl: req.body.sonarrUrl,
       sonarrToken: req.body.sonarrToken,
-      sonarrDays: req.body.sonarrDays
-        ? parseInt(req.body.sonarrDays)
-        : DEFAULT_SETTINGS.sonarrCalDays,
+      sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : DEFAULT_SETTINGS.sonarrCalDays,
       premiereSwitch: req.body.premiereSwitch,
       radarrUrl: req.body.radarrUrl,
       radarrToken: req.body.radarrToken,
-      radarrDays: req.body.radarrDays
-        ? parseInt(req.body.radarrDays)
-        : DEFAULT_SETTINGS.radarrCalDays,
+      radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : DEFAULT_SETTINGS.radarrCalDays,
       saved: false,
     };
 

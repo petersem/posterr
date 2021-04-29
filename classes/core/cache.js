@@ -52,12 +52,16 @@ class Cache {
             .pipe(fs.createWriteStream(savePath, { autoClose: true }))
             .on("close", callback)
             .on("error", (err) => {
-              console.log("download failed for: ",url, err.message);
-              if(err.errno !== -4048) throw err;
+              // throw error unless the download failed due to a restart
+              if(err.code !== 'EPERM') {
+                console.log("download failed for: ",url, err.message, err.code, err.errno);
+                throw err;
+              }
+              //this.close();
               return callback;
             })
             .on("finish", () => {
-              //console.log("Download Completed");
+//console.log("Download Completed");
               return callback;
             });
         });
@@ -99,7 +103,15 @@ class Cache {
    */
   static async DeleteMP3Cache() {
     const directory = "./public/mp3cache/";
-    fsExtra.emptyDirSync(directory);
+    try{
+      fsExtra.emptyDirSync(directory);
+    }
+    catch (err){
+      if(err.code !== 'EPERM') {
+        console.log('Delete MP3 Cache-->' + err.code);
+        throw err;
+      }
+    }
     console.log("✅ MP3 cache cleared");
   }
 
@@ -109,7 +121,16 @@ class Cache {
    */
   static async DeleteImageCache() {
     const directory = "./public/imagecache/";
-    fsExtra.emptyDirSync(directory);
+    try {
+      fsExtra.emptyDirSync(directory);
+    }
+    catch (err){
+      if(err.code !== 'EPERM') {
+        console.log('Delete Image Cache -->' + err.code);
+        throw err;
+      }
+    }
+
     console.log("✅ Image cache cleared");
   }
 
