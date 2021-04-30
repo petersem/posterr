@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<!--
+***********************************************************
+* Posterr - Your home media display                        *
+* Developed by Matt Petersen - Brisbane, Australia        *
+***********************************************************
+-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-control" content="public">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Additional js libs -->
+  <script src="/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+
+  <!--- CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/debug.css">
+  <link rel="stylesheet" href="/css/light.min.css">
+  <!-- <script src="/js/script.js"></script> -->
+
+  <title>Poster</title>
+</head>
+
+<body>
+  <h1>  <i class="fal fa-debug" style="font-size: 48px; color:forestgreen;"></i> Posterr Debug Page</h1>
+</br>
+<p>Use this page to help debug any connectivity issues with Posterr</p>
+</br>
+<h3>Software Version</h3>
+<p>Posterr Verson: <%=version%></p>
+</br>
+<h3>Settings</h3>
+<ul>
+  <li>Slide Duration: <span class="settings"><%=settings.slideDuration%></span></li>
+  <li>Browser refresh: <span class="settings"><%=settings.refreshPeriod%>s</span></li>
+  <li>Show background art: <span class="settings"><%=settings.hasArt%></span></li>
+  <li>TV Themes: <span class="settings"><%=settings.playThemes%></span></li>
+  <li>Movie Themes: <span class="settings"><%=settings.genericThemes%></span></li>
+  <li>Fade transition: <span class="settings"><%=settings.fade%></span></li>
+  <li>Plex IP: <span class="settings"><%=settings.plexIP%></span></li>
+  <li>Plex port: <span class="settings"><%=settings.plexPort%></span></li>
+  <li>Plex secure only: <span class="settings"><%=settings.plexHTTPS%></span></li>
+  <li>On-demand libraries: <span class="settings"><%=settings.onDemandLibraries%></span></li>
+  <li>Number on-demand: <span class="settings"><%=settings.numberOnDemand%></span></li>
+  <li>On-demand refresh period: <span class="settings"><%=settings.onDemandRefresh%>m</span></li>
+  <li>Sonarr URL: <span class="settings"><%=settings.sonarrURL%></span></li>
+  <li>Sonarr days to look ahead: <span class="settings"><%=settings.sonarrCalDays%></span></li>
+  <li>Sonarr season premieres: <span class="settings"><%=settings.sonarrPremieres%></span></li>
+  <li>Radarr URL: <span class="settings"><%=settings.radarrURL%></span></li>
+  <li>Radarr days to look ahead: <span class="settings"><%=settings.radarrCalDays%></span></li>
+</ul>
+</br>
+<h3>Other Tests</h3>
+See logs for results
+<br/><br/>
+<button type="button" class="btn btn-success" onclick="location.href = '/';">Return</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/ping';">Ping Tests</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/plexns';">Now Screening Test</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/plexod';">On-demand Test</button>
+<br/>
+</body>
+</html>

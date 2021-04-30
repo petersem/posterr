@@ -1,0 +1,35 @@
+/* hide mouse cursor */
+
+
+body {
+  background-color:rgb(13, 22, 22);
+  /* color: #daa520; */
+  text-align: left;
+  color:rgb(248, 240, 219);
+  margin: 10px;
+}
+
+h1 {
+  white-space: nowrap;
+  text-align: left;
+  color:goldenrod;
+}
+
+h3 {
+  white-space: nowrap;
+  text-align: left;
+  color:rgb(228, 199, 127);
+}
+
+code {
+  color:green;
+}
+
+button {
+  padding-left: 5px;
+}
+
+.settings {
+   color: rgb(226, 211, 9); 
+   background-color: rgb(36, 0, 0);
+}

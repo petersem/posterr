@@ -431,7 +431,6 @@ class Plex {
     playGenenericThemes,
     hasArt
   ) {
-    // get library keys
     let odCards = [];
     let odRaw;
     try {
@@ -459,8 +458,16 @@ class Plex {
             if (playThemes == "true") {
               // download mp3 from plex tv theme server
               let mp3 = result[2].split("?")[0] + ".mp3";
-              await core.CacheMP3(mp3);
-              medCard.theme = "/mp3cache/" + mp3;
+              try {
+                const dlOK = await core.CacheMP3(mp3);
+  //console.log('==--->> ' + dlOK);
+                medCard.theme = "/mp3cache/" + mp3;
+              }
+              catch (err) {
+                if(err == 'mp3 unavailable'){
+                  medCard.theme = "/randomthemes/" + (await core.GetRandomMP3(odCards));
+                }
+              }
             }
 
             if (await util.isEmpty(md.rating)) {

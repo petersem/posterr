@@ -394,18 +394,20 @@ async function startup(clearCache) {
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
 
-  // run housekeeping job - but not on settings save
-  //if (clearCache !== false) await 
-  houseKeeping();
+  // run housekeeping job 
+  if (clearCache !== false) await houseKeeping();
 
   // load settings object
   loadedSettings = await Promise.resolve(await loadSettings());
-if(loadedSettings == 'undefined'){ 
-  console.load('settings not loaded!!');
-}
-else{
-  console.log(`✅ Settings loaded
+  if(loadedSettings == 'undefined'){ 
+    console.load('settings not loaded!!');
+  }
+  else{
+    console.log(`✅ Settings loaded
   `);
+
+  // restart timer for houseKeeping
+  setInterval(houseKeeping, 86400000); // daily
 }
 
   // check status
@@ -447,22 +449,11 @@ async function saveReset(formObject) {
   // clear old cards
   globalPage.cards = [];
   // dont clear cached files if restarting after settings saved
-  startup(true);
-}
-
-/**
- * @desc Checks system connectivity and settings
- * @returns nothing
- */
-function healthCheck() {
-  test = new health(loadedSettings);
-  test.TestAll();
-
-  return;
+  startup(false);
 }
 
 // call all card providers - initial card loads and sets scheduled runs
-startup();
+startup(true);
 
 //use ejs templating engine
 app.set("view engine", "ejs");
@@ -500,6 +491,37 @@ app.use(express.static(path.join(__dirname, "public")));
 // set routes
 app.get("/", (req, res) => {
   res.render("index", { globals: globalPage, hasConfig: setng.GetChanged() }); // index refers to index.ejs
+});
+
+app.get("/debug", (req, res) => {
+  res.render("debug", { settings: loadedSettings, version: pjson.version }); 
+});
+
+app.get("/debug/ping", (req, res) => {
+  console.log(' ');
+  console.log('** PING TESTS **');
+  console.log('-------------------------------------------------------');
+  let test = new health(loadedSettings);
+  test.TestPing();
+  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+});
+
+app.get("/debug/plexns", (req, res) => {
+  console.log(' ');
+  console.log("** PLEX 'NOW SCREENING' CHECK **");
+  console.log('-------------------------------------------------------');
+  let test = new health(loadedSettings);
+  test.PlexNSCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+});
+
+app.get("/debug/plexod", (req, res) => {
+  console.log(' ');
+  console.log("** PLEX 'ON-DEMAND' CHECK **");
+  console.log('-------------------------------------------------------');
+  let test = new health(loadedSettings);
+  test.PlexODCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
 });
 
 // password for settings section

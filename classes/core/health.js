@@ -3,6 +3,7 @@ const fsp = require("fs").promises;
 const DEFAULT_SETTINGS = require("../../consts");
 const util = require("../core/utility");
 const ping = require("ping");
+const pms = require("../mediaservers/plex");
 
 /**
  * @desc health object is used poster health checks
@@ -15,14 +16,73 @@ class Health {
     return;
   }
 
+async PlexNSCheck(){
+  let ms = new pms({
+    plexHTTPS: this.settings.plexHTTPS,
+    plexIP: this.settings.plexIP,
+    plexPort: this.settings.plexPort,
+    plexToken: this.settings.plexToken,
+  });
+
+  try {
+    let result = await Promise.resolve(ms.client.query("/status/sessions"));
+    console.log(result);
+  }
+  catch (err) {
+    console.log(err);
+  }
+}
+
+async PlexODCheck(){
+  let ms = new pms({
+    plexHTTPS: this.settings.plexHTTPS,
+    plexIP: this.settings.plexIP,
+    plexPort: this.settings.plexPort,
+    plexToken: this.settings.plexToken,
+  });
+
+  // return first movie library found
+  let key;
+  ms.client.query("/library/sections").then(function (result) {
+    const children = result.MediaContainer.Directory;
+    return children.filter(dir => dir.type = 'movie');
+}).then(
+    function (result) {
+      // list directory objects
+      //for (let d=0; d < result.length; d++){
+        console.log('Library Name:',result[0].title, ', Key:', result[0].key, '(first 5 titles)');
+        key = parseInt(result[0].key);
+      //}
+      return;
+    },
+    function (err) {
+      let now = new Date();
+      console.log(now.toLocaleString() + " *On-demand - get library key:" + err);
+  });
+
+  // return first 5 titles in library
+  
+  ms.client.query("/library/sections/" + 5 + "/all").then(function (result) {
+    for (let x =0; x < 5; x++){
+    console.log(' -', result.MediaContainer.Metadata[x].title);
+    }
+  },
+    function (err) {
+      let now = new Date();
+      console.log(now.toLocaleString() + " *On-demand - title retrieval: " + err);
+  });
+
+}
+
+
   /**
    * @desc Checks all services available
    * @returns nothing
    */
-  TestAll() {
+  async TestPing() {
     this.PingSingleIP("Plex",this.settings.plexIP);
-    this.PingSingleIP("Radarr", this.settings.radarrURL);
-    this.PingSingleIP("Sonarr",this.settings.sonarrURL);
+    if(this.settings.radarrURL !== undefined) this.PingSingleIP("Radarr", this.settings.radarrURL);
+    if(this.settings.sonarrURL !== undefined) this.PingSingleIP("Sonarr",this.settings.sonarrURL);
     this.PingSingleIP("TVDB", "artworks.thetvdb.com");
     this.PingSingleIP("Plex Themes","tvthemes.plexapp.com");
     this.PingSingleIP("IMDB", "https://image.tmdb.org");
