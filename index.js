@@ -524,6 +524,24 @@ app.get("/debug/plexod", (req, res) => {
   res.render("debug", { settings: loadedSettings, version: pjson.version}); 
 });
 
+app.get("/debug/sonarr", (req, res) => {
+  console.log(' ');
+  console.log("** SONARR CHECK ** (titles in next 5 days)");
+  console.log('-------------------------------------------------------');
+  let test = new health(loadedSettings);
+  test.SonarrCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+});
+
+app.get("/debug/radarr", (req, res) => {
+  console.log(' ');
+  console.log("** RADARR CHECK ** (Any releases in next month)");
+  console.log('-------------------------------------------------------');
+  let test = new health(loadedSettings);
+  test.RadarrCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+});
+
 // password for settings section
 let userData = { valid: false, expires: 10 };
 
