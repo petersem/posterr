@@ -132,7 +132,7 @@ async RadarrCheck() {
   // set up date range and date formats
   let today = new Date();
   let later = new Date();
-  later.setDate(later.getDate() + 7);
+  later.setDate(later.getDate() + 30);
   let startDate = today.toISOString().split("T")[0];
   let endDate = later.toISOString().split("T")[0];
   // call sonarr API and return results

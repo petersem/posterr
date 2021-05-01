@@ -535,7 +535,7 @@ app.get("/debug/sonarr", (req, res) => {
 
 app.get("/debug/radarr", (req, res) => {
   console.log(' ');
-  console.log("** RADARR CHECK ** (Any releases in next month)");
+  console.log("** RADARR CHECK ** (Any releases in next 30 days)");
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.RadarrCheck();
