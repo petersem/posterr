@@ -86,41 +86,7 @@ Buttons are:
  - `Main Page` - Navigates to main Posterr page (unsaved changes lost)
  - `Save` - Saves and restarts the application
 
-Following is a description of each setup option. Options with a **'*'** are mandatory.
-
-#### General Options
-|Option|Description  |
-|--|--|
-|*Password |Settings page password|
-|*Slide duration|How long (in seconds) a slide will be shown for. (suggest 5-30 seconds)|
-|*Refresh period|How long (in seconds) before the browser auto-refreshes all slides (suggested 120-300 seconds)|
-|Enable background artwork|Shows media artwork in a faded background behind the poster|
-|TV theme tunes|`ON / OFF` Enable to play TV theme tunes. (note: some TV themes are unavaible) |
-|Generic movie themes|`ON / OFF` Enable to play random tunes for slides that show movies.|
-|Slide Transitions|`Slide / Fade` The slide transition effect.|
-#### Plex Options
-|Option|Description  |
-|--|--|
-|*HTTPS connection|`ON / OFF` If your Plex server requires a secure connections|
-|*Server IP|The IP or domain name for plex (exclude http/https)|
-|*Server port|The port Plex uses (default is 32400)|
-|*Plex token|Token required to access Plex. ([Finding a Plex token](https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/))|
-|Plex Libraries for On-demand titles|Enter the Plex library name(s) to use for on-demand slides. Comma-seperated if multiple libraries. *(**Leave this blank** if you do not want on-demand slides)* |
-|Number to display |The number of random titles to display, per-library, for on-demand slides (avoid going over 200 _'combined'_ slides for all libraries, or may cause excessive polling on Plex server.)|
-|On-demand refresh period|The refresh period in minutes before a new set of random titles are loaded|
-#### Sonarr Options (v3 only)
-|Option|Description  |
-|--|--|
-|Sonarr token|The Sonarr API key required for accessing Sonarr. *(**Leave this blank** if you do not want coming soon TV titles to show)*|
-|Sonarr url|The full URL and Port for your Sonarr installation.|
-|Days ahead|The number of days to look ahead in the Sonarr calendar for titles. Set this low number, like `3-5`, if `Show Premieres` is off. Alternatively, up to `60+` days is fine if on.|
-|Show premieres|`ON / OFF` Only season premieres will be shown |
-#### Radarr Options
-|Option|Description  |
-|--|--|
-|Radarr token|The Radarr API key required for accessing Radarr. *(**Leave this blank** if you do not want coming soon Movie titles to show)*|
-|Radarr url|The full URL and Port for your Radarr installation.|
-|Days ahead|The number of days to look ahead in the Radarr calendar for titles.|
+ > Please see the [Posterr Wiki](https://github.com/petersem/posterr/wiki/Posterr-Configuration) for more information.
 
 ## Troubleshooting
 Should you encounter a problem, the solution may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
@@ -130,7 +96,7 @@ There is no _'official'_ support for this product, however should you encounter 
 
 *Support my efforts and continued development* - Click this link to Buy me a coffee: 
 
- - [Support development](https://paypal.me/thanksmp)
+ > ![](https://github.com/petersem/posterr/blob/master/doco/coffsmall.gif?raw=true) [Support development](https://paypal.me/thanksmp)
 
 Thanks,
 
