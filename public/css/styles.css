@@ -76,8 +76,8 @@ iframe {
   background-position: center middle;
   background-size: cover;
   background-repeat: no-repeat;
-  opacity: .3;
-  filter: blur(10px);
+  opacity: .5;
+  filter: blur(5px);
 }
 
 .poster {
