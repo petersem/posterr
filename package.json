@@ -1,6 +1,6 @@
 {
   "name": "posterr",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
@@ -20,8 +20,9 @@
     "delay": "2500"
   },
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
   "author": "Matt Petersen",
   "license": "MIT",
