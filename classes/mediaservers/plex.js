@@ -48,9 +48,7 @@ class Plex {
       );
     } catch (err) {
       let now = new Date();
-      console.log(
-        now.toLocaleString() + " *Now Scrn. - Get sessions: " + err
-      );
+      console.log(now.toLocaleString() + " *Now Scrn. - Get sessions: " + err);
       throw err;
     }
     return this.nowScreening;
@@ -69,9 +67,7 @@ class Plex {
       nsRaw = await this.GetNowScreeningRawData();
     } catch (err) {
       let now = new Date();
-      console.log(
-        now.toLocaleString() + " *Now Scrn. - Get raw data: " + err
-      );
+      console.log(now.toLocaleString() + " *Now Scrn. - Get raw data: " + err);
       throw err;
     }
     // reutrn an empty array if no results
@@ -91,6 +87,7 @@ class Plex {
         let prefix;
         let url;
         let contentRating;
+        let mediaId;
 
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
@@ -123,7 +120,7 @@ class Plex {
 
             // download artist art image to local server
             // check art exists
-            if(md.grandparentArt !== undefined && hasArt == 'true'){
+            if (md.grandparentArt !== undefined && hasArt == "true") {
               fileName = result[3] + "-art.jpg";
               prefix = "http://";
               if (this.https) prefix = "https://";
@@ -138,7 +135,7 @@ class Plex {
               await core.CacheImage(url, fileName);
               medCard.posterArtURL = "/imagecache/" + fileName;
             }
-              
+
             medCard.posterAR = 1;
 
             medCard.audioCodec = md.Media[0].audioCodec;
@@ -156,14 +153,33 @@ class Plex {
               md.title +
               "'";
             result = md.guid.split("/");
-            medCard.DBID = result[2];
+
+            // Use TVDB ID if available, otherwise use GUID
+            if (isNaN(result[2])) {
+              mediaId = result[3];
+// console.log(md.title, mediaId, md);
+            } else {
+              mediaId = result[2];
+            }
+
+            medCard.DBID = mediaId;
 
             // only downlad mp3 if playThemes enabled
             if (playThemes == "true") {
               // download mp3 file to local server
-              let mp3 = result[2] + ".mp3";
-              await core.CacheMP3(mp3);
-              medCard.theme = "/mp3cache/" + mp3;
+              fileName = mediaId + ".mp3";
+              prefix = "http://";
+              if (this.https) prefix = "https://";
+              url =
+                prefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.grandparentTheme +
+                "?X-Plex-Token=" +
+                this.plexToken;
+              await core.CachePlexMP3(url, fileName);
+              medCard.theme = "/mp3cache/" + fileName;
             }
 
             if (await util.isEmpty(md.rating)) {
@@ -173,7 +189,7 @@ class Plex {
             }
 
             // download poster image to local server
-            fileName = result[2] + ".jpg";
+            fileName = mediaId + ".jpg";
             prefix = "http://";
             if (this.https) prefix = "https://";
             url =
@@ -187,10 +203,10 @@ class Plex {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
 
-            //download poster 
+            //download poster
             // check art exists
-            if(md.art !== undefined && hasArt == 'true'){
-              fileName = result[2].split("?")[0] + "-art.jpg";
+            if (md.art !== undefined && hasArt == "true") {
+              fileName = mediaId + "-art.jpg";
               if (this.https) prefix = "https://";
               url =
                 prefix +
@@ -268,20 +284,20 @@ class Plex {
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
 
-            //download poster 
+            //download poster
             // check art exists
-            if(md.art !== undefined && hasArt == 'true'){
+            if (md.art !== undefined && hasArt == "true") {
               movieFileName = md.updatedAt + "-art.jpg";
               if (this.https) moviePlexPrefix = "https://";
-                movieUrl =
-                  moviePlexPrefix +
-                  this.plexIP +
-                  ":" +
-                  this.plexPort +
-                  md.art +
-                  "?X-Plex-Token=" +
-                  this.plexToken;
-            
+              movieUrl =
+                moviePlexPrefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.art +
+                "?X-Plex-Token=" +
+                this.plexToken;
+
               await core.CacheImage(movieUrl, movieFileName);
               medCard.posterArtURL = "/imagecache/" + movieFileName;
             }
@@ -433,6 +449,8 @@ class Plex {
   ) {
     let odCards = [];
     let odRaw;
+    let mediaId;
+
     try {
       odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand);
     } catch (err) {
@@ -452,22 +470,37 @@ class Plex {
           case "show":
             medCard.tagLine = md.title;
             let result = md.guid.split("/");
-            medCard.DBID = result[2].split("?")[0];
+
+            // if(md.theme == undefined){
+            //   console.log('no theme:', md.title, result[2]);
+            // }
+            // Use TVDB ID if available, otherwise use GUID
+            if (isNaN(result[2].split("?")[0])) {
+              mediaId = result[3];
+              //console.log(md.title, mediaId, md);
+            } else {
+              mediaId = result[2].split("?")[0];
+            }
+
+            medCard.DBID = mediaId;
 
             // include if playThemes is enabled
-            if (playThemes == "true") {
+            medCard.theme = "";
+            if (playThemes == "true" && md.theme !== undefined) {
               // download mp3 from plex tv theme server
-              let mp3 = result[2].split("?")[0] + ".mp3";
-              try {
-                const dlOK = await core.CacheMP3(mp3);
-  //console.log('==--->> ' + dlOK);
-                medCard.theme = "/mp3cache/" + mp3;
-              }
-              catch (err) {
-                if(err == 'mp3 unavailable'){
-                  medCard.theme = "/randomthemes/" + (await core.GetRandomMP3(odCards));
-                }
-              }
+              let fileName = mediaId + ".mp3";
+              let prefix = "http://";
+              if (this.https) prefix = "https://";
+              let url =
+                prefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.theme +
+                "?X-Plex-Token=" +
+                this.plexToken;
+              await core.CachePlexMP3(url, fileName);
+              medCard.theme = "/mp3cache/" + fileName;
             }
 
             if (await util.isEmpty(md.rating)) {
@@ -477,7 +510,8 @@ class Plex {
             }
 
             // download poster image from plex server
-            let fileName = result[2].split("?")[0] + ".jpg";
+            let fileName = mediaId + ".jpg";
+
             let prefix = "http://";
             if (this.https) prefix = "https://";
             let url =
@@ -494,17 +528,17 @@ class Plex {
 
             //download poster art
             // check art exists
-            if(md.art !== undefined && hasArt == 'true'){
-              fileName = result[2].split("?")[0] + "-art.jpg";
+            if (md.art !== undefined && hasArt == "true") {
+              fileName = mediaId + "-art.jpg";
               if (this.https) prefix = "https://";
-                url =
-                  prefix +
-                  this.plexIP +
-                  ":" +
-                  this.plexPort +
-                  md.art +
-                  "?X-Plex-Token=" +
-                  this.plexToken;
+              url =
+                prefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.art +
+                "?X-Plex-Token=" +
+                this.plexToken;
 
               await core.CacheImage(url, fileName);
               medCard.posterArtURL = "/imagecache/" + fileName;
@@ -518,6 +552,7 @@ class Plex {
             break;
           case "movie":
             // cache movie poster
+            //     console.log(md);
             let movieFileName = md.updatedAt + ".jpg";
             let moviePlexPrefix = "http://";
             if (this.https) moviePlexPrefix = "https://";
@@ -532,19 +567,19 @@ class Plex {
             await core.CacheImage(movieUrl, movieFileName);
             medCard.posterURL = "/imagecache/" + movieFileName;
 
-            //download poster 
+            //download poster
             // check art exists
-            if(md.art !== undefined && hasArt == 'true'){
+            if (md.art !== undefined && hasArt == "true") {
               movieFileName = md.updatedAt + "-art.jpg";
               if (this.https) moviePlexPrefix = "https://";
-                movieUrl =
+              movieUrl =
                 moviePlexPrefix +
-                  this.plexIP +
-                  ":" +
-                  this.plexPort +
-                  md.art +
-                  "?X-Plex-Token=" +
-                  this.plexToken;
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.art +
+                "?X-Plex-Token=" +
+                this.plexToken;
 
               await core.CacheImage(movieUrl, movieFileName);
               medCard.posterArtURL = "/imagecache/" + movieFileName;
@@ -556,7 +591,7 @@ class Plex {
             }
 
             medCard.posterAR = 1.47;
-            
+
             // other data
             medCard.title = md.title;
             medCard.runTime = Math.round(md.Media[0].duration / 60000);
@@ -588,10 +623,8 @@ class Plex {
         if (!(await util.isEmpty(md.studio))) {
           medCard.studio = md.studio;
         }
-        
 
-        if(medCard.tagLine =="") medCard.tagLine = medCard.title;
-
+        if (medCard.tagLine == "") medCard.tagLine = medCard.title;
         medCard.mediaType = md.type;
         medCard.cardType = cType.CardTypeEnum.OnDemand;
 
@@ -727,26 +760,29 @@ class Plex {
    */
   async GetAllMediaForLibrary(libKey) {
     let mediaCards = [];
-    try{
-      return await this.client.query("/library/sections/" + libKey + "/all").then(
-        function (result) {
-          // populate a complete list of all titles into an array
-          if (result.MediaContainer.size > 0) {
-            result.MediaContainer.Metadata.forEach((mt) => {
-              mediaCards.push(mt);
-            });
-          }
-          return mediaCards;
-        },
-        function (err) {
-          let now = new Date();
-          console.log(now.toLocaleString() + " *On-demand - Get titles: " + err);
-          throw err;
-        },
-        Promise.resolve(0)
-      );
-    }
-    catch (err) {
+    try {
+      return await this.client
+        .query("/library/sections/" + libKey + "/all")
+        .then(
+          function (result) {
+            // populate a complete list of all titles into an array
+            if (result.MediaContainer.size > 0) {
+              result.MediaContainer.Metadata.forEach((mt) => {
+                mediaCards.push(mt);
+              });
+            }
+            return mediaCards;
+          },
+          function (err) {
+            let now = new Date();
+            console.log(
+              now.toLocaleString() + " *On-demand - Get titles: " + err
+            );
+            throw err;
+          },
+          Promise.resolve(0)
+        );
+    } catch (err) {
       throw err;
     }
   }
@@ -785,7 +821,9 @@ class Plex {
       }
     } catch (err) {
       let now = new Date();
-      console.log(now.toLocaleString() + " *On-demand - Get library keys: " + err);
+      console.log(
+        now.toLocaleString() + " *On-demand - Get library keys: " + err
+      );
       throw err;
     }
 

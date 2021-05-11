@@ -8,6 +8,8 @@ Media display software for Plex, Sonarr and Radarr.
 ![Landscape - background art mode](https://github.com/petersem/posterr/blob/master/doco/artmode.png?raw=true)
 ![Settings](https://github.com/petersem/posterr/blob/master/doco/settings.png?raw=true)
 
+ > Poster now utilises data obtained via the 'Plex TV Series' agent. Whilst it will continue to work if you are ~not~ using this agent, you will get mixed to no results for TV theme tunes. It is strongly recommended that you shift to this agent and scanner for your Plex libraries. (as recommended by Plex).
+ 
 ## Alpha software
 This software is still considered `ALPHA` quality. (Still not feature complete) 
 - **Check this page often for updates**
@@ -15,6 +17,7 @@ This software is still considered `ALPHA` quality. (Still not feature complete)
 Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
  
 ## Features
+ - Uses the latest 'Plex Agent' data (as recommended by Plex to use).
  - Now Screening: Shows and movies from Plex.
  - Playing: Music from Plex.
  - On-demand: Random on-demand titles from multiple specified Plex libraries.
