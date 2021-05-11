@@ -37,6 +37,18 @@ class Cache {
   }
 
   /**
+   * @desc Downloads the tv mp3 file from the Plex server
+   * @param {string} url - the fully qualified URL for the plex media file
+   * @param {string} fileName - the filename to download and save. this in the format of tvdbid.mp3
+   * @returns nothing
+   */
+  static async CachePlexMP3(url, fileName) {
+    const savePath = "./public/mp3cache/" + fileName;
+    await this.download(url + fileName, savePath);
+    return;
+  }
+
+  /**
    * @desc Download any asset, providing it does not already exist in the save location
    * @param {string} url - the full url to the asset
    * @param {string} savePath - the path to save the asset to
@@ -50,9 +62,9 @@ class Cache {
       request(url, function (err, res, body) {
         // check to see if no content, then if mp3, throw exception
         var size = parseInt(res.headers["content-length"], 10);
-    //console.log("file size: " + size);
+        //console.log("file size: " + size);
         if (isNaN(size) && url.toLowerCase().includes("themes")) {
-    //console.log('no mp3',url);
+          //console.log('no mp3',url);
           //return callback;
         }
       })
@@ -76,21 +88,20 @@ class Cache {
           //console.log("Download Completed");
           return callback(true);
         });
-   //   return callback(true);
+      //   return callback(true);
     };
 
-    let dlOK=false;
+    let dlOK = false;
 
     //
     // check if file exists before downloading
     if (!fs.existsSync(savePath)) {
       //file not present, so download
-        download(url, savePath, function(dlRes) {
-          // console.log("✅ Downloaded: " + fileName);
-//console.log(dlRes);
-          dlOK = Promise.resolve(dlRes);
-        });
-        
+      download(url, savePath, function (dlRes) {
+        // console.log("✅ Downloaded: " + fileName);
+        //console.log(dlRes);
+        dlOK = Promise.resolve(dlRes);
+      });
     } else {
       // console.log("✘ " + fileName + " exists, DL aborted");
       return false;
