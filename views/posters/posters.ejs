@@ -19,9 +19,9 @@
     });
 
 
-    // resize for initial page load
+    //resize for initial page load
     $('.myDiv').css({
-      'height': (($(window).height()) - 120) + 'px'
+      'height': (($(window).height())) + 'px'
     });
 
     StopAllAudio();
@@ -39,7 +39,7 @@
 
     // check if on single card
     var numOfCards;
-    numOfCards = <%=globals.cards.length %> ;
+    numOfCards = <%=globals.cards.length %>;
     // if on 1 or less cards then we need to trigger a manual refresh every slide transition period
     if (numOfCards < 2) {
       // check every 5 seconds to see if ready for refresh
