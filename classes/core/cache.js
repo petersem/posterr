@@ -44,7 +44,7 @@ class Cache {
    */
   static async CachePlexMP3(url, fileName) {
     const savePath = "./public/mp3cache/" + fileName;
-    console.log(url);
+    //console.log(url);
     await this.download(url + fileName, savePath);
     return;
   }
