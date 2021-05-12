@@ -165,7 +165,7 @@ class MediaCard {
       `">
       <div class="myDiv">
       <div class="posterArt" style="background-image: url('` +
-      this.posterArtURL + `'">
+      this.posterArtURL + `')">
       </div>
         <div class="banners">
           <div class="bannerBigText ` +
@@ -178,7 +178,7 @@ class MediaCard {
       <div id="poster` +
       this.ID +
       `" class="poster" style="background-image: url('` +
-      this.posterURL + `'">
+      this.posterURL + `')">
 
       <div class="progress ` +
       hidden +
