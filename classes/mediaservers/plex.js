@@ -178,7 +178,7 @@ class Plex {
                 md.grandparentTheme +
                 "?X-Plex-Token=" +
                 this.plexToken;
-              await core.CachePlexMP3(url + "?X-Plex-Token=" + this.plexToken, fileName);
+              await core.CachePlexMP3(url, fileName);
               medCard.theme = "/mp3cache/" + fileName;
             }
 
@@ -499,7 +499,7 @@ class Plex {
                 md.theme +
                 "?X-Plex-Token=" +
                 this.plexToken;
-              await core.CachePlexMP3(url + "?X-Plex-Token=" + this.plexToken, fileName);
+              await core.CachePlexMP3(url, fileName);
               medCard.theme = "/mp3cache/" + fileName;
             }
 
