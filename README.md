@@ -1,6 +1,8 @@
 # Poster
 Media display software for Plex, Sonarr and Radarr.
 
+ > **Important Note** - Posterr now utilises data obtained via the _'Plex TV Series'_ agent. Whilst it will continue to work if you are _not_ using this agent, you will get mixed, to no results for TV theme tunes. It is _strongly_ recommended that you shift to this agent and scanner for your Plex libraries. (as recommended by Plex).
+
 ![Music playing](https://github.com/petersem/posterr/blob/master/doco/music.png?raw=true)
 ![Now screening](https://github.com/petersem/posterr/blob/master/doco/ns.png?raw=true)
 ![On-demand](https://github.com/petersem/posterr/blob/master/doco/od.png?raw=true)
@@ -8,8 +10,6 @@ Media display software for Plex, Sonarr and Radarr.
 ![Landscape - background art mode](https://github.com/petersem/posterr/blob/master/doco/artmode.png?raw=true)
 ![Settings](https://github.com/petersem/posterr/blob/master/doco/settings.png?raw=true)
 
- > Poster now utilises data obtained via the 'Plex TV Series' agent. Whilst it will continue to work if you are ~not~ using this agent, you will get mixed to no results for TV theme tunes. It is strongly recommended that you shift to this agent and scanner for your Plex libraries. (as recommended by Plex).
- 
 ## Alpha software
 This software is still considered `ALPHA` quality. (Still not feature complete) 
 - **Check this page often for updates**
@@ -17,7 +17,7 @@ This software is still considered `ALPHA` quality. (Still not feature complete)
 Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
  
 ## Features
- - Uses the latest 'Plex Agent' data (as recommended by Plex to use).
+ - Uses the latest 'Plex Agent' data (as recommended by Plex).
  - Now Screening: Shows and movies from Plex.
  - Playing: Music from Plex.
  - On-demand: Random on-demand titles from multiple specified Plex libraries.
@@ -95,7 +95,7 @@ Buttons are:
 Should you encounter a problem, the solution may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
 
 ## Support
-There is no _'official'_ support for this product, however should you encounter issues, raise a defect on the github page.
+There is no _'official'_ support for this product, however should you encounter issues, raise an issue on the github page.
 
 *Support my efforts and continued development* - Click this link to Buy me a coffee: 
 
