@@ -1,6 +1,10 @@
 {
   "name": "posterr",
+<<<<<<< HEAD
   "version": "0.8.11",
+=======
+  "version": "0.8.10",
+>>>>>>> 0896dbebfe15f0f949107fa7b41a41487f8b0933
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
