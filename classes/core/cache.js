@@ -61,21 +61,12 @@ class Cache {
       // request.head(url, (err, res, body) => {
       request(url, function (err, res, body) {
         // check to see if no content, then if mp3, throw exception
-<<<<<<< HEAD
         // var size = parseInt(res.headers["content-length"], 10);
         // console.log("file size: " + size);
         // if (size < 100 && url.toLowerCase().includes("themes")) {
         //   console.log('no mp3',url);
         //   return callback;
         // }
-=======
-        var size = parseInt(res.headers["content-length"], 10);
-        //console.log("file size: " + size);
-        if (isNaN(size) && url.toLowerCase().includes("themes")) {
-          //console.log('no mp3',url);
-          //return callback;
-        }
->>>>>>> 0896dbebfe15f0f949107fa7b41a41487f8b0933
       })
         .pipe(fs.createWriteStream(savePath, { autoClose: true }))
         .on("close", callback)
