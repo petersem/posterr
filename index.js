@@ -310,8 +310,6 @@ async function houseKeeping() {
   await core.DeleteImageCache();
   // restart timer
   setInterval(houseKeeping, 86400000); // daily
-  // restart to ensure all images valid
-  startup(false);
 }
 
 /**
