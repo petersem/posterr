@@ -17,14 +17,14 @@ This software is still considered `ALPHA` quality. (Still not feature complete)
 Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
  
 ## Features
- - Uses the latest 'Plex Agent' data (as recommended by Plex).
+ - Uses the latest 'Plex Agent' data (will work without tv themes for other agents).
  - Now Screening: Shows and movies from Plex.
  - Playing: Music from Plex.
  - On-demand: Random on-demand titles from multiple specified Plex libraries.
  - Coming Soon: Shows in Sonarr that are releasing in a given number of days (or Season premieres).
  - Coming Soon: Movies in Radarr that are releasing in a given number of days.
  - Option to play TV themes (available for most shows)
- - Option to play a random MP3 of your choice for movies (add your own MP3 files)
+ - Option to play Movie themes if present, or a random MP3 of your choice for movies (add your own MP3 files)
  - Setup page (dark theme)
  - Built in Node JS, and packaged as a Docker image. (included image health check)
  - Now Screening / Playing displays a progress bar (green for direct play and red for transcoding)
@@ -69,7 +69,7 @@ services:
 |--|--|
 |TZ|Your local timezone. Go to [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
 |/docker/poster/config|This is required to save your Posterr settings|
-|/docker/poster/randomthemes|This is optional. If you leave it out, there are a few royalty-free tunes available. If you add this, then you must populate this directory with your own MP3 files, which will play for movie slides. (Supplied MP3's are royalty free from https://www.bensound.com/)|
+|/docker/poster/randomthemes|This is optional. If you add this, then you can populate this directory with your own MP3 files, which will play for movie slides|
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
 
 ## Updates
