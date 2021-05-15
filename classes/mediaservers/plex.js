@@ -221,7 +221,7 @@ class Plex {
               medCard.posterArtURL = "/imagecache/" + fileName;
             }
 
-            medCard.posterAR = 1.47;
+            medCard.posterAR = 1.5;
 
             medCard.title = md.grandparentTitle;
             medCard.genre = md.genre;
@@ -302,11 +302,29 @@ class Plex {
               medCard.posterArtURL = "/imagecache/" + movieFileName;
             }
 
-            medCard.posterAR = 1.47;
-            // add generic random theme if applicable
+            medCard.posterAR = 1.5;
+            // play movie theme or add generic random theme if applicable
             if (playGenenericThemes == "true") {
-              medCard.theme =
-                "/randomthemes/" + (await core.GetRandomMP3(nsCards));
+              if(await util.isEmpty(md.theme)){
+                medCard.theme =
+                  "/randomthemes/" + (await core.GetRandomMP3(nsCards));
+              }
+              else{
+                // download mp3 file to local server
+                fileName = md.updatedAt + ".mp3";
+              prefix = "http://";
+              if (this.https) prefix = "https://";
+              url =
+                prefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.theme +
+                "?X-Plex-Token=" +
+                this.plexToken;
+              await core.CachePlexMP3(url, fileName);
+              medCard.theme = "/mp3cache/" + fileName;
+              }
             }
 
             medCard.title = md.title;
@@ -502,7 +520,7 @@ class Plex {
               await core.CachePlexMP3(url, fileName);
               medCard.theme = "/mp3cache/" + fileName;
             }
-
+//console.log(md);
             if (await util.isEmpty(md.rating)) {
               medCard.rating = "";
             } else {
@@ -585,10 +603,31 @@ class Plex {
               medCard.posterArtURL = "/imagecache/" + movieFileName;
             }
 
+            // play movie theme or add generic random theme if applicable
+            let themeFile;
             if (playGenenericThemes == "true") {
-              medCard.theme =
-                "/randomthemes/" + (await core.GetRandomMP3(odCards));
+              if(await util.isEmpty(md.theme)){
+                medCard.theme =
+                  "/randomthemes/" + (await core.GetRandomMP3(odCards));
+              }
+              else{
+                // download mp3 file to local server
+                themeFile = md.updatedAt + ".mp3";
+              let prefix = "http://";
+              if (this.https) prefix = "https://";
+              let url =
+                prefix +
+                this.plexIP +
+                ":" +
+                this.plexPort +
+                md.theme +
+                "?X-Plex-Token=" +
+                this.plexToken;
+              await core.CachePlexMP3(url, themeFile);
+              medCard.theme = "/mp3cache/" + themeFile;
+              }
             }
+
 
             medCard.posterAR = 1.47;
 
