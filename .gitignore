@@ -2,6 +2,7 @@
 /node_modules
 /public/mp3cache/**
 /public/imagecache/**
+/public/randomthemes/**
 /config/*.json
 
 # any excluded dir with a .keep file. Will stay in github, but all other files will not :)
