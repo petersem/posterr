@@ -141,8 +141,8 @@
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="themeSwitch" id="themeSwitch" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.themeSwitch ? 'checked' : '' %><%}else{%><%=(settings.playThemes == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="themeSwitch">TV theme tunes</label>
-                    <small id="themeHelp" class="form-text text-muted">Enables TV theme tunes, *when available*</small>
+                    <label class="custom-control-label" for="themeSwitch">TV themes</label>
+                    <small id="themeHelp" class="form-text text-muted">Enables TV theme (if available)</small>
                   </div>
                 </div>
 
@@ -150,8 +150,8 @@
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="genericSwitch" id="genericSwitch" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.genericSwitch ? 'checked' : '' %><%}else{%><%=(settings.genericThemes == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="genericSwitch">Generic movie themes</label>
-                    <small id="randomThemeHelp" class="form-text text-muted">Plays a random mp3 from the '/randomthemes' directory</small>
+                    <label class="custom-control-label" for="genericSwitch">Movie themes</label>
+                    <small id="randomThemeHelp" class="form-text text-muted">Enables movie themes (if added) or a random mp3 from the '/randomthemes' directory</small>
                   </div>
                 </div>
 
