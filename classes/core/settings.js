@@ -12,7 +12,6 @@ class Settings {
     // default values
     this.password = DEFAULT_SETTINGS.password;
     this.slideDuration = DEFAULT_SETTINGS.slideDuration;
-    this.refreshPeriod = DEFAULT_SETTINGS.refreshPeriod;
     this.playThemes = DEFAULT_SETTINGS.playThemes;
     this.genericThemes = DEFAULT_SETTINGS.genericThemes;
     this.fade = DEFAULT_SETTINGS.fade;
@@ -132,8 +131,6 @@ class Settings {
     else this.password = cs.password;
     if (jsonObject.slideDuration) this.slideDuration = jsonObject.slideDuration;
     else this.slideDuration = cs.slideDuration;
-    if (jsonObject.refreshPeriod) this.refreshPeriod = jsonObject.refreshPeriod;
-    else this.refreshPeriod = cs.refreshPeriod;
     if (jsonObject.themeSwitch) this.playThemes = jsonObject.themeSwitch;
     else this.playThemes = "false";
     if (jsonObject.genericSwitch) this.genericThemes = jsonObject.genericSwitch;

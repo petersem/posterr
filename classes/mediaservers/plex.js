@@ -308,6 +308,7 @@ class Plex {
               if(await util.isEmpty(md.theme)){
                 medCard.theme =
                   "/randomthemes/" + (await core.GetRandomMP3(nsCards));
+                if(medCard.theme.includes("undefined")) medCard.theme="";
               }
               else{
                 // download mp3 file to local server
@@ -609,6 +610,7 @@ class Plex {
               if(await util.isEmpty(md.theme)){
                 medCard.theme =
                   "/randomthemes/" + (await core.GetRandomMP3(odCards));
+                if(medCard.theme.includes("undefined")) medCard.theme="";
               }
               else{
                 // download mp3 file to local server

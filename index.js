@@ -235,7 +235,6 @@ async function loadNowScreening() {
   // put everything into global class, ready to be passed to poster.ejs
   // render html for all cards
   await globalPage.OrderAndRenderCards(loadedSettings.hasArt);
-  globalPage.refreshPeriod = loadedSettings.refreshPeriod * 1000;
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
@@ -493,6 +492,10 @@ app.get("/", (req, res) => {
   res.render("index", { globals: globalPage, hasConfig: setng.GetChanged() }); // index refers to index.ejs
 });
 
+app.get("/getcards", (req, res) => {
+  res.send({ cards: globalPage.cards}); // get generated cards
+});
+
 app.get("/debug", (req, res) => {
   res.render("debug", { settings: loadedSettings, version: pjson.version }); 
 });
@@ -617,21 +620,6 @@ app.post(
         return true;
       })
       .withMessage("'Slide Duration' is required and must be 5 or more"),
-    check("refreshPeriod")
-      .not()
-      .isEmpty()
-      .withMessage("'Refresh period' cannot be blank. (setting default)")
-      .custom((value) => {
-        if (parseInt(value) === "NaN") {
-          throw new Error("'Refresh period' must be a number");
-        }
-        if (parseInt(value) < 60) {
-          throw new Error("'Refresh period' cannot be less than 60 seconds");
-        }
-        // Indicates the success of this synchronous custom validator
-        return true;
-      })
-      .withMessage("'Refresh Period' is required"),
     check("plexIP").not().isEmpty().withMessage("'Plex IP' is required"),
     check("plexPort")
       .not()
@@ -660,7 +648,6 @@ app.post(
     let form = {
       password: req.body.password,
       slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : DEFAULT_SETTINGS.slideDuration,
-      refreshPeriod: req.body.refreshPeriod ? parseInt(req.body.refreshPeriod) : DEFAULT_SETTINGS.refreshPeriod,
       artSwitch: req.body.artSwitch,
       themeSwitch: req.body.themeSwitch,
       genericSwitch: req.body.genericSwitch,

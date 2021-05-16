@@ -3,18 +3,15 @@ const cache = require("./cache");
 /**
  * @desc globalPage object is passed to poster.ejs and contains all browser settings and card data
  * @param {number} slideDuration - how long each slide will be visible for (seconds)
- * @param {number} refreshPeriod - how long before the brpwser does a refresh and data is refreshed (seconds)
  * @param {string} fadeTransition - boolean - if true, will fade transition. false will slide.
  * @returns {<object>} globalPage
  */
 class globalPage {
   constructor(
     slideDuration,
-    refreshPeriod,
     fadeTransition
   ) {
     this.slideDuration = slideDuration;
-    this.refreshPeriod = refreshPeriod;
     this.fadeTransition = fadeTransition;
 
     this.cards = [];

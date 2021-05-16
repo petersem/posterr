@@ -31,7 +31,7 @@ Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more
  - Displays information for media, such as run time, content rating, studio, etc. 
  - Move the mouse cursor to the bottom footer of the page to hide it
  - Low resource usage. Memory: 20-35mb, Diskspace: 175mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
- - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser `refresh period` is reached)
+ - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
  - Browser-based, so can run the app on one machine and a browser on another.
  - Background artwork option for slides (when available)
 

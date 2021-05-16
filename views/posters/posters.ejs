@@ -1,29 +1,45 @@
 <div id="myCarousel" data-interval="<%=globals.slideDuration%>" data-pause="false" class="carousel slide <%=globals.fadeTransition%> h-100 w-100"
      data-ride="carousel">
-    <div class="carousel-inner h-100 w-100 ">
-        <% globals.cards.forEach(function(card) { %>
-        <%-card.rendered%>
-        <%});%>
+    <div class="carousel-inner cardHolder h-100 w-100 ">
     </div>
 </div>
 
 <script language='javascript'>
   var initialLoadTime = new Date().getTime();
 
-  $(function () {
-    
+  function getCards(){
+    const xhr = new XMLHttpRequest();
+console.log();
+    xhr.open('GET', window.location.href + 'getcards');
+
+    // set response format
+    xhr.responseType = 'json';
+
+    xhr.send();
+
+    xhr.onload = () => {
+      // get JSON response
+      const posterr = xhr.response;
+
+      let cardHtml = "";
+      posterr.cards.forEach(card => {
+        cardHtml += card.rendered;
+      });
+
+      $(".cardHolder").html(cardHtml);
+      initialLoad();
+    }
+  }
+
+  function initialLoad() {
     // make banner link to settings
     $(".bannerBigText").click(function() {
       window.location = "/settings"; 
       return false;
     });
 
-
     //resize for initial page load
-    $('.myDiv').css({
-      'height': (($(window).height())) + 'px'
-    });
-
+    $('.myDiv').css({'height': (($(window).height())) + 'px' });
     StopAllAudio();
     //trigger initial audio play if present
     if (document.getElementById("audio1")) {
@@ -34,21 +50,12 @@
       });
     }
 
-    // pause on itial slide for 4 seconds to allow poster load
-    waitforload(1000, 1);
+    Resize(1);
+  }
 
-    // check if on single card
-    var numOfCards;
-    numOfCards = <%=globals.cards.length %>;
-    // if on 1 or less cards then we need to trigger a manual refresh every slide transition period
-    if (numOfCards < 2) {
-      // check every 5 seconds to see if ready for refresh
-      const interval = setInterval(function () {
-        if (new Date().getTime() - initialLoadTime > <%=globals.slideDuration %> ) {
-          window.location.reload();
-        }
-      }, 5000);
-    }
+  $(function () {
+    // initial load of cards
+    getCards();
   });
 
   async function sleep(ms) {
@@ -131,13 +138,7 @@
   $('#myCarousel').on('slid.bs.carousel', function (ev) {
     StopAllAudio();
     var id = ev.relatedTarget.id;
-
-    // if the refresh period has been met, then reload
-    //console.log((new Date().getTime() - initialLoadTime) / 1000);
-    if (new Date().getTime() - initialLoadTime > <%=globals.refreshPeriod %> ) {
-      window.location.reload();
-    }
-
+    if(id==1) getCards();
 
     //console.log('sliding to item:', id); // do something...
     if (document.getElementById("audio" + id)) {
