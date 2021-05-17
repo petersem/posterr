@@ -501,6 +501,11 @@ app.get("/getcards", (req, res) => {
   res.send({ cards: globalPage.cards}); // get generated cards
 });
 
+app.get("/conncheck", (req, res) => {
+  res.send({ status: "connection ok"}); // get generated cards
+});
+
+
 app.get("/debug", (req, res) => {
   res.render("debug", { settings: loadedSettings, version: pjson.version }); 
 });
