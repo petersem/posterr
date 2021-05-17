@@ -44,6 +44,7 @@
     }
   }
 
+  // call posterr api to get currently generated card sets
   function getCards(){
     const xhr = new XMLHttpRequest();
     xhr.open('GET', window.location.href + 'getcards');
@@ -67,6 +68,7 @@
     }
   }
 
+  // apply styles to cards and manage audio
   function initialLoad() {
     // make banner link to settings
     $(".bannerBigText").click(function() {
@@ -90,7 +92,7 @@
   }
 
   $(function () {
-    // initial load of cards
+    // initial load of cards and connection check timer
     setInterval(connCheck,5000);
     getCards();
   });
