@@ -9,7 +9,7 @@
 
   function getCards(){
     const xhr = new XMLHttpRequest();
-console.log();
+
     xhr.open('GET', window.location.href + 'getcards');
 
     // set response format
@@ -20,14 +20,22 @@ console.log();
     xhr.onload = () => {
       // get JSON response
       const posterr = xhr.response;
+      if(!posterr == null || posterr.cards.length !== 0) {
+        let cardHtml = "";
+        posterr.cards.forEach(card => {
+          cardHtml += card.rendered;
+        });
 
-      let cardHtml = "";
-      posterr.cards.forEach(card => {
-        cardHtml += card.rendered;
-      });
+        $(".cardHolder").html(cardHtml);
+        initialLoad();
+      }
+      else{
+        console.log('Error: Cannot contact poster server!');
+      }
+    }
 
-      $(".cardHolder").html(cardHtml);
-      initialLoad();
+    xhr.onerror = (err) => {
+      window.location.href = window.location.href + 'nocontent';
     }
   }
 
