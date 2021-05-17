@@ -34,6 +34,7 @@ Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more
  - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
  - Browser-based, so can run the app on one machine and a browser on another.
  - Background artwork option for slides (when available)
+ - Browser connectivity checks and auto-reconnect when the poster app restarts. (eg During container updates) 
 
 ## Possible Uses
  - Mount a monitor on your wall (extra points if framed) and showcase your home media setup
