@@ -23,6 +23,12 @@ console.log(" POSTERR - Your media display");
 console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" Version: " + pjson.version);
+console.log(" ");
+console.log(" BBBB   EEEEE  TTTTTT  AAA    !!");
+console.log(" BB BB  EE       TT   AA AA   !!");
+console.log(" BBBB   EEEEE    TT  AA   AA  !!");
+console.log(" BB BB  EE       TT  AAAAAAA    ");
+console.log(" BBBB   EEEEE    TT  AA   AA  !!");
 console.log("-------------------------------------------------------");
 
 // global variables
@@ -294,7 +300,8 @@ async function loadOnDemand() {
   // restart interval timer
   onDemandClock = setInterval(loadOnDemand, odCheckMinutes * 60000);
 
-  return odCards;
+  // randomise on-demand results for all libraries queried
+  return odCards.sort(() => Math.random() - 0.5);
 }
 
 /**
