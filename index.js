@@ -393,6 +393,11 @@ async function startup(clearCache) {
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
 
+  odCards = [];
+  nsCards = [];
+  csCards = [];
+  csrCards = [];
+
   // run housekeeping job 
   if (clearCache !== false) await houseKeeping();
 
