@@ -6,15 +6,50 @@
 
 <script language='javascript'>
   var initialLoadTime = new Date().getTime();
+  var connCheckClock;
+  var connOk = true;
+
+  function noConnection() {
+    cardHtml = `<div class="container d-flex align-items-center justify-content-center no-content"><div class="d-flex">
+      <div class="settingsLink">Lost connectivity with Posterr server!</br>Attempting to restore connection..</div></div></div>`
+    $(".cardHolder").html(cardHtml);    
+    
+  }
+
+  function connCheck(){
+//console.log('check for connection');
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', window.location.href + 'conncheck');
+    // set response format
+    xhr.responseType = 'json';
+    xhr.send();
+    // connection failed
+    xhr.onerror = () => {
+      console.log('Conection failed. Trying to restore connection.')
+      connOk = false;
+      noConnection();
+    }
+
+    xhr.onload = () => {
+      // restore connection
+      if(connOk==false){
+        console.log('Connection restored!');
+        connOk=true;
+        location.reload();
+      }
+      // connection ok!
+      else{
+        //console.log('connection ok');
+      }
+    }
+  }
 
   function getCards(){
     const xhr = new XMLHttpRequest();
-
     xhr.open('GET', window.location.href + 'getcards');
 
     // set response format
     xhr.responseType = 'json';
-
     xhr.send();
 
     xhr.onload = () => {
@@ -29,13 +64,6 @@
         $(".cardHolder").html(cardHtml);
         initialLoad();
       }
-      else{
-        console.log('Error: Cannot contact poster server!');
-      }
-    }
-
-    xhr.onerror = (err) => {
-      window.location.href = window.location.href + 'nocontent';
     }
   }
 
@@ -63,6 +91,7 @@
 
   $(function () {
     // initial load of cards
+    setInterval(connCheck,5000);
     getCards();
   });
 
