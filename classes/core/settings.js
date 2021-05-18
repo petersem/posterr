@@ -30,6 +30,7 @@ class Settings {
     this.radarrToken = DEFAULT_SETTINGS.radarrToken;
     this.radarrCalDays = DEFAULT_SETTINGS.radarrCalDays;
     this.hasArt = DEFAULT_SETTINGS.hasArt;
+    this.shuffleSlides = DEFAULT_SETTINGS.shuffleSlides;
     return;
   }
 
@@ -148,8 +149,8 @@ class Settings {
     if (jsonObject.plexLibraries)
       this.onDemandLibraries = jsonObject.plexLibraries;
     else this.onDemandLibraries = cs.onDemandLibraries;
-    if (jsonObject.numberOnDemand)
-      this.numberOnDemand = jsonObject.numberOnDemand;
+    if (jsonObject.numberOnDemand || jsonObject.numberOnDemand==0) 
+     this.numberOnDemand = jsonObject.numberOnDemand;
     else this.numberOnDemand = cs.numberOnDemand;
     if (jsonObject.onDemandRefresh)
       this.onDemandRefresh = jsonObject.onDemandRefresh;
@@ -171,6 +172,8 @@ class Settings {
     else this.radarrCalDays = cs.radarrCalDays;
     if (jsonObject.artSwitch) this.hasArt = jsonObject.artSwitch;
     else this.hasArt = cs.hasArt;
+    if (jsonObject.shuffleSwitch) this.shuffleSlides = jsonObject.shuffleSwitch;
+    else this.shuffleSlides = cs.shuffleSlides;
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
 

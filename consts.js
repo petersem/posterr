@@ -18,7 +18,8 @@ const DEFAULT_SETTINGS = {
   radarrURL : "",
   radarrToken : "",
   radarrCalDays : 30,
-  hasArt : "false"
+  hasArt : "false",
+  shuffleSlides: "false"
 };
 
 module.exports = DEFAULT_SETTINGS;

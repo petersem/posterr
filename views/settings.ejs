@@ -166,6 +166,14 @@
                   <div class="form-group small text-muted">
                   </div>
                 </div>
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="shuffleSwitch" id="shuffleSwitch"
+                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.shuffleSwitch ? 'checked' : '' %><%}else{%><%=(settings.shuffleSlides == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="shuffleSwitch">Shuffle slides</label>
+                    <small id="suffleSwitchHelp" class="form-text text-muted">Shuffles on-demand, coming soon (radar) & coming soon (Sonarr)</small>
+                  </div>
+                </div>
 
               </br>
               <h6>PLEX SETTINGS</h6>
@@ -212,7 +220,7 @@
                 <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
                   <input type="text" class="form-control" id="numberOnDemand" name="numberOnDemand" aria-describedby="numberOnDemand"
-                    placeholder="suggest no more than 10" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
+                    placeholder="suggest 5 or 6. (lower numbers perform better)" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
                   <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to display from
                     each specified Plex library.</small>
                 </div>
