@@ -17,6 +17,10 @@ const util = require("./classes/core/utility");
 const DEFAULT_SETTINGS = require("./consts");
 const health = require("./classes/core/health");
 const pjson = require("./package.json");
+const COLD_START_TIME = new Date();
+const MAX_OD_SLIDES=150;  // this is with themes. Will be double this if tv and movie themes are off
+console.log(COLD_START_TIME);
+
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
@@ -24,11 +28,11 @@ console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" Version: " + pjson.version);
 console.log(" ");
-console.log(" BBBB   EEEEE  TTTTTT  AAA    !!");
-console.log(" BB BB  EE       TT   AA AA   !!");
-console.log(" BBBB   EEEEE    TT  AA   AA  !!");
-console.log(" BB BB  EE       TT  AAAAAAA    ");
-console.log(" BBBB   EEEEE    TT  AA   AA  !!");
+// console.log(" BBBB   EEEEE  TTTTT    A      !!");
+// console.log(" B   B  E        T     A A     !!");
+// console.log(" BBBB   EEEEE    T    A   A    !!");
+// console.log(" B   B  E        T   AAAAAAA   ");
+// console.log(" BBBB   EEEEE    T  A       A  !!");
 console.log("-------------------------------------------------------");
 
 // global variables
@@ -52,6 +56,7 @@ let isPlexEnabled = false;
 let isPlexUnavailable = false;
 let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
+
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -209,14 +214,24 @@ async function loadNowScreening() {
   // TODO - move this into its own function!
   let mCards = [];
   if (nsCards.length > 0) {
-    mCards = nsCards.concat(odCards);
-    mCards = mCards.concat(csCards);
-    mCards = mCards.concat(csrCards);
+    if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+      mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5));
+    }
+    else {
+      mCards = nsCards.concat(odCards);
+      mCards = mCards.concat(csCards);
+      mCards = mCards.concat(csrCards);
+    }
     globalPage.cards = mCards;
   } else {
     if (odCards.length > 0) {
-      mCards = odCards.concat(csCards);
-      mCards = mCards.concat(csrCards);
+      if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+        mCards = odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5);
+      }
+      else{
+        mCards = odCards.concat(csCards);
+        mCards = mCards.concat(csrCards);
+      }
       globalPage.cards = mCards;
     } else {
       if (csCards.length > 0) {
@@ -301,7 +316,13 @@ async function loadOnDemand() {
   onDemandClock = setInterval(loadOnDemand, odCheckMinutes * 60000);
 
   // randomise on-demand results for all libraries queried
-  return odCards.sort(() => Math.random() - 0.5);
+  if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+    return odCards.sort(() => Math.random() - 0.5);
+  }
+  else{
+    return odCards;
+  }
+  
 }
 
 /**
@@ -347,7 +368,7 @@ async function checkEnabled() {
     isPlexEnabled = true;
   }
   // check on-demand
-  if (loadedSettings.onDemandLibraries !== undefined && isPlexEnabled) {
+  if (loadedSettings.onDemandLibraries !== undefined && isPlexEnabled && loadedSettings.numberOnDemand !== undefined && loadedSettings.numberOnDemand !== 0 ) {
     isOnDemandEnabled = true;
   }
   // check Sonarr
@@ -627,7 +648,7 @@ app.post(
       .isEmpty()
       .withMessage("'Slide Duration' cannot be blank. (setting default)")
       .custom((value) => {
-        if (parseInt(value) === "NaN") {
+        if (isNaN(parseInt(value))) {
           throw new Error("'Slide duration' must be a number");
         }
         if (parseInt(value) < 5) {
@@ -649,15 +670,54 @@ app.post(
         // Indicates the success of this synchronous custom validator
         return true;
       }),
-    check("numberOnDemand").custom((value) => {
-      if (!util.isEmpty(value) && parseInt(value) !== "NaN") {
-        if (parseInt(value) > 100) {
-          throw new Error("'Number to Display' cannot be more than 100");
+    check("onDemandRefresh")
+      .not()
+      .isEmpty()
+      .withMessage("'On-demand refresh period' cannot be blank. (setting default)")
+      .custom((value) => {
+        if (isNaN(parseInt(value))) {
+          throw new Error("'On-demand refresh period' must be a number (setting default)");
         }
-      }
-      // Indicates the success of this synchronous custom validator
-      return true;
-    }),
+        if (parseInt(value) < 10) {
+          throw new Error("'On-demand refresh period' must be 10 or more");
+        }
+        // Indicates the success of this synchronous custom validator
+        return true;
+      })
+      .withMessage("'Slide Duration' is required and must be 5 or more"),
+    check("numberOnDemand")
+      .not()
+      .isEmpty()
+      .withMessage("'Number to Display' must be 0 or more. (setting default)")
+      .custom((value, { req }) => {
+        if (value !== undefined && value !== "" && parseInt(value) !== "NaN") {
+          // make sure there are limited slides requested
+          let numOfLibraries = 0;
+          let themeMessage;
+
+          // double the slide count if tv and movie themes are off
+          let maxSlides = MAX_OD_SLIDES;
+
+          if(req.body.themeSwitch==undefined && req.body.genericSwitch==undefined){
+            maxSlides = maxSlides * 2;
+            themeMessage = "";
+          }
+          else{
+            maxSlide = MAX_OD_SLIDES;
+            themeMessage ="(when themes enabled)";
+          }
+
+          if (req.body.plexLibraries !== undefined || req.body.plexLibraries !== ""){
+            numberOfLibraries = req.body.plexLibraries.split(",").length;
+            if (parseInt(value) * numberOfLibraries > maxSlides) {
+              let estimatedNumber = parseInt(maxSlides / numberOfLibraries);
+              throw new Error("'Number to Display' cannot be more than '" + estimatedNumber + "' for '" + numberOfLibraries + "' libraries " + themeMessage);
+            }
+          }
+        }
+        // Indicates the success of this synchronous custom validator
+        return true;
+      }),
     check("plexToken").not().isEmpty().withMessage("'Plex token' is required"),
   ],
   (req, res) => {
@@ -669,6 +729,7 @@ app.post(
       themeSwitch: req.body.themeSwitch,
       genericSwitch: req.body.genericSwitch,
       fadeOption: req.body.fadeOption,
+      shuffleSwitch: req.body.shuffleSwitch,
       plexToken: req.body.plexToken,
       plexIP: req.body.plexIP,
       plexHTTPSSwitch: req.body.plexHTTPSSwitch,
