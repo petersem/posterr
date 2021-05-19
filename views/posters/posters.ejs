@@ -43,7 +43,7 @@
 
       // if a restart happened between the connection checks, then restart
       // this is only checked for if there are already slides configured, so should not happen for initial setup
-      if(Seconds_Between_Dates<3){
+      if(Seconds_Between_Dates<5){
         console.log('unscheduled rapid restart of server. Client refreshing');
         location.reload();
       }
