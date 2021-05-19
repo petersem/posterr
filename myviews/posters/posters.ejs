@@ -64,6 +64,7 @@
 
   // call posterr api to get currently generated card sets
   function getCards(){
+    console.log('getting cards');
     const xhr = new XMLHttpRequest();
     xhr.open('GET', window.location.href + 'getcards');
 
@@ -73,6 +74,8 @@
 
     xhr.onload = () => {
       // get JSON response
+      console.log('got response');
+
       const posterr = xhr.response;
       if(!posterr == null || posterr.globalPage.cards.length !== 0) {
         let cardHtml = "";
