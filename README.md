@@ -12,7 +12,7 @@ Media display software for Plex, Sonarr and Radarr.
 
 ## Alpha software
 This software is still considered `ALPHA` quality. (Still not feature complete) 
-- **Check this page often for updates**
+- **Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates**
 
 Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
  
