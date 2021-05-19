@@ -33,6 +33,7 @@
     xhr.onload = () => {
       // check that there hasn't been rapid a cold restart of posterr that this connection check missed
       const res = xhr.response;
+      if(res==null) noConnection();
       let serverDate = new Date(res.status);
       let clientDate = new Date();
       let dif = clientDate.getTime() - serverDate.getTime();
