@@ -105,6 +105,16 @@
       });
     }
 
+    // check if marquee is needed
+    var marquee = document.getElementById("marquee1");
+    var tagLine = document.getElementById("tagLine1");
+    if(tagLine.scrollHeight > tagLine.clientHeight || tagLine.scrollWidth > tagLine.clientWidth){
+      marquee.start();
+    }
+    else{
+      marquee.stop();
+    }
+
     Resize(1);
   }
 
@@ -202,6 +212,16 @@
       x.play().catch(e => {
         // ignore promise errors when paused during play
       });
+    }
+
+    // check if marquee is needed
+    var marquee = document.getElementById("marquee" + id);
+    var tagLine = document.getElementById("tagLine" + id);
+    if(tagLine.scrollHeight > tagLine.clientHeight || tagLine.scrollWidth > tagLine.clientWidth){
+      marquee.start();
+    }
+    else{
+      marquee.stop();
     }
 
     // resize everything after move to new slide
