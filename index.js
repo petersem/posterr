@@ -17,10 +17,7 @@ const util = require("./classes/core/utility");
 const DEFAULT_SETTINGS = require("./consts");
 const health = require("./classes/core/health");
 const pjson = require("./package.json");
-const COLD_START_TIME = new Date();
 const MAX_OD_SLIDES=150;  // this is with themes. Will be double this if tv and movie themes are off
-console.log(COLD_START_TIME);
-
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
@@ -56,6 +53,7 @@ let isPlexEnabled = false;
 let isPlexUnavailable = false;
 let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
+let cold_start_time = new Date();
 
 
 /**
@@ -459,7 +457,7 @@ async function startup(clearCache) {
   console.log(`✅ Application ready on http://hostIP:3000
    Goto http://hostIP:3000/settings to get to setup page.
   `);
-
+  cold_start_time = new Date();
   return;
 }
 
@@ -526,12 +524,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getcards", (req, res) => {
-  res.send({ cards: globalPage.cards}); // get generated cards
+  res.send({ globalPage: globalPage}); // get generated cards
 });
 
 // Used by the web client to check connection status to Posterr, and also to determine if there was a cold start that was missed
 app.get("/conncheck", (req, res) => {
-  res.send({ status: COLD_START_TIME}); 
+  res.send({ status: cold_start_time}); 
 });
 
 

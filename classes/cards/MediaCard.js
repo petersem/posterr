@@ -150,19 +150,19 @@ class MediaCard {
     // render data into html
     this.rendered =
       `
-    <audio id="audio` +
-      this.ID +
-      `">
-      <source src="` +
-      this.theme +
-      `" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
     <div class="carousel-item ` +
       this.active +
       ` w-100 h-100" id="` +
       this.ID +
       `">
+      <audio id="audio` +
+        this.ID +
+        `">
+        <source src="` +
+        this.theme +
+        `" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
       <div class="myDiv">
       <div class="posterArt" style="background-image: url('` +
       this.posterArtURL + `')">
@@ -220,7 +220,7 @@ class MediaCard {
       </div>
       </div>
     </div>`;
-    return;
+      return;
   }
 }
 

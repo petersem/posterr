@@ -44,7 +44,7 @@
       // if a restart happened between the connection checks, then restart
       // this is only checked for if there are already slides configured, so should not happen for initial setup
       if(Seconds_Between_Dates<5){
-        console.log('unscheduled rapid restart of server. Client refreshing');
+        //console.log('unscheduled rapid restart of server. Client refreshing');
         location.reload();
       }
 
@@ -56,7 +56,7 @@
       }
       // connection ok!
       else{
-        //console.log('connection ok');
+       // console.log('connection ok');
       }
     }
   }
@@ -73,14 +73,19 @@
     xhr.onload = () => {
       // get JSON response
       const posterr = xhr.response;
-      if(!posterr == null || posterr.cards.length !== 0) {
+      if(!posterr == null || posterr.globalPage.cards.length !== 0) {
         let cardHtml = "";
-        posterr.cards.forEach(card => {
+        posterr.globalPage.cards.forEach(card => {
           cardHtml += card.rendered;
         });
 
         $(".cardHolder").html(cardHtml);
         initialLoad();
+
+        // check if there is only one card showing and if so, schedule a data refresh after the slide duration period has passed.
+        if(posterr.globalPage.cards.length == 1){
+          setTimeout( getCards, poster.globalPage.slideDuration );
+        }
       }
     }
   }
