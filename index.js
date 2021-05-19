@@ -529,8 +529,9 @@ app.get("/getcards", (req, res) => {
   res.send({ cards: globalPage.cards}); // get generated cards
 });
 
+// Used by the web client to check connection status to Posterr, and also to determine if there was a cold start that was missed
 app.get("/conncheck", (req, res) => {
-  res.send({ status: "connection ok"}); // get generated cards
+  res.send({ status: COLD_START_TIME}); 
 });
 
 

@@ -31,6 +31,23 @@
     }
 
     xhr.onload = () => {
+      // check that there hasn't been rapid a cold restart of posterr that this connection check missed
+      const res = xhr.response;
+      let serverDate = new Date(res.status);
+      let clientDate = new Date();
+      let dif = clientDate.getTime() - serverDate.getTime();
+
+      let secsDiff = dif / 1000;
+      let Seconds_Between_Dates = Math.abs(secsDiff);
+      //console.log('difference:',Seconds_Between_Dates);
+
+      // if a restart happened between the connection checks, then restart
+      // this is only checked for if there are already slides configured, so should not happen for initial setup
+      if(Seconds_Between_Dates<3){
+        console.log('unscheduled rapid restart of server. Client refreshing');
+        location.reload();
+      }
+
       // restore connection
       if(connOk==false){
         console.log('Connection restored!');
