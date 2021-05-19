@@ -24,9 +24,11 @@ h1 {
   /* font-size: 14px; */
   font-style: italic;
   /* margin-bottom: 10px; */
-  overflow: hidden;
-  word-wrap: break-word;
+  text-align: center;
+  /* overflow: hidden;  */
+  word-wrap: break-word; 
   white-space: nowrap;
+
 }
 
 iframe {

@@ -201,9 +201,9 @@ class MediaCard {
       <div class="bottomBanner mx-auto transparent" id="bottomBanner` +
       this.ID +
       `">
-        <div class="tagLine">` +
+        <marquee direction="left"><div class="tagLine">` +
       this.tagLine +
-      `</div>
+      `</div></marquee>
         <div class="tagDetails">` +
       contentRatingPill +
       resCodecPill +
