@@ -100,7 +100,7 @@ There is no _'official'_ support for this product, however should you encounter 
 
 *Support my efforts and continued development* - Click this link to Buy me a coffee: 
 
- > ![](https://github.com/petersem/posterr/blob/master/doco/coffsmall.gif?raw=true) [Support development](https://paypal.me/thanksmp)
+ > ![](https://github.com/petersem/posterr/blob/master/doco/coffsmall.gif?raw=true) [Support development](https://www.paypal.com/paypalme/thanksmp)
 
 Thanks,
 
