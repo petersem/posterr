@@ -346,6 +346,7 @@ class Plex {
             medCard.cardType = cType.CardTypeEnum.NowScreening;
 
             contentRating = "NR";
+
             if (!(await util.isEmpty(md.contentRating))) {
               contentRating = md.contentRating;
             }
@@ -367,8 +368,9 @@ class Plex {
         medCard.progressPercent = Math.round(
           (md.viewOffset / md.Media[0].duration) * 100
         );
-
+        
         // set colours for rating badges
+        if(contentRating==undefined) contentRating="nr";
         let ratingColour = "";
         switch (contentRating.toLowerCase()) {
           case "nr":

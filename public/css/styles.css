@@ -5,6 +5,7 @@ body {
   background-color: black;
   /* color: #daa520; */
   text-align: center;
+  min-height: 320;
 }
 
 h1 {
@@ -92,7 +93,7 @@ iframe {
   position: fixed;
   height: 84%;
   max-height: 84%;
-  min-height: 545px;
+  min-height: 264px;
   width: 100%;
   background-position: 50% 50%;
   background-size: contain;
@@ -108,28 +109,129 @@ iframe {
   z-index: 1000;
 }
 
-/* If the screen size is 871px high or more */
-@media screen and (min-height: 871px) {
+
+/* If the screen size is above 3001 */
+ @media screen and (min-height: 3001px) {
   .banners {
     padding-top: 0px;
   }
 
   .progress {
-    height: 10px;
+    height: 30px;
   }
 
   .bannerBigText {
-    font-size: 49px;
+    font-size: 158px;
   }
 
   .bottomBanner {
-    font-size: 18px;
+    font-size: 54px;
+    padding-bottom: 0px;
+  }
+} 
+
+@media screen and (max-height: 3000px) and (min-height:2400px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 30px;
+  }
+
+  .bannerBigText {
+    font-size: 121px;
+  }
+
+  .bottomBanner {
+    font-size: 43px;
     padding-bottom: 0px;
   }
 }
 
-/* If the screen size is 870px high or less */
-@media screen and (max-height: 870px) {
+/* If the screen size is 2399px-871px high */
+@media screen and (max-height: 2399px) and (min-height: 1860px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 25px;
+  }
+
+  .bannerBigText {
+    font-size: 103px;
+  }
+
+  .bottomBanner {
+    font-size: 33px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 1859px-1651px high */
+@media screen and (max-height: 1859px) and (min-height: 1651px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 20px;
+  }
+
+  .bannerBigText {
+    font-size: 91px;
+  }
+
+  .bottomBanner {
+    font-size: 28px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 1650px-1251px high */
+@media screen and (max-height: 1650px) and (min-height: 1101px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 15px;
+  }
+
+  .bannerBigText {
+    font-size: 58px;
+  }
+
+  .bottomBanner {
+    font-size: 19px;
+    padding-bottom: 0px;
+  }
+}
+
+
+/* If the screen size is 1250px-851px high */
+@media screen and (max-height: 1100px) and (min-height: 851px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 7px;
+  }
+
+  .bannerBigText {
+    font-size: 41px;
+  }
+
+  .bottomBanner {
+    font-size: 15px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 850px-700px high */
+@media screen and (max-height: 850px) and (min-height: 701px) {
   .banners {
     padding-top: 5px;
   }
@@ -143,7 +245,27 @@ iframe {
   }
 
   .bottomBanner {
-    font-size: 14px;
+    font-size: 12px;
+    padding-bottom: 10px;
+  }
+}
+
+/* If the screen size is 700px-650px high */
+@media screen and (max-height: 700px) and (min-height: 650px) {
+  .banners {
+    padding-top: 5px;
+  }
+
+  .progress {
+    height: 4px;
+  }
+
+  .bannerBigText {
+    font-size: 27px;
+  }
+
+  .bottomBanner {
+    font-size: 11px;
     padding-bottom: 10px;
   }
 }
@@ -152,6 +274,113 @@ iframe {
   color: lightgoldenrodyellow;
   vertical-align: middle;
 }
+
+/* If the screen size is 649px-550px high */
+@media screen and (max-height: 649px) and (min-height: 550px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 3px;
+  }
+
+  .bannerBigText {
+    font-size: 25px;
+  }
+
+  .bottomBanner {
+    font-size: 9px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 549px-450px high */
+@media screen and (max-height: 549px) and (min-height: 450px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 2px;
+  }
+
+  .bannerBigText {
+    font-size: 22px;
+  }
+
+  .bottomBanner {
+    font-size: 7px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 449px-400px high */
+@media screen and (max-height: 449px) and (min-height: 400px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 1px;
+  }
+
+  .bannerBigText {
+    font-size: 20px;
+  }
+
+  .bottomBanner {
+    font-size: 7px;
+    padding-bottom: 0px;
+  }
+}
+
+/* If the screen size is 449px-351px high */
+@media screen and (max-height: 399px) and (min-height: 351px) {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 1px;
+  }
+
+  .bannerBigText {
+    font-size: 17px;
+  }
+
+  .bottomBanner {
+    font-size: 6px;
+    padding-bottom: 0px;
+  }
+}
+
+
+/* If the screen size is up to 350px high */
+@media screen and (max-height: 350px)  {
+  .banners {
+    padding-top: 0px;
+  }
+
+  .progress {
+    height: 1px;
+  }
+
+  .bannerBigText {
+    font-size: 15px;
+  }
+
+  .bottomBanner {
+    font-size: 5px;
+    padding-bottom: 0px;
+  }
+}
+
+.bannerBigText {
+  color: lightgoldenrodyellow;
+  vertical-align: middle;
+}
+
 
 .bannerSmallText {
   font-size: 10px;

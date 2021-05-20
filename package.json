@@ -1,15 +1,20 @@
 {
   "name": "posterr",
-  "version": "0.8.15",
+  "version": "0.8.16",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
   "pkg": {
-    "scripts": "public/**/*.js",
+    "scripts": "public/js/*.js",
     "assets": [
-      "views/**/*",
-      "public/**/*"
-    ]
+      "public/css/**/*",
+      "public/favicons/**/*",
+      "public/images/**/*",
+      "public/webfonts/**/*",
+      "myviews/*",
+      "myviews/posters/*"
+    ],
+    "outputPath": "dist"
   },
   "nodemonConfig": {
     "ignore": [
@@ -38,6 +43,7 @@
     "express-validator": "^6.10.0",
     "fs-extra": "^9.1.0",
     "image-size": "^0.9.7",
+    "jquery": "^3.6.0",
     "memorystore": "^1.6.6",
     "ping": "^0.4.1",
     "plex-api": "^5.3.1",

@@ -195,7 +195,7 @@
 
   // resize when window resizes
   $(window).bind('resize', function () {
-    if(window.innerHeight <= 650) {
+    if(window.innerHeight < 320) {
       $('.banners').css({
         'background-color': 'red'
       })

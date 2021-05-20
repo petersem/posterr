@@ -10,12 +10,14 @@ Media display software for Plex, Sonarr and Radarr.
 ![Landscape - background art mode](https://github.com/petersem/posterr/blob/master/doco/artmode.png?raw=true)
 ![Settings](https://github.com/petersem/posterr/blob/master/doco/settings.png?raw=true)
 
-## Alpha software
-This software is still considered `ALPHA` quality. (Still not feature complete) 
+## Beta software
+This software is current in the `BETA` phase. (Yay!) 
 - **Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates**
 
 Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
- 
+
+Visit the [Discord Group](https://discord.gg/c5mHXaY5) for any discussions
+
 ## Features
  - Uses the latest 'Plex Agent' data (will work without tv themes for other agents).
  - Now Screening: Shows and movies from Plex.
@@ -35,6 +37,7 @@ Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more
  - Browser-based, so can run the app on one machine and a browser on another.
  - Background artwork option for slides (when available)
  - Browser connectivity checks and auto-reconnect when the poster app restarts. (eg During container updates) 
+ - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
 
 ## Possible Uses
  - Mount a monitor on your wall (extra points if framed) and showcase your home media setup
@@ -96,7 +99,8 @@ Buttons are:
 Should you encounter a problem, the solution may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
 
 ## Support
-There is no _'official'_ support for this product, however should you encounter issues, raise an issue on the github page.
+ - There is no _'official'_ support for this product, however should you encounter issues, raise an issue on the github page.
+ - Limited support in [Discord](https://discord.gg/c5mHXaY5)
 
 *Support my efforts and continued development* - Click this link to Buy me a coffee: 
 

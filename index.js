@@ -487,6 +487,8 @@ startup(true);
 
 //use ejs templating engine
 app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, '/myviews'));
+
 
 // Express settings
 app.use(express.json());
