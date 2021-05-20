@@ -25,11 +25,11 @@ console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" Version: " + pjson.version);
 console.log(" ");
-// console.log(" BBBB   EEEEE  TTTTT    A      !!");
-// console.log(" B   B  E        T     A A     !!");
-// console.log(" BBBB   EEEEE    T    A   A    !!");
-// console.log(" B   B  E        T   AAAAAAA   ");
-// console.log(" BBBB   EEEEE    T  A       A  !!");
+console.log(" BBBB   EEEEE  TTTTT    A      !!");
+console.log(" B   B  E        T     A A     !!");
+console.log(" BBBB   EEEEE    T    A   A    !!");
+console.log(" B   B  E        T   AAAAAAA   ");
+console.log(" BBBB   EEEEE    T  A       A  !!");
 console.log("-------------------------------------------------------");
 
 // global variables

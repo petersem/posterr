@@ -1,9 +1,9 @@
 version: '2.4'
 
 services:
-  poster:
-    image: poster
-    container_name: poster
+  posterr:
+    image: posterr
+    container_name: posterr
     build:
       context: .
       dockerfile: ./Dockerfile

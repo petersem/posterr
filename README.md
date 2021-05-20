@@ -1,4 +1,4 @@
-# Poster
+# Poster (BETA!!)
 Media display software for Plex, Sonarr and Radarr.
 
  > **Important Note** - Posterr now utilises data obtained via the _'Plex TV Series'_ agent. Whilst it will continue to work if you are _not_ using this agent, you will get mixed, to no results for TV theme tunes. It is _strongly_ recommended that you shift to this agent and scanner for your Plex libraries. (as recommended by Plex).
@@ -46,7 +46,8 @@ Visit the [Discord Group](https://discord.gg/c5mHXaY5) for any discussions
  - Use a reverse proxy, or port-forward, to let your friends see what is playing, available, and coming soon
 
 ## Installation
-Installation options are as follows:
+Installation details are as follows:
+
 
 ### Docker Compose
 Create the following directories in your docker folder:
@@ -58,7 +59,7 @@ version: '2.4'
 
 services:
   posterr:
-    image: petersem/poster
+    image: petersem/posterr
     container_name: posterr
     environment:
       TZ: Australia/Brisbane
