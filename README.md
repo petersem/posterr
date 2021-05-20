@@ -64,8 +64,8 @@ services:
     environment:
       TZ: Australia/Brisbane
     volumes:
-      - ./docker/poster/randomthemes:/usr/src/app/public/randomthemes
-      - ./docker/poster/config:/usr/src/app/config
+      - ./docker/posterr/randomthemes:/usr/src/app/public/randomthemes
+      - ./docker/posterr/config:/usr/src/app/config
     ports:
       - 3000:3000
 ```
@@ -73,8 +73,8 @@ services:
 |Option|Details|
 |--|--|
 |TZ|Your local timezone. Go to [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
-|/docker/poster/config|This is required to save your Posterr settings|
-|/docker/poster/randomthemes|This is optional. If you add this, then you can populate this directory with your own MP3 files, which will play for movie slides|
+|/docker/posterr/config|This is required to save your Posterr settings|
+|/docker/posterr/randomthemes|This is optional. If you add this, then you can populate this directory with your own MP3 files, which will play for movie slides|
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
 
 ## Updates
