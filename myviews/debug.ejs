@@ -16,14 +16,14 @@
   <script src="/js/bootstrap.min.js"></script>
 
   <!--- CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/css/debug.css">
-  <link rel="stylesheet" href="/css/light.min.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/debug.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/light.min.css">
   <!-- <script src="/js/script.js"></script> -->
 
   <title>Poster Debug Page</title>
-  <link rel="shortcut icon" type="image/png" href="/favicons/favicon.ico"/>
+  <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>
 </head>
 
 <body>
@@ -57,12 +57,12 @@
 <h3>Other Tests</h3>
 See logs for results
 <br/><br/>
-<button type="button" class="btn btn-success" onclick="location.href = '/';">Return</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/ping';">Ping Tests</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/plexns';">Now Screening Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/plexod';">On-demand Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/sonarr';">Sonarr Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '/debug/radarr';">Radarr Test</button>
+<button type="button" class="btn btn-success" onclick="location.href = '<%=baseUrl%>/';">Return</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/ping';">Ping Tests</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexns';">Now Screening Test</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexod';">On-demand Test</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/sonarr';">Sonarr Test</button>
+<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/radarr';">Radarr Test</button>
 <br/>
 </body>
 </html>

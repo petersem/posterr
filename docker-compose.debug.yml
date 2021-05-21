@@ -8,6 +8,8 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: development
+      TZ: "Australia/Brisbane"
+      BASEURL: ""
     ports:
       - 3000:3000
       - 9229:9229

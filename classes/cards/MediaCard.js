@@ -45,7 +45,7 @@ class MediaCard {
    * @desc renders the properties of the card into html, then sets this to the 'rendered' property
    * @returns nothing
    */
-  async Render(hasArt) {
+  async Render(hasArt,baseUrl) {
     let hidden = "";
     if (this.cardType != "Now Screening" && this.cardType != "Playing") hidden = "hidden";
     // pill variables
@@ -159,12 +159,13 @@ class MediaCard {
         this.ID +
         `">
         <source src="` +
-        this.theme +
+        baseUrl + this.theme +
         `" type="audio/mpeg">
         Your browser does not support the audio element.
       </audio>
       <div class="myDiv">
       <div class="posterArt" style="background-image: url('` +
+      baseUrl + 
       this.posterArtURL + `')">
       </div>
         <div class="banners">
@@ -178,6 +179,7 @@ class MediaCard {
       <div id="poster` +
       this.ID +
       `" class="poster" style="background-image: url('` +
+      baseUrl + 
       this.posterURL + `')">
 
       <div class="progress ` +

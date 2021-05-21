@@ -13,28 +13,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Additional js libs -->
-  <script src="/js/jquery-3.3.1.slim.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
+  <script src="<%=baseUrl%>/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="<%=baseUrl%>/js/bootstrap.min.js"></script>
 
   <!--- CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/css/settings-styles.css">
-  <link rel="stylesheet" href="/css/light.min.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/settings-styles.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/light.min.css">
 
   <!-- <script src="/js/script.js"></script> -->
 
   <title>Posterr - Settings</title>
-  <link rel="shortcut icon" type="image/png" href="/favicons/favicon.ico"/>
+  <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>
 </head>
 
 <body>
-  <%if(!user.valid){%><script language='javascript'>window.location.href = '/logon';</script>%><%}%>
+  <%if(!user.valid){%><script language='javascript'>window.location.href = '<%=baseUrl%>/logon';</script>%><%}%>
   <div class="container">
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">Posterr</a></li>
+        <li class="breadcrumb-item"><a href="<%=baseUrl%>/">Posterr</a></li>
         <li class="breadcrumb-item active" aria-current="page">Posterr Settings</li>
       </ol>
     </nav>
@@ -51,7 +51,7 @@
               <a href="#settings" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
                 <i class="fal fa-cog"></i><span class="menu">Settings</span>
               </a>
-              <a href="/debug" class="nav-item nav-link has-icon nav-link-faded">
+              <a href="<%=baseUrl%>/debug" class="nav-item nav-link has-icon nav-link-faded">
                 <i class="fal fa-debug"></i><span class="menu">Debug</span>
               </a>
               <a href="#about" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
@@ -106,7 +106,7 @@
                   <p class="alert alert-warning"><%=e.msg %></p>
                 <%});%>
               <%}%>
-              <form method="POST" action="/settings">
+              <form method="POST" action="<%=baseUrl%>/settings">
                 <div class="form-group">
                   <label for="password">Password</label>
                   <input type="password" class="form-control" id="password" name="password" aria-describedby="password"
@@ -293,8 +293,8 @@
                 </div>
 
                 <hr />
-                <button type="reset" class="btn btn-info" onclick="location.href = '/settings';">Reload Saved</button>&nbsp;&nbsp;&nbsp;
-                <button type="reset" class="btn btn-info"    onclick="location.href = '/';">Main Page</button>
+                <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload Saved</button>&nbsp;&nbsp;&nbsp;
+                <button type="reset" class="btn btn-info"    onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
                 <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
               </form>
             </div>
@@ -334,7 +334,7 @@
               </p>
               <p>
                 If you want to install this with Docker, find the image at
-                <a href="https://hub.docker.com/repository/docker/petersem/posterr" target="_blank">petersem/poster</a>
+                <a href="https://hub.docker.com/repository/docker/petersem/posterr" target="_blank">petersem/posterr</a>
                 on Docker Hub.
               </p>
             </div>

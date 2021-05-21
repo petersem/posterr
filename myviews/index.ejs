@@ -1,3 +1,3 @@
-<%- include('header.ejs') %>
-<%- include('posters/index.ejs', {globals, hasConfig}) %>
+<%- include('header.ejs'), {baseUrl} %>
+<%- include('posters/index.ejs', {globals, hasConfig, baseUrl}) %>
 <%- include('footer.ejs') %>

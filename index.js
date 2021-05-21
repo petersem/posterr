@@ -19,6 +19,12 @@ const health = require("./classes/core/health");
 const pjson = require("./package.json");
 const MAX_OD_SLIDES=150;  // this is with themes. Will be double this if tv and movie themes are off
 
+// just in case someone puts in a / for the basepath value
+if(process.env.BASEPATH=="/") process.env.BASEPATH="";
+const BASEURL = process.env.BASEPATH || "";
+
+
+
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
 console.log(" Developed by Matt Petersen - Brisbane Australia");
@@ -253,7 +259,7 @@ async function loadNowScreening() {
 
   // put everything into global class, ready to be passed to poster.ejs
   // render html for all cards
-  await globalPage.OrderAndRenderCards(loadedSettings.hasArt);
+  await globalPage.OrderAndRenderCards(BASEURL,loadedSettings.hasArt);
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
@@ -455,7 +461,7 @@ async function startup(clearCache) {
   // );
   console.log(" ");
   console.log(`✅ Application ready on http://hostIP:3000
-   Goto http://hostIP:3000/settings to get to setup page.
+   Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
   `);
   cold_start_time = new Date();
   return;
@@ -518,85 +524,94 @@ app.use(
 );
 
 // sets public folder for assets
-app.use(express.static(path.join(__dirname, "public")));
+//app.use(express.static(path.join(__dirname, "public")));
+
+//sets public folder for assets
+if(BASEURL == ""){
+  app.use(express.static(path.join(__dirname, "public")));
+}
+else{
+  app.use(BASEURL, express.static(__dirname + '/public'));
+}
+
 
 // set routes
-app.get("/", (req, res) => {
-  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged() }); // index refers to index.ejs
+app.get(BASEURL + "/", (req, res) => {
+  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL }); // index refers to index.ejs
 });
 
-app.get("/getcards", (req, res) => {
-  res.send({ globalPage: globalPage}); // get generated cards
+app.get(BASEURL + "/getcards", (req, res) => {
+  res.send({ globalPage: globalPage, baseUrl: BASEURL}); // get generated cards
 });
 
 // Used by the web client to check connection status to Posterr, and also to determine if there was a cold start that was missed
-app.get("/conncheck", (req, res) => {
+app.get(BASEURL + "/conncheck", (req, res) => {
   res.send({ status: cold_start_time}); 
 });
 
 
-app.get("/debug", (req, res) => {
-  res.render("debug", { settings: loadedSettings, version: pjson.version }); 
+app.get(BASEURL + "/debug", (req, res) => {
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL }); 
 });
 
-app.get("/debug/ping", (req, res) => {
+app.get(BASEURL + "/debug/ping", (req, res) => {
   console.log(' ');
   console.log('** PING TESTS **');
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.TestPing();
-  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
 });
 
-app.get("/debug/plexns", (req, res) => {
+app.get(BASEURL + "/debug/plexns", (req, res) => {
   console.log(' ');
   console.log("** PLEX 'NOW SCREENING' CHECK **");
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.PlexNSCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
 });
 
-app.get("/debug/plexod", (req, res) => {
+app.get(BASEURL + "/debug/plexod", (req, res) => {
   console.log(' ');
   console.log("** PLEX 'ON-DEMAND' CHECK **");
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.PlexODCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
 });
 
-app.get("/debug/sonarr", (req, res) => {
+app.get(BASEURL + "/debug/sonarr", (req, res) => {
   console.log(' ');
   console.log("** SONARR CHECK ** (titles in next 5 days)");
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.SonarrCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
 });
 
-app.get("/debug/radarr", (req, res) => {
+app.get(BASEURL + "/debug/radarr", (req, res) => {
   console.log(' ');
   console.log("** RADARR CHECK ** (Any releases in next 30 days)");
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.RadarrCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
 });
 
 // password for settings section
 let userData = { valid: false, expires: 10 };
 
 // settings page
-app.get("/logon", (req, res) => {
+app.get(BASEURL + "/logon", (req, res) => {
   res.render("logon", {
-    success: req.session.success,
+    success: req.session.success, baseUrl: BASEURL
   });
   req.session.errors = null;
 });
 
 app.post(
-  "/logon",
+  BASEURL + "/logon",
   [
     check("password")
       .custom((value) => {
@@ -616,32 +631,35 @@ app.post(
       res.render("logon", {
         errors: req.session.errors,
         user: { valid: false },
+        baseUrl: BASEURL
       });
     } else {
       res.render("settings", {
         user: userData,
         success: req.session.success,
         settings: loadedSettings,
-        version: pjson.version
+        version: pjson.version, 
+        baseUrl: BASEURL
       });
     }
   }
 );
 
 // settings page
-app.get("/settings", (req, res) => {
+app.get(BASEURL + "/settings", (req, res) => {
   res.render("settings", {
     success: req.session.success,
     user: { valid: false },
     settings: loadedSettings,
     errors: req.session.errors,
-    version: pjson.version
+    version: pjson.version, 
+    baseUrl: BASEURL
   });
   req.session.errors = null;
 });
 
 app.post(
-  "/settings",
+  BASEURL + "/settings",
   [
     check("password").not().isEmpty().withMessage("Password cannot be blank"),
     check("slideDuration")
@@ -757,7 +775,8 @@ app.post(
         errors: req.session.errors,
         user: { valid: true },
         formData: form,
-        version: pjson.version
+        version: pjson.version,
+        baseUrl: BASEURL
       });
     } else {
       // save settings
@@ -769,7 +788,8 @@ app.post(
         errors: req.session.errors,
         version: pjson.version,
         user: { valid: true },
-        formData: form,
+        formData: form, 
+        baseUrl: BASEURL
       });
     }
   }

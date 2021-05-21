@@ -13,19 +13,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Additional js libs -->
-    <script src="/js/jquery-3.3.1.slim.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="<%=baseUrl%>/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="<%=baseUrl%>/js/bootstrap.min.js"></script>
 
     <!--- CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/logon-styles.css">
-    <link rel="stylesheet" href="/css/light.min.css">
+    <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<%=baseUrl%>/css/logon-styles.css">
+    <link rel="stylesheet" href="<%=baseUrl%>/css/light.min.css">
 
     <!-- <script src="/js/script.js"></script> -->
 
     <title>Poster - Settings Login</title>
-    <link rel="shortcut icon" type="image/png" href="/favicons/favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>
 </head>
 
 <body>
@@ -46,7 +46,7 @@
 
             </div>
             <div class="col-10">
-                <form method="POST" action="/logon">
+                <form method="POST" action="<%=baseUrl%>/logon">
                     <div class="form-group">
                         <label for="password">Enter the password</label>
                         <input type="password" class="form-control" id="password" name="password"

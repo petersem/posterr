@@ -19,6 +19,7 @@
   function connCheck(){
 //console.log('check for connection');
     const xhr = new XMLHttpRequest();
+   
     xhr.open('GET', window.location.href + 'conncheck');
     // set response format
     xhr.responseType = 'json';
@@ -98,7 +99,7 @@
   function initialLoad() {
     // make banner link to settings
     $(".bannerBigText").click(function() {
-      window.location = "/settings"; 
+      window.location = "<%=baseUrl%>/settings"; 
       return false;
     });
 
