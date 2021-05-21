@@ -1,4 +1,4 @@
-# Poster (BETA!!)
+# Posterr (BETA!!)
 Media display software for Plex, Sonarr and Radarr.
 
  > **Important Note** - Posterr now utilises data obtained via the _'Plex TV Series'_ agent. Whilst it will continue to work if you are _not_ using this agent, you will get mixed, to no results for TV theme tunes. It is _strongly_ recommended that you shift to this agent and scanner for your Plex libraries. (as recommended by Plex).
@@ -36,7 +36,7 @@ Visit the [Discord Group](https://discord.gg/c5mHXaY5) for any discussions
  - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
  - Browser-based, so can run the app on one machine and a browser on another.
  - Background artwork option for slides (when available)
- - Browser connectivity checks and auto-reconnect when the poster app restarts. (eg During container updates) 
+ - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
  - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
 
 ## Possible Uses
@@ -51,8 +51,8 @@ Installation details are as follows:
 
 ### Docker Compose
 Create the following directories in your docker folder:
- - .../docker/poster/config
- - .../docker/poster/randomthemes
+ - .../dockerr/posterr/config
+ - .../dockerr/posterr/randomthemes
 
 ```ya
 version: '2.4'
