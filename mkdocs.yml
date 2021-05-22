@@ -17,8 +17,8 @@ theme:
     - navigation.instant
     - navigation.tabs
     - navigation.top
-  favicon: assets/logo/favicon.ico
-  logo: assets/logo/ombi-logo.png
+  #favicon: assets/favicon.ico
+  #logo: assets/posterr-logo.png
   palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"
