@@ -1,0 +1,6 @@
+wheel>=0.36.2
+mkdocs-material>=7.1.0
+mkdocs-redirects>=1.0.1
+mkdocs-git-revision-date-localized-plugin>=0.8
+Pygments>=2.8.0
+pymdown-extensions>=8.1.1
