@@ -445,7 +445,10 @@ class Plex {
         if (md.type == "episode" || md.type == "movie" || md.type == "track") {
           nsCards.push(medCard);
         } else {
-          console.log("Unknown media type playing: " + md.type);
+          // ignore movie trailers playing
+          if (md.type !== "clip"){
+            console.log("Unknown media type playing: " + md.type);
+          }
         }
       }, undefined);
     }
