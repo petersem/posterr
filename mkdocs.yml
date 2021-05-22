@@ -1,0 +1,66 @@
+# Site Details
+site_name: Posterr Docs
+site_description: The official guide for Posterr
+#site_author: TBC
+#site_url: Whatever the github pages url will be. Add later.
+edit_uri: https://github.com/petersem/posterr/edit/development/docs/
+repo_url: https://github.com/petersem/posterr/
+repo_name:  petersem/posterr 
+
+# Site appearance (logos, colours, icons)
+theme:
+  name: material
+  language: en
+  code_wrap: true
+  features:
+    - header.autohide
+    - navigation.instant
+    - navigation.tabs
+    - navigation.top
+  favicon: assets/logo/favicon.ico
+  logo: assets/logo/ombi-logo.png
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
+# Markdown extensions
+markdown_extensions:
+  - abbr
+  - attr_list
+  - meta
+  - pymdownx.details
+  - pymdownx.highlight:
+      guess_lang: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.saneheaders
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - sane_lists
+  - toc:
+      permalink: true
+      toc_depth: 4
+
+# mkdocs function extensions
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: timeago
+      locale: en
+      fallback_to_build_date: false
