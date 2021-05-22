@@ -69,7 +69,7 @@ services:
       - ./docker/posterr/randomthemes:/usr/src/app/public/randomthemes
       - ./docker/posterr/config:/usr/src/app/config
     ports:
-      - 3000:3000
+      - 9876:3000
 ```
 #### Details
 |Option|Details|
