@@ -38,7 +38,7 @@ Visit the [Discord Group](https://discord.gg/c5mHXaY5) for any discussions
  - Background artwork option for slides (when available)
  - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
  - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
- - Supports reverse proxy setup for wildcard dns or alternate paths
+ - Supports reverse proxy setup for wildcard dns or alternate base path.
 
 ## Possible Uses
  - Mount a monitor on your wall (extra points if framed) and showcase your home media setup
@@ -78,7 +78,7 @@ services:
 |/docker/posterr/config|This is required to save your Posterr settings|
 |/docker/posterr/randomthemes|This is optional. If you add this, then you can populate this directory with your own MP3 files, which will play for movie slides|
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
-|BASEPATH|"/path" Alternate path value, if using these with a reverse proxy. **This line can be left out or value left blank** if you dont use alternate paths. |
+|BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out or value left blank** if you dont use alternate paths. |
 
 ## Updates
  - Use containrr/watchtower to auto-update Posterr.
