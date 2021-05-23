@@ -1,8 +1,8 @@
 # ignore the following folders
 /node_modules
-/public/mp3cache/**
-/public/imagecache/**
-/public/randomthemes/**
+/saved/mp3cache/**
+/saved/imagecache/**
+/saved/randomthemes/**
 /config/*.json
 /dist
 

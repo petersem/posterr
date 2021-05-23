@@ -19,7 +19,7 @@ class Cache {
    * @returns nothing
    */
   static async CacheImage(url, fileName) {
-    const savePath = "./public/imagecache/" + fileName;
+    const savePath = "./saved/imagecache/" + fileName;
     await this.download(url, savePath, fileName);
     return;
   }
@@ -30,7 +30,7 @@ class Cache {
    * @returns nothing
    */
   static async CacheMP3(fileName) {
-    const savePath = "./public/mp3cache/" + fileName;
+    const savePath = "./saved/mp3cache/" + fileName;
     const url = "http://tvthemes.plexapp.com/" + fileName;
     await this.download(url, savePath);
     return;
@@ -43,7 +43,7 @@ class Cache {
    * @returns nothing
    */
   static async CachePlexMP3(url, fileName) {
-    const savePath = "./public/mp3cache/" + fileName;
+    const savePath = "./saved/mp3cache/" + fileName;
   //console.log(fileName, url);
     await this.download(url, savePath);
     return;
@@ -127,7 +127,7 @@ class Cache {
    * @returns nothing
    */
   static async DeleteMP3Cache() {
-    const directory = "./public/mp3cache/";
+    const directory = "./saved/mp3cache/";
     try {
       fsExtra.emptyDirSync(directory);
     } catch (err) {
@@ -144,7 +144,7 @@ class Cache {
    * @returns nothing
    */
   static async DeleteImageCache() {
-    const directory = "./public/imagecache/";
+    const directory = "./saved/imagecache/";
     try {
       fsExtra.emptyDirSync(directory);
     } catch (err) {
@@ -163,7 +163,7 @@ class Cache {
    * @returns {string} fileName - a random filename
    */
   static async GetRandomMP3(cardArray) {
-    let directory = "./public/randomthemes";
+    let directory = "./saved/randomthemes";
     // get all mp3 files from directory
     let fileArr = fs.readdirSync(directory);
     let mp3Files = fileArr.filter(function (elm) {

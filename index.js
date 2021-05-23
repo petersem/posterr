@@ -61,6 +61,28 @@ let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
 let cold_start_time = new Date();
 
+// create working folders if they do not exist
+// needed for package binaries
+
+var fs = require('fs');
+var dir = './config';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+var dir = './saved';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+var dir = './saved/randomthemes';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -528,10 +550,14 @@ app.use(
 
 //sets public folder for assets
 if(BASEURL == ""){
-  app.use(express.static(path.join(__dirname, "public")));
+//  console.log(__dirname);
+//  console.log(process.cwd());
+  app.use(express.static(path.join(__dirname, "public")));  
+  app.use(express.static(path.join(process.cwd(), "saved")));
 }
 else{
   app.use(BASEURL, express.static(__dirname + '/public'));
+  app.use(BASEURL, express.static(process.cwd() + '/saved'));
 }
 
 
