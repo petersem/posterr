@@ -20,8 +20,8 @@ class Cache {
    */
   static async CacheImage(url, fileName) {
     const savePath = "./saved/imagecache/" + fileName;
-    await this.download(url, savePath, fileName);
-    return;
+    const result = await this.download(url, savePath, fileName);
+    return result;
   }
 
   /**
@@ -32,8 +32,8 @@ class Cache {
   static async CacheMP3(fileName) {
     const savePath = "./saved/mp3cache/" + fileName;
     const url = "http://tvthemes.plexapp.com/" + fileName;
-    await this.download(url, savePath);
-    return;
+    const result = await this.download(url, savePath);
+    return result;
   }
 
   /**
@@ -44,9 +44,9 @@ class Cache {
    */
   static async CachePlexMP3(url, fileName) {
     const savePath = "./saved/mp3cache/" + fileName;
-  //console.log(fileName, url);
-    await this.download(url, savePath);
-    return;
+    //console.log(fileName, url);
+    const result = await this.download(url, savePath);
+    return result;
   }
 
   /**
@@ -58,19 +58,20 @@ class Cache {
    */
   static async download(url, savePath) {
     // download file function
+    let status=true;
     const download = (url, savePath, callback) => {
       // request.head(url, (err, res, body) => {
       request(url, function (err, res, body) {
         // check to see if no content, then if mp3, throw exception
-        // var size = parseInt(res.headers["content-length"], 10);
-        // console.log("file size: " + size);
-        // if (size < 100 && url.toLowerCase().includes("themes")) {
-        //   console.log('no mp3',url);
-        //   return callback;
-        // }
+        var size = parseInt(res.headers["content-length"], 10);
+//        console.log("file size: " + size);
+        if (isNaN(size) || (size < 250 && url.toLowerCase().includes("themes"))) {
+          //console.log('no mp3',url);
+          status=false;
+          return callback;
+        }
       })
         .pipe(fs.createWriteStream(savePath, { autoClose: true }))
-        .on("close", callback)
         .on("error", (err) => {
           // throw error unless the download failed due to a restart
           if (err.code !== "EPERM") {
@@ -81,18 +82,15 @@ class Cache {
               err.code,
               err.errno
             );
-            //return callback(false);
           }
+          status=false;
           return callback(true);
         })
-        .on("finish", () => {
-          //console.log("Download Completed");
-          return callback(true);
+        .on("close", () => {
+          return callback;
         });
-      //   return callback(true);
+         return callback;
     };
-
-    let dlOK = false;
 
     //
     // check if file exists before downloading
@@ -100,14 +98,10 @@ class Cache {
       //file not present, so download
       download(url, savePath, function (dlRes) {
         // console.log("✅ Downloaded: " + fileName);
-        //console.log(dlRes);
-        dlOK = Promise.resolve(dlRes);
       });
     } else {
       // console.log("✘ " + fileName + " exists, DL aborted");
-      return false;
     }
-    return dlOK;
   }
 
   // not implemented yet!
