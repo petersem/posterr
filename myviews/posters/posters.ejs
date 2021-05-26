@@ -89,8 +89,28 @@
 
         // check if there is only one card showing and if so, schedule a data refresh after the slide duration period has passed.
         if(posterr.globalPage.cards.length == 1){
-          setTimeout( getCards, poster.globalPage.slideDuration );
+          setTimeout( getCards, posterr.globalPage.slideDuration );
         }
+      }
+    }
+  }
+
+  //get and update the first slide. This is to ensure a clean transition from last to first slide
+  function updateFirstCard(){
+    //console.log('getting cards');
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', window.location.href + 'getcards');
+
+    // set response format
+    xhr.responseType = 'json';
+    xhr.send();
+
+    xhr.onload = () => {
+      const posterr = xhr.response;
+      if(!posterr == null || posterr.globalPage.cards.length !== 0) {
+        let cardHtml = "";
+        cardHtml = posterr.globalPage.cards[0].rendered.replace("item active","item");
+        $("#1").html(cardHtml);
       }
     }
   }
@@ -236,6 +256,13 @@
 
     // resize everything after move to new slide
     waitforload(0, id);
+
+    // if slide to last car, update the first to ensure smooth(er) transition
+    //console.log(id, $('.carousel-item').length);
+    if(id==$('.carousel-item').length){
+      updateFirstCard();
+    }
+
 
     /*         if (substr(id, 3).toLower() == 'vid') {
               console.log('pausing carousel and starting video');
