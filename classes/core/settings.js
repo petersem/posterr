@@ -36,7 +36,7 @@ class Settings {
 
   /**
    * @desc Returns if settings have been changed from default values
-   * @returns {<boolean>} true / false if any value is chagned
+   * @returns {<boolean>} true / false if any value is changed
    */
   GetChanged() {
     let hasChanged = false;
