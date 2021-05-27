@@ -150,7 +150,7 @@ class Settings {
       this.onDemandLibraries = jsonObject.plexLibraries;
     else this.onDemandLibraries = cs.onDemandLibraries;
     if (jsonObject.numberOnDemand || jsonObject.numberOnDemand==0) 
-     this.numberOnDemand = jsonObject.numberOnDemand;
+      this.numberOnDemand = jsonObject.numberOnDemand;
     else this.numberOnDemand = cs.numberOnDemand;
     if (jsonObject.onDemandRefresh)
       this.onDemandRefresh = jsonObject.onDemandRefresh;
