@@ -1,6 +1,6 @@
 {
   "name": "posterr",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
@@ -46,6 +46,7 @@
     "jquery": "^3.6.0",
     "memorystore": "^1.6.6",
     "ping": "^0.4.1",
+    "pkg": "^5.2.1",
     "plex-api": "^5.3.1",
     "yarn": "^1.22.10"
   },

@@ -12,7 +12,7 @@ router.post('/save-settings',
             .withMessage('Name is required'),
         check('email', 'Email is required')
             .isEmail(),
-        check('password', 'Password is requried')
+        check('password', 'Password is required')
             .isLength({ min: 1 })
             .custom((val, { req, loc, path }) => {
                 if (val !== req.body.confirm_password) {

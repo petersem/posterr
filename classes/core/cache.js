@@ -19,9 +19,9 @@ class Cache {
    * @returns nothing
    */
   static async CacheImage(url, fileName) {
-    const savePath = "./public/imagecache/" + fileName;
-    await this.download(url, savePath, fileName);
-    return;
+    const savePath = "./saved/imagecache/" + fileName;
+    const result = await this.download(url, savePath, fileName);
+    return result;
   }
 
   /**
@@ -30,10 +30,10 @@ class Cache {
    * @returns nothing
    */
   static async CacheMP3(fileName) {
-    const savePath = "./public/mp3cache/" + fileName;
+    const savePath = "./saved/mp3cache/" + fileName;
     const url = "http://tvthemes.plexapp.com/" + fileName;
-    await this.download(url, savePath);
-    return;
+    const result = await this.download(url, savePath);
+    return result;
   }
 
   /**
@@ -43,10 +43,10 @@ class Cache {
    * @returns nothing
    */
   static async CachePlexMP3(url, fileName) {
-    const savePath = "./public/mp3cache/" + fileName;
-  //console.log(fileName, url);
-    await this.download(url, savePath);
-    return;
+    const savePath = "./saved/mp3cache/" + fileName;
+    //console.log(fileName, url);
+    const result = await this.download(url, savePath);
+    return result;
   }
 
   /**
@@ -58,19 +58,20 @@ class Cache {
    */
   static async download(url, savePath) {
     // download file function
+    let status=true;
     const download = (url, savePath, callback) => {
       // request.head(url, (err, res, body) => {
       request(url, function (err, res, body) {
         // check to see if no content, then if mp3, throw exception
-        // var size = parseInt(res.headers["content-length"], 10);
-        // console.log("file size: " + size);
-        // if (size < 100 && url.toLowerCase().includes("themes")) {
-        //   console.log('no mp3',url);
-        //   return callback;
-        // }
+        var size = parseInt(res.headers["content-length"], 10);
+//        console.log("file size: " + size);
+        if (isNaN(size) || (size < 250 && url.toLowerCase().includes("themes"))) {
+          //console.log('no mp3',url);
+          status=false;
+          return callback;
+        }
       })
         .pipe(fs.createWriteStream(savePath, { autoClose: true }))
-        .on("close", callback)
         .on("error", (err) => {
           // throw error unless the download failed due to a restart
           if (err.code !== "EPERM") {
@@ -81,18 +82,15 @@ class Cache {
               err.code,
               err.errno
             );
-            //return callback(false);
           }
+          status=false;
           return callback(true);
         })
-        .on("finish", () => {
-          //console.log("Download Completed");
-          return callback(true);
+        .on("close", () => {
+          return callback;
         });
-      //   return callback(true);
+         return callback;
     };
-
-    let dlOK = false;
 
     //
     // check if file exists before downloading
@@ -100,14 +98,10 @@ class Cache {
       //file not present, so download
       download(url, savePath, function (dlRes) {
         // console.log("✅ Downloaded: " + fileName);
-        //console.log(dlRes);
-        dlOK = Promise.resolve(dlRes);
       });
     } else {
       // console.log("✘ " + fileName + " exists, DL aborted");
-      return false;
     }
-    return dlOK;
   }
 
   // not implemented yet!
@@ -127,7 +121,7 @@ class Cache {
    * @returns nothing
    */
   static async DeleteMP3Cache() {
-    const directory = "./public/mp3cache/";
+    const directory = "./saved/mp3cache/";
     try {
       fsExtra.emptyDirSync(directory);
     } catch (err) {
@@ -144,7 +138,7 @@ class Cache {
    * @returns nothing
    */
   static async DeleteImageCache() {
-    const directory = "./public/imagecache/";
+    const directory = "./saved/imagecache/";
     try {
       fsExtra.emptyDirSync(directory);
     } catch (err) {
@@ -163,7 +157,7 @@ class Cache {
    * @returns {string} fileName - a random filename
    */
   static async GetRandomMP3(cardArray) {
-    let directory = "./public/randomthemes";
+    let directory = "./saved/randomthemes";
     // get all mp3 files from directory
     let fileArr = fs.readdirSync(directory);
     let mp3Files = fileArr.filter(function (elm) {

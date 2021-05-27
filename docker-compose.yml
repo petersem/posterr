@@ -10,10 +10,10 @@ services:
     environment:
       TZ: "Australia/Brisbane"
       NODE_ENV: production
-      BASEPATH: "/posterr"
+      BASEPATH: ""
     volumes:
-      - c:/docker/poster/randomthemes:/usr/src/app/public/randomthemes
-      - c:/docker/poster/config:/usr/src/app/config
+      - /c/docker/posterr/randomthemes:/usr/src/app/public/randomthemes
+      - /c/docker/posterr/config:/usr/src/app/config
     ports:
       - 9876:3000
 
