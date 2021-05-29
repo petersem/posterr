@@ -19,7 +19,8 @@ const DEFAULT_SETTINGS = {
   radarrToken : "",
   radarrCalDays : 30,
   hasArt : "false",
-  shuffleSlides: "false"
+  shuffleSlides: "false",
+  genres: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

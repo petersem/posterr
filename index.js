@@ -31,11 +31,8 @@ console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" Version: " + pjson.version);
 console.log(" ");
-console.log(" BBBB   EEEEE  TTTTT    A      !!");
-console.log(" B   B  E        T     A A     !!");
-console.log(" BBBB   EEEEE    T    A   A    !!");
-console.log(" B   B  E        T   AAAAAAA   ");
-console.log(" BBBB   EEEEE    T  A       A  !!");
+console.log(" This is the *Dev* branch of Posterr. ");
+console.log(" Feedback is welcome, but there *no* support offered. ");
 console.log("-------------------------------------------------------");
 
 // global variables
@@ -331,7 +328,15 @@ async function loadOnDemand() {
       loadedSettings.numberOnDemand,
       loadedSettings.playThemes,
       loadedSettings.genericThemes,
-      loadedSettings.hasArt
+      loadedSettings.hasArt,
+// TODO Wire this into settings
+// TODO Wire this into settings
+// TODO Wire this into settings
+// TODO Wire this into settings
+// TODO Wire this into settings
+// TODO Wire this into settings
+// TODO Wire this into settings
+      loadedSettings.genres
     );
   } catch (err) {
     let d = new Date();
@@ -782,6 +787,7 @@ app.post(
       plexLibraries: req.body.plexLibraries,
       numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
       onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
+      genres: req.body.genres,
       sonarrUrl: req.body.sonarrUrl,
       sonarrToken: req.body.sonarrToken,
       sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : DEFAULT_SETTINGS.sonarrCalDays,
