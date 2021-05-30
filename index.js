@@ -485,7 +485,7 @@ async function startup(clearCache) {
   //   now.toLocaleString() + " Now screening titles refreshed (First run only)"
   // );
   console.log(" ");
-  console.log(`✅ Application ready on http://hostIP:3000
+  console.log(`✅ Application ready on http://hostIP:3000`+BASEURL +`
    Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
   `);
   cold_start_time = new Date();
