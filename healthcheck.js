@@ -1,7 +1,11 @@
 var http = require("http");
 
+if(process.env.BASEPATH=="/") process.env.BASEPATH="";
+const BASEURL = process.env.BASEPATH || "";
+
+
 var options = {  
-    host : "localhost",
+    host : "localhost" + BASEURL,
     port : "3000",
     timeout : 2000
 };
@@ -23,7 +27,7 @@ var request = http.request(options, (res) => {
 });
 
 request.on('error', function(err) {  
-    console.log('ERROR');
+    console.log('ERROR',err);
     process.exit(1);
 });
 
