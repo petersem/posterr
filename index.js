@@ -329,13 +329,6 @@ async function loadOnDemand() {
       loadedSettings.playThemes,
       loadedSettings.genericThemes,
       loadedSettings.hasArt,
-// TODO Wire this into settings
-// TODO Wire this into settings
-// TODO Wire this into settings
-// TODO Wire this into settings
-// TODO Wire this into settings
-// TODO Wire this into settings
-// TODO Wire this into settings
       loadedSettings.genres
     );
   } catch (err) {
