@@ -87,7 +87,7 @@ services:
 Get to the settings page in a number of ways:
  - On initial load, you will be prompted.
  - Change the URL to _'http://hostIP:3000/settings'_
- - Clicking on the top banner title of any slide)
+ - Clicking on the top banner title of any slide.
  - If on the 'no content' page, then click this text
 
 *The default password is:* **raidisnotabackup**
