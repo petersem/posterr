@@ -31,11 +31,8 @@ console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" Version: " + pjson.version);
 console.log(" ");
-console.log(" BBBB   EEEEE  TTTTT    A      !!");
-console.log(" B   B  E        T     A A     !!");
-console.log(" BBBB   EEEEE    T    A   A    !!");
-console.log(" B   B  E        T   AAAAAAA   ");
-console.log(" BBBB   EEEEE    T  A       A  !!");
+console.log(" This is the *Dev* branch of Posterr. ");
+console.log(" Feedback is welcome, but there *no* support offered. ");
 console.log("-------------------------------------------------------");
 
 // global variables
@@ -240,13 +237,18 @@ async function loadNowScreening() {
   // TODO - move this into its own function!
   let mCards = [];
   if (nsCards.length > 0) {
-    if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-      mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5));
+    if(loadedSettings.pinNS !== "true"){
+      if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5));
+      }
+      else {
+        mCards = nsCards.concat(odCards);
+        mCards = mCards.concat(csCards);
+        mCards = mCards.concat(csrCards);
+      }
     }
-    else {
-      mCards = nsCards.concat(odCards);
-      mCards = mCards.concat(csCards);
-      mCards = mCards.concat(csrCards);
+    else{
+      mCards = nsCards;
     }
     globalPage.cards = mCards;
   } else {
@@ -331,7 +333,8 @@ async function loadOnDemand() {
       loadedSettings.numberOnDemand,
       loadedSettings.playThemes,
       loadedSettings.genericThemes,
-      loadedSettings.hasArt
+      loadedSettings.hasArt,
+      loadedSettings.genres
     );
   } catch (err) {
     let d = new Date();
@@ -482,7 +485,7 @@ async function startup(clearCache) {
   //   now.toLocaleString() + " Now screening titles refreshed (First run only)"
   // );
   console.log(" ");
-  console.log(`✅ Application ready on http://hostIP:3000
+  console.log(`✅ Application ready on http://hostIP:3000`+BASEURL +`
    Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
   `);
   cold_start_time = new Date();
@@ -780,8 +783,10 @@ app.post(
       plexHTTPSSwitch: req.body.plexHTTPSSwitch,
       plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : DEFAULT_SETTINGS.plexPort,
       plexLibraries: req.body.plexLibraries,
+      pinNSSwitch: req.body.pinNSSwitch,
       numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
       onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
+      genres: req.body.genres,
       sonarrUrl: req.body.sonarrUrl,
       sonarrToken: req.body.sonarrToken,
       sonarrDays: req.body.sonarrDays ? parseInt(req.body.sonarrDays) : DEFAULT_SETTINGS.sonarrCalDays,

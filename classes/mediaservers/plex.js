@@ -469,24 +469,35 @@ class Plex {
     numberOnDemand,
     playThemes,
     playGenenericThemes,
-    hasArt
+    hasArt,
+    genres
   ) {
     let odCards = [];
     let odRaw;
     let mediaId;
-
+    // sanitise genres input
+    genres = genres !== undefined ? genres : "";
+    genres = genres.replace(", ",",").replace(" ,",",").split(",");
+//console.log(genres);
     try {
-      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand);
+      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres);
     } catch (err) {
       let now = new Date();
       console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
       throw err;
     }
 
+  if(JSON.stringify(odRaw) == "[null,null]"){
+    odRaw = [];
+    let now = new Date();
+    console.log(now.toLocaleString() + " *On-demand - No results returned - check 'Genres' values");
+  } 
+
     // reutrn an empty array if no results
-    if (odRaw.length != null) {
+    if (odRaw.length !== null && odRaw.length !== 0 && odRaw !== ",") {
       // move through results and populate media cards
       await odRaw.reduce(async (memo, md) => {
+//console.log(md.title,md.Genre);
         await memo;
         const medCard = new mediaCard();
         // modify inputs, based upon tv episode or movie result structures
@@ -804,7 +815,7 @@ class Plex {
    * @param {number} libKey - The plex library key number
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetAllMediaForLibrary(libKey) {
+  async GetAllMediaForLibrary(libKey, genres) {
     let mediaCards = [];
     try {
       return await this.client
@@ -813,8 +824,31 @@ class Plex {
           function (result) {
             // populate a complete list of all titles into an array
             if (result.MediaContainer.size > 0) {
-              result.MediaContainer.Metadata.forEach((mt) => {
-                mediaCards.push(mt);
+
+              // if genre filters present, then filter results 
+              const mapGenre = (arr, gs) => {
+                return gs.reduce((acc, val) => {
+                  const libMatches = arr.filter(m => m.Genre !== undefined && JSON.stringify(m.Genre).toLowerCase().includes(val.toLowerCase()));
+        //console.log("Library matches for genre '"+val+"':",libMatches.length);
+                  if(libMatches.length > 0){
+                    return acc.concat(libMatches);
+                  }
+                  else{
+                    return acc;
+                  }
+                }, []);
+              }
+
+              let mediaResults = result.MediaContainer.Metadata;
+              // check if supplying genres, then filter
+              if(genres !== undefined && genres.length > 0){
+                let mediaFiltered = result.MediaContainer.Metadata;
+                mediaResults = mapGenre(mediaFiltered, genres);
+              }
+
+              // send selected card to filtered array
+              mediaResults.forEach((mt) => {
+                  mediaCards.push(mt);
               });
             }
             return mediaCards;
@@ -839,7 +873,7 @@ class Plex {
    * @param {number} numberOnDemand - the number of results to return from each library
    * @returns {object} mediaCard[] - Returns an array of on-demand mediaCards
    */
-  async GetOnDemandRawData(onDemandLibraries, numberOnDemand) {
+  async GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres) {
     // Get a list of random titles from selected libraries
     let odSet = [];
 
@@ -852,7 +886,7 @@ class Plex {
         const p = await keys.reduce(async (acc, value) => {
           return (
             (await acc) +
-            (await this.GetAllMediaForLibrary(value).then(async function (
+            (await this.GetAllMediaForLibrary(value, genres).then(async function (
               result
             ) {
               const od = await util.build_random_od_set(numberOnDemand, result);

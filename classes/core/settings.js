@@ -31,6 +31,7 @@ class Settings {
     this.radarrCalDays = DEFAULT_SETTINGS.radarrCalDays;
     this.hasArt = DEFAULT_SETTINGS.hasArt;
     this.shuffleSlides = DEFAULT_SETTINGS.shuffleSlides;
+    this.genres = DEFAULT_SETTINGS.genres;
     return;
   }
 
@@ -174,6 +175,11 @@ class Settings {
     else this.hasArt = cs.hasArt;
     if (jsonObject.shuffleSwitch) this.shuffleSlides = jsonObject.shuffleSwitch;
     else this.shuffleSlides = cs.shuffleSlides;
+    if (jsonObject.genres) this.genres = jsonObject.genres;
+    else this.genres = cs.genres;
+    if (jsonObject.pinNSSwitch) this.pinNS = jsonObject.pinNSSwitch;
+    else this.pinNS = cs.pinNS;
+
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
 

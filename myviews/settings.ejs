@@ -210,6 +210,20 @@
                     (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
                       target="_blank">details</a>)</small>
                 </div>
+              </br>
+              <h6>NOW SCREENING</h6>
+              <hr>
+              <div class="form-group">
+                <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                  <input type="checkbox" class="custom-control-input" name="pinNSSwitch" id="pinNSSwitch" 
+                    value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.pinNSSwitch ? 'checked' : '' %><%}else{%><%=(settings.pinNS == 'true') ? 'checked' : '' %><%}%>>
+                  <label class="custom-control-label" for="pinNSSwitch">Pin Now Screening / Now Playing</label>
+                  <small id="randomThemeHelp" class="form-text text-muted">If something is playing, then hide on-demand and coming soon</small>
+                </div>
+              </div>
+              </br>
+              <h6>ON-DEMAND</h6>
+              <hr>
                 <div class="form-group">
                   <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
                   <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
@@ -229,6 +243,12 @@
                   <input type="text" class="form-control" id="onDemandRefresh" name="onDemandRefresh" aria-describedby="onDemandRefresh"
                     placeholder="suggest 30" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.onDemandRefresh%>"<%}else{%><%=settings.onDemandRefresh%>"<%}%>>
                   <small id="onDemandRefresh" class="form-text text-muted">How often, in minutes, on-demand titles are refreshed</small>
+                </div>
+                <div class="form-group">
+                  <label for="genres">Genres</label>
+                  <input type="text" class="form-control" id="genres" name="genres" aria-describedby="genres"
+                    placeholder="genre1,genre2" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.genres%>"<%}else{%><%=settings.genres%>"<%}%>>
+                  <small id="genres" class="form-text text-muted">Filter on-demand to only show selected genres (not cumulative)</small>
                 </div>
 
               </br>
