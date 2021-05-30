@@ -8,6 +8,7 @@ const DEFAULT_SETTINGS = {
   plexHTTPS : "false",
   plexPort : 32400,
   plexToken : "",
+  pinNS : "false",
   onDemandLibraries : "",
   numberOnDemand : 2,
   onDemandRefresh : 30,

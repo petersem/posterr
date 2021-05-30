@@ -211,6 +211,17 @@
                       target="_blank">details</a>)</small>
                 </div>
               </br>
+              <h6>NOW SCREENING</h6>
+              <hr>
+              <div class="form-group">
+                <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                  <input type="checkbox" class="custom-control-input" name="pinNSSwitch" id="pinNSSwitch" 
+                    value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.pinNSSwitch ? 'checked' : '' %><%}else{%><%=(settings.pinNS == 'true') ? 'checked' : '' %><%}%>>
+                  <label class="custom-control-label" for="pinNSSwitch">Pin Now Screening / Now Playing</label>
+                  <small id="randomThemeHelp" class="form-text text-muted">If something is playing, then hide on-demand and coming soon</small>
+                </div>
+              </div>
+              </br>
               <h6>ON-DEMAND</h6>
               <hr>
                 <div class="form-group">

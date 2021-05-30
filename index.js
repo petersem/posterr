@@ -237,13 +237,18 @@ async function loadNowScreening() {
   // TODO - move this into its own function!
   let mCards = [];
   if (nsCards.length > 0) {
-    if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-      mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5));
+    if(loadedSettings.pinNS !== "true"){
+      if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5));
+      }
+      else {
+        mCards = nsCards.concat(odCards);
+        mCards = mCards.concat(csCards);
+        mCards = mCards.concat(csrCards);
+      }
     }
-    else {
-      mCards = nsCards.concat(odCards);
-      mCards = mCards.concat(csCards);
-      mCards = mCards.concat(csrCards);
+    else{
+      mCards = nsCards;
     }
     globalPage.cards = mCards;
   } else {
@@ -778,6 +783,7 @@ app.post(
       plexHTTPSSwitch: req.body.plexHTTPSSwitch,
       plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : DEFAULT_SETTINGS.plexPort,
       plexLibraries: req.body.plexLibraries,
+      pinNSSwitch: req.body.pinNSSwitch,
       numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
       onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
       genres: req.body.genres,

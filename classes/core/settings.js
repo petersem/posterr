@@ -177,6 +177,8 @@ class Settings {
     else this.shuffleSlides = cs.shuffleSlides;
     if (jsonObject.genres) this.genres = jsonObject.genres;
     else this.genres = cs.genres;
+    if (jsonObject.pinNSSwitch) this.pinNS = jsonObject.pinNSSwitch;
+    else this.pinNS = cs.pinNS;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
