@@ -66,7 +66,7 @@ class utility {
       }
     }
     // display a warning if 'number to display' was too large for library size.
-    if(libTooSmall){
+    if(libTooSmall && mediaCards.length !== 0){
       let d = new Date();
       console.log(d.toLocaleString() + " ✘✘ WARNING ✘✘ On-demand library too small to get consistent unique titles. Requested titles reduced. (Reduce the 'number to display')");
     }
