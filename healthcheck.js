@@ -7,6 +7,7 @@ const BASEURL = process.env.BASEPATH || "";
 var options = {  
     host : "127.0.0.1",
     port: 3000,
+    path: BASEURL,
     timeout : 2000
 };
 

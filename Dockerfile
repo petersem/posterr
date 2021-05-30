@@ -1,6 +1,6 @@
 FROM node:12.18-alpine
 
-# tzdata for timzone
+# tzdata for timzone and net-tools
 RUN apk update 
 RUN apk add tzdata
 RUN apk add net-tools
@@ -13,5 +13,5 @@ RUN npm install --production --silent && mv node_modules ../
 
 COPY . .
 EXPOSE 3000
-HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=15s CMD wget --spider 127.0.0.1:3000 > /dev/null || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=15s CMD node healthcheck.js > /dev/null || exit 1
 CMD ["node", "index.js"]
