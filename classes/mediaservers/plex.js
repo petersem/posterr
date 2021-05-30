@@ -487,8 +487,14 @@ class Plex {
       throw err;
     }
 
+  if(JSON.stringify(odRaw) == "[null,null]"){
+    odRaw = [];
+    let now = new Date();
+    console.log(now.toLocaleString() + " *On-demand - No results returned - check 'Genres' values");
+  } 
+
     // reutrn an empty array if no results
-    if (odRaw.length != null) {
+    if (odRaw.length !== null && odRaw.length !== 0 && odRaw !== ",") {
       // move through results and populate media cards
       await odRaw.reduce(async (memo, md) => {
 //console.log(md.title,md.Genre);
@@ -823,8 +829,13 @@ class Plex {
               const mapGenre = (arr, gs) => {
                 return gs.reduce((acc, val) => {
                   const libMatches = arr.filter(m => m.Genre !== undefined && JSON.stringify(m.Genre).toLowerCase().includes(val.toLowerCase()));
-                  //console.log("Library matches for genre '"+val+"':",libMatches.length);
-                  return acc.concat(libMatches);
+        //console.log("Library matches for genre '"+val+"':",libMatches.length);
+                  if(libMatches.length > 0){
+                    return acc.concat(libMatches);
+                  }
+                  else{
+                    return acc;
+                  }
                 }, []);
               }
 
@@ -832,7 +843,7 @@ class Plex {
               // check if supplying genres, then filter
               if(genres !== undefined && genres.length > 0){
                 let mediaFiltered = result.MediaContainer.Metadata;
-                mediaResults = mapGenre(mediaFiltered, genres)
+                mediaResults = mapGenre(mediaFiltered, genres);
               }
 
               // send selected card to filtered array
