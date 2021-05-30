@@ -13,5 +13,5 @@ RUN npm install --production --silent && mv node_modules ../
 
 COPY . .
 EXPOSE 3000
-HEALTHCHECK --interval=10s --retries=3 --start-period=30s CMD node healthcheck.js
+HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=15s CMD curl 127.0.0.1:3000 > /dev/null || exit 1
 CMD ["node", "index.js"]
