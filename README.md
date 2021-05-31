@@ -104,7 +104,7 @@ Should you encounter a problem, the solution may be listed [HERE](https://github
 
 ## Support
  - There is no _'official'_ support for this product, however should you encounter issues, raise an issue on the github page.
- - Limited support in [Discord](https://discord.gg/c5mHXaY5)
+ - Limited support in [Discord](https://discord.gg/pucjF6j8k9)
 
 *Support my efforts and continued development* - Click this link to Buy me a coffee: 
 
