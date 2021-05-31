@@ -31,8 +31,6 @@ console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" Version: " + pjson.version);
 console.log(" ");
-console.log(" This is the *Dev* branch of Posterr. ");
-console.log(" Feedback is welcome, but there *no* support offered. ");
 console.log("-------------------------------------------------------");
 
 // global variables
