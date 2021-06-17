@@ -1,4 +1,4 @@
-# Posterr (BETA!!)
+# Posterr
 Media display software for Plex, Sonarr and Radarr.
 
 ![Music playing](https://github.com/petersem/posterr/blob/master/doco/music.png?raw=true)
