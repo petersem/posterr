@@ -93,7 +93,7 @@ Get to the settings page in a number of ways:
 Buttons are:
  - `Reload Saved` - Discards any changes and reloads last saved settings
  - `Main Page` - Navigates to main Posterr page (unsaved changes lost)
- - `Save` - Saves and restarts the application
+ - `Save` - Saves and restarts the application.
 
  > Please see the [Posterr Wiki](https://github.com/petersem/posterr/wiki/Posterr-Configuration) for more information.
 
