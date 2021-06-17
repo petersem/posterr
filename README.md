@@ -9,7 +9,7 @@ Media display software for Plex, Sonarr and Radarr.
 ![Settings](https://github.com/petersem/posterr/blob/master/doco/settings.png?raw=true)
 
 ## Beta software
-This software is current in the `BETA` phase. (Yay!) 
+This software is current in the `BETA` phase.
 - **Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates**
 
 Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
