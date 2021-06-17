@@ -1,8 +1,6 @@
 # Posterr (BETA!!)
 Media display software for Plex, Sonarr and Radarr.
 
- > **Important Note** - Posterr now utilises data obtained via the _'Plex TV Series'_ agent. Whilst it will continue to work if you are _not_ using this agent, you will get mixed, to no results for TV theme tunes. It is _strongly_ recommended that you shift to this agent and scanner for your Plex libraries. (as recommended by Plex).
-
 ![Music playing](https://github.com/petersem/posterr/blob/master/doco/music.png?raw=true)
 ![Now screening](https://github.com/petersem/posterr/blob/master/doco/ns.png?raw=true)
 ![On-demand](https://github.com/petersem/posterr/blob/master/doco/od.png?raw=true)
