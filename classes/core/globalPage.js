@@ -4,16 +4,18 @@ const cache = require("./cache");
  * @desc globalPage object is passed to poster.ejs and contains all browser settings and card data
  * @param {number} slideDuration - how long each slide will be visible for (seconds)
  * @param {string} fadeTransition - boolean - if true, will fade transition. false will slide.
+ * @param {string} custBrand - string - Font name to use for slide titles.
  * @returns {<object>} globalPage
  */
 class globalPage {
   constructor(
     slideDuration,
-    fadeTransition
+    fadeTransition,
+    custBrand
   ) {
     this.slideDuration = slideDuration;
     this.fadeTransition = fadeTransition;
-
+    this.custBrand = custBrand;
     this.cards = [];
     return;
   }

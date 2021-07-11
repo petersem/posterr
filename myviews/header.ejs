@@ -19,7 +19,9 @@
   <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/styles.css">
-  <!-- <script src="/js/script.js"></script> -->
+  <%if(globals.custBrand != ""){%>
+    <style>.banners { font-family: '<%=globals.custBrand%>'; }</style>
+  <%}%>
 
   <title>Posterr</title>
   <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>

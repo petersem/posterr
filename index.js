@@ -287,6 +287,7 @@ async function loadNowScreening() {
   globalPage.playGenericThemes = loadedSettings.genericThemes;
   globalPage.fadeTransition =
     loadedSettings.fade == "true" ? "carousel-fade" : "";
+  globalPage.custBrand = loadedSettings.custBrand;
 
   // restart the clock
   nowScreeningClock = setInterval(loadNowScreening, pollInterval);
@@ -564,7 +565,7 @@ else{
 
 // set routes
 app.get(BASEURL + "/", (req, res) => {
-  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL }); // index refers to index.ejs
+  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand }); // index refers to index.ejs
 });
 
 app.get(BASEURL + "/getcards", (req, res) => {
@@ -792,6 +793,7 @@ app.post(
       radarrUrl: req.body.radarrUrl,
       radarrToken: req.body.radarrToken,
       radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : DEFAULT_SETTINGS.radarrCalDays,
+      titleFont: req.body.titleFont,
       saved: false,
     };
 

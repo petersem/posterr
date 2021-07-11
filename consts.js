@@ -21,7 +21,8 @@ const DEFAULT_SETTINGS = {
   radarrCalDays : 30,
   hasArt : "false",
   shuffleSlides: "false",
-  genres: ""
+  genres: "",
+  custBrand: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

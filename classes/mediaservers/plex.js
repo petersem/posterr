@@ -420,9 +420,9 @@ class Plex {
         medCard.ratingColour = ratingColour;
 
         if (transcode == "transcode") {
-          transcode = "bg-danger";
+          transcode = "transcode";  // bg-danger
         } else {
-          transcode = "bg-success";
+          transcode = "direct"; // bg-success
         }
         medCard.decision = transcode;
 

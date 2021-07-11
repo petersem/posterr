@@ -32,6 +32,7 @@ class Settings {
     this.hasArt = DEFAULT_SETTINGS.hasArt;
     this.shuffleSlides = DEFAULT_SETTINGS.shuffleSlides;
     this.genres = DEFAULT_SETTINGS.genres;
+    this.custBrand = DEFAULT_SETTINGS.custBrand;
     return;
   }
 
@@ -179,6 +180,8 @@ class Settings {
     else this.genres = cs.genres;
     if (jsonObject.pinNSSwitch) this.pinNS = jsonObject.pinNSSwitch;
     else this.pinNS = cs.pinNS;
+    if (jsonObject.titleFont) this.custBrand = jsonObject.titleFont;
+    else this.custBrand = cs.custBrand;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

@@ -174,14 +174,43 @@
                     <small id="suffleSwitchHelp" class="form-text text-muted">Shuffles on-demand, coming soon (radar) & coming soon (Sonarr)</small>
                   </div>
                 </div>
-
+                <div class="form-group">
+                  <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Title Font</label>
+                  <select class="custom-select my-1 mr-sm-2" id="titleFont" name="titleFont">
+                    <option value="" selected>Default</option>
+                    <option value="movie_timesregular" style="font-family: 'movie_timesregular';">Movie Times</option>
+                    <option value="riemann_theatreregular" style="font-family: 'riemann_theatreregular';">Riemann Theatre</option>
+                    <option value="limelightregular" style="font-family: 'limelightregular';">Limelight</option>
+                    <option value="inepticregular" style="font-family: 'inepticregular';">Ineptic</option>
+                    <option value="great_attractionregular" style="font-family: 'great_attractionregular';">Great Attraction</option>
+                    <option value="joyful_theatreregular" style="font-family: 'joyful_theatreregular';">Joyful Theatre</option>
+                    <option value="midnight_championregular" style="font-family: 'midnight_championregular';">Midnight Champion</option>
+                    <option value="style_thiefregular" style="font-family: 'style_thiefregular';">Style Thief</option>
+                    <option value="reach_the_endregular" style="font-family: 'reach_the_endregular';">Reach The End</option>
+                    <option value="showtimenormal" style="font-family: 'showtimenormal';">Showtime</option>
+                    <option value="emerald_greyregular" style="font-family: 'emerald_greyregular';">Emerald Grey</option>
+                    <option value="laconicaregular" style="font-family: 'laconicaregular';">Laconica</option>
+                  </select>
+                </div>
+                <script lang='javascript'>
+                  // set pre-selected or saved font
+                  var fontDD = document.getElementById("titleFont");
+                <%
+                  if(typeof formData !== 'undefined' && errors){%>
+                    fontDD.value='<%=formData.titleFont%>';<%
+                  }
+                  else{%>
+                    fontDD.value='<%=settings.custBrand%>';<%
+                  }
+                %>
+                </script>
               </br>
               <h6>PLEX SETTINGS</h6>
               <hr>
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="plexHTTPSSwitch" id="plexHTTPSSwitch"
-                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.plexHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.plexHTTPS == 'true') ? 'checked' : '' %><%}%>>
+                     value="showtimenormal">true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.plexHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.plexHTTPS == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="plexHTTPSSwitch">HTTPS Connection</label>
                     <small id="plexHTTPSHelp" class="form-text text-muted">Enable if Plex requires a HTTPS 'secure'
                       connection.</small>
