@@ -72,11 +72,11 @@ if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
 }
 
-var dir = './saved/randomthemes';
+// var dir = './saved/randomthemes';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
-}
+// if (!fs.existsSync(dir)){
+//     fs.mkdirSync(dir);
+// }
 
 
 /**
@@ -367,7 +367,7 @@ async function houseKeeping() {
   setInterval(houseKeeping, 86400000); // daily
 }
 
-/**
+/*
  * @desc Loads all poster settings
  * @returns {object} json - settings details
  */

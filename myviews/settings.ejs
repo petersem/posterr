@@ -39,7 +39,7 @@
       </ol>
     </nav>
     <%if(typeof formData !== 'undefined' && formData.saved == true) {%><script language='javascript'>
-      alert("Posterr Settings Saved. Please allow a few seconds for Posterr to restart. (For slower Plex servers, you may need to wait a few extra seconds for all images to load in Posterr)");
+      alert("Posterr Settings Saved. Please allow a few seconds for Posterr to restart.");
     </script><%}%>
     <!-- Layout -->
     <div class="row gutters-sm">
@@ -145,7 +145,7 @@
                     <input type="checkbox" class="custom-control-input" name="genericSwitch" id="genericSwitch" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.genericSwitch ? 'checked' : '' %><%}else{%><%=(settings.genericThemes == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="genericSwitch">Movie themes</label>
-                    <small id="randomThemeHelp" class="form-text text-muted">Enables movie themes (if added) or a random mp3 from the '/randomthemes' directory</small>
+                    <small id="randomThemeHelp" class="form-text text-muted">Enables movie themes (if available)</small>
                   </div>
                 </div>
 
@@ -210,7 +210,7 @@
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="plexHTTPSSwitch" id="plexHTTPSSwitch"
-                     value="showtimenormal">true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.plexHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.plexHTTPS == 'true') ? 'checked' : '' %><%}%>>
+                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.plexHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.plexHTTPS == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="plexHTTPSSwitch">HTTPS Connection</label>
                     <small id="plexHTTPSHelp" class="form-text text-muted">Enable if Plex requires a HTTPS 'secure'
                       connection.</small>

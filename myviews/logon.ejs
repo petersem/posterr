@@ -25,51 +25,47 @@
     <!-- <script src="/js/script.js"></script> -->
 
     <title>Posterr - Settings Login</title>
-    <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>
+    <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico" />
+    <style>
+div {
+  margin-left: 70px;
+  margin-right: 70px;
+color: whitesmoke;
+}
+    </style>
 </head>
 
 <body>
 
 
-    <div class="container d-flex align-items-center justify-content-center no-content">
-        <div class="row">
-            <div class="col">
-                <div class="jumbotron">
-                    <h1 class="display-4">Posterr Settings</h1>
-                    <p class="lead">Media display software for Plex, Sonarr and Radarr.</p>
-                </div>
-            </div>
+    <br class="container d-flex align-items-center justify-content-center no-content" style="position: fixed; position: 50%,50%">
+        <div style="color: lightgoldenrodyellow;">
+            <h1>Posterr Settings</h1>
+            <p class="lead">Media display software for Plex, Sonarr and Radarr.</p>
         </div>
 
-        <div class="row">
-            <div class="col-1">
-
+        <form method="POST" action="<%=baseUrl%>/logon">
+            <div class="form-group">
+                <label for="password">Enter the password</label>
+                <input type="password" class="form-control" id="password" name="password" aria-describedby="password"
+                    placeholder="Enter a password" value="" style="width: 200px">
             </div>
-            <div class="col-10">
-                <form method="POST" action="<%=baseUrl%>/logon">
-                    <div class="form-group">
-                        <label for="password">Enter the password</label>
-                        <input type="password" class="form-control" id="password" name="password"
-                            aria-describedby="password" placeholder="Enter a password" value="">
-                        </div>
-                    <button type="submit" class="btn btn-info" style="float: middle;">GO</button>
-                    <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/';">Return</button>
-                    <small id="passwordHelp" class="form-text text-muted">If you have forgetten the password, please
-                        review the /config/settings.json file</small>
-                </form>
+            <div>
+            <button type="submit" class="btn btn-info" >GO</button>
+            <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/';">Return</button>
+            <small id="passwordHelp" class="form-text text-muted">If you have forgetten the password, please
+                review the /config/settings.json file</small>
             </div>
-            <div class="col-1"></div>
-            </div>
-        </div>
+        </form>
     </div>
-    <hr>
+
     <!-- show validation errors -->
     <% 
     if(typeof errors !== 'undefined'){
       // display validation errors
       errors.forEach(function(e) { %>
-        <p class="alert alert-warning"><%=e.msg %></p>
-      <%});%>
+    <p class="alert alert-warning"><%=e.msg %></p>
+    <%});%>
     <%}%>
     <script language="javascript">
         // set focus on password field

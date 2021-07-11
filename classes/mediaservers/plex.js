@@ -56,10 +56,9 @@ class Plex {
 
   /**
    * @desc Gets now screening cards
-   * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetNowScreening(playThemes, playGenenericThemes, hasArt) {
+    async GetNowScreening(playThemes, playGenenericThemes, hasArt) {
     // get raw data first
     let nsCards = [];
     let nsRaw;
@@ -306,9 +305,6 @@ class Plex {
             // play movie theme or add generic random theme if applicable
             if (playGenenericThemes == "true") {
               if(await util.isEmpty(md.theme)){
-                medCard.theme =
-                  "/randomthemes/" + (await core.GetRandomMP3(nsCards));
-                if(medCard.theme.includes("undefined")) medCard.theme="";
               }
               else{
                 // download mp3 file to local server
@@ -624,9 +620,9 @@ class Plex {
             let themeFile;
             if (playGenenericThemes == "true") {
               if(await util.isEmpty(md.theme)){
-                medCard.theme =
-                  "/randomthemes/" + (await core.GetRandomMP3(odCards));
-                if(medCard.theme.includes("undefined")) medCard.theme="";
+                // medCard.theme =
+                //   "/randomthemes/" + (await core.GetRandomMP3(odCards));
+                // if(medCard.theme.includes("undefined")) medCard.theme="";
               }
               else{
                 // download mp3 file to local server

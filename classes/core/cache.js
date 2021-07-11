@@ -151,34 +151,34 @@ class Cache {
     console.log("✅ Image cache cleared");
   }
 
-  /**
-   * @desc Returns a single random mp3 filename from the randomthemese folder. (tries to make MP3 unique)
-   * @param {array} cardArray - the card array that has been built thus far (needed to be able to check for duplicates)
-   * @returns {string} fileName - a random filename
-   */
-  static async GetRandomMP3(cardArray) {
-    let directory = "./saved/randomthemes";
-    // get all mp3 files from directory
-    let fileArr = fs.readdirSync(directory);
-    let mp3Files = fileArr.filter(function (elm) {
-      return elm.match(/.*\.(mp3)/gi);
-    });
+  // /**
+  //  * @desc Returns a single random mp3 filename from the randomthemese folder. (tries to make MP3 unique)
+  //  * @param {array} cardArray - the card array that has been built thus far (needed to be able to check for duplicates)
+  //  * @returns {string} fileName - a random filename
+  //  */
+  // static async GetRandomMP3(cardArray) {
+  //   let directory = "./saved/randomthemes";
+  //   // get all mp3 files from directory
+  //   let fileArr = fs.readdirSync(directory);
+  //   let mp3Files = fileArr.filter(function (elm) {
+  //     return elm.match(/.*\.(mp3)/gi);
+  //   });
 
-    // calls random_items function to return a random item from an array
-    let randomFile = await util.random_item(mp3Files);
+  //   // calls random_items function to return a random item from an array
+  //   let randomFile = await util.random_item(mp3Files);
 
-    let tryCount = 0;
+  //   let tryCount = 0;
 
-    // now try to get a unique file (try 5 times)
-    while ((await this.themeUsed(cardArray, randomFile)) && tryCount < 5) {
-      // try again if the MP3 has already been used
-      tryCount++;
-      randomFile = await util.random_item(mp3Files);
-    }
+  //   // now try to get a unique file (try 5 times)
+  //   while ((await this.themeUsed(cardArray, randomFile)) && tryCount < 5) {
+  //     // try again if the MP3 has already been used
+  //     tryCount++;
+  //     randomFile = await util.random_item(mp3Files);
+  //   }
 
-    // return whatever MP3 we ended up selecting
-    return randomFile;
-  }
+  //   // return whatever MP3 we ended up selecting
+  //   return randomFile;
+  // }
 
   /**
    * @desc Returns a boolean if a theme is present in a card array

@@ -176,10 +176,10 @@ class Radarr {
         
         // add generic random theme if applicable
 
-        if (playGenenericThemes == 'true') {
-          medCard.theme = "/randomthemes/" + (await core.GetRandomMP3(csrCards));
-          if(medCard.theme.includes("undefined")) medCard.theme="";
-        }
+        // if (playGenenericThemes == 'true') {
+        //   medCard.theme = "/randomthemes/" + (await core.GetRandomMP3(csrCards));
+        //   if(medCard.theme.includes("undefined")) medCard.theme="";
+        // }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)
         if (md.status != "released" && !await util.isEmpty(md.digitalRelease) ) {
