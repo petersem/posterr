@@ -33,6 +33,13 @@ class Settings {
     this.shuffleSlides = DEFAULT_SETTINGS.shuffleSlides;
     this.genres = DEFAULT_SETTINGS.genres;
     this.custBrand = DEFAULT_SETTINGS.custBrand;
+    this.nowScreening = DEFAULT_SETTINGS.nowScreening;
+    this.comingSoon = DEFAULT_SETTINGS.comingSoon;
+    this.onDemand = DEFAULT_SETTINGS.onDemand;
+    this.iframe = DEFAULT_SETTINGS.iframe;
+    this.playing = DEFAULT_SETTINGS.playing;
+    this.picture = DEFAULT_SETTINGS.picture;
+
     return;
   }
 
@@ -182,6 +189,18 @@ class Settings {
     else this.pinNS = cs.pinNS;
     if (jsonObject.titleFont) this.custBrand = jsonObject.titleFont;
     else this.custBrand = cs.custBrand;
+    if (jsonObject.nowScreening) this.nowScreening = jsonObject.nowScreening;
+    else this.nowScreening = cs.nowScreening;
+    if (jsonObject.onDemand) this.onDemand = jsonObject.onDemand;
+    else this.onDemand = cs.onDemand;
+    if (jsonObject.comingSoon) this.comingSoon = jsonObject.comingSoon;
+    else this.comingSoon = cs.comingSoon;
+    if (jsonObject.playing) this.playing = jsonObject.playing;
+    else this.playing = cs.playing;
+    if (jsonObject.iframe) this.iframe = jsonObject.iframe;
+    else this.iframe = cs.iframe;
+    if (jsonObject.picture) this.picture = jsonObject.picture;
+    else this.picture = cs.picture;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

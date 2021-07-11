@@ -58,9 +58,11 @@ let cold_start_time = new Date();
 
 // create working folders if they do not exist
 // needed for package binaries
-
 var fs = require('fs');
+const { CardTypeEnum } = require("./classes/cards/CardType");
 var dir = './config';
+
+//CardTypeEnum.OnDemand="Available";
 
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
@@ -71,13 +73,6 @@ var dir = './saved';
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
 }
-
-// var dir = './saved/randomthemes';
-
-// if (!fs.existsSync(dir)){
-//     fs.mkdirSync(dir);
-// }
-
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -286,8 +281,9 @@ async function loadNowScreening() {
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
   globalPage.fadeTransition =
-    loadedSettings.fade == "true" ? "carousel-fade" : "";
+  loadedSettings.fade == "true" ? "carousel-fade" : "";
   globalPage.custBrand = loadedSettings.custBrand;
+
 
   // restart the clock
   nowScreeningClock = setInterval(loadNowScreening, pollInterval);
@@ -472,6 +468,14 @@ async function startup(clearCache) {
 
   // check status
   await checkEnabled();
+
+  // set custom titles if available
+  CardTypeEnum.NowScreening = loadedSettings.nowScreening !== undefined ? loadedSettings.nowScreening : "Now Screening"
+  CardTypeEnum.OnDemand = loadedSettings.onDemand !== undefined ? loadedSettings.onDemand : "On-demand"
+  CardTypeEnum.ComingSoon = loadedSettings.comingSoon !== undefined ? loadedSettings.comingSoon : "Coming Soon"
+  CardTypeEnum.IFrame = loadedSettings.iframe !== undefined ? loadedSettings.iframe : "";
+  CardTypeEnum.Playing = loadedSettings.playing !== undefined ? loadedSettings.playing : "Playing";
+  CardTypeEnum.Picture = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
 
   // initial load of card providers
   if (isSonarrEnabled) await loadSonarrComingSoon();
@@ -675,7 +679,18 @@ app.post(
 
 // settings page
 app.get(BASEURL + "/settings", (req, res) => {
-  res.render("settings", {
+  if (loadedSettings.password == undefined) {
+    res.render("settings", {
+      success: req.session.success,
+      user: { valid: true },
+      settings: loadedSettings,
+      errors: req.session.errors,
+      version: pjson.version, 
+      baseUrl: BASEURL
+    });
+  }
+  else{
+    res.render("settings", {
     success: req.session.success,
     user: { valid: false },
     settings: loadedSettings,
@@ -683,13 +698,14 @@ app.get(BASEURL + "/settings", (req, res) => {
     version: pjson.version, 
     baseUrl: BASEURL
   });
+}
   req.session.errors = null;
 });
 
 app.post(
   BASEURL + "/settings",
   [
-    check("password").not().isEmpty().withMessage("Password cannot be blank"),
+    //check("password").not().isEmpty().withMessage("Password cannot be blank"),
     check("slideDuration")
       .not()
       .isEmpty()
@@ -794,7 +810,13 @@ app.post(
       radarrToken: req.body.radarrToken,
       radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : DEFAULT_SETTINGS.radarrCalDays,
       titleFont: req.body.titleFont,
-      saved: false,
+      nowScreening: req.body.nowScreening,
+      comingSoon: req.body.comingSoon,
+      onDemand: req.body.onDemand,
+      playing: req.body.playing,
+      iframe: req.body.iframe,
+      picture: req.body.picture,
+      saved: false
     };
 
     var errors = validationResult(req).array();

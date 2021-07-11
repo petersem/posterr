@@ -29,7 +29,7 @@
 </head>
 
 <body>
-  
+
   <%if(!user.valid){%><script language='javascript'>window.location.href = '<%=baseUrl%>/logon';</script>%><%}%>
   <div class="container">
     <!-- Breadcrumb -->
@@ -97,7 +97,7 @@
 
             <!-- General Settings -->
             <div class="tab-pane active" id="settings">
-              <h6>POSTERR SETTINGS</h6>
+              <h5>GENERAL SETTINGS</h5>
               <hr>
               <!-- show validation errors -->
               <% 
@@ -175,7 +175,10 @@
                     <small id="suffleSwitchHelp" class="form-text text-muted">Shuffles on-demand, coming soon (radar) & coming soon (Sonarr)</small>
                   </div>
                 </div>
-                <div class="form-group">
+              </br>
+              <h5>UI CUSTOMISATIONS</h5>
+              <hr>
+                  <div class="form-group">
                   <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Title Font</label>
                   <select class="custom-select my-1 mr-sm-2" id="titleFont" name="titleFont">
                     <option value="" selected>Default</option>
@@ -205,8 +208,50 @@
                   }
                 %>
                 </script>
+                <div class="form-group">
+                  <label for="comingSoon">Coming Soon (Alternate text)</label>
+                  <input type="text" class="form-control" id="comingSoon" name="comingSoon" aria-describedby="comingSoonHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.comingSoon%>"<%}else{%><%=settings.comingSoon%>"<%}%>>
+                  <small id="comingSoonHelp" class="form-text text-muted">Alternate text for 'Coming Soon'</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="plexIP">Now Screening (Alternate text)</label>
+                  <input type="text" class="form-control" id="nowScreening" name="nowScreening" aria-describedby="nowScreeningHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.nowScreening%>"<%}else{%><%=settings.nowScreening%>"<%}%>>
+                  <small id="nowScreeningHelp" class="form-text text-muted">Alternate text for 'Now Screening'</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="plexIP">On-demand (Alternate text)</label>
+                  <input type="text" class="form-control" id="nowScreening" name="onDemand" aria-describedby="onDemandHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.onDemand%>"<%}else{%><%=settings.onDemand%>"<%}%>>
+                  <small id="onDemandHelp" class="form-text text-muted">Alternate text for 'On-demand'</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="plexIP">Playing (Alternate text)</label>
+                  <input type="text" class="form-control" id="playing" name="playing" aria-describedby="playingHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.playing%>"<%}else{%><%=settings.playing%>"<%}%>>
+                  <small id="plexIPHelp" class="form-text text-muted">Alternate text for 'Playing' (music)</small>
+                </div>
+
+                <!-- <div class="form-group">
+                  <label for="iframe">Iframe (Alternate text)</label>
+                  <input type="text" class="form-control" id="iframe" name="iframe" aria-describedby="iframeHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.iframe%>"<%}else{%><%=settings.iframe%>"<%}%>>
+                  <small id="iframeHelp" class="form-text text-muted">Alternate text for 'Iframe'</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="picture">Picture (Alternate text)</label>
+                  <input type="text" class="form-control" id="picture" name="picture" aria-describedby="pictureHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.picture%>"<%}else{%><%=settings.picture%>"<%}%>>
+                  <small id="pictureHelp" class="form-text text-muted">Alternate text for 'picture'</small>
+                </div> -->
+
               </br>
-              <h6>PLEX SETTINGS</h6>
+              <h5>PLEX SETTINGS</h5>
               <hr>
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
@@ -241,7 +286,7 @@
                       target="_blank">details</a>)</small>
                 </div>
               </br>
-              <h6>NOW SCREENING</h6>
+              <h5>NOW SCREENING</h5>
               <hr>
               <div class="form-group">
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
@@ -252,7 +297,7 @@
                 </div>
               </div>
               </br>
-              <h6>ON-DEMAND</h6>
+              <h5>ON-DEMAND</h5>
               <hr>
                 <div class="form-group">
                   <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
@@ -282,7 +327,7 @@
                 </div>
 
               </br>
-              <h6>SONARR SETTINGS (v3 Only)</h6>
+              <h5>SONARR SETTINGS (v3 Only)</h5>
               <small id="sonarrHelp" class="form-text text-muted">The following settings allow for comming soon 'TV'
                 titles to be included.</small>
               <hr>
@@ -318,7 +363,7 @@
                 </div>
                 
               </br>
-              <h6>RADARR SETTINGS</h6>
+              <h5>RADARR SETTINGS</h5>
               <small id="radarrInfo" class="form-text text-muted">The following settings allow for comming soon 'Movie'
                 titles to be included.</small>
               <hr>
@@ -351,9 +396,11 @@
 
             <!-- About -->
             <div class="tab-pane" id="about">
-              <h6>ABOUT POSTERR</h6>
+              <h5>ABOUT POSTERR</h5>
               <p><%="Version: " + version%></p>
+              <p><b>Support my efforts and continued development.</b></br> <a href="https://www.paypal.com/paypalme/thanksmp" target="_blank">Buy me a coffee to say thanks.</a></p>
               <hr>
+              
               <p>
                 POSTERR was initially born from a desire for me to learn Node. Over time, I decided to
                  take it from an excercise to being a full product.
@@ -364,28 +411,19 @@
                 <li>Make it open source</li>
                 <li>Make it free</li>
                 <li>Make it cross-platform</li>
-                <li>Make it better, or at least a bit different to the other apps out there.</li>
+                <li>Make it as good as possible</li>
               </ul>
               <p>
                 I'd like to thank everyone for their suggestions and feedback. Keep it coming!
-                I'd also like to thank those that have contributed to the project. Im learning as much from you as
-                I have from building this.
               </p>
-              <P>Thanks everyone!</P>
               <P>Matt Petersen (April, 2021)</P>
-              <p>Support my efforts and continued development.</br> <a href="https://www.paypal.com/paypalme/thanksmp" target="_blank">Buy me a coffee to say thanks.</a></p>
               <hr />
               <label class="d-block" style="text-decoration: underline;">Project Details</label>
               <p>
-                Find this project on GitHub <a href="https://github.com/petersem/posterr" target="_blank">here</a>.
-              </p>
-              <p>
-                Get involved in the discussion groups and have your say. Contribute to the code, where you can add value.
-              </p>
-              <p>
-                If you want to install this with Docker, find the image at
-                <a href="https://hub.docker.com/repository/docker/petersem/posterr" target="_blank">petersem/posterr</a>
-                on Docker Hub.
+                <ul>
+                <li>GitHub repository: <a href="https://github.com/petersem/posterr" target="_blank">Here</a></li>
+                <li>Docker repository: <a href="https://hub.docker.com/repository/docker/petersem/posterr" target="_blank">Here</a></li>
+              </ul>
               </p>
             </div>
           </div>
