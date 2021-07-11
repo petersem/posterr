@@ -43,7 +43,7 @@ Installation details are as follows:
 
 ### Docker Compose
 Create the following directories in your docker folder:
- - .../dockerr/posterr/config
+ - .../docker/posterr/config
 
 ```ya
 version: '2.4'
