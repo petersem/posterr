@@ -4,54 +4,46 @@ Media display software for Plex, Sonarr and Radarr.
 ![Music playing](https://github.com/petersem/posterr/blob/master/doco/music.png?raw=true)
 ![Now screening](https://github.com/petersem/posterr/blob/master/doco/ns.png?raw=true)
 ![On-demand](https://github.com/petersem/posterr/blob/master/doco/od.png?raw=true)
-![Coming soon](https://github.com/petersem/posterr/blob/master/doco/cs.png?raw=true)
-![Landscape - background art mode](https://github.com/petersem/posterr/blob/master/doco/artmode.png?raw=true)
-![Settings](https://github.com/petersem/posterr/blob/master/doco/settings.png?raw=true)
 
-## Beta software
-This software is current in the `BETA` phase.
-- **Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates**
-
-Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
-
-Visit the [Discord Group](https://discord.gg/c5mHXaY5) for any discussions
+- Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates
+- Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
+- Visit the [Discord Group](https://discord.gg/c5mHXaY5) for discussions and limited support.
+ > **The default password is:** raidisnotabackup
 
 ## Features
- - Uses the latest 'Plex Agent' data (will work without tv themes for other agents).
- - Now Screening: Shows and movies from Plex.
- - Playing: Music from Plex.
- - On-demand: Random on-demand titles from multiple specified Plex libraries.
- - Coming Soon: Shows in Sonarr that are releasing in a given number of days (or Season premieres).
- - Coming Soon: Movies in Radarr that are releasing in a given number of days.
- - Option to play TV themes (available for most shows)
- - Option to play Movie themes if present, or a random MP3 of your choice for movies (add your own MP3 files)
- - Setup page (dark theme)
- - Built in Node JS, and packaged as a Docker image. (included image health check)
- - Now Screening / Playing displays a progress bar (green for direct play and red for transcoding)
- - Displays information for media, such as run time, content rating, studio, etc. 
+ - Displays movies, shows, and music that are currently playing.
+ - Displays random (on-demand) titles from multiple Plex libraries.
+ - Shows coming soon titles from Sonarr (or Season premieres).
+ - Shows coming soon titles from Radarr.
+ - Optionally play TV and Movies themes, if available
+ - A progress bar (green for direct play and red for transcoding) displays for playing titles
+ - Various metadata displayed, such as run time, content rating, studio, etc. 
  - Move the mouse cursor to the bottom footer of the page to hide it
- - Low resource usage. Memory: 20-35mb, Diskspace: 175mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
- - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
- - Browser-based, so can run the app on one machine and a browser on another.
- - Background artwork option for slides (when available)
- - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
- - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
- - Supports reverse proxy setup for wildcard dns or alternate base path.
+ - Background artwork option for improved landscape view (when available)
+ - Automatically scales for most display sizes and orientation.
 
 ## Possible Uses
- - Mount a monitor on your wall (extra points if framed) and showcase your home media setup
+ - Mount a monitor on your wall and showcase your home media setup
  - Use it on a second monitor to keep an eye on what is running
  - Run it on a small screen mounted outside your theater room to show when a movie is in progress
  - Use a reverse proxy, or port-forward, to let your friends see what is playing, available, and coming soon
 
+## Technical Features
+ - Built in Node JS, and packaged as a Docker image. (included image health check)
+ - Low resource usage. Memory: 20-35mb, Diskspace: 175mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
+ - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
+ - Browser-based, so can run the app on one machine and a browser on another.
+ - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
+ - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
+ - Supports reverse proxy setup for wildcard dns or alternate base path.
+ - Built-in recovery features should the Docker app, or Plex, go offline.
+
 ## Installation
 Installation details are as follows:
-
 
 ### Docker Compose
 Create the following directories in your docker folder:
  - .../dockerr/posterr/config
- - .../dockerr/posterr/randomthemes
 
 ```ya
 version: '2.4'
@@ -64,7 +56,6 @@ services:
       TZ: Australia/Brisbane
       BASEPATH: ""
     volumes:
-      - ./docker/posterr/randomthemes:/usr/src/app/public/randomthemes
       - ./docker/posterr/config:/usr/src/app/config
     ports:
       - 9876:3000
@@ -74,9 +65,8 @@ services:
 |--|--|
 |TZ|Your local timezone. Go to [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
 |/docker/posterr/config|This is required to save your Posterr settings|
-|/docker/posterr/randomthemes|This is optional. If you add this, then you can populate this directory with your own MP3 files, which will play for movie slides|
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
-|BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out or value left blank** if you dont use alternate paths. |
+|BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out, or value left blank** if you dont use alternate paths. |
 
 ## Updates
  - Use containrr/watchtower to auto-update Posterr.
@@ -104,9 +94,10 @@ Should you encounter a problem, the solution may be listed [HERE](https://github
  - There is no _'official'_ support for this product, however should you encounter issues, raise an issue on the github page.
  - Limited support in [Discord](https://discord.gg/pucjF6j8k9)
 
-*Support my efforts and continued development* - Click this link to Buy me a coffee: 
+### Support my efforts and continued development 
 
- > ![](https://github.com/petersem/posterr/blob/master/doco/coffsmall.gif?raw=true) [Support development](https://www.paypal.com/paypalme/thanksmp)
+> [![](https://github.com/petersem/posterr/blob/master/doco/coffeesmall.gif?raw=true)](https://www.paypal.com/paypalme/thanksmp)
+
 
 Thanks,
 
