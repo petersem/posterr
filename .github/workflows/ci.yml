@@ -31,4 +31,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm/v7,linux/arm/v6
           push: true
-          tags: petersem/posterr:latest, ${{ github.run_number }}
+          tags: petersem/posterr:latest
