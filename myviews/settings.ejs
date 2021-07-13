@@ -15,33 +15,36 @@
   <!-- Additional js libs -->
   <script src="<%=baseUrl%>/js/jquery-3.3.1.slim.min.js"></script>
   <script src="<%=baseUrl%>/js/bootstrap.min.js"></script>
+  <!-- <script src="<%=baseUrl%>/js/bootstrap-colorpicker.min.js"></script> -->
 
   <!--- CSS -->
   <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/settings-styles.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/light.min.css">
-
+  <!-- <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap-colorpicker.min.css"> -->
   <!-- <script src="/js/script.js"></script> -->
 
   <title>Posterr - Settings</title>
-  <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>
+  <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico" />
 </head>
 
 <body>
 
-  <%if(!user.valid){%><script language='javascript'>window.location.href = '<%=baseUrl%>/logon';</script>%><%}%>
+  <%if(!user.valid){%><script language='javascript'>
+    window.location.href = '<%=baseUrl%>/logon';
+  </script>%><%}%>
   <div class="container">
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="<%=baseUrl%>/">Posterr</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Posterr Settings</li>
-      </ol>
-    </nav>
-    <%if(typeof formData !== 'undefined' && formData.saved == true) {%><script language='javascript'>
-      alert("Posterr Settings Saved. Please allow a few seconds for Posterr to restart.");
-    </script><%}%>
+  <li class="breadcrumb-item active" aria-current="page">Posterr Settings</li>
+  </ol>
+  </nav>
+  <%if(typeof formData !== 'undefined' && formData.saved == true) {%><script language='javascript'>
+    alert("Posterr Settings Saved. Please allow a few seconds for Posterr to restart.");
+  </script><%}%>
     <!-- Layout -->
     <div class="row gutters-sm">
       <!-- Side Menu View -->
@@ -53,65 +56,66 @@
                 <i class="fal fa-cog"></i><span class="menu">Settings</span>
               </a>
               <a href="<%=baseUrl%>/debug" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-debug"></i><span class="menu">Debug</span>
-              </a>
-              <a href="#about" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-person-sign"></i><span class="menu">About</span>
-              </a>
-            </nav>
-          </div>
-        </div>
+  <i class="fal fa-debug"></i><span class="menu">Debug</span>
+  </a>
+  <a href="#about" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+    <i class="fal fa-person-sign"></i><span class="menu">About</span>
+  </a>
+  </nav>
+  </div>
+  </div>
+  </div>
+
+
+  <div class="col-md-8">
+    <div class="card">
+      <!-- Mobile Menu View -->
+      <div class="card-header border-bottom mb-3 d-flex d-md-none">
+        <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
+          <li class="nav-item">
+            <a href="#settings" data-toggle="tab" class="nav-link has-icon active"><i class="fal fa-cog"></i>
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle></svg>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/debug" class="nav-link has-icon"><i class="fal fa-debug"></i>
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#about" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-person-sign"></i>
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </a>
+          </li>
+        </ul>
       </div>
 
+      <!-- Tab Content -->
+      <div class="card-body tab-content">
 
-      <div class="col-md-8">
-        <div class="card">
-          <!-- Mobile Menu View -->
-          <div class="card-header border-bottom mb-3 d-flex d-md-none">
-            <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
-              <li class="nav-item">
-                <a href="#settings" data-toggle="tab" class="nav-link has-icon active"><i class="fal fa-cog"></i>
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle></svg>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/debug" class="nav-link has-icon"><i class="fal fa-debug"></i>
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#about" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-person-sign"></i>
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Tab Content -->
-          <div class="card-body tab-content">
-
-            <!-- General Settings -->
-            <div class="tab-pane active" id="settings">
-              <h5>GENERAL SETTINGS</h5>
-              <hr>
-              <!-- show validation errors -->
-              <% 
+        <!-- General Settings -->
+        <div class="tab-pane active" id="settings">
+          <h5>GENERAL SETTINGS</h5>
+          <hr>
+          <!-- show validation errors -->
+          <% 
               if(typeof errors !== 'undefined'){
                 // display validation errors
                 errors.forEach(function(e) { %>
-                  <p class="alert alert-warning"><%=e.msg %></p>
-                <%});%>
-              <%}%>
+          <p class="alert alert-warning"><%=e.msg %></p>
+          <%});%>
+          <%}%>
               <form method="POST" action="<%=baseUrl%>/settings">
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" class="form-control" id="password" name="password" aria-describedby="password"
-                    placeholder="Enter a password" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.password%>"<%}else{%><%=settings.password%>"<%}%>>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" aria-describedby="password"
+              placeholder="Enter a password"
+              value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.password%>" <%}else{%><%=settings.password%>"<%}%>>
                   <small id="passwordHelp" class="form-text text-muted">Enter a password to secure this page</small>
                 </div>
                 <div class="form-group">
@@ -178,6 +182,17 @@
               </br>
               <h5>UI CUSTOMISATIONS</h5>
               <hr>
+                <!-- <div class="form-group">
+                  <label for="titleColour">Title Colour</label>
+                  <input type="text" class="form-control" id="titleColour" name="titleColour" aria-describedby="titleColourHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.titleColour%>"<%}else{%><%=settings.titleColour%>"<%}%>>
+                  <small id="comingSoonHelp" class="form-text text-muted">Set the colour for the slide title</small>
+                </div> -->
+                <!-- <script lan='javascript'>
+                  $(function () {
+                    $('#titleColour').colorpicker();
+                  });
+                </script> -->
                   <div class="form-group">
                   <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Title Font</label>
                   <select class="custom-select my-1 mr-sm-2" id="titleFont" name="titleFont">
@@ -205,18 +220,16 @@
                   // set pre-selected or saved font
                   var fontDD = document.getElementById("titleFont");
                 <%
-                  if(typeof formData !== 'undefined' && errors){%>
-                    fontDD.value='<%=formData.titleFont%>';<%
+                  if(typeof formData !== 'undefined' && errors){%> fontDD.value='<%=formData.titleFont%>' ;<%
                   }
-                  else{%>
-                    fontDD.value='<%=settings.custBrand%>';<%
+                  else{%> fontDD.value='<%=settings.custBrand%>' ;<%
                   }
-                %>
-                </script>
-                <div class="form-group">
-                  <label for="comingSoon">Coming Soon (Alternate text)</label>
-                  <input type="text" class="form-control" id="comingSoon" name="comingSoon" aria-describedby="comingSoonHelp"
-                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.comingSoon%>"<%}else{%><%=settings.comingSoon%>"<%}%>>
+                %> </script> <div class="form-group">
+            <label for="comingSoon">Coming Soon (Alternate text)</label>
+            <input type="text" class="form-control" id="comingSoon" name="comingSoon" aria-describedby="comingSoonHelp"
+              placeholder="Leave blank for default"
+              value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.comingSoon%>"
+              <%}else{%><%=settings.comingSoon%>"<%}%>>
                   <small id="comingSoonHelp" class="form-text text-muted">Alternate text for 'Coming Soon'</small>
                 </div>
 
@@ -361,8 +374,7 @@
 
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                   <input type="checkbox" class="custom-control-input" id="premiereSwitch" name="premiereSwitch"
-                  value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.premiereSwitch ? 'checked' : '' %>
-                    <%}else{%><%=(settings.sonarrPremieres == 'true') ? 'checked' : '' %><%}%>>
+                  value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.premiereSwitch ? 'checked' : '' %> <%}else{%><%=(settings.sonarrPremieres == 'true') ? 'checked' : '' %><%}%>>
                   <label class="custom-control-label" for="premiereSwitch">Show premieres</label>
                   <small id="premiereSwitchHelp" class="form-text text-muted">Only show season premieres.</small>
                 </div>
@@ -393,48 +405,51 @@
                 </div>
 
                 <hr />
-                <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload Saved</button>&nbsp;&nbsp;&nbsp;
-                <button type="reset" class="btn btn-info"    onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
-                <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
-              </form>
-            </div>
+                <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload
+              Saved</button>&nbsp;&nbsp;&nbsp; <button type="reset" class="btn btn-info"
+              onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
+            <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
+            </form>
+          </div>
 
-            <!-- About -->
-            <div class="tab-pane" id="about">
-              <h5>ABOUT POSTERR</h5>
-              <p><%="Version: " + version%></p>
-              <p><b>Support my efforts and continued development.</b></br> <a href="https://www.paypal.com/paypalme/thanksmp" target="_blank">Buy me a coffee to say thanks.</a></p>
-              <hr>
-              
-              <p>
-                POSTERR was initially born from a desire for me to learn Node. Over time, I decided to
-                 take it from an excercise to being a full product.
-              </p>
-              <p>
-                My goals were simple: </p>
+          <!-- About -->
+          <div class="tab-pane" id="about">
+            <h5>ABOUT POSTERR</h5>
+            <p><%="Version: " + version%></p>
+            <p><b>Support my efforts and continued development.</b></br> <a
+                href="https://www.paypal.com/paypalme/thanksmp" target="_blank">Buy me a coffee to say thanks.</a></p>
+            <hr>
+
+            <p>
+              POSTERR was initially born from a desire for me to learn Node. Over time, I decided to
+              take it from an excercise to being a full product.
+            </p>
+            <p>
+              My goals were simple: </p>
+            <ul>
+              <li>Make it open source</li>
+              <li>Make it free</li>
+              <li>Make it cross-platform</li>
+              <li>Make it as good as possible</li>
+            </ul>
+            <p>
+              I'd like to thank everyone for their suggestions and feedback. Keep it coming!
+            </p>
+            <P>Matt Petersen (April, 2021)</P>
+            <hr />
+            <label class="d-block" style="text-decoration: underline;">Project Details</label>
+            <p>
               <ul>
-                <li>Make it open source</li>
-                <li>Make it free</li>
-                <li>Make it cross-platform</li>
-                <li>Make it as good as possible</li>
-              </ul>
-              <p>
-                I'd like to thank everyone for their suggestions and feedback. Keep it coming!
-              </p>
-              <P>Matt Petersen (April, 2021)</P>
-              <hr />
-              <label class="d-block" style="text-decoration: underline;">Project Details</label>
-              <p>
-                <ul>
                 <li>GitHub repository: <a href="https://github.com/petersem/posterr" target="_blank">Here</a></li>
-                <li>Docker repository: <a href="https://hub.docker.com/repository/docker/petersem/posterr" target="_blank">Here</a></li>
+                <li>Docker repository: <a href="https://hub.docker.com/repository/docker/petersem/posterr"
+                    target="_blank">Here</a></li>
               </ul>
-              </p>
-            </div>
+            </p>
           </div>
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   </div>
