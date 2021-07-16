@@ -22,7 +22,10 @@ const DEFAULT_SETTINGS = {
   hasArt : "false",
   shuffleSlides: "false",
   genres: "",
-  custBrand: ""
+  custBrand: "",
+  titleColour: "#FAFAD2",
+  footColour: "#FAFAD2",
+  bgColour: "#FAFAD2",
 };
 
 module.exports = DEFAULT_SETTINGS;

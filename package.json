@@ -1,6 +1,6 @@
 {
   "name": "posterr",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
@@ -32,6 +32,7 @@
   "author": "Matt Petersen",
   "license": "MIT",
   "dependencies": {
+    "@jaames/iro": "^5.5.2",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "bootstrap-colorpicker": "^3.4.0",

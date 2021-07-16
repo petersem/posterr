@@ -11,11 +11,17 @@ class globalPage {
   constructor(
     slideDuration,
     fadeTransition,
-    custBrand
+    custBrand,
+    titleColour,
+    footColour,
+    bgColour
   ) {
     this.slideDuration = slideDuration;
     this.fadeTransition = fadeTransition;
     this.custBrand = custBrand;
+    this.titleColour = titleColour;
+    this.footColour = footColour;
+    this.bgColour = bgColour;
     this.cards = [];
     return;
   }

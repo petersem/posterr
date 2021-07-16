@@ -39,6 +39,9 @@ class Settings {
     this.iframe = DEFAULT_SETTINGS.iframe;
     this.playing = DEFAULT_SETTINGS.playing;
     this.picture = DEFAULT_SETTINGS.picture;
+    this.titleColour = DEFAULT_SETTINGS.titleColour;
+    this.footColour = DEFAULT_SETTINGS.footColour;
+    this.bgColour = DEFAULT_SETTINGS.bgColour;
 
     return;
   }
@@ -201,6 +204,12 @@ class Settings {
     else this.iframe = cs.iframe;
     if (jsonObject.picture) this.picture = jsonObject.picture;
     else this.picture = cs.picture;
+    if (jsonObject.titleColour) this.titleColour = jsonObject.titleColour;
+    else this.titleColour = cs.titleColour;
+    if (jsonObject.footColour) this.footColour = jsonObject.footColour;
+    else this.footColour = cs.footColour;
+    if (jsonObject.bgColour) this.bgColour = jsonObject.bgColour;
+    else this.bgColour = cs.bgColour;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

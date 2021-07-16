@@ -15,14 +15,15 @@
   <!-- Additional js libs -->
   <script src="<%=baseUrl%>/js/jquery-3.3.1.slim.min.js"></script>
   <script src="<%=baseUrl%>/js/bootstrap.min.js"></script>
-  <!-- <script src="<%=baseUrl%>/js/bootstrap-colorpicker.min.js"></script> -->
+  <!-- <script src="<%=baseUrl%>/js/bootstrap-colourpicker.min.js"></script> -->
+  <script src="/js/iro.min.js"></script>
 
   <!--- CSS -->
   <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/settings-styles.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/light.min.css">
-  <!-- <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap-colorpicker.min.css"> -->
+  <!-- <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap-colourpicker.min.css"> -->
   <!-- <script src="/js/script.js"></script> -->
 
   <title>Posterr - Settings</title>
@@ -131,7 +132,7 @@
                     <input type="checkbox" class="custom-control-input" name="artSwitch" id="artSwitch" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.artSwitch ? 'checked' : '' %><%}else{%><%=(settings.hasArt == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="artSwitch">Enable background artwork</label>
-                    <small id="themeHelp" class="form-text text-muted">Shows background art behind the poster, *when available*</small>
+                    <small id="themeHelp" class="form-text text-muted">Shows background art (Best with black background)</small>
                   </div>
                 </div>
 
@@ -182,17 +183,147 @@
               </br>
               <h5>UI CUSTOMISATIONS</h5>
               <hr>
-                <!-- <div class="form-group">
-                  <label for="titleColour">Title Colour</label>
-                  <input type="text" class="form-control" id="titleColour" name="titleColour" aria-describedby="titleColourHelp"
+                <h6>Colours</h6>
+                <div class="form-group">
+                  &nbsp;&nbsp;<input type="color" value="#FAFAD2" id="colourWellTitle">
+                  <label for="titleColour">&nbsp;&nbsp;Title </label>
+                  &nbsp;<span id="titleHex" name="titleHex"></span>
+                  <input type="text" class="form-control" id="titleColour" style="display: none;" name="titleColour" aria-describedby="titleColourHelp"
                     placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.titleColour%>"<%}else{%><%=settings.titleColour%>"<%}%>>
-                  <small id="comingSoonHelp" class="form-text text-muted">Set the colour for the slide title</small>
-                </div> -->
-                <!-- <script lan='javascript'>
-                  $(function () {
-                    $('#titleColour').colorpicker();
-                  });
-                </script> -->
+                  <small id="titleColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the slide title</small>
+                </div>
+                <div class="form-group">
+                &nbsp;&nbsp;<input type="color" value="#FAFAD2" id="colourWellFoot">
+                <label for="footColour">&nbsp;&nbsp;Tagline </label>
+                &nbsp;<span id="footHex" name="footHex"></span>
+                <input type="text" class="form-control" id="footColour" style="display: none;" name="footColour" aria-describedby="footColourHelp"
+                  placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.footColour%>"<%}else{%><%=settings.footColour%>"<%}%>>
+                <small id="footColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the slide tagline</small>
+              </div>
+              <div class="form-group">
+              &nbsp;&nbsp;<input type="color" value="#000000" id="colourWellBg">
+              <label for="bgColour">&nbsp;&nbsp;Background </label>
+              &nbsp;<span id="bgHex" name="bgHex"></span>
+              <input type="text" class="form-control" id="bgColour" style="display: none;" name="bgColour" aria-describedby="bgColourHelp"
+                placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.bgColour%>"<%}else{%><%=settings.bgColour%>"<%}%>>
+              <small id="bgColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the background (black best with artwork)</small>
+            </div>
+              &nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="resetColours();">Reset colours</button> 
+            </br></br>
+
+                <script lang=javascript>
+                  var colourWellTitle;
+                  var colourWellFoot;
+                  var colourWellBg;
+                  var defaultTitlecolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.titleColour%>"<%}else{%><%=settings.titleColour%>"<%}%>;
+                  var defaultFootcolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.footColour%>"<%}else{%><%=settings.footColour%>"<%}%>;
+                  var defaultBgcolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.bgColour%>"<%}else{%><%=settings.bgColour%>"<%}%>;
+
+                  // set defaults if nothing saved
+                  if(defaultTitlecolour == "") {defaultTitlecolour = "#FAFAD2"};
+                  if(defaultFootcolour == "") {defaultFootcolour = "#FAFAD2"};
+                  if(defaultBgcolour == "") {defaultBgcolour = "#000000"};
+                  titleCol = document.querySelector("#titleColour");
+                  titleCol.value = defaultTitlecolour;
+                  footCol = document.querySelector("#footColour");
+                  footCol.value = defaultFootcolour;
+                  bgCol = document.querySelector("#bgColour");
+                  bgCol.value = defaultBgcolour;
+                  
+                  window.addEventListener("load", startup, false);
+
+                  function startup() {
+                  colourWellTitle = document.querySelector("#colourWellTitle");
+                  colourWellTitle.value = defaultTitlecolour;
+                  colourWellTitle.addEventListener("input", updateFirst, false);
+                  colourWellTitle.addEventListener("change", updateAll, false);
+
+                  colourWellFoot = document.querySelector("#colourWellFoot");
+                  colourWellFoot.value = defaultFootcolour;
+                  colourWellFoot.addEventListener("input", updateFirstFoot, false);
+                  colourWellFoot.addEventListener("change", updateAllFoot, false);
+
+                  colourWellBg = document.querySelector("#colourWellBg");
+                  colourWellBg.value = defaultBgcolour;
+                  colourWellBg.addEventListener("input", updateFirstBg, false);
+                  colourWellBg.addEventListener("change", updateAllBg, false);
+
+                  var th = document.getElementById("titleHex");
+                  th.innerText = "(" + defaultTitlecolour + ")";  
+                  var fh = document.getElementById("footHex");
+                  fh.innerText = "(" + defaultFootcolour + ")";  
+                  var bh = document.getElementById("bgHex");
+                  bh.innerText = "(" + defaultBgcolour + ")";  
+                }
+
+                function resetColours() {
+                  colourWellTitle = document.querySelector("#colourWellTitle");
+                  colourWellTitle.value = "#FAFAD2";
+                  colourWellFoot = document.querySelector("#colourWellFoot");
+                  colourWellFoot.value = "#FAFAD2";
+                  colourWellBg = document.querySelector("#colourWellBg");
+                  colourWellBg.value = "#000000";
+
+                  var tc = document.getElementById("titleColour");
+                  tc.value = "#FAFAD2";
+                  var th = document.getElementById("titleHex");
+                  th.innerText = "(#FAFAD2)"; 
+
+                  var fc = document.getElementById("footColour");
+                  fc.value = "#FAFAD2"
+                  var fh = document.getElementById("footHex");
+                  fh.innerText = "(#FAFAD2)";  
+
+                  var bc = document.getElementById("bgColour");
+                  bc.value = "#000000";
+                  var bh = document.getElementById("bgHex");
+                  bh.innerText = "(#000000)";                
+                }
+
+                function updateFirst(event) {
+                  var tc = document.getElementById("titleColour");
+                  tc.value = event.target.value;
+                  var th = document.getElementById("titleHex");
+                  th.innerText = "(" + event.target.value + ")";                
+                }
+
+                function updateFirstFoot(event) {
+                  var fc = document.getElementById("footColour");
+                  fc.value = event.target.value;
+                  var fh = document.getElementById("footHex");
+                  fh.innerText = "(" + event.target.value + ")";                
+                }
+
+                function updateFirstBg(event) {
+                  var bc = document.getElementById("bgColour");
+                  bc.value = event.target.value;
+                  var bh = document.getElementById("bgHex");
+                  bh.innerText = "(" + event.target.value + ")";                
+                }
+
+                function updateAll(event) {
+                  var tc = document.getElementById("titleColour");
+                  tc.value = event.target.value;
+                  var th = document.getElementById("titleHex");
+                  th.innerText = "(" + event.target.value + ")";                
+                };
+
+                function updateAllFoot(event) {
+                  var fc = document.getElementById("footColour");
+                  fc.value = event.target.value;
+                  var fh = document.getElementById("footHex");
+                  fh.innerText = "(" + event.target.value + ")";                
+                };
+
+                function updateAllBg(event) {
+                  var bc = document.getElementById("bgColour");
+                  bc.value = event.target.value;
+                  var bh = document.getElementById("bgHex");
+                  bh.innerText = "(" + event.target.value + ")";                
+                };
+
+              </script>
+
                   <div class="form-group">
                   <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Title Font</label>
                   <select class="custom-select my-1 mr-sm-2" id="titleFont" name="titleFont">

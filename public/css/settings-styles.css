@@ -206,3 +206,11 @@ body{margin-top:20px;
         background: #0d111d;
         color: #bcd0f7;
     }
+
+    .colSample {
+      margin-bottom: 10px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      border: 0;
+    }

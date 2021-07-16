@@ -19,8 +19,21 @@
   <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/styles.css">
-  <%if(globals.custBrand != ""){%>
+  <!-- Apply UI customisations -->
+  <%if(globals.custBrand !== ""){%>
     <style>.banners { font-family: '<%=globals.custBrand%>'; }</style>
+  <%}%>
+
+  <%if(globals.footColour !== undefined && globals.footColour !== "" ){%>
+    <style>.tagLine { color: <%=globals.footColour%>; }</style>
+  <%}%>
+
+  <%if(globals.bgColour !== undefined && globals.bgColour !== "" ){%>
+    <style>body { background-color: <%=globals.bgColour%>; }</style>
+  <%}%>
+
+  <%if(globals.titleColour !== undefined && globals.titleColour !== "" ){%>
+    <style>.bannerBigText { color: <%=globals.titleColour%>; }</style>
   <%}%>
 
   <title>Posterr</title>

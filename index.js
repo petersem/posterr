@@ -60,6 +60,7 @@ let cold_start_time = new Date();
 // needed for package binaries
 var fs = require('fs');
 const { CardTypeEnum } = require("./classes/cards/CardType");
+const { titleColour } = require("./consts");
 var dir = './config';
 
 //CardTypeEnum.OnDemand="Available";
@@ -283,6 +284,9 @@ async function loadNowScreening() {
   globalPage.fadeTransition =
   loadedSettings.fade == "true" ? "carousel-fade" : "";
   globalPage.custBrand = loadedSettings.custBrand;
+  globalPage.titleColour = loadedSettings.titleColour;
+  globalPage.footColour = loadedSettings.footColour;
+  globalPage.bgColour = loadedSettings.bgColour;
 
 
   // restart the clock
@@ -816,9 +820,16 @@ app.post(
       playing: req.body.playing,
       iframe: req.body.iframe,
       picture: req.body.picture,
+      titleColour: req.body.titleColour ? req.body.titleColour : DEFAULT_SETTINGS.titleColour,
+      footColour: req.body.footColour ? req.body.footColour : DEFAULT_SETTINGS.footColour,
+      bgColour: req.body.bgColour ? req.body.bgColour : DEFAULT_SETTINGS.bgColour,
       saved: false
     };
-
+// console.log(req.body);
+//     console.log(req.body.titleColour);
+//     console.log(req.body.footColour);
+//     console.log(req.body.bgColour);
+    
     var errors = validationResult(req).array();
     if (errors.length > 0) {
       req.session.errors = errors;
