@@ -36,6 +36,7 @@
     window.location.href = '<%=baseUrl%>/logon';
   </script>%><%}%>
   <div class="container">
+
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
@@ -101,8 +102,20 @@
 
         <!-- General Settings -->
         <div class="tab-pane active" id="settings">
-          <h5>GENERAL SETTINGS</h5>
-          <hr>
+
+
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    GENERAL SETTINGS <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+
           <!-- show validation errors -->
           <% 
               if(typeof errors !== 'undefined'){
@@ -180,229 +193,266 @@
                     <small id="suffleSwitchHelp" class="form-text text-muted">Shuffles on-demand, coming soon (radar) & coming soon (Sonarr)</small>
                   </div>
                 </div>
-              </br>
-              <h5>UI CUSTOMISATIONS</h5>
-              <hr>
-                <h6>Colours</h6>
-                <div class="form-group">
-                  &nbsp;&nbsp;<input type="color" value="#FAFAD2" id="colourWellTitle">
-                  <label for="titleColour">&nbsp;&nbsp;Title </label>
-                  &nbsp;<span id="titleHex" name="titleHex"></span>
-                  <input type="text" class="form-control" id="titleColour" style="display: none;" name="titleColour" aria-describedby="titleColourHelp"
-                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.titleColour%>"<%}else{%><%=settings.titleColour%>"<%}%>>
-                  <small id="titleColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the slide title</small>
+
+
+                </div>
+              </div>
+            </div>
+            <hr>
+
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    UI CUSTOMISATIONS <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+
+                  <h6>Colours</h6>
+                  <div class="form-group">
+                    &nbsp;&nbsp;<input type="color" value="#FAFAD2" id="colourWellTitle">
+                    <label for="titleColour">&nbsp;&nbsp;Title </label>
+                    &nbsp;<span id="titleHex" name="titleHex"></span>
+                    <input type="text" class="form-control" id="titleColour" style="display: none;" name="titleColour" aria-describedby="titleColourHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.titleColour%>"<%}else{%><%=settings.titleColour%>"<%}%>>
+                    <small id="titleColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the slide title</small>
+                  </div>
+                  <div class="form-group">
+                  &nbsp;&nbsp;<input type="color" value="#FAFAD2" id="colourWellFoot">
+                  <label for="footColour">&nbsp;&nbsp;Tagline </label>
+                  &nbsp;<span id="footHex" name="footHex"></span>
+                  <input type="text" class="form-control" id="footColour" style="display: none;" name="footColour" aria-describedby="footColourHelp"
+                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.footColour%>"<%}else{%><%=settings.footColour%>"<%}%>>
+                  <small id="footColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the slide tagline</small>
                 </div>
                 <div class="form-group">
-                &nbsp;&nbsp;<input type="color" value="#FAFAD2" id="colourWellFoot">
-                <label for="footColour">&nbsp;&nbsp;Tagline </label>
-                &nbsp;<span id="footHex" name="footHex"></span>
-                <input type="text" class="form-control" id="footColour" style="display: none;" name="footColour" aria-describedby="footColourHelp"
-                  placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.footColour%>"<%}else{%><%=settings.footColour%>"<%}%>>
-                <small id="footColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the slide tagline</small>
+                &nbsp;&nbsp;<input type="color" value="#000000" id="colourWellBg">
+                <label for="bgColour">&nbsp;&nbsp;Background </label>
+                &nbsp;<span id="bgHex" name="bgHex"></span>
+                <input type="text" class="form-control" id="bgColour" style="display: none;" name="bgColour" aria-describedby="bgColourHelp"
+                  placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.bgColour%>"<%}else{%><%=settings.bgColour%>"<%}%>>
+                <small id="bgColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the background (black best with artwork)</small>
               </div>
-              <div class="form-group">
-              &nbsp;&nbsp;<input type="color" value="#000000" id="colourWellBg">
-              <label for="bgColour">&nbsp;&nbsp;Background </label>
-              &nbsp;<span id="bgHex" name="bgHex"></span>
-              <input type="text" class="form-control" id="bgColour" style="display: none;" name="bgColour" aria-describedby="bgColourHelp"
-                placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.bgColour%>"<%}else{%><%=settings.bgColour%>"<%}%>>
-              <small id="bgColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the background (black best with artwork)</small>
+                &nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="resetColours();">Reset colours</button> 
+              </br></br>
+  
+                  <script lang=javascript>
+                    var colourWellTitle;
+                    var colourWellFoot;
+                    var colourWellBg;
+                    var defaultTitlecolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.titleColour%>"<%}else{%><%=settings.titleColour%>"<%}%>;
+                    var defaultFootcolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.footColour%>"<%}else{%><%=settings.footColour%>"<%}%>;
+                    var defaultBgcolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.bgColour%>"<%}else{%><%=settings.bgColour%>"<%}%>;
+  
+                    // set defaults if nothing saved
+                    if(defaultTitlecolour == "") {defaultTitlecolour = "#FAFAD2"};
+                    if(defaultFootcolour == "") {defaultFootcolour = "#FAFAD2"};
+                    if(defaultBgcolour == "") {defaultBgcolour = "#000000"};
+                    titleCol = document.querySelector("#titleColour");
+                    titleCol.value = defaultTitlecolour;
+                    footCol = document.querySelector("#footColour");
+                    footCol.value = defaultFootcolour;
+                    bgCol = document.querySelector("#bgColour");
+                    bgCol.value = defaultBgcolour;
+                    
+                    window.addEventListener("load", startup, false);
+  
+                    function startup() {
+  
+                    $('.panel-title > a').click(function() {
+                    $(this).find('i').toggleClass('fa-plus fa-minus')
+                      .closest('panel').siblings('panel')
+                      .find('i')
+                      .removeClass('fa-minus').addClass('fa-plus');
+                    });
+  
+                    colourWellTitle = document.querySelector("#colourWellTitle");
+                    colourWellTitle.value = defaultTitlecolour;
+                    colourWellTitle.addEventListener("input", updateFirst, false);
+                    colourWellTitle.addEventListener("change", updateAll, false);
+  
+                    colourWellFoot = document.querySelector("#colourWellFoot");
+                    colourWellFoot.value = defaultFootcolour;
+                    colourWellFoot.addEventListener("input", updateFirstFoot, false);
+                    colourWellFoot.addEventListener("change", updateAllFoot, false);
+  
+                    colourWellBg = document.querySelector("#colourWellBg");
+                    colourWellBg.value = defaultBgcolour;
+                    colourWellBg.addEventListener("input", updateFirstBg, false);
+                    colourWellBg.addEventListener("change", updateAllBg, false);
+  
+                    var th = document.getElementById("titleHex");
+                    th.innerText = "(" + defaultTitlecolour + ")";  
+                    var fh = document.getElementById("footHex");
+                    fh.innerText = "(" + defaultFootcolour + ")";  
+                    var bh = document.getElementById("bgHex");
+                    bh.innerText = "(" + defaultBgcolour + ")";  
+                  }
+  
+                  function resetColours() {
+                    colourWellTitle = document.querySelector("#colourWellTitle");
+                    colourWellTitle.value = "#FAFAD2";
+                    colourWellFoot = document.querySelector("#colourWellFoot");
+                    colourWellFoot.value = "#FAFAD2";
+                    colourWellBg = document.querySelector("#colourWellBg");
+                    colourWellBg.value = "#000000";
+  
+                    var tc = document.getElementById("titleColour");
+                    tc.value = "#FAFAD2";
+                    var th = document.getElementById("titleHex");
+                    th.innerText = "(#FAFAD2)"; 
+  
+                    var fc = document.getElementById("footColour");
+                    fc.value = "#FAFAD2"
+                    var fh = document.getElementById("footHex");
+                    fh.innerText = "(#FAFAD2)";  
+  
+                    var bc = document.getElementById("bgColour");
+                    bc.value = "#000000";
+                    var bh = document.getElementById("bgHex");
+                    bh.innerText = "(#000000)";                
+                  }
+  
+                  function updateFirst(event) {
+                    var tc = document.getElementById("titleColour");
+                    tc.value = event.target.value;
+                    var th = document.getElementById("titleHex");
+                    th.innerText = "(" + event.target.value + ")";                
+                  }
+  
+                  function updateFirstFoot(event) {
+                    var fc = document.getElementById("footColour");
+                    fc.value = event.target.value;
+                    var fh = document.getElementById("footHex");
+                    fh.innerText = "(" + event.target.value + ")";                
+                  }
+  
+                  function updateFirstBg(event) {
+                    var bc = document.getElementById("bgColour");
+                    bc.value = event.target.value;
+                    var bh = document.getElementById("bgHex");
+                    bh.innerText = "(" + event.target.value + ")";                
+                  }
+  
+                  function updateAll(event) {
+                    var tc = document.getElementById("titleColour");
+                    tc.value = event.target.value;
+                    var th = document.getElementById("titleHex");
+                    th.innerText = "(" + event.target.value + ")";                
+                  };
+  
+                  function updateAllFoot(event) {
+                    var fc = document.getElementById("footColour");
+                    fc.value = event.target.value;
+                    var fh = document.getElementById("footHex");
+                    fh.innerText = "(" + event.target.value + ")";                
+                  };
+  
+                  function updateAllBg(event) {
+                    var bc = document.getElementById("bgColour");
+                    bc.value = event.target.value;
+                    var bh = document.getElementById("bgHex");
+                    bh.innerText = "(" + event.target.value + ")";                
+                  };
+  
+                </script>
+  
+                    <div class="form-group">
+                    <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Title Font</label>
+                    <select class="custom-select my-1 mr-sm-2" id="titleFont" name="titleFont">
+                      <option value="" selected>Default</option>
+                      <option value="broadwayregular" style="font-family: 'broadwayregular';">Broadway</option>
+                      <option value="carnival_centenaryregular" style="font-family: 'carnival_centenaryregular';">Carnival Centenary</option>
+                      <option value="emerald_greyregular" style="font-family: 'emerald_greyregular';">Emerald Grey</option>
+                      <option value="great_attractionregular" style="font-family: 'great_attractionregular';">Great Attraction</option>
+                      <option value="hangar_nineregular" style="font-family: 'hangar_nineregular';">Hangar Nine</option>
+                      <option value="inepticregular" style="font-family: 'inepticregular';">Ineptic</option>
+                      <option value="joyful_theatreregular" style="font-family: 'joyful_theatreregular';">Joyful Theatre</option>
+                      <option value="laconicaregular" style="font-family: 'laconicaregular';">Laconica</option>
+                      <option value="limelightregular" style="font-family: 'limelightregular';">Limelight</option>
+                      <option value="midnight_championregular" style="font-family: 'midnight_championregular';">Midnight Champion</option>
+                      <option value="moulinrougeflfregular" style="font-family: 'moulinrougeflfregular';">Moulinrouge Flf</option>       
+                      <option value="movie_timesregular" style="font-family: 'movie_timesregular';">Movie Times</option>
+                      <option value="r1999regular" style="font-family: 'r1999regular';">R1999</option>   
+                      <option value="reach_the_endregular" style="font-family: 'reach_the_endregular';">Reach The End</option>
+                      <option value="riemann_theatreregular" style="font-family: 'riemann_theatreregular';">Riemann Theatre</option>
+                      <option value="showtimenormal" style="font-family: 'showtimenormal';">Showtime</option>
+                      <option value="style_thiefregular" style="font-family: 'style_thiefregular';">Style Thief</option>
+                    </select>
+                  </div>
+                  <script lang='javascript'>
+                    // set pre-selected or saved font
+                    var fontDD = document.getElementById("titleFont");
+                  <%
+                    if(typeof formData !== 'undefined' && errors){%> fontDD.value='<%=formData.titleFont%>' ;<%
+                    }
+                    else{%> fontDD.value='<%=settings.custBrand%>' ;<%
+                    }
+                  %> </script> <div class="form-group">
+              <label for="comingSoon">Coming Soon (Alternate text)</label>
+              <input type="text" class="form-control" id="comingSoon" name="comingSoon" aria-describedby="comingSoonHelp"
+                placeholder="Leave blank for default"
+                value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.comingSoon%>"
+                <%}else{%><%=settings.comingSoon%>"<%}%>>
+                    <small id="comingSoonHelp" class="form-text text-muted">Alternate text for 'Coming Soon'</small>
+                  </div>
+  
+                  <div class="form-group">
+                    <label for="plexIP">Now Screening (Alternate text)</label>
+                    <input type="text" class="form-control" id="nowScreening" name="nowScreening" aria-describedby="nowScreeningHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.nowScreening%>"<%}else{%><%=settings.nowScreening%>"<%}%>>
+                    <small id="nowScreeningHelp" class="form-text text-muted">Alternate text for 'Now Screening'</small>
+                  </div>
+  
+                  <div class="form-group">
+                    <label for="plexIP">On-demand (Alternate text)</label>
+                    <input type="text" class="form-control" id="onDemand" name="onDemand" aria-describedby="onDemandHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.onDemand%>"<%}else{%><%=settings.onDemand%>"<%}%>>
+                    <small id="onDemandHelp" class="form-text text-muted">Alternate text for 'On-demand'</small>
+                  </div>
+  
+                  <div class="form-group">
+                    <label for="plexIP">Playing (Alternate text)</label>
+                    <input type="text" class="form-control" id="playing" name="playing" aria-describedby="playingHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.playing%>"<%}else{%><%=settings.playing%>"<%}%>>
+                    <small id="plexIPHelp" class="form-text text-muted">Alternate text for 'Playing' (music)</small>
+                  </div>
+  
+                  <!-- <div class="form-group">
+                    <label for="iframe">Iframe (Alternate text)</label>
+                    <input type="text" class="form-control" id="iframe" name="iframe" aria-describedby="iframeHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.iframe%>"<%}else{%><%=settings.iframe%>"<%}%>>
+                    <small id="iframeHelp" class="form-text text-muted">Alternate text for 'Iframe'</small>
+                  </div>
+  
+                  <div class="form-group">
+                    <label for="picture">Picture (Alternate text)</label>
+                    <input type="text" class="form-control" id="picture" name="picture" aria-describedby="pictureHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.picture%>"<%}else{%><%=settings.picture%>"<%}%>>
+                    <small id="pictureHelp" class="form-text text-muted">Alternate text for 'picture'</small>
+                  </div> -->
+                </br>
+
+                </div>
+              </div>
             </div>
-              &nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="resetColours();">Reset colours</button> 
-            </br></br>
-
-                <script lang=javascript>
-                  var colourWellTitle;
-                  var colourWellFoot;
-                  var colourWellBg;
-                  var defaultTitlecolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.titleColour%>"<%}else{%><%=settings.titleColour%>"<%}%>;
-                  var defaultFootcolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.footColour%>"<%}else{%><%=settings.footColour%>"<%}%>;
-                  var defaultBgcolour = "<% if(typeof formData !== 'undefined' && errors){%><%=formData.bgColour%>"<%}else{%><%=settings.bgColour%>"<%}%>;
-
-                  // set defaults if nothing saved
-                  if(defaultTitlecolour == "") {defaultTitlecolour = "#FAFAD2"};
-                  if(defaultFootcolour == "") {defaultFootcolour = "#FAFAD2"};
-                  if(defaultBgcolour == "") {defaultBgcolour = "#000000"};
-                  titleCol = document.querySelector("#titleColour");
-                  titleCol.value = defaultTitlecolour;
-                  footCol = document.querySelector("#footColour");
-                  footCol.value = defaultFootcolour;
-                  bgCol = document.querySelector("#bgColour");
-                  bgCol.value = defaultBgcolour;
-                  
-                  window.addEventListener("load", startup, false);
-
-                  function startup() {
-                  colourWellTitle = document.querySelector("#colourWellTitle");
-                  colourWellTitle.value = defaultTitlecolour;
-                  colourWellTitle.addEventListener("input", updateFirst, false);
-                  colourWellTitle.addEventListener("change", updateAll, false);
-
-                  colourWellFoot = document.querySelector("#colourWellFoot");
-                  colourWellFoot.value = defaultFootcolour;
-                  colourWellFoot.addEventListener("input", updateFirstFoot, false);
-                  colourWellFoot.addEventListener("change", updateAllFoot, false);
-
-                  colourWellBg = document.querySelector("#colourWellBg");
-                  colourWellBg.value = defaultBgcolour;
-                  colourWellBg.addEventListener("input", updateFirstBg, false);
-                  colourWellBg.addEventListener("change", updateAllBg, false);
-
-                  var th = document.getElementById("titleHex");
-                  th.innerText = "(" + defaultTitlecolour + ")";  
-                  var fh = document.getElementById("footHex");
-                  fh.innerText = "(" + defaultFootcolour + ")";  
-                  var bh = document.getElementById("bgHex");
-                  bh.innerText = "(" + defaultBgcolour + ")";  
-                }
-
-                function resetColours() {
-                  colourWellTitle = document.querySelector("#colourWellTitle");
-                  colourWellTitle.value = "#FAFAD2";
-                  colourWellFoot = document.querySelector("#colourWellFoot");
-                  colourWellFoot.value = "#FAFAD2";
-                  colourWellBg = document.querySelector("#colourWellBg");
-                  colourWellBg.value = "#000000";
-
-                  var tc = document.getElementById("titleColour");
-                  tc.value = "#FAFAD2";
-                  var th = document.getElementById("titleHex");
-                  th.innerText = "(#FAFAD2)"; 
-
-                  var fc = document.getElementById("footColour");
-                  fc.value = "#FAFAD2"
-                  var fh = document.getElementById("footHex");
-                  fh.innerText = "(#FAFAD2)";  
-
-                  var bc = document.getElementById("bgColour");
-                  bc.value = "#000000";
-                  var bh = document.getElementById("bgHex");
-                  bh.innerText = "(#000000)";                
-                }
-
-                function updateFirst(event) {
-                  var tc = document.getElementById("titleColour");
-                  tc.value = event.target.value;
-                  var th = document.getElementById("titleHex");
-                  th.innerText = "(" + event.target.value + ")";                
-                }
-
-                function updateFirstFoot(event) {
-                  var fc = document.getElementById("footColour");
-                  fc.value = event.target.value;
-                  var fh = document.getElementById("footHex");
-                  fh.innerText = "(" + event.target.value + ")";                
-                }
-
-                function updateFirstBg(event) {
-                  var bc = document.getElementById("bgColour");
-                  bc.value = event.target.value;
-                  var bh = document.getElementById("bgHex");
-                  bh.innerText = "(" + event.target.value + ")";                
-                }
-
-                function updateAll(event) {
-                  var tc = document.getElementById("titleColour");
-                  tc.value = event.target.value;
-                  var th = document.getElementById("titleHex");
-                  th.innerText = "(" + event.target.value + ")";                
-                };
-
-                function updateAllFoot(event) {
-                  var fc = document.getElementById("footColour");
-                  fc.value = event.target.value;
-                  var fh = document.getElementById("footHex");
-                  fh.innerText = "(" + event.target.value + ")";                
-                };
-
-                function updateAllBg(event) {
-                  var bc = document.getElementById("bgColour");
-                  bc.value = event.target.value;
-                  var bh = document.getElementById("bgHex");
-                  bh.innerText = "(" + event.target.value + ")";                
-                };
-
-              </script>
+            <hr>
+            
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    PLEX SETTINGS <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
 
                   <div class="form-group">
-                  <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Title Font</label>
-                  <select class="custom-select my-1 mr-sm-2" id="titleFont" name="titleFont">
-                    <option value="" selected>Default</option>
-                    <option value="broadwayregular" style="font-family: 'broadwayregular';">Broadway</option>
-                    <option value="carnival_centenaryregular" style="font-family: 'carnival_centenaryregular';">Carnival Centenary</option>
-                    <option value="emerald_greyregular" style="font-family: 'emerald_greyregular';">Emerald Grey</option>
-                    <option value="great_attractionregular" style="font-family: 'great_attractionregular';">Great Attraction</option>
-                    <option value="hangar_nineregular" style="font-family: 'hangar_nineregular';">Hangar Nine</option>
-                    <option value="inepticregular" style="font-family: 'inepticregular';">Ineptic</option>
-                    <option value="joyful_theatreregular" style="font-family: 'joyful_theatreregular';">Joyful Theatre</option>
-                    <option value="laconicaregular" style="font-family: 'laconicaregular';">Laconica</option>
-                    <option value="limelightregular" style="font-family: 'limelightregular';">Limelight</option>
-                    <option value="midnight_championregular" style="font-family: 'midnight_championregular';">Midnight Champion</option>
-                    <option value="moulinrougeflfregular" style="font-family: 'moulinrougeflfregular';">Moulinrouge Flf</option>       
-                    <option value="movie_timesregular" style="font-family: 'movie_timesregular';">Movie Times</option>
-                    <option value="r1999regular" style="font-family: 'r1999regular';">R1999</option>   
-                    <option value="reach_the_endregular" style="font-family: 'reach_the_endregular';">Reach The End</option>
-                    <option value="riemann_theatreregular" style="font-family: 'riemann_theatreregular';">Riemann Theatre</option>
-                    <option value="showtimenormal" style="font-family: 'showtimenormal';">Showtime</option>
-                    <option value="style_thiefregular" style="font-family: 'style_thiefregular';">Style Thief</option>
-                  </select>
-                </div>
-                <script lang='javascript'>
-                  // set pre-selected or saved font
-                  var fontDD = document.getElementById("titleFont");
-                <%
-                  if(typeof formData !== 'undefined' && errors){%> fontDD.value='<%=formData.titleFont%>' ;<%
-                  }
-                  else{%> fontDD.value='<%=settings.custBrand%>' ;<%
-                  }
-                %> </script> <div class="form-group">
-            <label for="comingSoon">Coming Soon (Alternate text)</label>
-            <input type="text" class="form-control" id="comingSoon" name="comingSoon" aria-describedby="comingSoonHelp"
-              placeholder="Leave blank for default"
-              value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.comingSoon%>"
-              <%}else{%><%=settings.comingSoon%>"<%}%>>
-                  <small id="comingSoonHelp" class="form-text text-muted">Alternate text for 'Coming Soon'</small>
-                </div>
-
-                <div class="form-group">
-                  <label for="plexIP">Now Screening (Alternate text)</label>
-                  <input type="text" class="form-control" id="nowScreening" name="nowScreening" aria-describedby="nowScreeningHelp"
-                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.nowScreening%>"<%}else{%><%=settings.nowScreening%>"<%}%>>
-                  <small id="nowScreeningHelp" class="form-text text-muted">Alternate text for 'Now Screening'</small>
-                </div>
-
-                <div class="form-group">
-                  <label for="plexIP">On-demand (Alternate text)</label>
-                  <input type="text" class="form-control" id="onDemand" name="onDemand" aria-describedby="onDemandHelp"
-                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.onDemand%>"<%}else{%><%=settings.onDemand%>"<%}%>>
-                  <small id="onDemandHelp" class="form-text text-muted">Alternate text for 'On-demand'</small>
-                </div>
-
-                <div class="form-group">
-                  <label for="plexIP">Playing (Alternate text)</label>
-                  <input type="text" class="form-control" id="playing" name="playing" aria-describedby="playingHelp"
-                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.playing%>"<%}else{%><%=settings.playing%>"<%}%>>
-                  <small id="plexIPHelp" class="form-text text-muted">Alternate text for 'Playing' (music)</small>
-                </div>
-
-                <!-- <div class="form-group">
-                  <label for="iframe">Iframe (Alternate text)</label>
-                  <input type="text" class="form-control" id="iframe" name="iframe" aria-describedby="iframeHelp"
-                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.iframe%>"<%}else{%><%=settings.iframe%>"<%}%>>
-                  <small id="iframeHelp" class="form-text text-muted">Alternate text for 'Iframe'</small>
-                </div>
-
-                <div class="form-group">
-                  <label for="picture">Picture (Alternate text)</label>
-                  <input type="text" class="form-control" id="picture" name="picture" aria-describedby="pictureHelp"
-                    placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.picture%>"<%}else{%><%=settings.picture%>"<%}%>>
-                  <small id="pictureHelp" class="form-text text-muted">Alternate text for 'picture'</small>
-                </div> -->
-
-              </br>
-              <h5>PLEX SETTINGS</h5>
-              <hr>
-                <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="plexHTTPSSwitch" id="plexHTTPSSwitch"
                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.plexHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.plexHTTPS == 'true') ? 'checked' : '' %><%}%>>
@@ -435,9 +485,34 @@
                       target="_blank">details</a>)</small>
                 </div>
               </br>
-              <h5>NOW SCREENING</h5>
-              <hr>
-              <div class="form-group">
+
+                  
+                </div>
+              </div>
+            </div>
+            <hr>
+            
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingFour">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    NOW SCREENING <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body">
+
+                  <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableNS" id="enableNS" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableNS ? 'checked' : '' %><%}else{%><%=(settings.enableNS == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableNS">Enabled</label>
+                  </div>
+                </div>
+
+
+                  <div class="form-group">
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                   <input type="checkbox" class="custom-control-input" name="pinNSSwitch" id="pinNSSwitch" 
                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.pinNSSwitch ? 'checked' : '' %><%}else{%><%=(settings.pinNS == 'true') ? 'checked' : '' %><%}%>>
@@ -446,8 +521,31 @@
                 </div>
               </div>
               </br>
-              <h5>ON-DEMAND</h5>
-              <hr>
+
+                </div>
+              </div>
+            </div>
+            <hr>
+            
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingFive">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    ON-DEMAND <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+
+                  <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableOD" id="enableOD" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableOD ? 'checked' : '' %><%}else{%><%=(settings.enableOD == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableOD">Enabled</label>
+                  </div>
+                </div>
+
                 <div class="form-group">
                   <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
                   <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
@@ -474,12 +572,32 @@
                     placeholder="genre1,genre2" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.genres%>"<%}else{%><%=settings.genres%>"<%}%>>
                   <small id="genres" class="form-text text-muted">Filter on-demand to only show selected genres (not cumulative)</small>
                 </div>
-
               </br>
-              <h5>SONARR SETTINGS (v3 Only)</h5>
-              <small id="sonarrHelp" class="form-text text-muted">The following settings allow for comming soon 'TV'
-                titles to be included.</small>
-              <hr>
+
+                </div>
+              </div>
+            </div>  
+            <hr>
+            
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingSix">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                    SONARR SETTINGS <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                <div class="panel-body">
+
+                  <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableSonarr" id="enableSonarr" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableSonarr ? 'checked' : '' %><%}else{%><%=(settings.enableSonarr == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableSonarr">Enabled</label>
+                  </div>
+                </div>
+
               <div class="form-group">
                 <label for="sonarrToken">Sonarr Token</label>
                 <input type="password" class="form-control" id="sonarrToken" name="sonarrToken" aria-describedby="sonarrTokenlHelp"
@@ -509,12 +627,33 @@
                   <label class="custom-control-label" for="premiereSwitch">Show premieres</label>
                   <small id="premiereSwitchHelp" class="form-text text-muted">Only show season premieres.</small>
                 </div>
-                
               </br>
-              <h5>RADARR SETTINGS</h5>
-              <small id="radarrInfo" class="form-text text-muted">The following settings allow for comming soon 'Movie'
-                titles to be included.</small>
-              <hr>
+
+
+                  </div>
+              </div>
+            </div>  
+            <hr>
+            
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingSeven">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                    RADARR SETTINGS <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                <div class="panel-body">
+
+                  <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableRadarr" id="enableRadarr" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableRadarr ? 'checked' : '' %><%}else{%><%=(settings.enableRadarr == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableRadarr">Enabled</label>
+                  </div>
+                </div>
+
               <div class="form-group">
                 <label for="radarrToken">Radarr Token</label>
                 <input type="password" class="form-control" id="radarrToken" name="radarrToken" aria-describedby="radarrTokenHelp"
@@ -534,6 +673,12 @@
                   <small id="radarrUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Radarr
                     calendar.</small>
                 </div>
+
+                  </div>
+              </div>
+            </div>  
+
+          </div>
 
                 <hr />
                 <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload

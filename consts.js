@@ -26,6 +26,10 @@ const DEFAULT_SETTINGS = {
   titleColour: "#FAFAD2",
   footColour: "#FAFAD2",
   bgColour: "#FAFAD2",
+  enableNS: "true",
+  enableOD: "true",
+  enableSonarr: "true",
+  enableRadarr: "true",
 };
 
 module.exports = DEFAULT_SETTINGS;

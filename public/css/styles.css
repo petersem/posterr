@@ -248,7 +248,7 @@ iframe {
 }
 
 .banners {
-  position: fixed;
+  position: relative;
   width: 100%;
   top: 0;
   max-height: 8%;
@@ -410,9 +410,9 @@ iframe {
 
 /* If the screen size is 850px-700px high */
 @media screen and (max-height: 850px) and (min-height: 701px) {
-  .banners {
+  /* .banners {
     padding-top: 5px;
-  }
+  } */
 
   .progress {
     height: 5px;
@@ -430,9 +430,9 @@ iframe {
 
 /* If the screen size is 700px-650px high */
 @media screen and (max-height: 700px) and (min-height: 650px) {
-  .banners {
+  /* .banners {
     padding-top: 5px;
-  }
+  } */
 
   .progress {
     height: 4px;
@@ -446,11 +446,6 @@ iframe {
     font-size: 11px;
     padding-bottom: 10px;
   }
-}
-
-.bannerBigText {
-  color: lightgoldenrodyellow;
-  vertical-align: middle;
 }
 
 /* If the screen size is 649px-550px high */
@@ -556,6 +551,18 @@ iframe {
 .bannerBigText {
   color: lightgoldenrodyellow;
   vertical-align: middle;
+  white-space: nowrap;
+
+  text-align: center;
+  /* height: 50px; */
+  /* Center vertically */
+  position: absolute;
+  top: 50%;
+  /* margin-top: -25px; half this element's height */
+  vertical-align: middle;
+  left: 50%;
+  /* transform: translateX(-50%); */
+  transform: translate(-50%,-50%);
 }
 
 .bannerSmallText {

@@ -191,7 +191,8 @@ async function loadNowScreening() {
   clearInterval(nowScreeningClock);
 
   // stop timers dont run if disabled
-  if (!isPlexEnabled) {
+  if (!isPlexEnabled ) {
+    nsCards = [];
     return nsCards;
   }
 
@@ -202,6 +203,7 @@ async function loadNowScreening() {
     plexPort: loadedSettings.plexPort,
     plexToken: loadedSettings.plexToken,
   });
+
 
   let pollInterval = nsCheckSeconds;
   // call now screening method
@@ -230,6 +232,9 @@ async function loadNowScreening() {
   // Concatenate cards for all objects load now showing and on-demand cards, else just on-demand (if present)
   // TODO - move this into its own function!
   let mCards = [];
+  // id now screening false, then clear array
+  if(!isNowShowingEnabled){nsCards.length=0};
+  
   if (nsCards.length > 0) {
     if(loadedSettings.pinNS !== "true"){
       if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
@@ -386,6 +391,14 @@ async function checkEnabled() {
   isPlexEnabled = false;
   isSonarrEnabled = false;
   isRadarrEnabled = false;
+  isNowShowingEnabled = false;
+
+  // check now showing
+  if (
+    loadedSettings.enableNS !== undefined
+  ) {
+    isNowShowingEnabled = true;
+  }
 
   // check Plex
   if (
@@ -396,14 +409,20 @@ async function checkEnabled() {
     isPlexEnabled = true;
   }
   // check on-demand
-  if (loadedSettings.onDemandLibraries !== undefined && isPlexEnabled && loadedSettings.numberOnDemand !== undefined && loadedSettings.numberOnDemand !== 0 ) {
+  if (loadedSettings.onDemandLibraries !== undefined && 
+    isPlexEnabled && 
+    loadedSettings.numberOnDemand !== undefined && 
+    loadedSettings.numberOnDemand !== 0 &&
+    loadedSettings.enableOD !== undefined
+  ) {
     isOnDemandEnabled = true;
   }
   // check Sonarr
   if (
     loadedSettings.sonarrURL !== undefined &&
     loadedSettings.sonarrCalDays !== undefined &&
-    loadedSettings.sonarrToken !== undefined
+    loadedSettings.sonarrToken !== undefined &&
+    loadedSettings.enableSonarr !== undefined
   ) {
     isSonarrEnabled = true;
   }
@@ -411,7 +430,8 @@ async function checkEnabled() {
   if (
     loadedSettings.radarrURL !== undefined &&
     loadedSettings.radarrCalDays !== undefined &&
-    loadedSettings.radarrToken !== undefined
+    loadedSettings.radarrToken !== undefined &&
+    loadedSettings.enableRadarr !== undefined
   ) {
     isRadarrEnabled = true;
   }
@@ -421,6 +441,9 @@ async function checkEnabled() {
     `--- Enabled Status ---
    Plex: ` +
       isPlexEnabled +
+      `
+   Now Showing: ` +
+      isNowShowingEnabled +
       `
    On-demand: ` +
       isOnDemandEnabled +
@@ -823,13 +846,13 @@ app.post(
       titleColour: req.body.titleColour ? req.body.titleColour : DEFAULT_SETTINGS.titleColour,
       footColour: req.body.footColour ? req.body.footColour : DEFAULT_SETTINGS.footColour,
       bgColour: req.body.bgColour ? req.body.bgColour : DEFAULT_SETTINGS.bgColour,
+      enableNS: req.body.enableNS,
+      enableOD: req.body.enableOD,
+      enableSonarr: req.body.enableSonarr,
+      enableRadarr: req.body.enableRadarr,
       saved: false
     };
-// console.log(req.body);
-//     console.log(req.body.titleColour);
-//     console.log(req.body.footColour);
-//     console.log(req.body.bgColour);
-    
+   
     var errors = validationResult(req).array();
     if (errors.length > 0) {
       req.session.errors = errors;

@@ -42,7 +42,10 @@ class Settings {
     this.titleColour = DEFAULT_SETTINGS.titleColour;
     this.footColour = DEFAULT_SETTINGS.footColour;
     this.bgColour = DEFAULT_SETTINGS.bgColour;
-
+    this.enableNS = DEFAULT_SETTINGS.enableNS;
+    this.enableOD = DEFAULT_SETTINGS.enableOD;
+    this.enableSonarr = DEFAULT_SETTINGS.enableSonarr;
+    this.enableRadarr = DEFAULT_SETTINGS.enableRadarr;
     return;
   }
 
@@ -210,6 +213,14 @@ class Settings {
     else this.footColour = cs.footColour;
     if (jsonObject.bgColour) this.bgColour = jsonObject.bgColour;
     else this.bgColour = cs.bgColour;
+    if (jsonObject.enableNS) this.enableNS = jsonObject.enableNS;
+    else this.enableNS = cs.enableNS;
+    if (jsonObject.enableOD) this.enableOD = jsonObject.enableOD;
+    else this.enableOD = cs.enableOD;
+    if (jsonObject.enableSonarr) this.enableSonarr = jsonObject.enableSonarr;
+    else this.enableSonarr = cs.enableSonarr;
+    if (jsonObject.enableRadarr) this.enableRadarr = jsonObject.enableRadarr;
+    else this.enableRadarr = cs.enableRadarr;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

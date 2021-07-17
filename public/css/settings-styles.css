@@ -144,6 +144,33 @@ i.fab {
     font-size: 24px;
 }
 
+.fal {
+  float: right;
+}
+
+.hr {
+  color: #bcd0f7;
+}
+
+.panel-title > a.collapsed {
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #bcd0f7;
+}
+
+.panel-title > a {
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: lightgoldenrodyellow;
+}
+
+
+.panel-title > a:hover {
+  color: #ebf0fa;
+}
+
 .breadcrumb {
     background: #1c2133;
 }
