@@ -25,7 +25,7 @@ const DEFAULT_SETTINGS = {
   custBrand: "",
   titleColour: "#FAFAD2",
   footColour: "#FAFAD2",
-  bgColour: "#FAFAD2",
+  bgColour: "#000000",
   enableNS: "true",
   enableOD: "true",
   enableSonarr: "true",
