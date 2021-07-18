@@ -10,9 +10,8 @@ Media display software for Plex, Sonarr and Radarr.
 - Visit the [Discord Group](https://discord.gg/c5mHXaY5) for discussions and limited support.
 - **The default password is:** raidisnotabackup
 
- > **IMPORTANT NOTE ON UPGRADING FROM v1.3.0 OR EARLIER**
- > - You will need to go into settings and enable 'Now Screening', 'On-demand', 'Sonarr', and 'Radarr'. (Not required for fresh installs)
- > - You should also go into settings - now screening, and (at least) set the local network filter on. 
+ > **IMPORTANT NOTE ON UPGRADING FROM v1.4.0**
+ > - If you _had_ 'Now Screaning', 'On-demand', 'Sonarr', or 'Radarr' disabled previously, you will need to disable these in settings again.
 
 ## Features
  - Displays movies, shows, and music that are currently playing.
