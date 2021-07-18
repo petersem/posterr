@@ -46,6 +46,13 @@ class MediaCard {
    * @returns nothing
    */
   async Render(hasArt,baseUrl) {
+    // if (this.cardType[0] == "Now Screening" || this.cardType[0] == "Playing"){
+    //   console.log(playerDevice);
+    //   console.log(playerIP);
+    //   console.log(device);
+    //   console.log(playerLocal);
+    // }
+
     let hidden = "";
 
     // set to hide progress bar if not a playing type of card

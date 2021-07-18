@@ -30,6 +30,10 @@ const DEFAULT_SETTINGS = {
   enableOD: "true",
   enableSonarr: "true",
   enableRadarr: "true",
+  filterRemote: "true",
+  filterLocal: "true",
+  filterDevices: "",
+  filterUsers: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

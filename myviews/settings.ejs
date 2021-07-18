@@ -471,7 +471,7 @@
 
                 <div class="form-group">
                   <label for="plexIP">Server Port</label>
-                  <input type="text" class="form-control" id="plexIPort" name="plexPort" aria-describedby=" plexPortHelp"
+                  <input type="text" class="form-control" id="plexIPort" name="plexPort" aria-describedby="plexPortHelp"
                     placeholder="usually port 32400" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexPort%>"<%}else{%><%=settings.plexPort%>"<%}%>>
                   <small id="plexPortHelp" class="form-text text-muted">Enter the server port. (usually 32400).</small>
                 </div>
@@ -511,7 +511,6 @@
                   </div>
                 </div>
 
-
                   <div class="form-group">
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                   <input type="checkbox" class="custom-control-input" name="pinNSSwitch" id="pinNSSwitch" 
@@ -520,6 +519,38 @@
                   <small id="randomThemeHelp" class="form-text text-muted">If something is playing, then hide on-demand and coming soon</small>
                 </div>
               </div>
+
+              <div class="form-group">
+                <label for="filterDevices">Filter by device(s)</label>
+                <input type="text" class="form-control" id="filterDevices" name="filterDevices" aria-describedby="filterDevicesHelp"
+                  placeholder="examples -> chromecast,chrome,Roku Ultra - XYZ123456789" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.filterDevices%>"<%}else{%><%=settings.filterDevices%>"<%}%>>
+                  <small id="filterDevicesHelp" class="form-text text-muted">Enter device names to include (Comma seperated and no spaces, except in the name. Leave blank for all devices)</small>
+              </div>
+
+              <div class="form-group">
+                <label for="filterUsers">Filter by user(s)</label>
+                <input type="text" class="form-control" id="filterUsers" name="filterUsers" aria-describedby="filterUsersHelp"
+                  placeholder="examples -> matt,fred,sally@abc.com" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.filterUsers%>"<%}else{%><%=settings.filterUsers%>"<%}%>>
+                  <small id="filterUsersHelp" class="form-text text-muted">Enter user names to include (Comma seperated and no spaces. Leave blank for all users)</small>
+              </div>    
+
+              <h6>Network Boundaries</h6>
+              <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="filterLocal" id="filterLocal" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.filterLocal ? 'checked' : '' %><%}else{%><%=(settings.filterLocal == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="filterLocal">Local Network</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="filterRemote" id="filterRemote" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.filterRemote ? 'checked' : '' %><%}else{%><%=(settings.filterRemote == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="filterRemote">Remote Networks</label>
+                  </div>
+                </div>
+
               </br>
 
                 </div>

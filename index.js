@@ -209,7 +209,11 @@ async function loadNowScreening() {
     nsCards = await ms.GetNowScreening(
       loadedSettings.playThemes,
       loadedSettings.genericThemes,
-      loadedSettings.hasArt
+      loadedSettings.hasArt,
+      loadedSettings.filterRemote,
+      loadedSettings.filterLocal,
+      loadedSettings.filterDevices,
+      loadedSettings.filterUsers
     );
     // restore defaults if plex now available after an error
     if (isPlexUnavailable) {
@@ -848,6 +852,10 @@ app.post(
       enableOD: req.body.enableOD,
       enableSonarr: req.body.enableSonarr,
       enableRadarr: req.body.enableRadarr,
+      filterRemote: req.body.filterRemote,
+      filterLocal: req.body.filterLocal,
+      filterDevices: req.body.filterDevices,      
+      filterUsers: req.body.filterUsers,
       saved: false
     };
    

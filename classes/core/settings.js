@@ -46,6 +46,10 @@ class Settings {
     this.enableOD = DEFAULT_SETTINGS.enableOD;
     this.enableSonarr = DEFAULT_SETTINGS.enableSonarr;
     this.enableRadarr = DEFAULT_SETTINGS.enableRadarr;
+    this.filterRemote = DEFAULT_SETTINGS.filterRemote;
+    this.filterLocal = DEFAULT_SETTINGS.filterLocal;
+    this.filterDevices = DEFAULT_SETTINGS.filterDevices;
+    this.filterUsers = DEFAULT_SETTINGS.filterUsers;
     return;
   }
 
@@ -221,6 +225,17 @@ class Settings {
     else this.enableSonarr = cs.enableSonarr;
     if (jsonObject.enableRadarr) this.enableRadarr = jsonObject.enableRadarr;
     else this.enableRadarr = cs.enableRadarr;
+    if (jsonObject.filterRemote) this.filterRemote = jsonObject.filterRemote;
+    else this.filterRemote = cs.filterRemote;
+    if (jsonObject.filterLocal) this.filterLocal = jsonObject.filterLocal;
+    else this.filterLocal = cs.filterLocal;
+    if (jsonObject.filterDevices) this.filterDevices = jsonObject.filterDevices;
+    else this.filterDevices = cs.filterDevices;
+    if (jsonObject.filterUsers) this.filterUsers = jsonObject.filterUsers;
+    else this.filterUsers = cs.filterUsers;
+
+
+
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

@@ -12,6 +12,7 @@ Media display software for Plex, Sonarr and Radarr.
 
  > **IMPORTANT NOTE ON UPGRADING FROM v1.3.0 OR EARLIER**
  > - You will need to go into settings and enable 'Now Screening', 'On-demand', 'Sonarr', and 'Radarr'. (Not required for fresh installs)
+ > - You should also go into settings - now screening, and (at least) set the local network filter on. 
 
 ## Features
  - Displays movies, shows, and music that are currently playing.

@@ -58,7 +58,7 @@ class Plex {
    * @desc Gets now screening cards
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-    async GetNowScreening(playThemes, playGenenericThemes, hasArt) {
+    async GetNowScreening(playThemes, playGenenericThemes, hasArt, filterRemote, filterLocal, filterDevices, filterUsers) {
     // get raw data first
     let nsCards = [];
     let nsRaw;
@@ -92,6 +92,7 @@ class Plex {
         switch (md.type) {
           case "track":
             contentRating = "";
+            medCard.title = md.title;
             medCard.tagLine =
               md.title +
               ", " +
@@ -156,7 +157,6 @@ class Plex {
             // Use TVDB ID if available, otherwise use GUID
             if (isNaN(result[2])) {
               mediaId = result[3];
-// console.log(md.title, mediaId, md);
             } else {
               mediaId = result[2];
             }
@@ -430,6 +430,14 @@ class Plex {
         medCard.playerLocal = md.Player.local;
         medCard.user = md.User.title;
 
+        console.log(" ");
+        console.log('Device Name: ' + medCard.playerDevice);
+        console.log('Playing: ' + medCard.title);
+        console.log('User: ' + medCard.user);
+        console.log('Device IP: ' + medCard.playerIP);
+        console.log('Local network: ' + medCard.playerLocal);
+        console.log("--------------------------------------------");
+
         let now = new Date();
         if (nsCards.length == 0) {
           // console.log(now.toLocaleString() + " Nothing playing");
@@ -439,7 +447,32 @@ class Plex {
 
         // add media card to array
         if (md.type == "episode" || md.type == "movie" || md.type == "track") {
-          nsCards.push(medCard);
+          // Sanitise inputs and apply filter checks
+          let okToAdd = false;
+          let devices = filterDevices !== undefined ? filterDevices : "";
+          devices = devices.toLowerCase().replace(", ",",").replace(" ,",",").split(",");
+          let users = filterUsers !== undefined ? filterUsers : "";
+          users = users.toLowerCase().replace(", ",",").replace(" ,",",").split(",");
+          // apply filter checks
+          if(filterRemote=='true' && medCard.playerLocal == false) okToAdd = true;
+          if(filterLocal=='true' && medCard.playerLocal == true) okToAdd = true;
+          console.log('-' + users[0] + '-');
+          if(users.length > 0 && users.includes(medCard.user.toLowerCase())==false && users[0] !== "") okToAdd = false;
+          console.log('users length: ' + users.length);
+          console.log('mismatch: ' + users.includes(medCard.user.toLowerCase()));
+          console.log('add status: ' + okToAdd);
+
+          console.log('-------');
+          console.log('-' + devices[0] + '-');
+          console.log('add status: ' + okToAdd);
+          if(devices.length > 0 && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
+          console.log('devices length: ' + devices.length);
+          console.log('mismatch: ' + devices.includes(medCard.playerDevice.toLowerCase()));
+          console.log('add status: ' + okToAdd);
+
+
+          // add if all criteria matched
+          if(okToAdd) nsCards.push(medCard);
         } else {
           // ignore movie trailers playing
           if (md.type !== "clip"){
