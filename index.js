@@ -63,8 +63,6 @@ const { CardTypeEnum } = require("./classes/cards/CardType");
 const { titleColour } = require("./consts");
 var dir = './config';
 
-//CardTypeEnum.OnDemand="Available";
-
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
 }
@@ -497,12 +495,12 @@ async function startup(clearCache) {
   await checkEnabled();
 
   // set custom titles if available
-  CardTypeEnum.NowScreening = loadedSettings.nowScreening !== undefined ? loadedSettings.nowScreening : "Now Screening"
-  CardTypeEnum.OnDemand = loadedSettings.onDemand !== undefined ? loadedSettings.onDemand : "On-demand"
-  CardTypeEnum.ComingSoon = loadedSettings.comingSoon !== undefined ? loadedSettings.comingSoon : "Coming Soon"
-  CardTypeEnum.IFrame = loadedSettings.iframe !== undefined ? loadedSettings.iframe : "";
-  CardTypeEnum.Playing = loadedSettings.playing !== undefined ? loadedSettings.playing : "Playing";
-  CardTypeEnum.Picture = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
+  CardTypeEnum.NowScreening[1] = loadedSettings.nowScreening !== undefined ? loadedSettings.nowScreening : ""
+  CardTypeEnum.OnDemand[1] = loadedSettings.onDemand !== undefined ? loadedSettings.onDemand : ""
+  CardTypeEnum.ComingSoon[1] = loadedSettings.comingSoon !== undefined ? loadedSettings.comingSoon : ""
+  CardTypeEnum.IFrame[1] = loadedSettings.iframe !== undefined ? loadedSettings.iframe : "";
+  CardTypeEnum.Playing[1] = loadedSettings.playing !== undefined ? loadedSettings.playing : "";
+  CardTypeEnum.Picture[1] = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
 
   // initial load of card providers
   if (isSonarrEnabled) await loadSonarrComingSoon();

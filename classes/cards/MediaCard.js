@@ -47,7 +47,13 @@ class MediaCard {
    */
   async Render(hasArt,baseUrl) {
     let hidden = "";
-    if (this.cardType != "Now Screening" && this.cardType != "Playing") hidden = "hidden";
+
+    // set to hide progress bar if not a playing type of card
+    if (this.cardType[0] != "Now Screening" && this.cardType[0] != "Playing") hidden = "hidden";
+    
+    // get custom card title
+    let cardCustomTitle = this.cardType[1] !== "" ? this.cardType[1] : this.cardType[0];
+
     // pill variables
     let contentRatingPill = "";
     let resCodecPill = "";
@@ -170,9 +176,9 @@ class MediaCard {
       </div>
         <div class="banners">
           <div class="bannerBigText ` +
-      this.cardType +
+      this.cardType[0] +
       `">` +
-      this.cardType +
+      cardCustomTitle +
       `</div>
         </div> 
 
