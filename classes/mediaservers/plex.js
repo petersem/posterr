@@ -430,13 +430,13 @@ class Plex {
         medCard.playerLocal = md.Player.local;
         medCard.user = md.User.title;
 
-        console.log(" ");
-        console.log('Device Name: ' + medCard.playerDevice);
-        console.log('Playing: ' + medCard.title);
-        console.log('User: ' + medCard.user);
-        console.log('Device IP: ' + medCard.playerIP);
-        console.log('Local network: ' + medCard.playerLocal);
-        console.log("--------------------------------------------");
+        // console.log(" ");
+        // console.log('Device Name: ' + medCard.playerDevice);
+        // console.log('Playing: ' + medCard.title);
+        // console.log('User: ' + medCard.user);
+        // console.log('Device IP: ' + medCard.playerIP);
+        // console.log('Local network: ' + medCard.playerLocal);
+        // console.log("--------------------------------------------");
 
         let now = new Date();
         if (nsCards.length == 0) {
@@ -456,20 +456,8 @@ class Plex {
           // apply filter checks
           if(filterRemote=='true' && medCard.playerLocal == false) okToAdd = true;
           if(filterLocal=='true' && medCard.playerLocal == true) okToAdd = true;
-          console.log('-' + users[0] + '-');
           if(users.length > 0 && users.includes(medCard.user.toLowerCase())==false && users[0] !== "") okToAdd = false;
-          console.log('users length: ' + users.length);
-          console.log('mismatch: ' + users.includes(medCard.user.toLowerCase()));
-          console.log('add status: ' + okToAdd);
-
-          console.log('-------');
-          console.log('-' + devices[0] + '-');
-          console.log('add status: ' + okToAdd);
           if(devices.length > 0 && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
-          console.log('devices length: ' + devices.length);
-          console.log('mismatch: ' + devices.includes(medCard.playerDevice.toLowerCase()));
-          console.log('add status: ' + okToAdd);
-
 
           // add if all criteria matched
           if(okToAdd) nsCards.push(medCard);
@@ -478,6 +466,7 @@ class Plex {
           if (md.type !== "clip"){
             console.log("Unknown media type playing: " + md.type);
           }
+
         }
       }, undefined);
     }
