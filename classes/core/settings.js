@@ -96,6 +96,15 @@ class Settings {
     let readSettings;
     try {
       readSettings = await JSON.parse(data.toString());
+
+      // if needed settings values missing, then add them to the object, pending a future save. This is for settings file upgrades of exisitng installs. (when default state should be true)
+      readSettings.enableNS = 'true';
+      readSettings.enableOD = 'true';
+      readSettings.enableSonarr = 'true';
+      readSettings.enableRadarr = 'true';
+      readSettings.filterRemote = 'true';
+      readSettings.filterLocal = 'true';
+      console.log(readSettings);
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -218,21 +227,21 @@ class Settings {
     if (jsonObject.bgColour) this.bgColour = jsonObject.bgColour;
     else this.bgColour = cs.bgColour;
     if (jsonObject.enableNS) this.enableNS = jsonObject.enableNS;
-    else this.enableNS = cs.enableNS;
+    else this.enableNS = "false";
     if (jsonObject.enableOD) this.enableOD = jsonObject.enableOD;
-    else this.enableOD = cs.enableOD;
+    else this.enableOD = "false";
     if (jsonObject.enableSonarr) this.enableSonarr = jsonObject.enableSonarr;
-    else this.enableSonarr = cs.enableSonarr;
+    else this.enableSonarr = "false";
     if (jsonObject.enableRadarr) this.enableRadarr = jsonObject.enableRadarr;
-    else this.enableRadarr = cs.enableRadarr;
+    else this.enableRadarr = "false";
     if (jsonObject.filterRemote) this.filterRemote = jsonObject.filterRemote;
-    else this.filterRemote = cs.filterRemote;
+    else this.filterRemote = "false";
     if (jsonObject.filterLocal) this.filterLocal = jsonObject.filterLocal;
-    else this.filterLocal = cs.filterLocal;
+    else this.filterLocal = "false";
     if (jsonObject.filterDevices) this.filterDevices = jsonObject.filterDevices;
-    else this.filterDevices = cs.filterDevices;
+    else this.filterDevices = "";
     if (jsonObject.filterUsers) this.filterUsers = jsonObject.filterUsers;
-    else this.filterUsers = cs.filterUsers;
+    else this.filterUsers = "";
 
 
 
