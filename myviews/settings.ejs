@@ -603,6 +603,24 @@
                     placeholder="genre1,genre2" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.genres%>"<%}else{%><%=settings.genres%>"<%}%>>
                   <small id="genres" class="form-text text-muted">Filter on-demand to only show selected genres (not cumulative)</small>
                 </div>
+
+                <h6>Hide Banners</h6>
+              <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="odHideTitle" id="odHideTitle" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.odHideTitle ? 'checked' : '' %><%}else{%><%=(settings.odHideTitle == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="odHideTitle">Hide Title</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="odHideFooter" id="odHideFooter" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.odHideFooter ? 'checked' : '' %><%}else{%><%=(settings.odHideFooter == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="odHideFooter">Hide Footer</label>
+                  </div>
+                </div>
+
               </br>
 
                 </div>

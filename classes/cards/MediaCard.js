@@ -45,15 +45,17 @@ class MediaCard {
    * @desc renders the properties of the card into html, then sets this to the 'rendered' property
    * @returns nothing
    */
-  async Render(hasArt,baseUrl) {
-    // if (this.cardType[0] == "Now Screening" || this.cardType[0] == "Playing"){
-    //   console.log(playerDevice);
-    //   console.log(playerIP);
-    //   console.log(device);
-    //   console.log(playerLocal);
-    // }
-
+  async Render(hasArt,baseUrl,hideTitle,hideFooter) {
+    let hiddenTitle = "";
+    let hiddenFooter = "";
     let hidden = "";
+    let fullScreen = "";
+
+    // set header/footer hidden values
+    if(hideTitle=='true' && this.cardType[0] == "On-demand") hiddenTitle = "hidden";
+    if(hideFooter=='true' && this.cardType[0] == "On-demand") hiddenFooter = "hidden";
+    if(hiddenTitle !== "" && hiddenFooter !== "") fullScreen="fullscreen";
+
 
     // set to hide progress bar if not a playing type of card
     if (this.cardType[0] != "Now Screening" && this.cardType[0] != "Playing") hidden = "hidden";
@@ -184,6 +186,7 @@ class MediaCard {
         <div class="banners">
           <div class="bannerBigText ` +
       this.cardType[0] +
+      ` ` + hiddenTitle + 
       `">` +
       cardCustomTitle +
       `</div>
@@ -191,7 +194,9 @@ class MediaCard {
 
       <div id="poster` +
       this.ID +
-      `" class="poster" style="background-image: url('` +
+      `" class="poster` +
+      " " + fullScreen +
+      `" style="background-image: url('` +
       baseUrl + 
       this.posterURL + `')">
 
@@ -213,7 +218,9 @@ class MediaCard {
       <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>
       </div>
 
-      <div class="bottomBanner mx-auto transparent" id="bottomBanner` +
+      <div class="bottomBanner mx-auto transparent` +
+      ` ` + hiddenFooter + 
+      `" id="bottomBanner` +
       this.ID +
       `">
         <marquee direction="left" autostart="false" id="marquee`+ this.ID + `"><div class="tagLine" id="tagLine`+ this.ID + `">` +

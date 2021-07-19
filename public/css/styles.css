@@ -247,26 +247,20 @@ iframe {
   z-index: 1000;
 }
 
+.fullscreen {
+  top: 0% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  cursor: none;
+}
+
 .banners {
   position: relative;
   width: 100%;
   top: 0;
   max-height: 8%;
   z-index: 1000;
-  /* font-family: 'movie_timesregular'; */
-  /* font-family: 'riemann_theatreregular'; */
-  /* font-family: 'limelightregular'; */
-  /* font-family: 'inepticregular'; */
-  /* font-family: 'great_attractionregular'; */
-  /* font-family: 'joyful_theatreregular'; */
-  /* font-family: 'midnight_championregular'; */
-  /* font-family: 'style_thiefregular'; */
-  /* font-family: 'reach_the_endregular'; */
-  /* font-family: 'showtimenormal'; */
-  /* font-family: 'emerald_greyregular'; */
-  /* font-family: 'laconicaregular'; */
 }
-
 
 
 /* If the screen size is above 3001 */

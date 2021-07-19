@@ -122,6 +122,11 @@
       window.location = "<%=baseUrl%>/settings"; 
       return false;
     });
+    // if full screen, then make poster the link
+    $(".poster").click(function() {
+      window.location = "<%=baseUrl%>/settings"; 
+      return false;
+    });
 
     //resize for initial page load
     $('.myDiv').css({'height': (($(window).height())) + 'px' });

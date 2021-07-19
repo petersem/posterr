@@ -50,6 +50,8 @@ class Settings {
     this.filterLocal = DEFAULT_SETTINGS.filterLocal;
     this.filterDevices = DEFAULT_SETTINGS.filterDevices;
     this.filterUsers = DEFAULT_SETTINGS.filterUsers;
+    this.odHideTitle = DEFAULT_SETTINGS.odHideTitle;
+    this.odHideFooter = DEFAULT_SETTINGS.odHideFooter;
     return;
   }
 
@@ -98,13 +100,12 @@ class Settings {
       readSettings = await JSON.parse(data.toString());
 
       // if needed settings values missing, then add them to the object, pending a future save. This is for settings file upgrades of exisitng installs. (when default state should be true)
-      readSettings.enableNS = 'true';
-      readSettings.enableOD = 'true';
-      readSettings.enableSonarr = 'true';
-      readSettings.enableRadarr = 'true';
-      readSettings.filterRemote = 'true';
-      readSettings.filterLocal = 'true';
-      //console.log(readSettings);
+      if(readSettings.enableNS==undefined) readSettings.enableNS = 'true';
+      if(readSettings.enableOD==undefined) readSettings.enableOD = 'true';
+      if(readSettings.enableSonarr==undefined) readSettings.enableSonarr = 'true';
+      if(readSettings.enableRadarr==undefined) readSettings.enableRadarr = 'true';
+      if(readSettings.filterRemote==undefined) readSettings.filterRemote = 'true';
+      if(readSettings.filterLocal==undefined) readSettings.filterLocal = 'true';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -242,9 +243,10 @@ class Settings {
     else this.filterDevices = "";
     if (jsonObject.filterUsers) this.filterUsers = jsonObject.filterUsers;
     else this.filterUsers = "";
-
-
-
+    if (jsonObject.odHideTitle) this.odHideTitle = jsonObject.odHideTitle;
+    else this.odHideTitle = cs.odHideTitle;
+    if (jsonObject.odHideFooter) this.odHideFooter = jsonObject.odHideFooter;
+    else this.odHideFooter = cs.odHideFooter;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

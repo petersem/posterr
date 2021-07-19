@@ -284,7 +284,7 @@ async function loadNowScreening() {
 
   // put everything into global class, ready to be passed to poster.ejs
   // render html for all cards
-  await globalPage.OrderAndRenderCards(BASEURL,loadedSettings.hasArt);
+  await globalPage.OrderAndRenderCards(BASEURL,loadedSettings.hasArt,loadedSettings.odHideTitle,loadedSettings.odHideFooter);
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
@@ -397,7 +397,7 @@ async function checkEnabled() {
 
   // check now showing
   if (
-    loadedSettings.enableNS !== undefined
+    loadedSettings.enableNS !== 'false'
   ) {
     isNowShowingEnabled = true;
   }
@@ -415,7 +415,7 @@ async function checkEnabled() {
     isPlexEnabled && 
     loadedSettings.numberOnDemand !== undefined && 
     loadedSettings.numberOnDemand !== 0 &&
-    loadedSettings.enableOD !== undefined
+    loadedSettings.enableOD !== 'false'
   ) {
     isOnDemandEnabled = true;
   }
@@ -424,7 +424,7 @@ async function checkEnabled() {
     loadedSettings.sonarrURL !== undefined &&
     loadedSettings.sonarrCalDays !== undefined &&
     loadedSettings.sonarrToken !== undefined &&
-    loadedSettings.enableSonarr !== undefined
+    loadedSettings.enableSonarr !== 'false'
   ) {
     isSonarrEnabled = true;
   }
@@ -433,7 +433,7 @@ async function checkEnabled() {
     loadedSettings.radarrURL !== undefined &&
     loadedSettings.radarrCalDays !== undefined &&
     loadedSettings.radarrToken !== undefined &&
-    loadedSettings.enableRadarr !== undefined
+    loadedSettings.enableRadarr !== 'false'
   ) {
     isRadarrEnabled = true;
   }
@@ -856,6 +856,8 @@ app.post(
       filterLocal: req.body.filterLocal,
       filterDevices: req.body.filterDevices,      
       filterUsers: req.body.filterUsers,
+      odHideTitle: req.body.odHideTitle,
+      odHideFooter: req.body.odHideFooter,
       saved: false
     };
    

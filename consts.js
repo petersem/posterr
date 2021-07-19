@@ -33,7 +33,9 @@ const DEFAULT_SETTINGS = {
   filterRemote: "true",
   filterLocal: "true",
   filterDevices: "",
-  filterUsers: ""
+  filterUsers: "",
+  odHideTitle: "false",
+  odHideFooter: "false"
 };
 
 module.exports = DEFAULT_SETTINGS;
