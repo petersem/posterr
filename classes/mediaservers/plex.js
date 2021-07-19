@@ -515,7 +515,6 @@ class Plex {
     if (odRaw.length !== null && odRaw.length !== 0 && odRaw !== ",") {
       // move through results and populate media cards
       await odRaw.reduce(async (memo, md) => {
-//console.log(md.title,md.Genre);
         await memo;
         const medCard = new mediaCard();
         // modify inputs, based upon tv episode or movie result structures
@@ -524,9 +523,6 @@ class Plex {
             medCard.tagLine = md.title;
             let result = md.guid.split("/");
 
-            // if(md.theme == undefined){
-            //   console.log('no theme:', md.title, result[2]);
-            // }
             // Use TVDB ID if available, otherwise use GUID
             if (isNaN(result[2].split("?")[0])) {
               mediaId = result[3];
@@ -555,7 +551,6 @@ class Plex {
               await core.CachePlexMP3(url, fileName);
               medCard.theme = "/mp3cache/" + fileName;
             }
-//console.log(md);
             if (await util.isEmpty(md.rating)) {
               medCard.rating = "";
             } else {
