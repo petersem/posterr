@@ -104,7 +104,7 @@ class Settings {
       readSettings.enableRadarr = 'true';
       readSettings.filterRemote = 'true';
       readSettings.filterLocal = 'true';
-      console.log(readSettings);
+      //console.log(readSettings);
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
