@@ -38,7 +38,8 @@ const DEFAULT_SETTINGS = {
   odHideFooter: "false",
   enableCustomPictures: "false",
   enableCustomPictureThemes: "false",
-  customPictureTheme: "default"
+  customPictureTheme: "default",
+  serverID: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

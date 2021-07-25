@@ -62,6 +62,7 @@ let isRadarrUnavailable = false;
 let hasReported = false;
 let cold_start_time = new Date();
 let customPicFolders = [];
+let serverID = "";
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -603,10 +604,14 @@ async function startup(clearCache) {
    Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
   `);
   cold_start_time = new Date();
-  if(hasReported == false){
+  if(hasReported == false && loadedSettings.serverID !== undefined){
     let v = new vers(endPoint);
-    v.log(pjson.version,isNowShowingEnabled,isOnDemandEnabled,isSonarrEnabled,isRadarrEnabled,isPicturesEnabled);
+    v.log(loadedSettings.serverID,pjson.version,isNowShowingEnabled,isOnDemandEnabled,isSonarrEnabled,isRadarrEnabled,isPicturesEnabled);
     hasReported=true;
+  }
+
+  if(loadedSettings.serverID == undefined){
+    console.log("******************** Please check and save settings ********************");
   }
   return;
 }
@@ -758,7 +763,6 @@ app.get(BASEURL + "/logon", (req, res) => {
   });
   req.session.errors = null;
 });
-
 
 
 function getDirectories(path) {
@@ -965,6 +969,7 @@ app.post(
       enableCustomPictureThemes: req.body.enableCustomPictureThemes,
       customPictureTheme: req.body.customPictureTheme ? req.body.customPictureTheme : DEFAULT_SETTINGS.customPictureTheme,
       customPicFolders: customPicFolders,
+      serverID: loadedSettings.serverID !== undefined ? loadedSettings.serverID : util.createUUID(),
       saved: false
     };
    

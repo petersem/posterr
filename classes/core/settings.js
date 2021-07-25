@@ -55,6 +55,7 @@ class Settings {
     this.enableCustomPictures = DEFAULT_SETTINGS.enableCustomPictures;
     this.enableCustomPictureThemes = DEFAULT_SETTINGS.enableCustomPictureThemes;
     this.customPictureTheme = DEFAULT_SETTINGS.customPictureTheme;
+    this.serverID = DEFAULT_SETTINGS.serverID;
     return;
   }
 
@@ -258,6 +259,8 @@ class Settings {
     else this.enableCustomPictureThemes = cs.enableCustomPictureThemes;
     if (jsonObject.customPictureTheme) this.customPictureTheme = jsonObject.customPictureTheme;
     else this.customPictureTheme = cs.customPictureTheme;
+    if (jsonObject.serverID) this.serverID = jsonObject.serverID;
+    else this.serverID = cs.serverID;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
