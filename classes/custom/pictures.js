@@ -85,6 +85,7 @@ async GetPictures(theme, hasThemes, hasArt) {
   const pics = await this.GetFiles(theme);
 
   let picCards = [];
+  // Example format needed for pictures object
   // let pics = [
   //   {url: '/custom/posterr1.jpg', theme: '/custom/posterr1.mp3', art: '/custom/posterr1-art.jpg'},
   //   {url: '/custom/posterr2.jpg', theme: '/custom/posterr2.mp3', art: '/custom/posterr2-art.jpg'},
