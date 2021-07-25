@@ -759,6 +759,14 @@ app.get(BASEURL + "/logon", (req, res) => {
   req.session.errors = null;
 });
 
+
+
+function getDirectories(path) {
+  return fs.readdirSync(path).filter(function (file) {
+    return fs.statSync(path+'/'+file).isDirectory();
+  });
+}
+
 app.post(
   BASEURL + "/logon",
   [
@@ -780,7 +788,8 @@ app.post(
       res.render("logon", {
         errors: req.session.errors,
         user: { valid: false },
-        baseUrl: BASEURL
+        baseUrl: BASEURL,
+        customPicFolders: customPicFolders
       });
     } else {
       res.render("settings", {
@@ -788,23 +797,17 @@ app.post(
         success: req.session.success,
         settings: loadedSettings,
         version: pjson.version, 
-        baseUrl: BASEURL
+        baseUrl: BASEURL,
+        customPicFolders: customPicFolders
       });
     }
   }
 );
 
-
-function getDirectories(path) {
-  return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path+'/'+file).isDirectory();
-  });
-}
-
 // settings page
 app.get(BASEURL + "/settings", (req, res) => {
   // load pic folders
-  customPicFolders = getDirectories('public/custom/pictures');
+  customPicFolders = getDirectories('./public/custom/pictures');
 
   if (loadedSettings.password == undefined) {
     res.render("settings", {

@@ -8,3 +8,6 @@
 
 # any excluded dir with a .keep file. Will stay in github, but all other files will not :)
 !.keep
+!/public/custom/pictures
+!/public/custom/pictures/default
+!/public/custom/pictures/readme.txt

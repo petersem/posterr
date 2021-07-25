@@ -48,7 +48,8 @@ Installation details are as follows:
 
 ### Docker Compose
 Create the following directories in your docker folder:
- - .../docker/posterr/config
+ - ./docker/posterr/config
+ - ./docker/posterr/custom
 
 ```ya
 version: '2.4'

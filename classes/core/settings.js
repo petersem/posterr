@@ -109,6 +109,7 @@ class Settings {
       if(readSettings.enableRadarr==undefined) readSettings.enableRadarr = 'true';
       if(readSettings.filterRemote==undefined) readSettings.filterRemote = 'true';
       if(readSettings.filterLocal==undefined) readSettings.filterLocal = 'true';
+      if(readSettings.enableCustomPictures==undefined) readSettings.enableCustomPictures = 'false';
       if(readSettings.customPictureTheme==undefined) readSettings.customPictureTheme = 'default';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
