@@ -22,7 +22,7 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 README.md
-/public/custom/**
+/public/custom/pictures/**
 
 
 !keep
