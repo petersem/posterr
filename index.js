@@ -7,10 +7,12 @@ const session = require("express-session");
 const { check, validationResult } = require("express-validator");
 //const user = require('./routes/user.routes');
 const pms = require("./classes/mediaservers/plex");
+const vers = require("./classes/core/ver");
 const glb = require("./classes/core/globalPage");
 const core = require("./classes/core/cache");
 const sonr = require("./classes/arr/sonarr");
 const radr = require("./classes/arr/radarr");
+const pics = require("./classes/custom/pictures");
 const settings = require("./classes/core/settings");
 const MemoryStore = require("memorystore")(session);
 const util = require("./classes/core/utility");
@@ -22,8 +24,6 @@ const MAX_OD_SLIDES=150;  // this is with themes. Will be double this if tv and 
 // just in case someone puts in a / for the basepath value
 if(process.env.BASEPATH=="/") process.env.BASEPATH="";
 const BASEURL = process.env.BASEPATH || "";
-
-
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
@@ -38,23 +38,30 @@ let odCards = [];
 let nsCards = [];
 let csCards = [];
 let csrCards = [];
+let picCards = [];
 let globalPage = new glb();
 let nowScreeningClock;
 let onDemandClock;
 let sonarrClock;
 let radarrClock;
 let houseKeepingClock;
+let picturesClock;
 let setng = new settings();
 let loadedSettings;
+let endPoint = "https://logz.nesretep.net/pstr";
 let nsCheckSeconds = 10000; // how often now screening checks are performed. (not available in setup screen as running too often can cause network issues)
 let isSonarrEnabled = false;
+let isNowShowingEnabled = false;
 let isRadarrEnabled = false;
 let isOnDemandEnabled = false;
+let isPicturesEnabled = false;
 let isPlexEnabled = false;
 let isPlexUnavailable = false;
 let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
+let hasReported = false;
 let cold_start_time = new Date();
+let customPicFolders = [];
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -68,6 +75,25 @@ if (!fs.existsSync(dir)){
 }
 
 var dir = './saved';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+var dir = './public/custom';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+
+var dir = './public/custom/pictures';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+var dir = './public/custom/pictures/default';
 
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
@@ -160,6 +186,7 @@ async function loadSonarrComingSoon() {
       loadedSettings.playThemes,
       loadedSettings.hasArt
     );
+
     if (isSonarrUnavailable) {
       console.log(
         "✅ Sonarr connection restored - defualt poll timers restored"
@@ -178,6 +205,24 @@ async function loadSonarrComingSoon() {
   // restart the 24 hour timer
   sonarrClock = setInterval(loadSonarrComingSoon, sonarrTicks);
   return csCards;
+}
+
+async function loadPictures(){
+  // stop the clock
+  clearInterval(picturesClock);
+  let picturesTicks = 1200000; // refreshed every 20 minutes
+
+  // stop timers and dont run if disabled
+  if (!isPicturesEnabled) {
+    return picCards;
+  }
+
+  let cPics = new pics();
+  picCards = await cPics.GetPictures(loadedSettings.customPictureTheme,loadedSettings.enableCustomPictureThemes,loadedSettings.hasArt);
+
+  // restart the 24 hour timer
+  picturesClock = setInterval(loadPictures, picturesTicks);
+  return picCards;
 }
 
 /**
@@ -240,10 +285,11 @@ async function loadNowScreening() {
   if (nsCards.length > 0) {
     if(loadedSettings.pinNS !== "true"){
       if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5));
+        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards)).sort(() => Math.random() - 0.5));
       }
       else {
         mCards = nsCards.concat(odCards);
+        mCards = mCards.concat(picCards);
         mCards = mCards.concat(csCards);
         mCards = mCards.concat(csrCards);
       }
@@ -255,26 +301,52 @@ async function loadNowScreening() {
   } else {
     if (odCards.length > 0) {
       if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-        mCards = odCards.concat(csCards.concat(csrCards)).sort(() => Math.random() - 0.5);
+        mCards = odCards.concat(csCards.concat(csrCards).concat(picCards)).sort(() => Math.random() - 0.5);
       }
       else{
         mCards = odCards.concat(csCards);
+        mCards = mCards.concat(picCards);
         mCards = mCards.concat(csrCards);
       }
       globalPage.cards = mCards;
     } else {
       if (csCards.length > 0) {
-        mCards = csCards.concat(csrCards);
+        if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+          mCards = csCards.concat(csrCards.concat(picCards)).sort(() => Math.random() - 0.5);
+        }
+        else{
+          mCards = csCards.concat(csrCards);
+          mCards = mCards.concat(picCards);
+        }
         globalPage.cards = mCards;
-        // console.log("CS:" +csCards.length);
       } else {
         if (csrCards.length > 0) {
+          if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+            mCards = csrCards.concat(picCards).sort(() => Math.random() - 0.5);
+          }
+          else{
+            mCards = csrCards.concat(picCards);
+          }
           globalPage.cards = csrCards;
+          
           // console.log("CSR:" +csrCards.length);
+        }
+        else{
+          if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+            mCards = picCards.sort(() => Math.random() - 0.5);
+          }
+          else{
+            mCards = csrCards.concat(picCards);
+          }   
+
+          globalPage.cards = mCards;
         }
       }
     }
   }
+
+    
+    globalPage.cards = mCards;
 
   // setup transition - fade or default slide
   let fadeTransition = "";
@@ -294,7 +366,7 @@ async function loadNowScreening() {
   globalPage.titleColour = loadedSettings.titleColour;
   globalPage.footColour = loadedSettings.footColour;
   globalPage.bgColour = loadedSettings.bgColour;
-
+  globalPage.hasArt = loadedSettings.hasArt;
 
   // restart the clock
   nowScreeningClock = setInterval(loadNowScreening, pollInterval);
@@ -394,6 +466,10 @@ async function checkEnabled() {
   isSonarrEnabled = false;
   isRadarrEnabled = false;
   isNowShowingEnabled = false;
+  isPicturesEnabled = false;
+
+  // check pictures
+  if(loadedSettings.enableCustomPictures == 'true') isPicturesEnabled = true;
 
   // check now showing
   if (
@@ -456,6 +532,9 @@ async function checkEnabled() {
    Radarr: ` +
       isRadarrEnabled +
       `
+   Custom Pictures: ` +
+      isPicturesEnabled +
+      `
    `
   );
 
@@ -473,7 +552,9 @@ async function startup(clearCache) {
   clearInterval(sonarrClock);
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
-
+  clearInterval(picturesClock);
+  
+  picCards = [];
   odCards = [];
   nsCards = [];
   csCards = [];
@@ -510,6 +591,7 @@ async function startup(clearCache) {
   if (isSonarrEnabled) await loadSonarrComingSoon();
   if (isRadarrEnabled) await loadRadarrComingSoon();
   if (isOnDemandEnabled) await loadOnDemand();
+  if (isPicturesEnabled) await loadPictures();
   await loadNowScreening();
 
   // let now = new Date();
@@ -521,6 +603,11 @@ async function startup(clearCache) {
    Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
   `);
   cold_start_time = new Date();
+  if(hasReported == false){
+    let v = new vers(endPoint);
+    v.log(pjson.version,isNowShowingEnabled,isOnDemandEnabled,isSonarrEnabled,isRadarrEnabled,isPicturesEnabled);
+    hasReported=true;
+  }
   return;
 }
 
@@ -536,6 +623,7 @@ async function saveReset(formObject) {
   clearInterval(sonarrClock);
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
+  clearInterval(picturesClock);
   console.log(
     "✘✘ WARNING ✘✘ - Restarting. Please wait while current jobs complete"
   );
@@ -598,7 +686,7 @@ else{
 
 // set routes
 app.get(BASEURL + "/", (req, res) => {
-  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand }); // index refers to index.ejs
+  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand, hasArt: globalPage.hasArt }); // index refers to index.ejs
 });
 
 app.get(BASEURL + "/getcards", (req, res) => {
@@ -706,8 +794,18 @@ app.post(
   }
 );
 
+
+function getDirectories(path) {
+  return fs.readdirSync(path).filter(function (file) {
+    return fs.statSync(path+'/'+file).isDirectory();
+  });
+}
+
 // settings page
 app.get(BASEURL + "/settings", (req, res) => {
+  // load pic folders
+  customPicFolders = getDirectories('public/custom/pictures');
+
   if (loadedSettings.password == undefined) {
     res.render("settings", {
       success: req.session.success,
@@ -715,7 +813,8 @@ app.get(BASEURL + "/settings", (req, res) => {
       settings: loadedSettings,
       errors: req.session.errors,
       version: pjson.version, 
-      baseUrl: BASEURL
+      baseUrl: BASEURL,
+      customPicFolders: customPicFolders
     });
   }
   else{
@@ -725,7 +824,8 @@ app.get(BASEURL + "/settings", (req, res) => {
     settings: loadedSettings,
     errors: req.session.errors,
     version: pjson.version, 
-    baseUrl: BASEURL
+    baseUrl: BASEURL,
+    customPicFolders: customPicFolders
   });
 }
   req.session.errors = null;
@@ -858,6 +958,10 @@ app.post(
       filterUsers: req.body.filterUsers,
       odHideTitle: req.body.odHideTitle,
       odHideFooter: req.body.odHideFooter,
+      enableCustomPictures: req.body.enableCustomPictures,
+      enableCustomPictureThemes: req.body.enableCustomPictureThemes,
+      customPictureTheme: req.body.customPictureTheme ? req.body.customPictureTheme : DEFAULT_SETTINGS.customPictureTheme,
+      customPicFolders: customPicFolders,
       saved: false
     };
    
@@ -871,7 +975,8 @@ app.post(
         user: { valid: true },
         formData: form,
         version: pjson.version,
-        baseUrl: BASEURL
+        baseUrl: BASEURL,
+        customPicFolders: customPicFolders
       });
     } else {
       // save settings
@@ -884,7 +989,8 @@ app.post(
         version: pjson.version,
         user: { valid: true },
         formData: form, 
-        baseUrl: BASEURL
+        baseUrl: BASEURL,
+        customPicFolders: customPicFolders
       });
     }
   }

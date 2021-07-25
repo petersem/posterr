@@ -254,6 +254,14 @@ iframe {
   cursor: none;
 }
 
+.fullscreenCustom {
+  top: 0% !important;
+  height: 94% !important;
+  max-height: 94% !important;
+  top: 3% !important;
+  cursor: none;
+}
+
 .banners {
   position: relative;
   width: 100%;

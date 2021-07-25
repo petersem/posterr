@@ -12,7 +12,7 @@ services:
       NODE_ENV: production
       BASEPATH: ""
     volumes:
-      - /c/docker/posterr/randomthemes:/usr/src/app/public/randomthemes
+      - /c/docker/posterr/custom:/usr/src/app/public/custom
       - /c/docker/posterr/config:/usr/src/app/config
     ports:
       - 9876:3000

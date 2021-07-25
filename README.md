@@ -14,16 +14,18 @@ Media display software for Plex, Sonarr and Radarr.
  > - Whilst I work hard to ensure that upgrades are backwards compatible, there are rare times that you will need to update settings. Check [here](https://github.com/petersem/posterr/wiki/Latest-changes) for detailed notes on each updated.
 
 ## Features
- - Displays movies, shows, and music that are currently playing.
+ - Displays movies, shows, music poster for what is currently playing.
  - Displays random (on-demand) titles from multiple Plex libraries.
+ - Displays custom pictures, background art, and themes
  - Shows coming soon titles from Sonarr (or Season premieres).
  - Shows coming soon titles from Radarr.
- - Optionally play TV and Movies themes, if available
+ - Optionally plays TV and Movies themes, if available
  - A progress bar (green for direct play and red for transcoding) displays for playing titles
  - Various metadata displayed, such as run time, content rating, studio, etc. 
  - Move the mouse cursor to the bottom footer of the page to hide it
  - Background artwork option for improved landscape view (when available)
  - Automatically scales for most display sizes and orientation.
+ - Plus [more](https://github.com/petersem/posterr/wiki/Detailed-Features)
 
 ## Possible Uses
  - Mount a monitor on your wall and showcase your home media setup
@@ -33,7 +35,7 @@ Media display software for Plex, Sonarr and Radarr.
 
 ## Technical Features
  - Built in Node JS, and packaged as a Docker image. (included image health check)
- - Low resource usage. Memory: 20-35mb, Diskspace: 175mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
+ - Low resource usage. Memory: 20-35mb, Diskspace: ~75mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
  - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
  - Browser-based, so can run the app on one machine and a browser on another.
  - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
@@ -60,8 +62,10 @@ services:
       BASEPATH: ""
     volumes:
       - ./docker/posterr/config:/usr/src/app/config
+      - ./docker/posterr/custom:/usr/src/app/public/custom
     ports:
       - 9876:3000
+    restart: unless-stopped
 ```
 #### Details
 |Option|Details|

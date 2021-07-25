@@ -52,6 +52,9 @@ class Settings {
     this.filterUsers = DEFAULT_SETTINGS.filterUsers;
     this.odHideTitle = DEFAULT_SETTINGS.odHideTitle;
     this.odHideFooter = DEFAULT_SETTINGS.odHideFooter;
+    this.enableCustomPictures = DEFAULT_SETTINGS.enableCustomPictures;
+    this.enableCustomPictureThemes = DEFAULT_SETTINGS.enableCustomPictureThemes;
+    this.customPictureTheme = DEFAULT_SETTINGS.customPictureTheme;
     return;
   }
 
@@ -106,6 +109,7 @@ class Settings {
       if(readSettings.enableRadarr==undefined) readSettings.enableRadarr = 'true';
       if(readSettings.filterRemote==undefined) readSettings.filterRemote = 'true';
       if(readSettings.filterLocal==undefined) readSettings.filterLocal = 'true';
+      if(readSettings.customPictureTheme==undefined) readSettings.customPictureTheme = 'default';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -247,6 +251,12 @@ class Settings {
     else this.odHideTitle = cs.odHideTitle;
     if (jsonObject.odHideFooter) this.odHideFooter = jsonObject.odHideFooter;
     else this.odHideFooter = cs.odHideFooter;
+    if (jsonObject.enableCustomPictures) this.enableCustomPictures = jsonObject.enableCustomPictures;
+    else this.enableCustomPictures = cs.enableCustomPictures;
+    if (jsonObject.enableCustomPictureThemes) this.enableCustomPictureThemes = jsonObject.enableCustomPictureThemes;
+    else this.enableCustomPictureThemes = cs.enableCustomPictureThemes;
+    if (jsonObject.customPictureTheme) this.customPictureTheme = jsonObject.customPictureTheme;
+    else this.customPictureTheme = cs.customPictureTheme;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

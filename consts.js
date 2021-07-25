@@ -35,7 +35,10 @@ const DEFAULT_SETTINGS = {
   filterDevices: "",
   filterUsers: "",
   odHideTitle: "false",
-  odHideFooter: "false"
+  odHideFooter: "false",
+  enableCustomPictures: "false",
+  enableCustomPictureThemes: "false",
+  customPictureTheme: "default"
 };
 
 module.exports = DEFAULT_SETTINGS;

@@ -104,11 +104,12 @@
         <div class="tab-pane active" id="settings">
 
 
-          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel-group accordion" id="accordion" name="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                    aria-expanded="false" aria-controls="collapseOne">
                     GENERAL SETTINGS <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
@@ -116,20 +117,20 @@
               <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body">
 
-          <!-- show validation errors -->
-          <% 
+                  <!-- show validation errors -->
+                  <% 
               if(typeof errors !== 'undefined'){
                 // display validation errors
                 errors.forEach(function(e) { %>
-          <p class="alert alert-warning"><%=e.msg %></p>
-          <%});%>
-          <%}%>
+                  <p class="alert alert-warning"><%=e.msg %></p>
+                  <%});%>
+                  <%}%>
               <form method="POST" action="<%=baseUrl%>/settings">
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" aria-describedby="password"
-              placeholder="Enter a password"
-              value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.password%>" <%}else{%><%=settings.password%>"<%}%>>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                      aria-describedby="password" placeholder="Enter a password"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.password%>" <%}else{%><%=settings.password%>"<%}%>>
                   <small id="passwordHelp" class="form-text text-muted">Enter a password to secure this page</small>
                 </div>
                 <div class="form-group">
@@ -145,7 +146,7 @@
                     <input type="checkbox" class="custom-control-input" name="artSwitch" id="artSwitch" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.artSwitch ? 'checked' : '' %><%}else{%><%=(settings.hasArt == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="artSwitch">Enable background artwork</label>
-                    <small id="themeHelp" class="form-text text-muted">Shows background art (Best with black background)</small>
+                    <small id="themeHelp" class="form-text text-muted">Shows background art (if available)</small>
                   </div>
                 </div>
 
@@ -168,6 +169,17 @@
                   </div>
                 </div>
 
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableCustomPictureThemes" id="enableCustomPictureThemes" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableCustomPictureThemes ? 'checked' : '' %><%}else{%><%=(settings.enableCustomPictureThemes == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableCustomPictureThemes">Custom picture themes</label>
+                    <small id="enableCustomPictureThemesHelp" class="form-text text-muted">Enables custom picture themes (if available)</small>
+                  </div>
+                </div>
+
+
+                
                 <label class="d-block">Slide Transitions</label>
                 <div class="form-group">
                   <div class="form-check form-check-inline">
@@ -234,7 +246,7 @@
                 &nbsp;<span id="bgHex" name="bgHex"></span>
                 <input type="text" class="form-control" id="bgColour" style="display: none;" name="bgColour" aria-describedby="bgColourHelp"
                   placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.bgColour%>"<%}else{%><%=settings.bgColour%>"<%}%>>
-                <small id="bgColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set the colour for the background (black best with artwork)</small>
+                <small id="bgColourHelp" class="form-text text-muted">&nbsp;&nbsp;Set background colour (Not appied if background art enabled)</small>
               </div>
                 &nbsp;&nbsp;<button type="button" class="btn btn-info" onclick="resetColours();">Reset colours</button> 
               </br></br>
@@ -392,11 +404,11 @@
                     else{%> fontDD.value='<%=settings.custBrand%>' ;<%
                     }
                   %> </script> <div class="form-group">
-              <label for="comingSoon">Coming Soon (Alternate text)</label>
-              <input type="text" class="form-control" id="comingSoon" name="comingSoon" aria-describedby="comingSoonHelp"
-                placeholder="Leave blank for default"
-                value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.comingSoon%>"
-                <%}else{%><%=settings.comingSoon%>"<%}%>>
+                    <label for="comingSoon">Coming Soon (Alternate text)</label>
+                    <input type="text" class="form-control" id="comingSoon" name="comingSoon"
+                      aria-describedby="comingSoonHelp" placeholder="Leave blank for default"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.comingSoon%>"
+                      <%}else{%><%=settings.comingSoon%>"<%}%>>
                     <small id="comingSoonHelp" class="form-text text-muted">Alternate text for 'Coming Soon'</small>
                   </div>
   
@@ -491,16 +503,62 @@
               </div>
             </div>
             <hr>
-            
+
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingFour">
                 <h4 class="panel-title">
                   <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    NOW SCREENING <i class="accordion_icon fal fa-plus"></i>
+                    CUSTOM PICTURES <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
               <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body">
+
+                  <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableCustomPictures" id="enableCustomPictures" aria-describedby="enableCustomPicturesHelp" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableCustomPictures ? 'checked' : '' %><%}else{%><%=(settings.enableCustomPictures == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableCustomPictures">Enabled</label>
+                    <small id="enableCustomPicturesHelp" class="form-text text-muted">(Uses .jpg files placed in './posterr/custom' folder)</small>
+                  </div>
+                </div>
+
+              <div class="form-group">
+                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Theme Folder</label>
+                <select class="custom-select my-1 mr-sm-2" name="customPictureTheme" id="customPictureTheme">
+                  <% customPicFolders.forEach(function(fld) { %>
+                    <option value="<%=fld%>"><%=fld%></option>>
+                  <% }); %>
+                </select>
+              </div>
+              <script lang='javascript'>
+                    // set pre-selected or saved font
+                    var picTheme = document.getElementById("customPictureTheme");
+                  <%
+                    if(typeof formData !== 'undefined' && errors){%> picTheme.value='<%=formData.customPictureTheme%>' ;<%
+                    }
+                    else{%> picTheme.value='<%=settings.customPictureTheme%>' ;<%
+                    }
+                  %> </script>
+               </br>
+                </div>
+              </div>
+            </div>
+            <hr>
+
+
+
+
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingFive">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    NOW SCREENING <i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
                 <div class="panel-body">
 
                   <div class="form-group">
@@ -559,14 +617,14 @@
             <hr>
             
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingFive">
+              <div class="panel-heading" role="tab" id="headingSix">
                 <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                     ON-DEMAND <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
-              <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+              <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
                 <div class="panel-body">
 
                   <div class="form-group">
@@ -620,23 +678,21 @@
                     <label class="custom-control-label" for="odHideFooter">Hide Footer</label>
                   </div>
                 </div>
-
               </br>
-
                 </div>
               </div>
             </div>  
             <hr>
             
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingSix">
+              <div class="panel-heading" role="tab" id="headingSeven">
                 <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
                     SONARR <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
-              <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+              <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
                 <div class="panel-body">
 
                   <div class="form-group">
@@ -677,22 +733,20 @@
                   <small id="premiereSwitchHelp" class="form-text text-muted">Only show season premieres.</small>
                 </div>
               </br>
-
-
                   </div>
               </div>
             </div>  
             <hr>
             
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingSeven">
+              <div class="panel-heading" role="tab" id="headingEight">
                 <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
                     RADARR <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
-              <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+              <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
                 <div class="panel-body">
 
                   <div class="form-group">
@@ -731,53 +785,55 @@
 
                 <hr />
                 <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload
-              Saved</button>&nbsp;&nbsp;&nbsp; <button type="reset" class="btn btn-info"
-              onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
-            <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
-            </form>
-          </div>
+                      Saved</button>&nbsp;&nbsp;&nbsp; <button type="reset" class="btn btn-info"
+                      onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
+                    <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
+                    </form>
+                  </div>
 
-          <!-- About -->
-          <div class="tab-pane" id="about">
-            <h5>ABOUT POSTERR</h5>
-            <p><%="Version: " + version%></p>
-            <p><b>Support my efforts and continued development.</b></br> <a
-                href="https://www.paypal.com/paypalme/thanksmp" target="_blank">Buy me a coffee to say thanks.</a></p>
-            <hr>
+                  <!-- About -->
+                  <div class="tab-pane" id="about">
+                    <h5>ABOUT POSTERR</h5>
+                    <p><%="Version: " + version%></p>
+                    <p><b>Support my efforts and continued development.</b></br> <a
+                        href="https://www.paypal.com/paypalme/thanksmp" target="_blank">Buy me a coffee to say
+                        thanks.</a></p>
+                    <hr>
 
-            <p>
-              POSTERR was initially born from a desire for me to learn Node. Over time, I decided to
-              take it from an excercise to being a full product.
-            </p>
-            <p>
-              My goals were simple: </p>
-            <ul>
-              <li>Make it open source</li>
-              <li>Make it free</li>
-              <li>Make it cross-platform</li>
-              <li>Make it as good as possible</li>
-            </ul>
-            <p>
-              I'd like to thank everyone for their suggestions and feedback. Keep it coming!
-            </p>
-            <P>Matt Petersen (April, 2021)</P>
-            <hr />
-            <label class="d-block" style="text-decoration: underline;">Project Details</label>
-            <p>
-              <ul>
-                <li>GitHub repository: <a href="https://github.com/petersem/posterr" target="_blank">Here</a></li>
-                <li>Docker repository: <a href="https://hub.docker.com/repository/docker/petersem/posterr"
-                    target="_blank">Here</a></li>
-              </ul>
-            </p>
+                    <p>
+                      POSTERR was initially born from a desire for me to learn Node. Over time, I decided to
+                      take it from an excercise to being a full product.
+                    </p>
+                    <p>
+                      My goals were simple: </p>
+                    <ul>
+                      <li>Make it open source</li>
+                      <li>Make it free</li>
+                      <li>Make it cross-platform</li>
+                      <li>Make it as good as possible</li>
+                    </ul>
+                    <p>
+                      I'd like to thank everyone for their suggestions and feedback. Keep it coming!
+                    </p>
+                    <P>Matt Petersen (April, 2021)</P>
+                    <hr />
+                    <label class="d-block" style="text-decoration: underline;">Project Details</label>
+                    <p>
+                      <ul>
+                        <li>GitHub repository: <a href="https://github.com/petersem/posterr" target="_blank">Here</a>
+                        </li>
+                        <li>Docker repository: <a href="https://hub.docker.com/repository/docker/petersem/posterr"
+                            target="_blank">Here</a></li>
+                      </ul>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  </div>
 
-  </div>
+      </div>
 
 
 </body>

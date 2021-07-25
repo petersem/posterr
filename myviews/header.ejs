@@ -28,7 +28,7 @@
     <style>.tagLine { color: <%=globals.footColour%>; }</style>
   <%}%>
 
-  <%if(globals.bgColour !== undefined && globals.bgColour !== "" ){%>
+  <%if(globals.bgColour !== undefined && globals.bgColour !== "" && globals.hasArt !== 'true' ){%>
     <style>body { background-color: <%=globals.bgColour%>; }</style>
   <%}%>
 

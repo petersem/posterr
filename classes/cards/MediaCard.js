@@ -55,7 +55,18 @@ class MediaCard {
     if(hideTitle=='true' && this.cardType[0] == "On-demand") hiddenTitle = "hidden";
     if(hideFooter=='true' && this.cardType[0] == "On-demand") hiddenFooter = "hidden";
     if(hiddenTitle !== "" && hiddenFooter !== "") fullScreen="fullscreen";
-
+    if(this.cardType[0] == "Picture"){
+      hiddenTitle="hidden";
+      hiddenFooter="hidden";
+      if(hasArt && this.posterArtURL !== ""){
+        // if has art, then reduce poster by 6% to improve look
+        fullScreen="fullscreenCustom";
+      }
+      else{
+        // if no art, then likely portrait and so go full screen
+        fullScreen="fullscreen";
+      }
+    }
 
     // set to hide progress bar if not a playing type of card
     if (this.cardType[0] != "Now Screening" && this.cardType[0] != "Playing") hidden = "hidden";
@@ -161,6 +172,7 @@ class MediaCard {
       ratingPill =
         "<span class='badge badge-pill badge-dark'> " + this.rating + "</span>";
     }
+
 
     // render data into html
     this.rendered =

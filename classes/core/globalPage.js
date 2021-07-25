@@ -14,7 +14,8 @@ class globalPage {
     custBrand,
     titleColour,
     footColour,
-    bgColour
+    bgColour,
+    hasArt
   ) {
     this.slideDuration = slideDuration;
     this.fadeTransition = fadeTransition;

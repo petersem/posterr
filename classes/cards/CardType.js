@@ -4,7 +4,7 @@
    */
 class CardType {
 
-    static CardTypeEnum = {NowScreening: ["Now Screening",""], OnDemand: ["On-demand",""], ComingSoon: ["Coming Soon",""], Playing: ["Playing",""], IFrame: ["",""], Picture: ["Custom Picture",""]};
+    static CardTypeEnum = {NowScreening: ["Now Screening",""], OnDemand: ["On-demand",""], ComingSoon: ["Coming Soon",""], Playing: ["Playing",""], IFrame: ["",""], Picture: ["Picture",""]};
 }
 
 module.exports = CardType;
