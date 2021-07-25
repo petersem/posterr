@@ -73,7 +73,7 @@ services:
 |--|--|
 |TZ|Your local timezone. Go to [wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) and use the `TZ Database Name` value.|
 |/docker/posterr/config|This is required to save your Posterr settings|
-|/docker/posterr/custom|This is required custom pictures (and other custom media in the future)|
+|/docker/posterr/custom|This is required for custom pictures (and other custom media in the future)|
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
 |BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out, or value left blank** if you dont use alternate paths. |
 
