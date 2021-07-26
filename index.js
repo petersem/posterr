@@ -48,7 +48,8 @@ let houseKeepingClock;
 let picturesClock;
 let setng = new settings();
 let loadedSettings;
-let endPoint = "https://logz.nesretep.net/pstr";
+let endPoint = "http://localhost:3001/pstr";
+//let endPoint = "https://logz.nesretep.net/pstr";
 let nsCheckSeconds = 10000; // how often now screening checks are performed. (not available in setup screen as running too often can cause network issues)
 let isSonarrEnabled = false;
 let isNowShowingEnabled = false;
@@ -63,6 +64,8 @@ let hasReported = false;
 let cold_start_time = new Date();
 let customPicFolders = [];
 let serverID = "";
+let pinnedMode = false;
+
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -295,12 +298,24 @@ async function loadNowScreening() {
         mCards = mCards.concat(csCards);
         mCards = mCards.concat(csrCards);
       }
+      pinnedMode = false;
     }
     else{
+      // if only one item is playing, then disable sound.
+      if(pinnedMode == true && nsCards.length == 1){
+        nsCards[0].theme = "";
+      }
+
       mCards = nsCards;
+
+      if(pinnedMode==false){
+        pinnedMode = true;
+        cold_start_time = new Date();
+      }
     }
     globalPage.cards = mCards;
   } else {
+    pinnedMode = false;
     if (odCards.length > 0) {
       if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
         mCards = odCards.concat(csCards.concat(csrCards).concat(picCards)).sort(() => Math.random() - 0.5);
@@ -360,6 +375,7 @@ async function loadNowScreening() {
   // render html for all cards
   await globalPage.OrderAndRenderCards(BASEURL,loadedSettings.hasArt,loadedSettings.odHideTitle,loadedSettings.odHideFooter);
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
+
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
   globalPage.fadeTransition =
