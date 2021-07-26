@@ -135,6 +135,11 @@ class Settings {
    */
   async SaveSettings() {
     // convert JSON object to string (pretty format)
+    this.serverID = util.createUUID();
+    this.enableNS = 'false';
+    this.enableOD = 'false';
+    this.enableSonarr = 'false';
+    this.enableRadarr = 'false';
     const data = JSON.stringify(this, null, 4);
 
     // write JSON string to a file
@@ -148,6 +153,27 @@ class Settings {
     });
     return;
   }
+
+  async UpdateSettings(settings){
+
+    if(fs.existsSync("config/settings.json")){
+    // convert JSON object to string (pretty format)
+    const data = JSON.stringify(settings, null, 4);
+
+    
+    // write JSON string to a file
+    fs.writeFileSync("config/settings.json", data, (err) => {
+      if (err) {
+        console.log('Error - writing to settings file',err);
+        throw err;
+      }
+    });
+  }
+  console.log(`✅ Upgraded settings file
+  `);
+
+    return;
+  }    
 
   /**
    * @desc Saves settings after changes from settings page

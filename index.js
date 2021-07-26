@@ -231,11 +231,12 @@ async function loadPictures(){
  * @returns {Promise<object>} mediaCards array - results of now screening search
  */
 async function loadNowScreening() {
+
   // stop the clock
   clearInterval(nowScreeningClock);
 
   // stop timers dont run if disabled
-  if (!isPlexEnabled ) {
+  if (!isPlexEnabled) {
     nsCards = [];
     return nsCards;
   }
@@ -481,9 +482,9 @@ async function checkEnabled() {
 
   // check Plex
   if (
-    loadedSettings.plexIP !== undefined &&
-    loadedSettings.plexToken !== undefined &&
-    loadedSettings.plexPort !== undefined
+    (loadedSettings.plexIP !== undefined && loadedSettings.plexIP !== '') &&
+    (loadedSettings.plexToken !== undefined && loadedSettings.plexToken !== '') &&
+    (loadedSettings.plexPort !== undefined && loadedSettings.plexPort !== undefined)
   ) {
     isPlexEnabled = true;
   }
@@ -604,15 +605,19 @@ async function startup(clearCache) {
    Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
   `);
   cold_start_time = new Date();
-  if(hasReported == false && loadedSettings.serverID !== undefined){
+
+  // add a server id if missing
+  if(loadedSettings !== undefined && loadedSettings.serverID == undefined){
+    loadedSettings.serverID = util.createUUID();
+    const saved = await setng.UpdateSettings(loadedSettings);
+  }
+
+  if(hasReported == false && loadedSettings !== undefined){
     let v = new vers(endPoint);
     v.log(loadedSettings.serverID,pjson.version,isNowShowingEnabled,isOnDemandEnabled,isSonarrEnabled,isRadarrEnabled,isPicturesEnabled);
     hasReported=true;
   }
 
-  if(loadedSettings.serverID == undefined){
-    console.log("******************** Please check and save settings ********************");
-  }
   return;
 }
 
@@ -969,7 +974,7 @@ app.post(
       enableCustomPictureThemes: req.body.enableCustomPictureThemes,
       customPictureTheme: req.body.customPictureTheme ? req.body.customPictureTheme : DEFAULT_SETTINGS.customPictureTheme,
       customPicFolders: customPicFolders,
-      serverID: loadedSettings.serverID !== undefined ? loadedSettings.serverID : util.createUUID(),
+      serverID: loadedSettings.serverID,
       saved: false
     };
    
