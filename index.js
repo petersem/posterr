@@ -24,6 +24,7 @@ const MAX_OD_SLIDES=150;  // this is with themes. Will be double this if tv and 
 // just in case someone puts in a / for the basepath value
 if(process.env.BASEPATH=="/") process.env.BASEPATH="";
 const BASEURL = process.env.BASEPATH || "";
+const PORT = process.env.PORT || 3000;
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
@@ -79,6 +80,12 @@ if (!fs.existsSync(dir)){
 }
 
 var dir = './saved';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+var dir = './public';
 
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
@@ -617,7 +624,7 @@ async function startup(clearCache) {
   //   now.toLocaleString() + " Now screening titles refreshed (First run only)"
   // );
   console.log(" ");
-  console.log(`✅ Application ready on http://hostIP:3000`+BASEURL +`
+  console.log(`✅ Application ready on http://hostIP:` + PORT + `+BASEURL +`
    Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
   `);
   cold_start_time = new Date();
@@ -1026,6 +1033,6 @@ app.post(
 );
 
 // start listening on port 3000
-app.listen(3000, () => {
-  console.log(`✅ Web server started on internal port 3000 `);
+app.listen(PORT, () => {
+  console.log(`✅ Web server started on internal port ` + PORT);
 });
