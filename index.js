@@ -48,8 +48,8 @@ let houseKeepingClock;
 let picturesClock;
 let setng = new settings();
 let loadedSettings;
-let endPoint = "http://localhost:3001/pstr";
-//let endPoint = "https://logz.nesretep.net/pstr";
+//let endPoint = "http://localhost:3001/pstr";
+let endPoint = "https://logz.nesretep.net/pstr";
 let nsCheckSeconds = 10000; // how often now screening checks are performed. (not available in setup screen as running too often can cause network issues)
 let isSonarrEnabled = false;
 let isNowShowingEnabled = false;
