@@ -97,7 +97,7 @@
         </ul>
 
       </div>
-      <% if(latestVersion !== undefined && latestVersion !== version.toString() && (typeof errors == 'undefined' || errors.length == 0)){%>
+      <% if(latestVersion !== undefined && latestVersion !== "" && latestVersion !== version.toString() && (typeof errors == 'undefined' || errors.length == 0)){%>
       <p id="rcorners-u"><span id="message">Update</span><br>Please upgrade to Posterr v<%=latestVersion%></br>
       <%}%>
 
@@ -789,7 +789,7 @@
             </div>  
             <hr>
 
-            <div class="panel panel-default">
+       <!--     <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingNine">
                 <h4 class="panel-title">
                   <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
@@ -830,7 +830,7 @@
 
                   </div>
               </div>
-            </div>  
+            </div>  -->
 
 
 
