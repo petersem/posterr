@@ -123,7 +123,6 @@ class Readarr {
     // reutrn an empty array if no results
     if (raw != null) {
       let d = new Date();
-      console.log(d.toLocaleString() + " *Commencing search for E-book covers");
       // move through results and populate media cards
       await raw.data.reduce(async (memo, md) => {
         await memo;
