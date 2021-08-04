@@ -21,6 +21,7 @@ class MediaCard {
     this.summary = "";
     this.tagLine = "";
     this.runTime = "";
+    this.pageCount = "";
     this.resCodec = "";
     this.studio = "";
     this.network = "";
@@ -86,6 +87,7 @@ class MediaCard {
     let userPill = "";
     let devicePill = "";
     let yearPill = "";
+    let pagePill = "";
 
     // toggle background art as per settings
     if(hasArt=="true") {
@@ -159,6 +161,13 @@ class MediaCard {
         "<span class='badge badge-pill badge-dark'> " +
         this.audioCodec +
         "</span>";
+    }
+
+    if (!(await util.isEmpty(this.pageCount))) {
+      pagePill =
+        "<span class='badge badge-pill badge-dark'> " +
+        this.pageCount +
+        " pages</span>";
     }
 
     if (!(await util.isEmpty(this.runTime))) {
@@ -245,6 +254,7 @@ class MediaCard {
       studioPill +
       audioCodecPill +
       runTimePill +
+      pagePill +
       ratingPill +
       userPill +
       devicePill + 

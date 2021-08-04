@@ -144,6 +144,42 @@ i.fab {
     font-size: 24px;
 }
 
+#rcorners-e {
+  margin: 10px;
+  border-radius: 25px;
+  border-color: #0c0e16;
+  background: #301b1b;
+  padding: 20px;
+  width: 95%;
+  height: 150px;
+}
+
+#rcorners {
+  margin: 10px;
+  border-radius: 25px;
+  border-color: #0c0e16;
+  background: #1b1f30;
+  padding: 20px;
+  width: 100%;
+  height: 150px;
+}
+
+#rcorners-u {
+  margin: 10px;
+  border-radius: 25px;
+  border-color: #0c0e16;
+  background: #1b1f30;
+  padding: 20px;
+  width: 95%;
+  height: 100px;
+}
+
+#message {
+  color: goldenrod;
+  font-weight: bolder;
+  font-size:x-large;
+}
+
 .fal {
   float: right;
 }

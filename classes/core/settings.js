@@ -29,6 +29,9 @@ class Settings {
     this.radarrURL = DEFAULT_SETTINGS.radarrURL;
     this.radarrToken = DEFAULT_SETTINGS.radarrToken;
     this.radarrCalDays = DEFAULT_SETTINGS.radarrCalDays;
+    this.readarrURL = DEFAULT_SETTINGS.readarrURL;
+    this.readarrToken = DEFAULT_SETTINGS.readarrToken;
+    this.readarrCalDays = DEFAULT_SETTINGS.readarrCalDays;
     this.hasArt = DEFAULT_SETTINGS.hasArt;
     this.shuffleSlides = DEFAULT_SETTINGS.shuffleSlides;
     this.genres = DEFAULT_SETTINGS.genres;
@@ -46,6 +49,7 @@ class Settings {
     this.enableOD = DEFAULT_SETTINGS.enableOD;
     this.enableSonarr = DEFAULT_SETTINGS.enableSonarr;
     this.enableRadarr = DEFAULT_SETTINGS.enableRadarr;
+    this.enableReadarr = DEFAULT_SETTINGS.enableReadarr;
     this.filterRemote = DEFAULT_SETTINGS.filterRemote;
     this.filterLocal = DEFAULT_SETTINGS.filterLocal;
     this.filterDevices = DEFAULT_SETTINGS.filterDevices;
@@ -107,6 +111,7 @@ class Settings {
       if(readSettings.enableNS==undefined) readSettings.enableNS = 'true';
       if(readSettings.enableOD==undefined) readSettings.enableOD = 'true';
       if(readSettings.enableSonarr==undefined) readSettings.enableSonarr = 'true';
+      if(readSettings.enableReadarr==undefined) readSettings.enableReadarr = 'true';
       if(readSettings.enableRadarr==undefined) readSettings.enableRadarr = 'true';
       if(readSettings.filterRemote==undefined) readSettings.filterRemote = 'true';
       if(readSettings.filterLocal==undefined) readSettings.filterLocal = 'true';
@@ -140,6 +145,7 @@ class Settings {
     this.enableOD = 'false';
     this.enableSonarr = 'false';
     this.enableRadarr = 'false';
+    this.enableReadarr = 'false';
     const data = JSON.stringify(this, null, 4);
 
     // write JSON string to a file
@@ -231,6 +237,12 @@ class Settings {
     else this.radarrToken = cs.radarrToken;
     if (jsonObject.radarrDays) this.radarrCalDays = jsonObject.radarrDays;
     else this.radarrCalDays = cs.radarrCalDays;
+    if (jsonObject.readarrUrl) this.readarrURL = jsonObject.readarrUrl;
+    else this.readarrURL = cs.readarrURL;
+    if (jsonObject.readarrToken) this.readarrToken = jsonObject.readarrToken;
+    else this.readarrToken = cs.readarrToken;
+    if (jsonObject.readarrDays) this.readarrCalDays = jsonObject.readarrDays;
+    else this.readarrCalDays = cs.readarrCalDays;
     if (jsonObject.artSwitch) this.hasArt = jsonObject.artSwitch;
     else this.hasArt = cs.hasArt;
     if (jsonObject.shuffleSwitch) this.shuffleSlides = jsonObject.shuffleSwitch;
@@ -265,6 +277,8 @@ class Settings {
     else this.enableOD = "false";
     if (jsonObject.enableSonarr) this.enableSonarr = jsonObject.enableSonarr;
     else this.enableSonarr = "false";
+    if (jsonObject.enableReadarr) this.enableReadarr = jsonObject.enableReadarr;
+    else this.enableReadarr = "false";
     if (jsonObject.enableRadarr) this.enableRadarr = jsonObject.enableRadarr;
     else this.enableRadarr = "false";
     if (jsonObject.filterRemote) this.filterRemote = jsonObject.filterRemote;

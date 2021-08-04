@@ -67,7 +67,7 @@ class Health {
         function (err) {
           let now = new Date();
           console.log(
-            now.toLocaleString() + " *On-demand - get library key:" + err
+            now.toLocaleString() + " *On-demand - get a library key:" + err
           );
         }
       );
@@ -76,6 +76,9 @@ class Health {
 
     ms.client.query("/library/sections/" + 5 + "/all").then(
       function (result) {
+        let now = new Date();
+        console.log(
+          now.toLocaleString() + " *On-demand - get titles from radom library");
         for (let x = 0; x < 5; x++) {
           console.log(" -", result.MediaContainer.Metadata[x].title);
         }
@@ -126,6 +129,47 @@ async SonarrCheck() {
   });
   return;
 }
+
+async ReadarrCheck() {
+  let resp;
+  // set up date range and date formats
+  let today = new Date();
+  let later = new Date();
+  later.setDate(later.getDate() + 30);
+  let startDate = today.toISOString().split("T")[0];
+  let endDate = later.toISOString().split("T")[0];
+  // call readarr API and return results
+  try {
+    resp = await axios
+      .get(
+        this.settings.readarrURL +
+          "/api/v1/calendar?apikey=" +
+          this.settings.readarrToken +
+          "&start=" +
+          startDate +
+          "&end=" +
+          endDate
+      )
+      .catch((err) => {
+        throw err;
+      });
+  } catch (err) {
+    // displpay error if call failed
+    let d = new Date();
+    console.log(
+      d.toLocaleString() + " *READARR CHECK- Get calendar data:",
+      err.message
+    );
+    throw err;
+  }
+
+  resp.data.forEach(book => {
+    console.log(book.title);
+  });
+  return;
+}
+
+
 
 async RadarrCheck() {
   let resp;

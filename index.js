@@ -12,6 +12,7 @@ const glb = require("./classes/core/globalPage");
 const core = require("./classes/core/cache");
 const sonr = require("./classes/arr/sonarr");
 const radr = require("./classes/arr/radarr");
+const readr = require("./classes/arr/readarr");
 const pics = require("./classes/custom/pictures");
 const settings = require("./classes/core/settings");
 const MemoryStore = require("memorystore")(session);
@@ -19,10 +20,10 @@ const util = require("./classes/core/utility");
 const DEFAULT_SETTINGS = require("./consts");
 const health = require("./classes/core/health");
 const pjson = require("./package.json");
-const MAX_OD_SLIDES=150;  // this is with themes. Will be double this if tv and movie themes are off
+const MAX_OD_SLIDES = 150;  // this is with themes. Will be double this if tv and movie themes are off
 
 // just in case someone puts in a / for the basepath value
-if(process.env.BASEPATH=="/") process.env.BASEPATH="";
+if (process.env.BASEPATH == "/") process.env.BASEPATH = "";
 const BASEURL = process.env.BASEPATH || "";
 const PORT = process.env.PORT || 3000;
 
@@ -31,7 +32,6 @@ console.log(" POSTERR - Your media display");
 console.log(" Developed by Matt Petersen - Brisbane Australia");
 console.log(" ");
 console.log(" Version: " + pjson.version);
-console.log(" ");
 console.log("-------------------------------------------------------");
 
 // global variables
@@ -40,11 +40,13 @@ let nsCards = [];
 let csCards = [];
 let csrCards = [];
 let picCards = [];
+let csbCards = [];
 let globalPage = new glb();
 let nowScreeningClock;
 let onDemandClock;
 let sonarrClock;
 let radarrClock;
+let readarrClock;
 let houseKeepingClock;
 let picturesClock;
 let setng = new settings();
@@ -55,17 +57,21 @@ let nsCheckSeconds = 10000; // how often now screening checks are performed. (no
 let isSonarrEnabled = false;
 let isNowShowingEnabled = false;
 let isRadarrEnabled = false;
+let isReadarrEnabled = false;
 let isOnDemandEnabled = false;
 let isPicturesEnabled = false;
 let isPlexEnabled = false;
 let isPlexUnavailable = false;
 let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
+let isReadarrUnavailable = false;
 let hasReported = false;
 let cold_start_time = new Date();
 let customPicFolders = [];
 let serverID = "";
 let pinnedMode = false;
+let message = "";
+let latestVersion = "";
 
 
 // create working folders if they do not exist
@@ -75,40 +81,91 @@ const { CardTypeEnum } = require("./classes/cards/CardType");
 const { titleColour } = require("./consts");
 var dir = './config';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
 }
 
 var dir = './saved';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
 }
 
 var dir = './public';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
 }
 
 var dir = './public/custom';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
 }
-
 
 var dir = './public/custom/pictures';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
 }
 
 var dir = './public/custom/pictures/default';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
 }
+
+/**
+ * @desc Wrapper function to call Readarr coming soon.
+ * @returns {Promise<object>} mediaCards array - coming soon
+ */
+async function loadReadarrComingSoon() {
+  // stop the clock
+  clearInterval(readarrClock);
+  let readarrTicks = 86400000; // daily
+
+  // stop timers and dont run if disabled
+  if (!isReadarrEnabled) {
+    return csbCards;
+  }
+
+  // instatntiate radarr class
+  let readarr = new readr(
+    loadedSettings.readarrURL,
+    loadedSettings.readarrToken,
+    loadedSettings.hasArt
+  );
+
+  // set up date range and date formats
+  let today = new Date();
+  let later = new Date();
+  later.setDate(later.getDate() + loadedSettings.readarrCalDays);
+  let now = today.toISOString().split("T")[0];
+  let ltr = later.toISOString().split("T")[0];
+
+  // call radarr coming soon
+  try {
+    csbCards = await readarr.GetComingSoon(now, ltr, loadedSettings.hasArt);
+    if (isReadarrUnavailable) {
+      console.log(
+        "✅ Readarr connection restored - defualt poll timers restored"
+      );
+      isReadarrUnavailable = false;
+      readarrTicks = 86400000; // daily
+    }
+  } catch (err) {
+    let now = new Date();
+    console.log(now.toLocaleString() + " *Coming Soon - Books: " + err);
+    radarrTicks = 60000;
+    console.log("✘✘ WARNING ✘✘ - Next Readarr query will run in 1 minute.");
+    isReadarrUnavailable = true;
+  }
+  // restart the 24 hour timer
+  readarrClock = setInterval(loadReadarrComingSoon, readarrTicks); // daily
+
+  return csbCards;
+}
+
 
 /**
  * @desc Wrapper function to call Radarr coming soon.
@@ -131,6 +188,7 @@ async function loadRadarrComingSoon() {
     loadedSettings.radarrPremieres,
     loadedSettings.hasArt
   );
+
   // set up date range and date formats
   let today = new Date();
   let later = new Date();
@@ -140,21 +198,21 @@ async function loadRadarrComingSoon() {
 
   // call radarr coming soon
   try {
-  csrCards = await radarr.GetComingSoon(now, ltr, loadedSettings.genericThemes, loadedSettings.hasArt);
-  if (isRadarrUnavailable) {
-    console.log(
-      "✅ Radarr connection restored - defualt poll timers restored"
-    );
-    isRadarrUnavailable = false;
-    radarrTicks = 86400000; // daily
+    csrCards = await radarr.GetComingSoon(now, ltr, loadedSettings.genericThemes, loadedSettings.hasArt);
+    if (isRadarrUnavailable) {
+      console.log(
+        "✅ Radarr connection restored - defualt poll timers restored"
+      );
+      isRadarrUnavailable = false;
+      radarrTicks = 86400000; // daily
+    }
+  } catch (err) {
+    let now = new Date();
+    console.log(now.toLocaleString() + " *Coming Soon - Movies: " + err);
+    radarrTicks = 60000;
+    console.log("✘✘ WARNING ✘✘ - Next Radarr query will run in 1 minute.");
+    isRadarrUnavailable = true;
   }
-} catch (err) {
-  let now = new Date();
-  console.log(now.toLocaleString() + " *Coming Soon - Movies: " + err);
-  radarrTicks = 60000;
-  console.log("✘✘ WARNING ✘✘ - Next Radarr query will run in 1 minute.");
-  isRadarrUnavailable = true;
-}
   // restart the 24 hour timer
   radarrClock = setInterval(loadRadarrComingSoon, radarrTicks); // daily
 
@@ -218,7 +276,7 @@ async function loadSonarrComingSoon() {
   return csCards;
 }
 
-async function loadPictures(){
+async function loadPictures() {
   // stop the clock
   clearInterval(picturesClock);
   let picturesTicks = 1200000; // refreshed every 20 minutes
@@ -229,7 +287,7 @@ async function loadPictures(){
   }
 
   let cPics = new pics();
-  picCards = await cPics.GetPictures(loadedSettings.customPictureTheme,loadedSettings.enableCustomPictureThemes,loadedSettings.hasArt);
+  picCards = await cPics.GetPictures(loadedSettings.customPictureTheme, loadedSettings.enableCustomPictureThemes, loadedSettings.hasArt);
 
   // restart the 24 hour timer
   picturesClock = setInterval(loadPictures, picturesTicks);
@@ -292,30 +350,31 @@ async function loadNowScreening() {
   // TODO - move this into its own function!
   let mCards = [];
   // id now screening false, then clear array
-  if(!isNowShowingEnabled){nsCards.length=0};
-  
+  if (!isNowShowingEnabled) { nsCards.length = 0 };
+
   if (nsCards.length > 0) {
-    if(loadedSettings.pinNS !== "true"){
-      if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards)).sort(() => Math.random() - 0.5));
+    if (loadedSettings.pinNS !== "true") {
+      if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards)).sort(() => Math.random() - 0.5));
       }
       else {
         mCards = nsCards.concat(odCards);
         mCards = mCards.concat(picCards);
         mCards = mCards.concat(csCards);
         mCards = mCards.concat(csrCards);
+        mCards = mCards.concat(csbCards);
       }
       pinnedMode = false;
     }
-    else{
+    else {
       // if only one item is playing, then disable sound.
-      if(pinnedMode == true && nsCards.length == 1){
+      if (pinnedMode == true && nsCards.length == 1) {
         nsCards[0].theme = "";
       }
 
       mCards = nsCards;
 
-      if(pinnedMode==false){
+      if (pinnedMode == false) {
         pinnedMode = true;
         cold_start_time = new Date();
       }
@@ -324,53 +383,67 @@ async function loadNowScreening() {
   } else {
     pinnedMode = false;
     if (odCards.length > 0) {
-      if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-        mCards = odCards.concat(csCards.concat(csrCards).concat(picCards)).sort(() => Math.random() - 0.5);
+      if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+        mCards = odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards)).sort(() => Math.random() - 0.5);
       }
-      else{
+      else {
         mCards = odCards.concat(csCards);
         mCards = mCards.concat(picCards);
         mCards = mCards.concat(csrCards);
+        mCards = mCards.concat(csbCards);
       }
       globalPage.cards = mCards;
     } else {
       if (csCards.length > 0) {
-        if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-          mCards = csCards.concat(csrCards.concat(picCards)).sort(() => Math.random() - 0.5);
+        if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+          mCards = csCards.concat(csrCards.concat(picCards).concat(csbCards)).sort(() => Math.random() - 0.5);
         }
-        else{
+        else {
           mCards = csCards.concat(csrCards);
           mCards = mCards.concat(picCards);
+          mCards = mCards.concat(csbCards);
         }
         globalPage.cards = mCards;
       } else {
         if (csrCards.length > 0) {
-          if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-            mCards = csrCards.concat(picCards).sort(() => Math.random() - 0.5);
+          if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+            mCards = csrCards.concat(picCards.concat(csbCards)).sort(() => Math.random() - 0.5);
           }
-          else{
+          else {
             mCards = csrCards.concat(picCards);
+            mCards = mCards.concat(csbCards);
           }
-          globalPage.cards = csrCards;
-          
+          globalPage.cards = mCards;
+
           // console.log("CSR:" +csrCards.length);
         }
-        else{
-          if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
-            mCards = picCards.sort(() => Math.random() - 0.5);
+        else {
+          if (csbCards.length > 0) {
+            if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+              mCards = csbCards.concat(picCards).sort(() => Math.random() - 0.5);
+            }
+            else {
+              mCards = csbCards.concat(picCards);
+            }
+            globalPage.cards = mCards;
           }
-          else{
-            mCards = csrCards.concat(picCards);
-          }   
+          else {
+            if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+              mCards = picCards.sort(() => Math.random() - 0.5);
+            }
+            else {
+              mCards = picCards;
+            }
 
-          globalPage.cards = mCards;
+            globalPage.cards = mCards;
+          }
         }
       }
     }
   }
 
-    
-    globalPage.cards = mCards;
+
+  globalPage.cards = mCards;
 
   // setup transition - fade or default slide
   let fadeTransition = "";
@@ -380,13 +453,13 @@ async function loadNowScreening() {
 
   // put everything into global class, ready to be passed to poster.ejs
   // render html for all cards
-  await globalPage.OrderAndRenderCards(BASEURL,loadedSettings.hasArt,loadedSettings.odHideTitle,loadedSettings.odHideFooter);
+  await globalPage.OrderAndRenderCards(BASEURL, loadedSettings.hasArt, loadedSettings.odHideTitle, loadedSettings.odHideFooter);
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
 
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
   globalPage.fadeTransition =
-  loadedSettings.fade == "true" ? "carousel-fade" : "";
+    loadedSettings.fade == "true" ? "carousel-fade" : "";
   globalPage.custBrand = loadedSettings.custBrand;
   globalPage.titleColour = loadedSettings.titleColour;
   globalPage.footColour = loadedSettings.footColour;
@@ -448,13 +521,13 @@ async function loadOnDemand() {
   onDemandClock = setInterval(loadOnDemand, odCheckMinutes * 60000);
 
   // randomise on-demand results for all libraries queried
-  if(loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides=="true"){
+  if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
     return odCards.sort(() => Math.random() - 0.5);
   }
-  else{
+  else {
     return odCards;
   }
-  
+
 }
 
 /**
@@ -492,9 +565,10 @@ async function checkEnabled() {
   isRadarrEnabled = false;
   isNowShowingEnabled = false;
   isPicturesEnabled = false;
+  isReadarrEnabled = false;
 
   // check pictures
-  if(loadedSettings.enableCustomPictures == 'true') isPicturesEnabled = true;
+  if (loadedSettings.enableCustomPictures == 'true') isPicturesEnabled = true;
 
   // check now showing
   if (
@@ -512,9 +586,9 @@ async function checkEnabled() {
     isPlexEnabled = true;
   }
   // check on-demand
-  if (loadedSettings.onDemandLibraries !== undefined && 
-    isPlexEnabled && 
-    loadedSettings.numberOnDemand !== undefined && 
+  if (loadedSettings.onDemandLibraries !== undefined &&
+    isPlexEnabled &&
+    loadedSettings.numberOnDemand !== undefined &&
     loadedSettings.numberOnDemand !== 0 &&
     loadedSettings.enableOD !== 'false'
   ) {
@@ -538,28 +612,39 @@ async function checkEnabled() {
   ) {
     isRadarrEnabled = true;
   }
-
+ // check Readarr
+ if (
+  loadedSettings.readarrURL !== undefined &&
+  loadedSettings.readarrCalDays !== undefined &&
+  loadedSettings.readarrToken !== undefined &&
+  loadedSettings.enableReadarr !== 'false'
+) {
+  isReadarrEnabled = true;
+}
   // display status
   console.log(
     `--- Enabled Status ---
    Plex: ` +
-      isPlexEnabled +
-      `
+    isPlexEnabled +
+    `
    Now Showing: ` +
-      isNowShowingEnabled +
-      `
+    isNowShowingEnabled +
+    `
    On-demand: ` +
-      isOnDemandEnabled +
-      `
+    isOnDemandEnabled +
+    `
    Sonarr: ` +
-      isSonarrEnabled +
-      `
+    isSonarrEnabled +
+    `
    Radarr: ` +
-      isRadarrEnabled +
-      `
+    isRadarrEnabled +
+    `
    Custom Pictures: ` +
-      isPicturesEnabled +
-      `
+    isPicturesEnabled +
+    `
+   Readarr: ` +
+    isReadarrEnabled +
+    `
    `
   );
 
@@ -578,28 +663,30 @@ async function startup(clearCache) {
   clearInterval(radarrClock);
   clearInterval(houseKeepingClock);
   clearInterval(picturesClock);
-  
+  clearInterval(readarrClock);
+
   picCards = [];
   odCards = [];
   nsCards = [];
   csCards = [];
   csrCards = [];
+  csbCards = [];
 
   // run housekeeping job 
   if (clearCache !== false) await houseKeeping();
 
   // load settings object
   loadedSettings = await Promise.resolve(await loadSettings());
-  if(loadedSettings == 'undefined'){ 
+  if (loadedSettings == 'undefined') {
     console.load('settings not loaded!!');
   }
-  else{
+  else {
     console.log(`✅ Settings loaded
   `);
 
-  // restart timer for houseKeeping
-  setInterval(houseKeeping, 86400000); // daily
-}
+    // restart timer for houseKeeping
+    setInterval(houseKeeping, 86400000); // daily
+  }
 
   // check status
   await checkEnabled();
@@ -617,6 +704,8 @@ async function startup(clearCache) {
   if (isRadarrEnabled) await loadRadarrComingSoon();
   if (isOnDemandEnabled) await loadOnDemand();
   if (isPicturesEnabled) await loadPictures();
+
+  if (isReadarrEnabled) await loadReadarrComingSoon();
   await loadNowScreening();
 
   // let now = new Date();
@@ -624,21 +713,33 @@ async function startup(clearCache) {
   //   now.toLocaleString() + " Now screening titles refreshed (First run only)"
   // );
   console.log(" ");
-  console.log(`✅ Application ready on http://hostIP:` + PORT + BASEURL +`
-   Goto http://hostIP:3000`+BASEURL+`/settings to get to setup page.
+  console.log(`✅ Application ready on http://hostIP:` + PORT + BASEURL + `
+   Goto http://hostIP:3000`+ BASEURL + `/settings to get to setup page.
   `);
   cold_start_time = new Date();
 
   // add a server id if missing
-  if(loadedSettings !== undefined && loadedSettings.serverID == undefined){
+  if (loadedSettings !== undefined && loadedSettings.serverID == undefined) {
     loadedSettings.serverID = util.createUUID();
     const saved = await setng.UpdateSettings(loadedSettings);
   }
 
-  if(hasReported == false && loadedSettings !== undefined){
+  if (hasReported == false && loadedSettings !== undefined) {
     let v = new vers(endPoint);
-    v.log(loadedSettings.serverID,pjson.version,isNowShowingEnabled,isOnDemandEnabled,isSonarrEnabled,isRadarrEnabled,isPicturesEnabled);
-    hasReported=true;
+    const logzResponse = await v.log(loadedSettings.serverID, pjson.version, isNowShowingEnabled, isOnDemandEnabled, isSonarrEnabled, isRadarrEnabled, isPicturesEnabled);
+    message = logzResponse.message;
+    latestVersion = logzResponse.version;
+    hasReported = true;
+  }
+  if(latestVersion !== undefined && latestVersion !== pjson.version.toString()){
+    console.log("");
+    console.log("*** PLEASE UPDATE TO v" + latestVersion + " ***");
+    console.log("");
+  }
+
+  if(message !== undefined && message !== ""){
+    console.log("Message: " + message);
+    console.log("");
   }
 
   return;
@@ -655,8 +756,18 @@ async function saveReset(formObject) {
   clearInterval(onDemandClock);
   clearInterval(sonarrClock);
   clearInterval(radarrClock);
+  clearInterval(readarrClock);
   clearInterval(houseKeepingClock);
   clearInterval(picturesClock);
+
+  // clear cards
+  nsCards = [];
+  odCards = [];
+  csrCards = [];
+  csrCards = [];
+  picCards = [];
+  csbCards = [];
+
   console.log(
     "✘✘ WARNING ✘✘ - Restarting. Please wait while current jobs complete"
   );
@@ -705,13 +816,13 @@ app.use(
 //app.use(express.static(path.join(__dirname, "public")));
 
 //sets public folder for assets
-if(BASEURL == ""){
-//  console.log(__dirname);
-//  console.log(process.cwd());
-  app.use(express.static(path.join(__dirname, "public")));  
+if (BASEURL == "") {
+  //  console.log(__dirname);
+  //  console.log(process.cwd());
+  app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(process.cwd(), "saved")));
 }
-else{
+else {
   app.use(BASEURL, express.static(__dirname + '/public'));
   app.use(BASEURL, express.static(process.cwd() + '/saved'));
 }
@@ -723,17 +834,17 @@ app.get(BASEURL + "/", (req, res) => {
 });
 
 app.get(BASEURL + "/getcards", (req, res) => {
-  res.send({ globalPage: globalPage, baseUrl: BASEURL}); // get generated cards
+  res.send({ globalPage: globalPage, baseUrl: BASEURL }); // get generated cards
 });
 
 // Used by the web client to check connection status to Posterr, and also to determine if there was a cold start that was missed
 app.get(BASEURL + "/conncheck", (req, res) => {
-  res.send({ status: cold_start_time}); 
+  res.send({ status: cold_start_time });
 });
 
 
 app.get(BASEURL + "/debug", (req, res) => {
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL }); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
 app.get(BASEURL + "/debug/ping", (req, res) => {
@@ -742,7 +853,7 @@ app.get(BASEURL + "/debug/ping", (req, res) => {
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.TestPing();
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
 app.get(BASEURL + "/debug/plexns", (req, res) => {
@@ -751,7 +862,7 @@ app.get(BASEURL + "/debug/plexns", (req, res) => {
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.PlexNSCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
 app.get(BASEURL + "/debug/plexod", (req, res) => {
@@ -760,7 +871,7 @@ app.get(BASEURL + "/debug/plexod", (req, res) => {
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.PlexODCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
 app.get(BASEURL + "/debug/sonarr", (req, res) => {
@@ -769,7 +880,7 @@ app.get(BASEURL + "/debug/sonarr", (req, res) => {
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.SonarrCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
 app.get(BASEURL + "/debug/radarr", (req, res) => {
@@ -778,7 +889,16 @@ app.get(BASEURL + "/debug/radarr", (req, res) => {
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.RadarrCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL}); 
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
+});
+
+app.get(BASEURL + "/debug/readarr", (req, res) => {
+  console.log(' ');
+  console.log("** READARR CHECK ** (Any releases in next 90 days)");
+  console.log('-------------------------------------------------------');
+  let test = new health(loadedSettings);
+  test.ReadarrCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
 // password for settings section
@@ -795,7 +915,7 @@ app.get(BASEURL + "/logon", (req, res) => {
 
 function getDirectories(path) {
   return fs.readdirSync(path).filter(function (file) {
-    return fs.statSync(path+'/'+file).isDirectory();
+    return fs.statSync(path + '/' + file).isDirectory();
   });
 }
 
@@ -828,9 +948,11 @@ app.post(
         user: userData,
         success: req.session.success,
         settings: loadedSettings,
-        version: pjson.version, 
+        version: pjson.version,
         baseUrl: BASEURL,
-        customPicFolders: customPicFolders
+        customPicFolders: customPicFolders,
+        latestVersion: latestVersion,
+        message: message
       });
     }
   }
@@ -847,22 +969,28 @@ app.get(BASEURL + "/settings", (req, res) => {
       user: { valid: true },
       settings: loadedSettings,
       errors: req.session.errors,
-      version: pjson.version, 
+      version: pjson.version,
       baseUrl: BASEURL,
-      customPicFolders: customPicFolders
+      customPicFolders: customPicFolders,
+      latestVersion: latestVersion,
+      message: message
+
     });
   }
-  else{
+  else {
     res.render("settings", {
-    success: req.session.success,
-    user: { valid: false },
-    settings: loadedSettings,
-    errors: req.session.errors,
-    version: pjson.version, 
-    baseUrl: BASEURL,
-    customPicFolders: customPicFolders
-  });
-}
+      success: req.session.success,
+      user: { valid: false },
+      settings: loadedSettings,
+      errors: req.session.errors,
+      version: pjson.version,
+      baseUrl: BASEURL,
+      customPicFolders: customPicFolders,
+      latestVersion: latestVersion,
+      message: message
+
+    });
+  }
   req.session.errors = null;
 });
 
@@ -925,16 +1053,16 @@ app.post(
           // double the slide count if tv and movie themes are off
           let maxSlides = MAX_OD_SLIDES;
 
-          if(req.body.themeSwitch==undefined && req.body.genericSwitch==undefined){
+          if (req.body.themeSwitch == undefined && req.body.genericSwitch == undefined) {
             maxSlides = maxSlides * 2;
             themeMessage = "";
           }
-          else{
+          else {
             maxSlide = MAX_OD_SLIDES;
-            themeMessage ="(when themes enabled)";
+            themeMessage = "(when themes enabled)";
           }
 
-          if (req.body.plexLibraries !== undefined || req.body.plexLibraries !== ""){
+          if (req.body.plexLibraries !== undefined || req.body.plexLibraries !== "") {
             numberOfLibraries = req.body.plexLibraries.split(",").length;
             if (parseInt(value) * numberOfLibraries > maxSlides) {
               let estimatedNumber = parseInt(maxSlides / numberOfLibraries);
@@ -973,6 +1101,9 @@ app.post(
       radarrUrl: req.body.radarrUrl,
       radarrToken: req.body.radarrToken,
       radarrDays: req.body.radarrDays ? parseInt(req.body.radarrDays) : DEFAULT_SETTINGS.radarrCalDays,
+      readarrUrl: req.body.readarrUrl,
+      readarrToken: req.body.readarrToken,
+      readarrDays: req.body.readarrDays ? parseInt(req.body.readarrDays) : DEFAULT_SETTINGS.readarrCalDays,
       titleFont: req.body.titleFont,
       nowScreening: req.body.nowScreening,
       comingSoon: req.body.comingSoon,
@@ -987,9 +1118,10 @@ app.post(
       enableOD: req.body.enableOD,
       enableSonarr: req.body.enableSonarr,
       enableRadarr: req.body.enableRadarr,
+      enableReadarr: req.body.enableReadarr,
       filterRemote: req.body.filterRemote,
       filterLocal: req.body.filterLocal,
-      filterDevices: req.body.filterDevices,      
+      filterDevices: req.body.filterDevices,
       filterUsers: req.body.filterUsers,
       odHideTitle: req.body.odHideTitle,
       odHideFooter: req.body.odHideFooter,
@@ -1000,7 +1132,7 @@ app.post(
       serverID: loadedSettings.serverID,
       saved: false
     };
-   
+
     var errors = validationResult(req).array();
     if (errors.length > 0) {
       req.session.errors = errors;
@@ -1012,7 +1144,9 @@ app.post(
         formData: form,
         version: pjson.version,
         baseUrl: BASEURL,
-        customPicFolders: customPicFolders
+        customPicFolders: customPicFolders,
+        latestVersion: latestVersion,
+        message: message
       });
     } else {
       // save settings
@@ -1024,9 +1158,11 @@ app.post(
         errors: req.session.errors,
         version: pjson.version,
         user: { valid: true },
-        formData: form, 
+        formData: form,
         baseUrl: BASEURL,
-        customPicFolders: customPicFolders
+        customPicFolders: customPicFolders,
+        latestVersion: latestVersion,
+        message: message
       });
     }
   }

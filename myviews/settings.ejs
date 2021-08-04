@@ -95,7 +95,22 @@
             </a>
           </li>
         </ul>
+
       </div>
+      <% if(latestVersion !== undefined && latestVersion !== version.toString() && (typeof errors == 'undefined' || errors.length == 0)){%>
+      <p id="rcorners-u"><span id="message">Update</span><br>Please upgrade to Posterr v<%=latestVersion%></br>
+      <%}%>
+
+                  <!-- show validation errors -->
+                  <% 
+              if(typeof errors !== 'undefined' && errors.length > 0){
+                // display validation errors
+                %><p id="rcorners-e"><span id="message">Validation errors</span><br><%
+                errors.forEach(function(e) { %>
+                  <%=e.msg %></br>
+                  <%});%></p>
+                  <%}%>
+
 
       <!-- Tab Content -->
       <div class="card-body tab-content">
@@ -117,14 +132,6 @@
               <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                 <div class="panel-body">
 
-                  <!-- show validation errors -->
-                  <% 
-              if(typeof errors !== 'undefined'){
-                // display validation errors
-                errors.forEach(function(e) { %>
-                  <p class="alert alert-warning"><%=e.msg %></p>
-                  <%});%>
-                  <%}%>
               <form method="POST" action="<%=baseUrl%>/settings">
                   <div class="form-group">
                     <label for="password">Password</label>
@@ -780,6 +787,52 @@
                   </div>
               </div>
             </div>  
+            <hr>
+
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingNine">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                    READARR (Experimental)<i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
+                <div class="panel-body">
+
+                  <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableReadarr" id="enableReadarr" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableReadarr ? 'checked' : '' %><%}else{%><%=(settings.enableReadarr == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableReadarr">Enabled</label>
+                  </div>
+                </div>
+
+              <div class="form-group">
+                <label for="readarrToken">Readarr Token</label>
+                <input type="password" class="form-control" id="readarrToken" name="readarrToken" aria-describedby="readarrTokenHelp"
+                  placeholder="Readarr API Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrToken%>"<%}else{%><%=settings.readarrToken%>"<%}%>>
+                <small id="readarrTokenHelp" class="form-text text-muted">Enter the Readarr API token. (Leave blank to disable)</small>
+              </div>
+                <div class="form-group">
+                  <label for="radarrUrl">Readarr URL</label>
+                  <input type="text" class="form-control" id="readarrUrl" name="readarrUrl" aria-describedby="readarrUrlHelp"
+                    placeholder="http://n.n.n.n:8787" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrUrl%>"<%}else{%><%=settings.readarrURL%>"<%}%>>
+                  <small id="readarUrlHelp" class="form-text text-muted">Enter the ful URL and port for Readarr.</small>
+                </div>
+                <div class="form-group">
+                  <label for="readarrDays">Days ahead</label>
+                  <input type="text" class="form-control" id="readarrDays" name="readarrDays" aria-describedby="readarrDays" placeholder="Suggest 60-90"
+                   value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrDays%>"<%}else{%><%=settings.readarrCalDays%>"<%}%>>
+                  <small id="readarrUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Readarr
+                    calendar.</small>
+                </div>
+
+                  </div>
+              </div>
+            </div>  
+
+
 
           </div>
 
@@ -791,6 +844,9 @@
                     </form>
                   </div>
 
+                  <% if(message !== undefined && message != ""){%>
+      <p id="rcorners"><%=message%></br>
+      <%}%>
                   <!-- About -->
                   <div class="tab-pane" id="about">
                     <h5>ABOUT POSTERR</h5>
