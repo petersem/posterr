@@ -619,7 +619,7 @@ async function checkEnabled() {
   loadedSettings.readarrToken !== undefined &&
   loadedSettings.enableReadarr !== 'false'
 ) {
-  isReadarrEnabled = false; // force to false for now!     true;
+  isReadarrEnabled = true;
 }
   // display status
   console.log(

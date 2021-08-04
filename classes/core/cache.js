@@ -20,7 +20,7 @@ class Cache {
    */
   static async CacheImage(url, fileName) {
     const savePath = "./saved/imagecache/" + fileName;
-    const result = await this.download(url, savePath, fileName);
+    const result = await this.download(url, savePath, fileName)
     return result;
   }
 

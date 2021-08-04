@@ -1,6 +1,6 @@
 {
   "name": "posterr",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
@@ -35,7 +35,6 @@
     "@jaames/iro": "^5.5.2",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
-    "bookcovers": "^0.1.0",
     "bootstrap": "^5.0.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

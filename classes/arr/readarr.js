@@ -5,7 +5,7 @@ const core = require("../core/cache");
 const axios = require("axios");
 const { cache } = require("ejs");
 const sizeOf = require('image-size');
-const bookcovers = require("bookcovers");
+const bookcovers=""; // = require("bookcovers");
 
 /**
  * @desc Used to communicate with Radarr to obtain a list of future releases
@@ -101,10 +101,6 @@ class Readarr {
     return response;
   }
 
-
-
-
-
   /**
    * @desc Get books coming soon data and formats into mediaCard array
    * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
@@ -160,14 +156,12 @@ class Readarr {
 
         // try to get book cover
         let cover = 'none';
-        if(md.editions[0].isbn13 !== undefined){
-          console.log(" - Searching for e-book cover art (" + md.title + ")");
-          const COVER_URL = await this.getCovers(md.editions[0].isbn13);
-          cover = COVER_URL;
+        if(md.editions[0].images[0] !== undefined){
+          cover = this.readarrUrl + "/api/v1/mediacover/book/" + md.id + "/cover.jpg?apikey=" +  this.readarrToken;
         }
         else{
-          console.log(" - ✘ Cannot find cover art. No ISBN - for (" + md.title + ")");          
-        };
+          cover = "none";
+        }
 
         // cache image
         // if no poster available, use the generic one
