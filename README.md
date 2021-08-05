@@ -143,6 +143,9 @@ Posterr uses the following:
  - Readarr (via API)
  - Posters and artwork from Plex, TVDB and TMDB.
 
+## Notice
+> Posterr is dependant on third party applications and services. Some features may fail temporarily or permenantly if the dependancies are unavailable or become incompatible for any technical or legal reason. This software comes with no warranty or guarantee of any kind and may contain bugs. Images and themes downloaded by Posterr may be copyrighted and are property of thier respective copyright holders.
+
 ## License
 
 MIT
