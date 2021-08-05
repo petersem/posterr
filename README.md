@@ -1,5 +1,5 @@
 # Posterr
-Media display software for Plex, Sonarr and Radarr.
+Media display software for Plex, Sonarr, Radarr, and Readarr.
 
 ![Music playing](https://github.com/petersem/posterr/blob/master/doco/music.png?raw=true)
 ![Now screening](https://github.com/petersem/posterr/blob/master/doco/ns.png?raw=true)
@@ -19,6 +19,7 @@ Media display software for Plex, Sonarr and Radarr.
  - Displays custom pictures, background art, and themes
  - Shows coming soon titles from Sonarr (or Season premieres).
  - Shows coming soon titles from Radarr.
+ - Shows coming soon books from Readarr.
  - Optionally plays TV and Movies themes, if available
  - A progress bar (green for direct play and red for transcoding) displays for playing titles
  - Various metadata displayed, such as run time, content rating, studio, etc. 
@@ -35,17 +36,17 @@ Media display software for Plex, Sonarr and Radarr.
 
 ## Technical Features
  - Built in Node JS, and packaged as a Docker image. (included image health check)
+ - Direct binary files also provided for MacOS, Linux, and Windows.
  - Low resource usage. Memory: 20-35mb, Diskspace: ~75mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
  - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
  - Browser-based, so can run the app on one machine and a browser on another.
  - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
  - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
  - Supports reverse proxy setup for wildcard dns or alternate base path.
- - Built-in recovery features should the Docker app, or Plex, go offline.
+ - Built-in recovery features should the Poster app, or Plex, go offline.
 
 ## Installation
 Installation details are as follows:
-
 ### Docker Compose
 Create the following directories in your docker folder:
  - ./docker/posterr/config
@@ -77,10 +78,25 @@ services:
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
 |BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out, or value left blank** if you dont use alternate paths. |
 
-> **UNRAID Users** I do not maintain or control the Posterr template in the community apps. If there is something missing or incorrect in this template, please contact the template author, so they can update it. 
+### UNRAID
+ - Use the Posterr template in community apps.
+ - I do not maintain or control the Posterr template in the community apps. If there is something missing or incorrect in this template, please contact the template author, so they can update it. 
+
+### Binaries
+- Get the latest binary release package from [here](https://github.com/petersem/posterr/releases)
+- Create a directory called `posterr` anywhere on your machine
+- Extract the appropriate binary for your machine and place it in this folder.
+- Run the executable file (double click or type posterr-windows.exe from windows, or ./posterr-xxx from Linux/MacOS)
+ > Posterr also works well Windows as a service, with [NSSM](https://nssm.cc/)
+ 
+ > Not yet tested on Linux or MacOS running as a service, however I expect it should work.
+
 
 ## Updates
- - Use containrr/watchtower to auto-update Posterr.
+ - From v1.10.1, there will be a notice at the top of the settings screen informing you if you are running an old version. 
+ - Use containrr/watchtower to auto-update Posterr in Docker environments
+ - Update in the usual way for Unraid
+ - Direct binaries should just be overwritten with a new version. 
  
 ## Setup
 Get to the settings page in a number of ways:
@@ -120,11 +136,11 @@ Posterr uses the following:
  - The awesome [Node-Plex-APi](https://github.com/phillipj/node-plex-api)
  - Jquery
  - Bootstrap
- - Popper.js
  - Font-Awesome
  - Plex (via PlexAPI)
  - Sonarr (via API)
  - Radarr (via API)
+ - Readarr (via API)
  - Posters and artwork from Plex, TVDB and TMDB.
 
 ## License
