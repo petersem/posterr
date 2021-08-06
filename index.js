@@ -837,9 +837,30 @@ app.get(BASEURL + "/getcards", (req, res) => {
   res.send({ globalPage: globalPage, baseUrl: BASEURL }); // get generated cards
 });
 
+let sleep = "false";
+setTimeout(() => {
+  sleep = "true";
+  console.log('and... sleeep');
+}, 20000);
+
+setTimeout(() => {
+  sleep = "false";
+  console.log('and... wakey wakey');
+}, 30000);
+
+setTimeout(() => {
+  sleep = "true";
+  console.log('and... go back to sleep');
+}, 40000);
+
+setTimeout(() => {
+  sleep = "false";
+  console.log('and... Awaken!');
+}, 47000);
+
 // Used by the web client to check connection status to Posterr, and also to determine if there was a cold start that was missed
 app.get(BASEURL + "/conncheck", (req, res) => {
-  res.send({ status: cold_start_time });
+  res.send({ "status": cold_start_time, "sleep": sleep });
 });
 
 

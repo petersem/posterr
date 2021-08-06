@@ -1,3 +1,9 @@
+<div id="myNav" class="overlay">
+  <div class="overlay-content">
+    Zzzzzzz...
+  </div>
+</div>
+
 <div id="myCarousel" data-interval="<%=globals.slideDuration%>" data-pause="false" class="carousel slide <%=globals.fadeTransition%> h-100 w-100"
      data-ride="carousel">
     <div class="carousel-inner cardHolder h-100 w-100 ">
@@ -8,12 +14,42 @@
   var initialLoadTime = new Date().getTime();
   var connCheckClock;
   var connOk = true;
+  var sleeping = false;
+
+  function openNav() {
+    document.getElementById("myNav").style.width = "100%";
+  }
+
+  function closeNav() {
+    document.getElementById("myNav").style.width = "0%";
+  }
+
 
   function noConnection() {
     cardHtml = `<div class="container d-flex align-items-center justify-content-center no-content"><div class="d-flex">
       <div class="settingsLink">Lost connectivity with Posterr server!</br>Attempting to restore connection..</div></div></div>`
     $(".cardHolder").html(cardHtml);    
     $("body").css("background-color","black");
+  }
+
+  function shutdown(){
+    // shutdown slides, audio, and then hide screen
+    if(sleeping !== true){
+      $('#myCarousel').carousel('pause');
+      StopAllAudio();
+      openNav();
+      sleeping = true;
+    }
+  }
+
+  function restart(){
+    $('#myCarousel').carousel({
+        interval: <%=globals.slideDuration%>
+    });
+
+    $('#myCarousel').carousel('cycle');
+    sleeping = false;
+    closeNav();
   }
 
   function connCheck(){
@@ -34,8 +70,19 @@
     xhr.onload = () => {
       // check that there hasn't been rapid a cold restart of posterr that this connection check missed
       const res = xhr.response;
-      if(res==null) noConnection();
+      if(res==null && sleeping !== true) noConnection();
       let serverDate = new Date(res.status);
+      // enable overlay if sleep signalled
+      if(res.sleep=="true") {
+        shutdown();
+      }
+      else{
+        // only restart if coming out of sleep
+        if(sleeping==true){
+          restart();
+        }
+        sleeping = false;
+      }
       let clientDate = new Date();
       let dif = clientDate.getTime() - serverDate.getTime();
 

@@ -277,3 +277,7 @@ body{margin-top:20px;
       border-radius: 5px;
       border: 0;
     }
+
+    .small {
+      font-size: x-small;
+    }
