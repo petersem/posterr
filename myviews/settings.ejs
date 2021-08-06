@@ -97,7 +97,7 @@
         </ul>
 
       </div>
-      <% if(latestVersion !== undefined && latestVersion !== "" && latestVersion !== version.toString() && (typeof errors == 'undefined' || errors.length == 0)){%>
+      <% if(latestVersion !== undefined && latestVersion !== "" && latestVersion !== version.toString() && (typeof errors == 'undefined' || errors.length == 0) && updateAvailable == true){%>
       <p id="rcorners-u"><span id="message">Update</span><br>Please upgrade to Posterr v<%=latestVersion%></br>
       <%}%>
 
@@ -185,10 +185,6 @@
                   </div>
                 </div>
 
-                <div class="md-form">
-                  <input placeholder="Selected time" type="text" id="input_starttime" class="form-control timepicker">
-                  <label for="input_starttime">Dark theme</label>
-                </div>
                 
                 <label class="d-block">Slide Transitions</label>
                 <div class="form-group">
