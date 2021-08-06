@@ -995,7 +995,8 @@ app.post(
         errors: req.session.errors,
         user: { valid: false },
         baseUrl: BASEURL,
-        customPicFolders: customPicFolders
+        customPicFolders: customPicFolders,
+        updateAvailable: updateAvailable
       });
     } else {
       res.render("settings", {
@@ -1186,6 +1187,7 @@ app.post(
       customPictureTheme: req.body.customPictureTheme ? req.body.customPictureTheme : DEFAULT_SETTINGS.customPictureTheme,
       customPicFolders: customPicFolders,
       serverID: loadedSettings.serverID,
+      updateAvailable: updateAvailable,
       saved: false
     };
 
@@ -1218,7 +1220,8 @@ app.post(
         baseUrl: BASEURL,
         customPicFolders: customPicFolders,
         latestVersion: latestVersion,
-        message: message
+        message: message,
+        updateAvailable: updateAvailable
       });
     }
   }
