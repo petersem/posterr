@@ -43,6 +43,7 @@
     "express-hbs": "^2.3.4",
     "express-session": "^1.17.1",
     "express-validator": "^6.10.0",
+    "font-awesome": "^4.7.0",
     "fs-extra": "^9.1.0",
     "image-size": "^0.9.7",
     "jquery": "^3.6.0",
