@@ -72,7 +72,7 @@ let serverID = "";
 let pinnedMode = false;
 let message = "";
 let latestVersion = "";
-
+let updateAvailable = false
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -732,9 +732,42 @@ async function startup(clearCache) {
     hasReported = true;
   }
   if(latestVersion !== undefined && latestVersion !== pjson.version.toString()){
-    console.log("");
-    console.log("*** PLEASE UPDATE TO v" + latestVersion + " ***");
-    console.log("");
+    // version numbers
+    let curMaj = parseInt(pjson.version.toString().split(".")[0]);
+    let curMed = parseInt(pjson.version.toString().split(".")[1]);
+    let curMin = parseInt(pjson.version.toString().split(".")[2]);
+    let rptMaj = parseInt(latestVersion.split(".")[0]);
+    let rptMed = parseInt(latestVersion.split(".")[1]);
+    let rptMin = parseInt(latestVersion.split(".")[2]);
+
+    // check if update required
+    if(rptMaj > curMaj){
+      updateAvailable = true;
+    }
+    else{
+      if(rptMaj == curMaj && rptMed > curMed){
+        updateAvailable = true;
+      }
+      else{
+        if(rptMaj == curMaj && rptMed == curMed && rptMin > curMin){
+          updateAvailable = true;
+        }
+        else{
+          updateAvailable = false;
+        }
+      }
+    }
+
+    if(updateAvailable == true){
+      console.log("");
+      console.log("*** PLEASE UPDATE TO v" + latestVersion + " ***");
+      console.log("");
+    }
+    else{
+      console.log("");
+      console.log("*** Running latest version v" + latestVersion + " ***");
+      console.log("");
+    }
   }
 
   if(message !== undefined && message !== ""){
@@ -973,7 +1006,8 @@ app.post(
         baseUrl: BASEURL,
         customPicFolders: customPicFolders,
         latestVersion: latestVersion,
-        message: message
+        message: message,
+        updateAvailable: updateAvailable
       });
     }
   }
@@ -994,8 +1028,8 @@ app.get(BASEURL + "/settings", (req, res) => {
       baseUrl: BASEURL,
       customPicFolders: customPicFolders,
       latestVersion: latestVersion,
-      message: message
-
+      message: message,
+      updateAvailable: updateAvailable
     });
   }
   else {
@@ -1008,7 +1042,8 @@ app.get(BASEURL + "/settings", (req, res) => {
       baseUrl: BASEURL,
       customPicFolders: customPicFolders,
       latestVersion: latestVersion,
-      message: message
+      message: message,
+      updateAvailable: updateAvailable
 
     });
   }
