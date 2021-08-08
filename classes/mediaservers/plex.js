@@ -184,7 +184,7 @@ class Plex {
             if (await util.isEmpty(md.rating)) {
               medCard.rating = "";
             } else {
-              medCard.rating = md.rating * 10 + "%";
+              medCard.rating = Math.round(md.rating * 10) + "%";
             }
 
             // download poster image to local server
@@ -329,7 +329,7 @@ class Plex {
             if (await util.isEmpty(md.audienceRating)) {
               medCard.rating = "";
             } else {
-              medCard.rating = md.audienceRating * 10 + "%";
+              medCard.rating = Math.round(md.audienceRating * 10) + "%";
             }
 
             medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
@@ -554,7 +554,7 @@ class Plex {
             if (await util.isEmpty(md.rating)) {
               medCard.rating = "";
             } else {
-              medCard.rating = md.rating * 10 + "%";
+              medCard.rating = Math.round(md.rating * 10) + "%";
             }
 
             // download poster image from plex server
@@ -684,7 +684,7 @@ class Plex {
             if (await util.isEmpty(md.audienceRating)) {
               medCard.rating = "";
             } else {
-              medCard.rating = md.audienceRating * 10 + "%";
+              medCard.rating = Math.round(md.audienceRating * 10) + "%";
             }
             break;
         }
