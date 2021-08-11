@@ -60,6 +60,9 @@ class Settings {
     this.enableCustomPictureThemes = DEFAULT_SETTINGS.enableCustomPictureThemes;
     this.customPictureTheme = DEFAULT_SETTINGS.customPictureTheme;
     this.serverID = DEFAULT_SETTINGS.serverID;
+    this.sleepStart = DEFAULT_SETTINGS.sleepStart;
+    this.sleepEnd = DEFAULT_SETTINGS.sleepEnd;
+    this.enableSleep = DEFAULT_SETTINGS.enableSleep;
     return;
   }
 
@@ -117,6 +120,7 @@ class Settings {
       if(readSettings.filterLocal==undefined) readSettings.filterLocal = 'true';
       if(readSettings.enableCustomPictures==undefined) readSettings.enableCustomPictures = 'false';
       if(readSettings.customPictureTheme==undefined) readSettings.customPictureTheme = 'default';
+      if(readSettings.enableSleep==undefined) readSettings.enableSleep = 'false';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -301,6 +305,13 @@ class Settings {
     else this.customPictureTheme = cs.customPictureTheme;
     if (jsonObject.serverID) this.serverID = jsonObject.serverID;
     else this.serverID = cs.serverID;
+    if (jsonObject.sleepStart) this.sleepStart = jsonObject.sleepStart;
+    else this.sleepStart = cs.sleepStart;
+    if (jsonObject.sleepEnd) this.sleepEnd = jsonObject.sleepEnd;
+    else this.sleepEnd = cs.sleepEnd;
+    if (jsonObject.enableSleep) this.enableSleep = jsonObject.enableSleep;
+    else this.enableSleep = cs.enableSleep;
+
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

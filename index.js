@@ -59,6 +59,7 @@ let isNowShowingEnabled = false;
 let isRadarrEnabled = false;
 let isReadarrEnabled = false;
 let isOnDemandEnabled = false;
+let isSleepEnabled = false;
 let isPicturesEnabled = false;
 let isPlexEnabled = false;
 let isPlexUnavailable = false;
@@ -73,12 +74,14 @@ let pinnedMode = false;
 let message = "";
 let latestVersion = "";
 let updateAvailable = false
+let sleep = "false";
+let sleepClock;
 
 // create working folders if they do not exist
 // needed for package binaries
 var fs = require('fs');
 const { CardTypeEnum } = require("./classes/cards/CardType");
-const { titleColour } = require("./consts");
+const { titleColour, enableSleep, sleepStart, sleepEnd } = require("./consts");
 var dir = './config';
 
 if (!fs.existsSync(dir)) {
@@ -276,6 +279,10 @@ async function loadSonarrComingSoon() {
   return csCards;
 }
 
+/**
+ * @desc Wrapper function to call Readarr coming soon.
+ * @returns {Promise<object>} mediaCards array - coming soon
+ */
 async function loadPictures() {
   // stop the clock
   clearInterval(picturesClock);
@@ -566,6 +573,7 @@ async function checkEnabled() {
   isNowShowingEnabled = false;
   isPicturesEnabled = false;
   isReadarrEnabled = false;
+  isSleepEnabled = false;
 
   // check pictures
   if (loadedSettings.enableCustomPictures == 'true') isPicturesEnabled = true;
@@ -577,6 +585,38 @@ async function checkEnabled() {
     isNowShowingEnabled = true;
   }
 
+  // check sleep mode
+  // let startTime = await util.emptyIfNull(loadedSettings.sleepStart);
+  // let endTime = await util.emptyIfNull(loadedSettings.sleepEnd);
+  let sleepStart;
+  let sleepEnd;
+  let sleepTicks;
+  try{
+    sleepStart = new Date(loadedSettings.sleepStart);
+    isSleepEnabled = true;
+  }
+  catch(ex){
+    console.log("*Invalid sleep start time entered");
+    isSleepEnabled = false
+  }
+
+  try{
+    sleepEnd = new Date(loadedSettings.sleepEnd);
+    isSleepEnabled = true;
+  }
+  catch(ex){
+    console.log("*Invalid sleep end time entered");
+    isSleepEnabled = false
+  }
+
+  if (loadedSettings.enableSleep == "true" && isSleepEnabled == true && sleepEnd > sleepStart){
+    isSleepEnabled = true;
+    sleepTicks = sleepEnd - sleepStart;
+  }
+  else{
+    isSleepEnabled = false;
+  }
+  
   // check Plex
   if (
     (loadedSettings.plexIP !== undefined && loadedSettings.plexIP !== '') &&
@@ -622,6 +662,9 @@ async function checkEnabled() {
   isReadarrEnabled = true;
 }
   // display status
+  let sleepRange = "";
+  if(isSleepEnabled==true) sleepRange = " (" + sleepStart.toTimeString() + " -> " + sleepEnd.toTimeString() + ")";
+
   console.log(
     `--- Enabled Status ---
    Plex: ` +
@@ -645,10 +688,37 @@ async function checkEnabled() {
    Readarr: ` +
     isReadarrEnabled +
     `
+   Sleep timer: ` +
+    loadedSettings.enableSleep + sleepRange +
+    `
    `
+
   );
 
   return;
+}
+
+async function suspend() {
+  // stop all clocks
+  clearInterval(nowScreeningClock);
+  clearInterval(onDemandClock);
+  clearInterval(sonarrClock);
+  clearInterval(radarrClock);
+  clearInterval(houseKeepingClock);
+  clearInterval(picturesClock);
+  clearInterval(readarrClock);
+  // set to sleep
+  sleep = "true";
+}
+
+async function wake(){
+  sleep = "false";
+  if (isSonarrEnabled) await loadSonarrComingSoon();
+  if (isRadarrEnabled) await loadRadarrComingSoon();
+  if (isOnDemandEnabled) await loadOnDemand();
+  if (isPicturesEnabled) await loadPictures();
+  if (isReadarrEnabled) await loadReadarrComingSoon();
+  await loadNowScreening();
 }
 
 /**
@@ -704,7 +774,6 @@ async function startup(clearCache) {
   if (isRadarrEnabled) await loadRadarrComingSoon();
   if (isOnDemandEnabled) await loadOnDemand();
   if (isPicturesEnabled) await loadPictures();
-
   if (isReadarrEnabled) await loadReadarrComingSoon();
   await loadNowScreening();
 
@@ -774,6 +843,9 @@ async function startup(clearCache) {
     console.log("Message: " + message);
     console.log("");
   }
+
+  // setup sleep mode if enabled
+  //!!!!!!!!!!!!!!!!!if loadedSettings.sl
 
   return;
 }
@@ -854,6 +926,9 @@ if (BASEURL == "") {
   //  console.log(process.cwd());
   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(process.cwd(), "saved")));
+  // app.use("/css",express.static(path.join(__dirname, "node_modules/bootstrap/dist/css")));
+  // app.use("/js",express.static(path.join(__dirname, "node_modules/bootstrap/dist/js")));
+  // app.use("/js",express.static(path.join(__dirname, "node_modules/jquery/dist")));
 }
 else {
   app.use(BASEURL, express.static(__dirname + '/public'));
@@ -869,27 +944,6 @@ app.get(BASEURL + "/", (req, res) => {
 app.get(BASEURL + "/getcards", (req, res) => {
   res.send({ globalPage: globalPage, baseUrl: BASEURL }); // get generated cards
 });
-
-let sleep = "false";
-setTimeout(() => {
-  sleep = "true";
-  console.log('and... sleeep');
-}, 20000);
-
-setTimeout(() => {
-  sleep = "false";
-  console.log('and... wakey wakey');
-}, 30000);
-
-setTimeout(() => {
-  sleep = "true";
-  console.log('and... go back to sleep');
-}, 40000);
-
-setTimeout(() => {
-  sleep = "false";
-  console.log('and... Awaken!');
-}, 47000);
 
 // Used by the web client to check connection status to Posterr, and also to determine if there was a cold start that was missed
 app.get(BASEURL + "/conncheck", (req, res) => {
@@ -1134,6 +1188,7 @@ app.post(
   ],
   (req, res) => {
     //fields value holder. Also sets default values in form passed without them.
+
     let form = {
       password: req.body.password,
       slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : DEFAULT_SETTINGS.slideDuration,
@@ -1188,6 +1243,9 @@ app.post(
       customPicFolders: customPicFolders,
       serverID: loadedSettings.serverID,
       updateAvailable: updateAvailable,
+      enableSleep: req.body.enableSleep,
+      sleepStart: req.body.sleepStart,
+      sleepEnd: req.body.sleepEnd,
       saved: false
     };
 

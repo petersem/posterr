@@ -665,6 +665,7 @@ a.alert-link {
   background-color: rgba(0,0,0, 1);
   overflow-x: hidden;
   transition: 0.5s;
+  cursor:none; 
 }
 
 .overlay-content {
@@ -677,3 +678,14 @@ a.alert-link {
   color: #0f0f0f;
 }
 
+.overlay-link {
+  height: 80vh;
+  color: #0f0f0f;
+  opacity: .5;
+}
+
+.overlay-link:hover {
+  color: white;
+  text-decoration: none;
+  opacity: 1;
+}

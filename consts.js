@@ -43,7 +43,10 @@ const DEFAULT_SETTINGS = {
   enableCustomPictures: "false",
   enableCustomPictureThemes: "false",
   customPictureTheme: "default",
-  serverID: ""
+  serverID: "",
+  sleepStart: "00:00",
+  sleepEnd: "07:00",
+  enableSleep: "false"
 };
 
 module.exports = DEFAULT_SETTINGS;

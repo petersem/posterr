@@ -1,6 +1,6 @@
 <div id="myNav" class="overlay">
   <div class="overlay-content">
-    Zzzzzzz...
+    <a href="<%=baseUrl%>/settings" class="overlay-link">Zzzzzzz...</a>
   </div>
 </div>
 
@@ -39,6 +39,9 @@
       StopAllAudio();
       openNav();
       sleeping = true;
+    }
+    else{
+      StopAllAudio();
     }
   }
 
