@@ -81,7 +81,7 @@ let sleepClock;
 // needed for package binaries
 var fs = require('fs');
 const { CardTypeEnum } = require("./classes/cards/CardType");
-const { titleColour, enableSleep, sleepStart, sleepEnd } = require("./consts");
+const { titleColour, enableSleep, sleepStart, sleepEnd, numberOnDemand } = require("./consts");
 var dir = './config';
 
 if (!fs.existsSync(dir)) {
@@ -119,10 +119,16 @@ if (!fs.existsSync(dir)) {
 }
 
 function checkTime(i) {
-  if (i < 10) {
-    i = "0" + i;
+  try{
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
   }
-  return i;
+  catch(ex){
+    console.log('*ERROR ' + ex);
+    return i;
+  }
 }
 
 /**
@@ -617,7 +623,7 @@ async function checkEnabled() {
   }
 
   try {
-    if (loadedSettings.enableSleep == "true" && isSleepEnabled == true && sleepEnd.getTime() > sleepStart.getTime()) {
+    if (loadedSettings.enableSleep == "true" && isSleepEnabled == true && sleepEnd.getTime() !== sleepStart.getTime()) {
       isSleepEnabled = true;
       sleepTicks = sleepEnd - sleepStart;
     }
@@ -678,12 +684,15 @@ async function checkEnabled() {
 
 
 
-  let sleepRange = "";
+  let sleepRange = " (Invalid or no date range set)";
   if (isSleepEnabled == true) {
     sleepRange = " (" + checkTime(sleepStart.getHours()) + 
       ":" + checkTime(sleepStart.getMinutes()) + 
       " -> " + checkTime(sleepEnd.getHours()) + 
       ":" + checkTime(sleepEnd.getMinutes()) + ")";
+  }
+  else{
+    sleepRange = "";
   }
 
   console.log(
@@ -710,7 +719,7 @@ async function checkEnabled() {
     isReadarrEnabled +
     `
    Sleep timer: ` +
-    loadedSettings.enableSleep + sleepRange +
+    isSleepEnabled + sleepRange +
     `
    `
 
@@ -797,6 +806,7 @@ async function startup(clearCache) {
   CardTypeEnum.IFrame[1] = loadedSettings.iframe !== undefined ? loadedSettings.iframe : "";
   CardTypeEnum.Playing[1] = loadedSettings.playing !== undefined ? loadedSettings.playing : "";
   CardTypeEnum.Picture[1] = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
+  CardTypeEnum.EBook[1] = loadedSettings.ebook !== undefined ? loadedSettings.ebook : "";
 
   // initial load of card providers
   if (isSonarrEnabled) await loadSonarrComingSoon();
@@ -857,13 +867,11 @@ async function startup(clearCache) {
     }
 
     if (updateAvailable == true) {
-      console.log("");
       console.log("*** PLEASE UPDATE TO v" + latestVersion + " ***");
       console.log("");
     }
     else {
-      console.log("");
-      console.log("*** Running latest version v" + latestVersion + " ***");
+      console.log("*** You are running the most current version of Posterr ***");
       console.log("");
     }
   }
@@ -1241,6 +1249,26 @@ app.post(
         return true;
       }),
     check("plexToken").not().isEmpty().withMessage("'Plex token' is required"),
+    check("enableSleep")
+      .custom((value, { req }) => {
+        if(value == "true"){
+          if(req.body.sleepStart.length == 0) throw new Error("You must specify sleep start and end times if the sleep timer is enabled");
+        }
+        if(value == "true"){
+          if(req.body.sleepEnd.length == 0) throw new Error("You must specify sleep start and end times if the sleep timer is enabled");
+        }
+        return true;
+      }),
+    check("sleepStart")
+      .custom((value, { req }) => {
+        if(isNaN(Date.parse("2100-01-01T" + value)) == true && value.length !== 0) throw new Error("Sleep start time must be in 24 hour format hh:mm (eg. 07:15 or 23:30)");
+        return true;
+      }),
+    check("sleepEnd")
+      .custom((value, { req }) => {
+        if(isNaN(Date.parse("2100-01-01T" + value)) == true && value.length !== 0) throw new Error("Sleep end time must be in 24 hour format hh:mm (eg. 07:15 or 23:30)");
+        return true;
+      })    
   ],
   (req, res) => {
     //fields value holder. Also sets default values in form passed without them.
@@ -1279,6 +1307,7 @@ app.post(
       playing: req.body.playing,
       iframe: req.body.iframe,
       picture: req.body.picture,
+      ebook: req.body.ebook,
       titleColour: req.body.titleColour ? req.body.titleColour : DEFAULT_SETTINGS.titleColour,
       footColour: req.body.footColour ? req.body.footColour : DEFAULT_SETTINGS.footColour,
       bgColour: req.body.bgColour ? req.body.bgColour : DEFAULT_SETTINGS.bgColour,

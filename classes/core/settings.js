@@ -42,6 +42,7 @@ class Settings {
     this.iframe = DEFAULT_SETTINGS.iframe;
     this.playing = DEFAULT_SETTINGS.playing;
     this.picture = DEFAULT_SETTINGS.picture;
+    this.ebook = DEFAULT_SETTINGS.ebook;
     this.titleColour = DEFAULT_SETTINGS.titleColour;
     this.footColour = DEFAULT_SETTINGS.footColour;
     this.bgColour = DEFAULT_SETTINGS.bgColour;
@@ -267,6 +268,8 @@ class Settings {
     else this.playing = cs.playing;
     if (jsonObject.iframe) this.iframe = jsonObject.iframe;
     else this.iframe = cs.iframe;
+    if (jsonObject.ebook) this.ebook = jsonObject.ebook;
+    else this.ebook = cs.ebook;
     if (jsonObject.picture) this.picture = jsonObject.picture;
     else this.picture = cs.picture;
     if (jsonObject.titleColour) this.titleColour = jsonObject.titleColour;

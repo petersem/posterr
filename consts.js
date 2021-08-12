@@ -46,7 +46,13 @@ const DEFAULT_SETTINGS = {
   serverID: "",
   sleepStart: "00:00",
   sleepEnd: "07:00",
-  enableSleep: "false"
+  enableSleep: "false",
+  nowScreening: "",
+  comingSoon: "",
+  onDemand: "",
+  iframe: "",
+  playing: "",
+  ebook: ""
 };
 
 module.exports = DEFAULT_SETTINGS;
