@@ -688,7 +688,7 @@ async function checkEnabled() {
   if (isSleepEnabled == true) {
     sleepRange = " (" + checkTime(sleepStart.getHours()) + 
       ":" + checkTime(sleepStart.getMinutes()) + 
-      " -> " + checkTime(sleepEnd.getHours()) + 
+      "->" + checkTime(sleepEnd.getHours()) + 
       ":" + checkTime(sleepEnd.getMinutes()) + ")";
   }
   else{
@@ -740,8 +740,7 @@ async function suspend() {
   // set to sleep
   sleep = "true";
   let d = new Date();
-  console.log(`
-` + d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)
+  console.log(d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)
   `);
 }
 
@@ -754,8 +753,7 @@ async function wake() {
   if (isReadarrEnabled) await loadReadarrComingSoon();
   await loadNowScreening();
   let d = new Date();
-  console.log(`
-` + d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)
+  console.log(d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)
   `);
 }
 
@@ -820,7 +818,7 @@ async function startup(clearCache) {
   // console.log(
   //   now.toLocaleString() + " Now screening titles refreshed (First run only)"
   // );
-  console.log(" ");
+  //console.log(" ");
   console.log(`✅ Application ready on http://hostIP:` + PORT + BASEURL + `
    Goto http://hostIP:3000`+ BASEURL + `/settings to get to setup page.
   `);
@@ -871,7 +869,7 @@ async function startup(clearCache) {
       console.log("");
     }
     else {
-      console.log("*** You are running the most current version of Posterr ***");
+      console.log("*** You are running the latest version of Posterr ***");
       console.log("");
     }
   }
@@ -889,11 +887,14 @@ async function startup(clearCache) {
       let endSleep = new Date("2100-01-01T" + loadedSettings.sleepEnd);
       let cur = new Date();
       let curDate = new Date("2100-01-01T" + checkTime(cur.getHours()) + ":" + checkTime(cur.getMinutes()));
+
+
+
       // console.log("S:" + startSleep.toTimeString());
       // console.log("C:" + curDate.toTimeString());
       // console.log("E:" + endSleep.toTimeString());
       // console.log('--------------------');
-      if(curDate.getTime() >= startSleep.getTime() && curDate.getTime() < endSleep.getTime()){
+      if((curDate.getTime() >= startSleep.getTime() && curDate.getTime() < endSleep.getTime() && endSleep.getTime() > startSleep.getTime()) || (endSleep.getTime() < startSleep.getTime() && (curDate.getTime() < endSleep.getTime() || curDate.getTime() >= startSleep.getTime())) ){
         if(sleep !== "true"){
           sleep="true";
           suspend();
