@@ -118,6 +118,13 @@ if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 
+function checkTime(i) {
+  if (i < 10) {
+    i = "0" + i;
+  }
+  return i;
+}
+
 /**
  * @desc Wrapper function to call Readarr coming soon.
  * @returns {Promise<object>} mediaCards array - coming soon
@@ -574,6 +581,9 @@ async function checkEnabled() {
   isPicturesEnabled = false;
   isReadarrEnabled = false;
   isSleepEnabled = false;
+  let sleepStart;
+  let sleepEnd;
+  let sleepTicks;
 
   // check pictures
   if (loadedSettings.enableCustomPictures == 'true') isPicturesEnabled = true;
@@ -588,35 +598,38 @@ async function checkEnabled() {
   // check sleep mode
   // let startTime = await util.emptyIfNull(loadedSettings.sleepStart);
   // let endTime = await util.emptyIfNull(loadedSettings.sleepEnd);
-  let sleepStart;
-  let sleepEnd;
-  let sleepTicks;
-  try{
-    sleepStart = new Date(loadedSettings.sleepStart);
+  try {
+    sleepStart = new Date("2100-01-01T" + loadedSettings.sleepStart);
     isSleepEnabled = true;
   }
-  catch(ex){
+  catch (ex) {
     console.log("*Invalid sleep start time entered");
     isSleepEnabled = false
   }
 
-  try{
-    sleepEnd = new Date(loadedSettings.sleepEnd);
+  try {
+    sleepEnd = new Date("2100-01-01T" + loadedSettings.sleepEnd);
     isSleepEnabled = true;
   }
-  catch(ex){
+  catch (ex) {
     console.log("*Invalid sleep end time entered");
     isSleepEnabled = false
   }
 
-  if (loadedSettings.enableSleep == "true" && isSleepEnabled == true && sleepEnd > sleepStart){
-    isSleepEnabled = true;
-    sleepTicks = sleepEnd - sleepStart;
+  try {
+    if (loadedSettings.enableSleep == "true" && isSleepEnabled == true && sleepEnd.getTime() > sleepStart.getTime()) {
+      isSleepEnabled = true;
+      sleepTicks = sleepEnd - sleepStart;
+    }
+    else {
+      isSleepEnabled = false;
+    }
   }
-  else{
-    isSleepEnabled = false;
+  catch(ex){
+    console.log("*Invalid sleep timer settings");
+    isSleepEnabled = false
   }
-  
+
   // check Plex
   if (
     (loadedSettings.plexIP !== undefined && loadedSettings.plexIP !== '') &&
@@ -652,18 +665,26 @@ async function checkEnabled() {
   ) {
     isRadarrEnabled = true;
   }
- // check Readarr
- if (
-  loadedSettings.readarrURL !== undefined &&
-  loadedSettings.readarrCalDays !== undefined &&
-  loadedSettings.readarrToken !== undefined &&
-  loadedSettings.enableReadarr !== 'false'
-) {
-  isReadarrEnabled = true;
-}
+  // check Readarr
+  if (
+    loadedSettings.readarrURL !== undefined &&
+    loadedSettings.readarrCalDays !== undefined &&
+    loadedSettings.readarrToken !== undefined &&
+    loadedSettings.enableReadarr !== 'false'
+  ) {
+    isReadarrEnabled = true;
+  }
   // display status
+
+
+
   let sleepRange = "";
-  if(isSleepEnabled==true) sleepRange = " (" + sleepStart.toTimeString() + " -> " + sleepEnd.toTimeString() + ")";
+  if (isSleepEnabled == true) {
+    sleepRange = " (" + checkTime(sleepStart.getHours()) + 
+      ":" + checkTime(sleepStart.getMinutes()) + 
+      " -> " + checkTime(sleepEnd.getHours()) + 
+      ":" + checkTime(sleepEnd.getMinutes()) + ")";
+  }
 
   console.log(
     `--- Enabled Status ---
@@ -709,9 +730,13 @@ async function suspend() {
   clearInterval(readarrClock);
   // set to sleep
   sleep = "true";
+  let d = new Date();
+  console.log(`
+` + d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)
+  `);
 }
 
-async function wake(){
+async function wake() {
   sleep = "false";
   if (isSonarrEnabled) await loadSonarrComingSoon();
   if (isRadarrEnabled) await loadRadarrComingSoon();
@@ -719,6 +744,10 @@ async function wake(){
   if (isPicturesEnabled) await loadPictures();
   if (isReadarrEnabled) await loadReadarrComingSoon();
   await loadNowScreening();
+  let d = new Date();
+  console.log(`
+` + d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)
+  `);
 }
 
 /**
@@ -800,7 +829,7 @@ async function startup(clearCache) {
     latestVersion = logzResponse.version;
     hasReported = true;
   }
-  if(latestVersion !== undefined && latestVersion !== pjson.version.toString()){
+  if (latestVersion !== undefined && latestVersion !== pjson.version.toString()) {
     // version numbers
     let curMaj = parseInt(pjson.version.toString().split(".")[0]);
     let curMed = parseInt(pjson.version.toString().split(".")[1]);
@@ -810,42 +839,69 @@ async function startup(clearCache) {
     let rptMin = parseInt(latestVersion.split(".")[2]);
 
     // check if update required
-    if(rptMaj > curMaj){
+    if (rptMaj > curMaj) {
       updateAvailable = true;
     }
-    else{
-      if(rptMaj == curMaj && rptMed > curMed){
+    else {
+      if (rptMaj == curMaj && rptMed > curMed) {
         updateAvailable = true;
       }
-      else{
-        if(rptMaj == curMaj && rptMed == curMed && rptMin > curMin){
+      else {
+        if (rptMaj == curMaj && rptMed == curMed && rptMin > curMin) {
           updateAvailable = true;
         }
-        else{
+        else {
           updateAvailable = false;
         }
       }
     }
 
-    if(updateAvailable == true){
+    if (updateAvailable == true) {
       console.log("");
       console.log("*** PLEASE UPDATE TO v" + latestVersion + " ***");
       console.log("");
     }
-    else{
+    else {
       console.log("");
       console.log("*** Running latest version v" + latestVersion + " ***");
       console.log("");
     }
   }
 
-  if(message !== undefined && message !== ""){
+  if (message !== undefined && message !== "") {
     console.log("Message: " + message);
     console.log("");
   }
 
   // setup sleep mode if enabled
-  //!!!!!!!!!!!!!!!!!if loadedSettings.sl
+  if(isSleepEnabled==true){
+    // check times every 5 seconds
+    sleepClock = setInterval(() => {
+      let startSleep = new Date("2100-01-01T" + loadedSettings.sleepStart);
+      let endSleep = new Date("2100-01-01T" + loadedSettings.sleepEnd);
+      let cur = new Date();
+      let curDate = new Date("2100-01-01T" + checkTime(cur.getHours()) + ":" + checkTime(cur.getMinutes()));
+      // console.log("S:" + startSleep.toTimeString());
+      // console.log("C:" + curDate.toTimeString());
+      // console.log("E:" + endSleep.toTimeString());
+      // console.log('--------------------');
+      if(curDate.getTime() >= startSleep.getTime() && curDate.getTime() < endSleep.getTime()){
+        if(sleep !== "true"){
+          sleep="true";
+          suspend();
+        }
+      }
+      else{
+        if(sleep=="true"){
+          wake();
+          sleep="false";
+        } 
+      }
+    }, 5000);
+  }
+  else{
+    clearInterval(sleepClock);
+  }
 
   return;
 }
