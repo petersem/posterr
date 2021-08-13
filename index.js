@@ -24,8 +24,27 @@ const MAX_OD_SLIDES = 150;  // this is with themes. Will be double this if tv an
 
 // just in case someone puts in a / for the basepath value
 if (process.env.BASEPATH == "/") process.env.BASEPATH = "";
-const BASEURL = process.env.BASEPATH || "";
-const PORT = process.env.PORT || 3000;
+let BASEURL = process.env.BASEPATH || "";
+let PORT = process.env.PORT || 3000;
+
+// parse any input parameters for binaries.
+let args = process.argv.slice(2)
+
+// parse port number
+if(args.length !== 0){
+  try{
+    PORT = parseInt(args[0]);
+  }
+  catch{
+    console.log("Cannot set port: " + args[0] + ". Setting default port 3000");
+    PORT = 3000
+  }
+}
+
+// parse base path
+if(args.length == 2){
+    BASEURL = args[1];
+}
 
 console.log("-------------------------------------------------------");
 console.log(" POSTERR - Your media display");
@@ -818,9 +837,9 @@ async function startup(clearCache) {
   // console.log(
   //   now.toLocaleString() + " Now screening titles refreshed (First run only)"
   // );
-  //console.log(" ");
+  console.log(" ");
   console.log(`✅ Application ready on http://hostIP:` + PORT + BASEURL + `
-   Goto http://hostIP:3000`+ BASEURL + `/settings to get to setup page.
+   Goto http://hostIP:` + PORT + BASEURL + `/settings to get to setup page.
   `);
   cold_start_time = new Date();
 
@@ -910,6 +929,7 @@ async function startup(clearCache) {
   }
   else{
     clearInterval(sleepClock);
+    sleep = "false";
   }
 
   return;
@@ -991,6 +1011,7 @@ if (BASEURL == "") {
   //  console.log(process.cwd());
   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(process.cwd(), "saved")));
+  app.use(express.static(path.join(process.cwd(), "public")));
   // app.use("/css",express.static(path.join(__dirname, "node_modules/bootstrap/dist/css")));
   // app.use("/js",express.static(path.join(__dirname, "node_modules/bootstrap/dist/js")));
   // app.use("/js",express.static(path.join(__dirname, "node_modules/jquery/dist")));
@@ -998,6 +1019,8 @@ if (BASEURL == "") {
 else {
   app.use(BASEURL, express.static(__dirname + '/public'));
   app.use(BASEURL, express.static(process.cwd() + '/saved'));
+  app.use(BASEURL, express.static(process.cwd() + '/public'));
+
 }
 
 
