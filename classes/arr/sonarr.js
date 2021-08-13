@@ -114,20 +114,29 @@ class Sonarr {
           let url;
           // cache poster
           fileName = md.series.tvdbId + ".jpg";
-          if (md.series.images[1] !== undefined) {
-            url = md.series.images[1].url;
+          // check art exists
+          md.series.images.forEach(i => {
+            if(i.coverType == "poster"){
+              url = i.url;
+            }
+          });
+          if (url !== undefined) {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
           } else {
             medCard.posterUrl = "/images/no-poster-available.png";
           }
 
-          // cache image
+          // cache art image
           if(hasArt=='true'){
             fileName = md.series.tvdbId + "-art.jpg";
             // check art exists
-            if (md.series.images[2] !== undefined) {
-              url = md.series.images[2].url;
+            md.series.images.forEach(i => {
+              if(i.coverType == "fanart"){
+                url = i.url;
+              }
+            });
+            if (url !== undefined) {
               await core.CacheImage(url, fileName);
               medCard.posterArtURL = "/imagecache/" + fileName;
             }
