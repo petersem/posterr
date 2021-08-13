@@ -26,7 +26,7 @@ Media display software for Plex, Sonarr, Radarr, and Readarr.
  - Move the mouse cursor to the bottom footer of the page to hide it
  - Background artwork option for improved landscape view (when available)
  - Automatically scales for most display sizes and orientation.
- - Plus [more](https://github.com/petersem/posterr/wiki/Detailed-Features)
+ - Sleep timer 
 
 ## Possible Uses
  - Mount a monitor on your wall and showcase your home media setup
@@ -87,7 +87,13 @@ services:
 - Create a directory called `posterr` anywhere on your machine
 - Extract the appropriate binary for your machine and place it in this folder.
 - Run the executable file (double click or type posterr-windows.exe from windows, or ./posterr-xxx from Linux/MacOS)
- > Posterr also works well Windows as a service, with [NSSM](https://nssm.cc/)
+  
+|Parameter|Details|
+|--|--|
+|Port number|Add a port number after the executable name like: 'poster-win 6969' (no parameter defaults to 3000)|
+|Base path|Use this for reverse proxies that require a base path value. If you need this, you must also enter a port number. (e.g. 'posterr-win 3000 /posterr')|
+
+ > Posterr also works well on Windows as a service, using [NSSM](https://nssm.cc/)
  
  > Not yet tested on Linux or MacOS running as a service, however I expect it should work.
 
