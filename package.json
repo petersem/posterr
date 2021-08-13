@@ -7,10 +7,12 @@
   "pkg": {
     "scripts": "public/js/*.js",
     "assets": [
+      "public/js/*.map",
       "public/css/**/*",
       "public/favicons/**/*",
       "public/images/**/*",
-      "public/webfonts/**/*",
+      "public/webfonts/*",
+      "public/webfontkit/*",
       "myviews/*",
       "myviews/posters/*"
     ],
