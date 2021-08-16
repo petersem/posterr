@@ -462,7 +462,6 @@ class Plex {
 
           // add if all criteria matched
           if(okToAdd) {
-            console.log(md.live);
             nsCards.push(medCard);
           }
         } else {
