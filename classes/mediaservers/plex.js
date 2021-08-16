@@ -77,6 +77,7 @@ class Plex {
     ) {
       // move through results and populate media cards
       await nsRaw.MediaContainer.Metadata.reduce(async (memo, md) => {
+
         await memo;
         const medCard = new mediaCard();
         let transcode = "direct";
@@ -446,7 +447,7 @@ class Plex {
         }
 
         // add media card to array
-        if (md.type == "episode" || md.type == "movie" || md.type == "track") {
+        if ((md.type == "episode" || md.type == "movie" || md.type == "track") && (md.live == undefined )) {
           // Sanitise inputs and apply filter checks
           let okToAdd = false;
           let devices = filterDevices !== undefined ? filterDevices : "";
@@ -460,11 +461,22 @@ class Plex {
           if(devices.length > 0 && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
 
           // add if all criteria matched
-          if(okToAdd) nsCards.push(medCard);
+          if(okToAdd) {
+            console.log(md.live);
+            nsCards.push(medCard);
+          }
         } else {
           // ignore movie trailers playing
           if (md.type !== "clip"){
-            console.log("Unknown media type playing: " + md.type);
+            let medType = "";
+            let d = new Date();
+            if(md.live !== undefined) {
+              medType="(Live stream)";
+              //console.log(d.toLocaleString() + " *Ignoring unhandled media type: " + md.type + " " + medType);
+            }
+            else {
+              console.log(d.toLocaleString() + " *Ignoring unhandled media type: " + md.type); 
+            }
           }
 
         }
