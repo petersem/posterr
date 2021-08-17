@@ -40,6 +40,12 @@ class MediaCard {
     this.rendered = "";
     this.user ="";
     this.ip ="";
+    this.triviaCategory = "";
+    this.triviaType = "";
+    this.triviaAnswer = "";
+    this.triviaQuestion = "";
+    this.triviaOptions = [];
+    this.triviaDifficulty = "";
   }
 
   /**
@@ -56,7 +62,7 @@ class MediaCard {
     if(hideTitle=='true' && this.cardType[0] == "On-demand") hiddenTitle = "hidden";
     if(hideFooter=='true' && this.cardType[0] == "On-demand") hiddenFooter = "hidden";
     if(hiddenTitle !== "" && hiddenFooter !== "") fullScreen="fullscreen";
-    if(this.cardType[0] == "Picture"){
+    if(this.cardType[0] == "Picture" || this.cardType == "Trivia Question"){
       hiddenTitle="hidden";
       hiddenFooter="hidden";
       if(hasArt && this.posterArtURL !== ""){
@@ -74,6 +80,41 @@ class MediaCard {
     
     // get custom card title
     let cardCustomTitle = this.cardType[1] !== "" ? this.cardType[1] : this.cardType[0];
+    this.trivaRender="";
+    // if a trivia card, then prepare html
+
+    if(this.cardType[0] == "Trivia Question"){
+      if(this.triviaType=="boolean"){
+        this.triviaOptions = ["True", "False"];
+      }
+      else{
+        this.triviaOptions = this.triviaOptions;
+        this.triviaOptions.push(this.triviaAnswer);
+        this.triviaOptions.sort(() => Math.random() - 0.5);
+      }
+      
+      let options = "<ol type='A' class='listOptions'>";
+      this.triviaOptions.forEach(o => {
+        if(o == this.triviaAnswer){
+          options += "<li class='theAnswer'>" + o + "</li>";
+        }
+        else{
+        options += "<li>" + o + "</li>";
+        }
+      });
+      options += "</ol>";
+
+      this.trivaRender = `
+      <div id='quiz' class='quiz quizText'>
+        <div id='question' class='question'>` + this.triviaQuestion + `</div>
+        <div class='options'>` + options + `</div>
+        <div class="countdown timer` + this.ID + `">
+          <div class="time_left_txt` + this.ID + `">Time Left</div>
+          <div class="time timer_sec` + this.ID + `"></div>
+          <div class="time_line` + this.ID + `"></div>
+        </div>
+      </div>`;
+    }
 
     // pill variables
     let contentRatingPill = "";
@@ -236,8 +277,9 @@ class MediaCard {
       this.runTime +
       `"></div>
         </div>
-      <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>
-      </div>
+      <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>` +
+      this.trivaRender +
+      `</div>
 
       <div class="bottomBanner mx-auto transparent` +
       ` ` + hiddenFooter + 
