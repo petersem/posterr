@@ -15,6 +15,7 @@
   var connCheckClock;
   var connOk = true;
   var sleeping = false;
+  var counter;
 
   function openNav() {
     document.getElementById("myNav").style.width = "100%";
@@ -188,6 +189,9 @@
         // ignore promise errors when paused during play
         //console.warn(e);
       });
+
+      // check if triva slide and if so, pause carousel and start timer
+      isQuiz(1);
     }
 
     // check if marquee is needed
@@ -258,6 +262,7 @@
     }
 
     if (posterWidth > 0) {
+      $('.quiz').width(posterWidth * .90);
       if ($('#progress' + id).hasClass('hidden')) {
       } else {
         $('#progress' + id).css({
@@ -284,6 +289,31 @@
     }
   });
 
+  // reset answer slides
+  $('#myCarousel').on('slide.bs.carousel', function (ex) {
+    $('.theAnswer').removeClass("answer"); 
+    $('.time').addClass('hidden');
+    $('.time').removeClass('timeR');
+    $('.time').removeClass('timeY');
+    $('.time').addClass('timeG');
+    clearTimeout(counter);
+  })
+
+  function isQuiz(id){
+    // check if triva slide and if so, pause carousel and start timer
+    
+    var quizTimer = $('.timer' + id);
+    if(quizTimer.length !== 0) {
+      // pause carousel
+      $('#myCarousel').carousel('pause');
+      // start timer
+      var timeText = document.querySelector(".time_left_txt" + id);
+      var timeCount = document.querySelector(".timer_sec" + id);
+      var timeValue = <%=quizTime%>;
+      startTimer(timeValue, timeCount, timeText, id)
+    }
+  }
+
   // pause carouselwhilst any videos are playing
   // [TODO!!! - ]
   $('#myCarousel').on('slid.bs.carousel', function (ev) {
@@ -291,13 +321,15 @@
     var id = ev.relatedTarget.id;
     if(id==1) getCards();
 
-    //console.log('sliding to item:', id); // do something...
     if (document.getElementById("audio" + id)) {
       var x = document.getElementById("audio" + id);
       x.play().catch(e => {
         // ignore promise errors when paused during play
       });
     }
+
+    // check if triva slide and if so, pause carousel and start timer
+    isQuiz(id);
 
     // check if marquee is needed
     var marquee = document.getElementById("marquee" + id);
@@ -318,7 +350,6 @@
       updateFirstCard();
     }
 
-
     /*         if (substr(id, 3).toLower() == 'vid') {
               console.log('pausing carousel and starting video');
               setTimeout(function () {
@@ -327,6 +358,57 @@
               player.playVideo();
             } */
   });
+
+  function startTimer(time, timeCount, timeText, id){
+    clearTimeout(counter);
+    counter = setInterval(timer, 1000);
+    var duration = time;
+    function timer(){
+        timeCount.textContent = time; //changing the value of timeCount with time value
+        time--; //decrement the time value
+        if(time < 9){ //if timer is less than 9
+            let addZero = timeCount.textContent; 
+            timeCount.textContent = "0" + addZero; //add a 0 before time value
+        }
+
+        $('.time').removeClass('hidden');
+        // set countdown timer colour
+        if(time >= Math.round(duration * .66)){
+          $('.time').removeClass('timeG');
+          $('.time').removeClass('timeY');
+          $('.time').removeClass('timeR');
+          $('.time').addClass('timeG');
+        }
+        else{
+          if(time > Math.round(duration * .33)){
+            $('.time').removeClass('timeG');
+            $('.time').removeClass('timeY');
+            $('.time').removeClass('timeR');
+            $('.time').addClass('timeY');
+          }
+          else{
+            if(time < Math.round(duration * .33)){
+              $('.time').removeClass('timeG');
+              $('.time').removeClass('timeY');
+              $('.time').removeClass('timeR');
+              $('.time').addClass('timeR');
+            }
+          }
+        }
+
+        if(time < 0){ //if timer is less than 0
+            clearInterval(counter); //clear counter
+            // resume
+            timeText.textContent = "Time's up!"; //change the time text to time off
+            $('.theAnswer').addClass("answer");
+            // wait a further 3 seconds and then reset the carousel
+            setTimeout(() => {
+              $('#myCarousel').carousel('cycle');
+              $('#myCarousel').carousel('next');
+            },3000);
+          }
+    }
+  }
 
   function StopAllAudio() {
     $('audio').each(function () {
