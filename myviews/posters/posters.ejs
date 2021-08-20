@@ -327,6 +327,9 @@
   // [TODO!!! - ]
   $('#myCarousel').on('slid.bs.carousel', function (ev) {
     StopAllAudio();
+    // ensire carousel active if manually slid via touch
+    $('#myCarousel').carousel('cycle');
+
     var id = ev.relatedTarget.id;
     if(id==1) getCards();
 

@@ -202,7 +202,7 @@ class Sonarr {
         medCard.posterAR = 1.47;
 
         // add media card to array (taking into account premieres option)
-        if (premieres && md.episodeNumber == 1) {
+        if (md.grabbed == false && premieres && md.episodeNumber == 1) {
           csCards.push(medCard);
         } else {
           if (!premieres) {

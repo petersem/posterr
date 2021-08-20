@@ -182,7 +182,7 @@ class Radarr {
         // }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)
-        if (md.status != "released" && !await util.isEmpty(md.digitalRelease) ) {
+        if (md.grabbed == false && md.status != "released" && !await util.isEmpty(md.digitalRelease) ) {
           csrCards.push(medCard);
         }
 
