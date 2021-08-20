@@ -185,15 +185,11 @@ class Readarr {
     }
     let now = new Date();
     if (csbCards.length == 0) {
-      console.log(
-        now.toLocaleString() + " No Coming soon 'book' titles found"
-      );
+      console.log(now.toLocaleString() + " No Coming soon 'book' titles found");
     } else {
       console.log(
-        now.toLocaleString() + " Coming soon 'book' titles refreshed"
-      );
+        now.toLocaleString() + " Coming soon 'book' titles refreshed");
     }
-    console.log(" ");
     return csbCards;
   }
 
