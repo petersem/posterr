@@ -13,6 +13,7 @@ const core = require("./classes/core/cache");
 const sonr = require("./classes/arr/sonarr");
 const radr = require("./classes/arr/radarr");
 const readr = require("./classes/arr/readarr");
+const trivQ = require("./classes/custom/trivia");
 const pics = require("./classes/custom/pictures");
 const settings = require("./classes/core/settings");
 const MemoryStore = require("memorystore")(session);
@@ -21,6 +22,7 @@ const DEFAULT_SETTINGS = require("./consts");
 const health = require("./classes/core/health");
 const pjson = require("./package.json");
 const MAX_OD_SLIDES = 150;  // this is with themes. Will be double this if tv and movie themes are off
+const triv = require("./classes/custom/trivia");
 
 // just in case someone puts in a / for the basepath value
 if (process.env.BASEPATH == "/") process.env.BASEPATH = "";
@@ -60,9 +62,11 @@ let csCards = [];
 let csrCards = [];
 let picCards = [];
 let csbCards = [];
+let trivCards = [];
 let globalPage = new glb();
 let nowScreeningClock;
 let onDemandClock;
+let triviaClock;
 let sonarrClock;
 let radarrClock;
 let readarrClock;
@@ -76,6 +80,7 @@ let nsCheckSeconds = 10000; // how often now screening checks are performed. (no
 let isSonarrEnabled = false;
 let isNowShowingEnabled = false;
 let isRadarrEnabled = false;
+let isTriviaEnabled = false;
 let isReadarrEnabled = false;
 let isOnDemandEnabled = false;
 let isSleepEnabled = false;
@@ -85,6 +90,7 @@ let isPlexUnavailable = false;
 let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
 let isReadarrUnavailable = false;
+let isTriviaUnavailable = false;
 let hasReported = false;
 let cold_start_time = new Date();
 let customPicFolders = [];
@@ -101,6 +107,9 @@ let sleepClock;
 var fs = require('fs');
 const { CardTypeEnum } = require("./classes/cards/CardType");
 const { titleColour, enableSleep, sleepStart, sleepEnd, numberOnDemand } = require("./consts");
+const CardType = require("./classes/cards/CardType");
+const MediaCard = require("./classes/cards/MediaCard");
+
 var dir = './config';
 
 if (!fs.existsSync(dir)) {
@@ -149,6 +158,48 @@ function checkTime(i) {
     return i;
   }
 }
+
+/**
+ * @desc Wrapper function to call Trivia.
+ * @returns {Promise<object>} mediaCards array - trivia
+ */
+ async function loadTrivia() {
+  // stop the clock
+  clearInterval(triviaClock);
+  let triviaTicks = 86400000; // daily
+
+  // stop timers and dont run if disabled
+  if (!isTriviaEnabled) {
+    return trivCards;
+  }
+
+  // instatntiate radarr class
+  let trivia = new triv();
+
+  // call trivia
+  try {
+    trivCards = await trivia.GetAllQuestions('false',loadedSettings.hasArt, loadedSettings.triviaNumber, loadedSettings.triviaCategories);
+    if (isTriviaUnavailable) {
+      console.log(
+        "✅ Trivia connection restored - defualt poll timers restored"
+      );
+      isTriviaUnavailable = false;
+      triviaTicks = 86400000; // daily
+    }
+  } catch (err) {
+    let now = new Date();
+    console.log(now.toLocaleString() + " *Trivia questions: " + err);
+    triviaTicks = 60000;
+    console.log("✘✘ WARNING ✘✘ - Next Trivia query will run in 1 minute.");
+    isTriviaUnavailable = true;
+  }
+  // restart the 24 hour timer
+  triviaClock = setInterval(loadTrivia, triviaTicks); // daily
+
+  return trivCards;
+}
+
+
 
 /**
  * @desc Wrapper function to call Readarr coming soon.
@@ -394,7 +445,7 @@ async function loadNowScreening() {
   if (nsCards.length > 0) {
     if (loadedSettings.pinNS !== "true") {
       if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards)).sort(() => Math.random() - 0.5));
+        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5));
       }
       else {
         mCards = nsCards.concat(odCards);
@@ -402,6 +453,7 @@ async function loadNowScreening() {
         mCards = mCards.concat(csCards);
         mCards = mCards.concat(csrCards);
         mCards = mCards.concat(csbCards);
+        mCards = mCards.concat(trivCards);
       }
       pinnedMode = false;
     }
@@ -423,34 +475,37 @@ async function loadNowScreening() {
     pinnedMode = false;
     if (odCards.length > 0) {
       if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-        mCards = odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards)).sort(() => Math.random() - 0.5);
+        mCards = odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5);
       }
       else {
         mCards = odCards.concat(csCards);
         mCards = mCards.concat(picCards);
         mCards = mCards.concat(csrCards);
         mCards = mCards.concat(csbCards);
+        mCards = mCards.concat(trivCards);
       }
       globalPage.cards = mCards;
     } else {
       if (csCards.length > 0) {
         if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-          mCards = csCards.concat(csrCards.concat(picCards).concat(csbCards)).sort(() => Math.random() - 0.5);
+          mCards = csCards.concat(csrCards.concat(picCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5);
         }
         else {
           mCards = csCards.concat(csrCards);
           mCards = mCards.concat(picCards);
           mCards = mCards.concat(csbCards);
+          mCards = mCards.concat(trivCards);
         }
         globalPage.cards = mCards;
       } else {
         if (csrCards.length > 0) {
           if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-            mCards = csrCards.concat(picCards.concat(csbCards)).sort(() => Math.random() - 0.5);
+            mCards = csrCards.concat(picCards.concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5);
           }
           else {
             mCards = csrCards.concat(picCards);
             mCards = mCards.concat(csbCards);
+            mCards = mCards.concat(trivCards);
           }
           globalPage.cards = mCards;
 
@@ -459,30 +514,38 @@ async function loadNowScreening() {
         else {
           if (csbCards.length > 0) {
             if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-              mCards = csbCards.concat(picCards).sort(() => Math.random() - 0.5);
+              mCards = csbCards.concat(picCards.concat(trivCards)).sort(() => Math.random() - 0.5);
             }
             else {
               mCards = csbCards.concat(picCards);
+              mCards = mCards.concat(trivCards);
             }
             globalPage.cards = mCards;
           }
           else {
-            if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-              mCards = picCards.sort(() => Math.random() - 0.5);
+            if(picCards.length > 0) {
+              if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+                mCards = picCards.concat(trivCards).sort(() => Math.random() - 0.5);
+              }
+              else {
+                mCards = picCards.concat(trivCards);
+              }
+              globalPage.cards = mCards;
             }
             else {
-              mCards = picCards;
+              if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
+                mCards = trivCards.sort(() => Math.random() - 0.5);
+              }
+              else {
+                mCards = trivCards;
+              }
+              globalPage.cards = mCards;
             }
-
-            globalPage.cards = mCards;
           }
         }
       }
     }
   }
-
-
-  globalPage.cards = mCards;
 
   // setup transition - fade or default slide
   let fadeTransition = "";
@@ -494,7 +557,6 @@ async function loadNowScreening() {
   // render html for all cards
   await globalPage.OrderAndRenderCards(BASEURL, loadedSettings.hasArt, loadedSettings.odHideTitle, loadedSettings.odHideFooter);
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
-
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
   globalPage.fadeTransition =
@@ -504,6 +566,7 @@ async function loadNowScreening() {
   globalPage.footColour = loadedSettings.footColour;
   globalPage.bgColour = loadedSettings.bgColour;
   globalPage.hasArt = loadedSettings.hasArt;
+  globalPage.quizTime = loadedSettings.triviaTimer !== undefined ? loadedSettings.triviaTimer : 15;
 
   // restart the clock
   nowScreeningClock = setInterval(loadNowScreening, pollInterval);
@@ -606,9 +669,14 @@ async function checkEnabled() {
   isPicturesEnabled = false;
   isReadarrEnabled = false;
   isSleepEnabled = false;
+  isTriviaEnabled = false;
+
   let sleepStart;
   let sleepEnd;
   let sleepTicks;
+
+  // check trivia
+  if (loadedSettings.enableTrivia == 'true') isTriviaEnabled = true;
 
   // check pictures
   if (loadedSettings.enableCustomPictures == 'true') isPicturesEnabled = true;
@@ -663,6 +731,10 @@ async function checkEnabled() {
   ) {
     isPlexEnabled = true;
   }
+  else{
+    isPlexEnabled = false;
+  }
+  
   // check on-demand
   if (loadedSettings.onDemandLibraries !== undefined &&
     isPlexEnabled &&
@@ -672,6 +744,10 @@ async function checkEnabled() {
   ) {
     isOnDemandEnabled = true;
   }
+  else{
+    isOnDemandEnabled = false;
+  }
+  
   // check Sonarr
   if (
     loadedSettings.sonarrURL !== undefined &&
@@ -681,6 +757,10 @@ async function checkEnabled() {
   ) {
     isSonarrEnabled = true;
   }
+  else{
+    isSonarrEnabled = false;
+  }
+  
   // check Radarr
   if (
     loadedSettings.radarrURL !== undefined &&
@@ -690,6 +770,10 @@ async function checkEnabled() {
   ) {
     isRadarrEnabled = true;
   }
+  else{
+    isRadarrEnabled = false;
+  }
+  
   // check Readarr
   if (
     loadedSettings.readarrURL !== undefined &&
@@ -699,10 +783,27 @@ async function checkEnabled() {
   ) {
     isReadarrEnabled = true;
   }
+  else{
+    isReadarrEnabled = false;
+  }
+
+  // check Trivia
+
+  if(typeof loadedSettings.triviaTimer=='undefined') console.log('nope');
+  if (
+    loadedSettings.triviaCategories !== undefined &&
+    loadedSettings.triviaCategories.length !== 0 &&
+    loadedSettings.triviaTimer !== undefined &&
+    loadedSettings.triviaNumber !== undefined &&
+    loadedSettings.enableTrivia !== 'false'
+  ) {
+    isTriviaEnabled = true;
+  }
+  else{
+    isTriviaEnabled = false;
+  }
+
   // display status
-
-
-
   let sleepRange = " (Invalid or no date range set)";
   if (isSleepEnabled == true) {
     sleepRange = " (" + checkTime(sleepStart.getHours()) + 
@@ -740,10 +841,11 @@ async function checkEnabled() {
    Sleep timer: ` +
     isSleepEnabled + sleepRange +
     `
+   Trivia: ` +
+    isTriviaEnabled + 
+    `
    `
-
   );
-
   return;
 }
 
@@ -770,6 +872,7 @@ async function wake() {
   if (isOnDemandEnabled) await loadOnDemand();
   if (isPicturesEnabled) await loadPictures();
   if (isReadarrEnabled) await loadReadarrComingSoon();
+  if (isTriviaEnabled) await loadTrivia();
   await loadNowScreening();
   let d = new Date();
   console.log(d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)
@@ -789,6 +892,7 @@ async function startup(clearCache) {
   clearInterval(houseKeepingClock);
   clearInterval(picturesClock);
   clearInterval(readarrClock);
+  clearInterval(triviaClock);
 
   picCards = [];
   odCards = [];
@@ -796,6 +900,7 @@ async function startup(clearCache) {
   csCards = [];
   csrCards = [];
   csbCards = [];
+  trivCards = [];
 
   // run housekeeping job 
   if (clearCache !== false) await houseKeeping();
@@ -824,6 +929,7 @@ async function startup(clearCache) {
   CardTypeEnum.Playing[1] = loadedSettings.playing !== undefined ? loadedSettings.playing : "";
   CardTypeEnum.Picture[1] = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
   CardTypeEnum.EBook[1] = loadedSettings.ebook !== undefined ? loadedSettings.ebook : "";
+  //CardTypeEnum.EBook[1] = loadedSettings.ebook !== undefined ? loadedSettings.ebook : ""; ToDO for trivia *********************************************************
 
   // initial load of card providers
   if (isSonarrEnabled) await loadSonarrComingSoon();
@@ -831,6 +937,7 @@ async function startup(clearCache) {
   if (isOnDemandEnabled) await loadOnDemand();
   if (isPicturesEnabled) await loadPictures();
   if (isReadarrEnabled) await loadReadarrComingSoon();
+  if (isTriviaEnabled) await loadTrivia();
   await loadNowScreening();
 
   // let now = new Date();
@@ -851,7 +958,7 @@ async function startup(clearCache) {
 
   if (hasReported == false && loadedSettings !== undefined) {
     let v = new vers(endPoint);
-    const logzResponse = await v.log(loadedSettings.serverID, pjson.version, isNowShowingEnabled, isOnDemandEnabled, isSonarrEnabled, isRadarrEnabled, isPicturesEnabled);
+    const logzResponse = await v.log(loadedSettings.serverID, pjson.version, isNowShowingEnabled, isOnDemandEnabled, isSonarrEnabled, isRadarrEnabled, isPicturesEnabled, isReadarrEnabled, isTriviaEnabled);
     message = logzResponse.message;
     latestVersion = logzResponse.version;
     hasReported = true;
@@ -949,6 +1056,7 @@ async function saveReset(formObject) {
   clearInterval(readarrClock);
   clearInterval(houseKeepingClock);
   clearInterval(picturesClock);
+  clearInterval(triviaClock);
 
   // clear cards
   nsCards = [];
@@ -957,6 +1065,7 @@ async function saveReset(formObject) {
   csrCards = [];
   picCards = [];
   csbCards = [];
+  trivCards = [];
 
   console.log(
     "✘✘ WARNING ✘✘ - Restarting. Please wait while current jobs complete"
@@ -1012,7 +1121,8 @@ if (BASEURL == "") {
   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(process.cwd(), "saved")));
   app.use(express.static(path.join(process.cwd(), "public")));
-  // app.use("/css",express.static(path.join(__dirname, "node_modules/bootstrap/dist/css")));
+  // app.use("/js",express.static(path.join(__dirname, "/node_modules/fitty/dist")));  
+  // app.use("/bscss",express.static(path.join(__dirname, "/node_modules/bootstrap/dist/css")));
   // app.use("/js",express.static(path.join(__dirname, "node_modules/bootstrap/dist/js")));
   // app.use("/js",express.static(path.join(__dirname, "node_modules/jquery/dist")));
 }
@@ -1026,7 +1136,7 @@ else {
 
 // set routes
 app.get(BASEURL + "/", (req, res) => {
-  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand, hasArt: globalPage.hasArt }); // index refers to index.ejs
+  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand, hasArt: globalPage.hasArt, quizTime: globalPage.quizTime }); // index refers to index.ejs
 });
 
 app.get(BASEURL + "/getcards", (req, res) => {
@@ -1094,6 +1204,15 @@ app.get(BASEURL + "/debug/readarr", (req, res) => {
   console.log('-------------------------------------------------------');
   let test = new health(loadedSettings);
   test.ReadarrCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
+});
+
+app.get(BASEURL + "/debug/trivia", (req, res) => {
+  console.log(' ');
+  console.log("** Open Trvia DB CHECK ** (Get 5 questions)");
+  console.log('-------------------------------------------------------');
+  let test = new health(loadedSettings);
+  test.TriviaCheck();
   res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
@@ -1355,6 +1474,10 @@ app.post(
       enableSleep: req.body.enableSleep,
       sleepStart: req.body.sleepStart,
       sleepEnd: req.body.sleepEnd,
+      triviaTimer: req.body.triviaTimer ? req.body.triviaTimer : DEFAULT_SETTINGS.triviaTimer,
+      triviaCategories: req.body.triviaCategories,
+      enableTrivia: req.body.enableTrivia,
+      triviaNumber: req.body.triviaNumber,
       saved: false
     };
 

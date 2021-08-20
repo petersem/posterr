@@ -281,3 +281,15 @@ body{margin-top:20px;
     .small {
       font-size: x-small;
     }
+
+    #triviaCategories {
+      height: 500px;
+      padding: .375rem 1.75rem .375rem .75rem;
+      font-size: 1.1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      vertical-align: middle;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }

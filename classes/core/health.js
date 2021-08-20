@@ -130,6 +130,32 @@ async SonarrCheck() {
   return;
 }
 
+async TriviaCheck() {
+  let resp;
+  // call trivia API and return results
+  try {
+    resp = await axios
+      .get("https://opentdb.com/api.php?amount=5&category=11")
+      .catch((err) => {
+        throw err;
+      });
+  } catch (err) {
+    // displpay error if call failed
+    let d = new Date();
+    console.log(
+      d.toLocaleString() + " *Trivia check failed - :",
+      err.message
+    );
+    throw err;
+  }
+  let cnt = 0;
+  resp.data.results.forEach(question => {
+    cnt++;
+    console.log(cnt + " - " + question.question);
+  });
+  return;
+}
+
 async ReadarrCheck() {
   let resp;
   // set up date range and date formats

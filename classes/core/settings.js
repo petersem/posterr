@@ -64,6 +64,10 @@ class Settings {
     this.sleepStart = DEFAULT_SETTINGS.sleepStart;
     this.sleepEnd = DEFAULT_SETTINGS.sleepEnd;
     this.enableSleep = DEFAULT_SETTINGS.enableSleep;
+    this.triviaTimer = DEFAULT_SETTINGS.triviaTimer;
+    this.triviaCategories = DEFAULT_SETTINGS.triviaCategories;
+    this.enableTrivia = DEFAULT_SETTINGS.enableTrivia;
+    this.triviaNumber = DEFAULT_SETTINGS.triviaNumber;
     return;
   }
 
@@ -122,6 +126,7 @@ class Settings {
       if(readSettings.enableCustomPictures==undefined) readSettings.enableCustomPictures = 'false';
       if(readSettings.customPictureTheme==undefined) readSettings.customPictureTheme = 'default';
       if(readSettings.enableSleep==undefined) readSettings.enableSleep = 'false';
+      if(readSettings.enableTrivia==undefined) readSettings.enableTrivia = 'false';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -151,6 +156,8 @@ class Settings {
     this.enableSonarr = 'false';
     this.enableRadarr = 'false';
     this.enableReadarr = 'false';
+    this.enableTrivia = 'false';
+
     const data = JSON.stringify(this, null, 4);
 
     // write JSON string to a file
@@ -314,7 +321,14 @@ class Settings {
     else this.sleepEnd = cs.sleepEnd;
     if (jsonObject.enableSleep) this.enableSleep = jsonObject.enableSleep;
     else this.enableSleep = cs.enableSleep;
-
+    if (jsonObject.enableTrivia) this.enableTrivia = jsonObject.enableTrivia;
+    else this.enableTrivia = cs.enableTrivia;
+    if (jsonObject.triviaCategories) this.triviaCategories = jsonObject.triviaCategories;
+    else this.triviaCategories = cs.triviaCategories;
+    if (jsonObject.triviaTimer) this.triviaTimer = jsonObject.triviaTimer;
+    else this.triviaTimer = cs.triviaTimer;
+    if (jsonObject.triviaNumber) this.triviaNumber = jsonObject.triviaNumber;
+    else this.triviaNumber = cs.triviaNumber;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

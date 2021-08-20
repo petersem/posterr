@@ -282,7 +282,11 @@ iframe {
   }
 
   .bannerBigText {
-    font-size: 158px;
+    font-size: 145px;
+  }
+
+  .quizText {
+    font-size: 105px;
   }
 
   .bottomBanner {
@@ -300,6 +304,10 @@ iframe {
     height: 14px;
   }
 
+  .quizText {
+    font-size: 85px;
+  }
+
   .bannerBigText {
     font-size: 121px;
   }
@@ -310,7 +318,7 @@ iframe {
   }
 }
 
-/* If the screen size is 2399px-871px high */
+/* If the screen size is 2399px-1861px high */
 @media screen and (max-height: 2399px) and (min-height: 1860px) {
   .banners {
     padding-top: 0px;
@@ -318,6 +326,10 @@ iframe {
 
   .progress {
     height: 12px;
+  }
+
+  .quizText {
+    font-size: 80px;
   }
 
   .bannerBigText {
@@ -340,6 +352,10 @@ iframe {
     height: 10px;
   }
 
+  .quizText {
+    font-size: 65px;
+  }
+
   .bannerBigText {
     font-size: 91px;
   }
@@ -358,6 +374,10 @@ iframe {
 
   .progress {
     height: 8px;
+  }
+
+  .quizText {
+    font-size: 50px;
   }
 
   .bannerBigText {
@@ -380,6 +400,10 @@ iframe {
     height: 4px;
   }
 
+  .quizText {
+    font-size: 38px;
+  }
+
   .bannerBigText {
     font-size: 58px;
   }
@@ -400,6 +424,10 @@ iframe {
     height: 4px;
   }
 
+  .quizText {
+    font-size: 32px;
+  }
+
   .bannerBigText {
     font-size: 41px;
   }
@@ -418,6 +446,10 @@ iframe {
 
   .progress {
     height: 5px;
+  }
+  
+  .quizText {
+    font-size: 26px;
   }
 
   .bannerBigText {
@@ -440,6 +472,10 @@ iframe {
     height: 4px;
   }
 
+  .quizText {
+    font-size: 22px;
+  }
+
   .bannerBigText {
     font-size: 27px;
   }
@@ -460,6 +496,10 @@ iframe {
     height: 3px;
   }
 
+  .quizText {
+    font-size: 20px;
+  }
+  
   .bannerBigText {
     font-size: 25px;
   }
@@ -478,6 +518,10 @@ iframe {
 
   .progress {
     height: 2px;
+  }
+
+  .quizText {
+    font-size: 17px;
   }
 
   .bannerBigText {
@@ -501,6 +545,10 @@ iframe {
   }
 
   .bannerBigText {
+    font-size: 15px;
+  }
+
+  .quizText {
     font-size: 20px;
   }
 
@@ -518,6 +566,10 @@ iframe {
 
   .progress {
     height: 1px;
+  }
+
+  .quizText {
+    font-size: 12px;
   }
 
   .bannerBigText {
@@ -541,6 +593,10 @@ iframe {
   }
 
   .bannerBigText {
+    font-size: 10px;
+  }
+
+  .quizText {
     font-size: 15px;
   }
 
@@ -689,3 +745,117 @@ a.alert-link {
   text-decoration: none;
   opacity: 1;
 }
+
+.question {
+  color: rgb(255, 255, 255);
+  /* font-size: xxx-large;  */
+  /* font-family: 'joyful_theatreregular'; */
+  /* font-style: italic; */
+  /* margin-bottom: 10px; */
+  text-align: center;
+  width: 100%;
+  text-overflow: string !important;
+  white-space: normal;
+  overflow: hidden !important;
+  max-width: 350px;
+  margin: auto;
+  /* border: 3px solid #73AD21;  */
+  line-height: 1.1em;
+  max-width: 100%;
+  /* color: white; */
+  vertical-align: middle;
+  top: 4%;
+  position: absolute;
+  height: 28%;
+  max-height: 28%;
+  min-height: 264px; 
+  width: 100%;
+  z-index: 1000;
+/* 
+  text-align: center;
+  top: 18%;
+  -ms-transform: translateY(-18%);
+  -webkit-transform: translateY(-18%);
+  transform: translateY(-18%); */
+}
+
+.options {
+  color: rgb(255, 255, 255);
+  /* font-family: 'joyful_theatreregular'; */
+  /* border: 3px solid yellow;  */
+  font-size: smaller; 
+  width:450px;
+  /* font-style: italic; */
+  /* margin-bottom: 10px; */
+  text-align: center;
+  width: 100%;
+  /* overflow: hidden;  */
+  word-wrap: normal; 
+  white-space:normal;
+
+  position: absolute;
+  top: 32%;
+  height: 40%;
+  max-height: 40%;
+}
+
+.listOptions{
+  display: table; 
+  margin: 0 auto;
+  list-style-position: inside;
+}
+
+.answer {
+  color: goldenrod !important;
+}
+
+.countdown {
+  text-align: center;
+  color: rgb(255, 255, 255);
+  /* font-family: 'joyful_theatreregular'; */
+  /* border: 3px solid blue;  */
+  /* font-size: xxx-large;   */
+  bottom: 2%;
+  position: absolute;
+  height: 20%;
+  max-height: 20%;
+  width: 100%;
+}
+
+.timeG {
+  color: green;
+  /* font-family: 'joyful_theatreregular'; */
+  /* font-size: 45px; */
+}
+
+.timeY {
+  color: yellow;
+  /* font-family: 'joyful_theatreregular'; */
+  /* font-size: 45px; */
+}
+
+.timeR {
+  color: red;
+  /* font-family: 'joyful_theatreregular'; */
+  /* font-size: 45px;  */
+}
+
+.quiz {
+  opacity: 1;
+  /* border: 3px solid red;  */
+  min-height: 100%;
+  transform: translate(+21%,0);
+  width:100%;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 900;
+
+  text-align: center;
+  left: 50%;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+   transform: translateX(-50%);
+}
+

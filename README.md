@@ -27,6 +27,7 @@ Media display software for Plex, Sonarr, Radarr, and Readarr.
  - Background artwork option for improved landscape view (when available)
  - Automatically scales for most display sizes and orientation.
  - Sleep timer 
+ - Trivia Quiz (multiple selectable topics)
 
 ## Possible Uses
  - Mount a monitor on your wall and showcase your home media setup

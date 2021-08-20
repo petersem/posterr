@@ -862,6 +862,96 @@
                   </div>
               </div>
             </div>  
+            <hr>
+
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingTrivia">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTrivia" aria-expanded="false" aria-controls="collapseTrivia">
+                    TRIVIA<i class="accordion_icon fal fa-plus"></i>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseTrivia" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTrivia">
+                <div class="panel-body">
+                  <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableTrivia" id="enableTrivia" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableTrivia ? 'checked' : '' %><%}else{%><%=(settings.enableTrivia == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableTrivia">Enabled</label>
+                  </div>
+                </div>
+
+                <!--<div class="form-group">
+                  <label for="triviaCategories">Trivia categories</label>
+                  <input type="text" class="form-control" id="triviaCategories" name="triviaCategories" aria-describedby="triviaCategoriesHelp"
+                    placeholder="11,12" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaCategories%>"<%}else{%><%=settings.triviaCategories%>"<%}%>>
+                  <small id="triviaCategoriesHelp" class="form-text text-muted">Select the categories for trivia questions.</small>
+                </div>-->
+                <div class="form-group">
+                  <label for="triviaTimer">Trivia timer</label>
+                  <input type="text" class="form-control" id="triviaTimer" name="triviaTimer" aria-describedby="triviaTimer" placeholder="Suggest 15"
+                   value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaTimer%>"<%}else{%><%=settings.triviaTimer%>"<%}%>>
+                  <small id="triviaTimerHelp" class="form-text text-muted">Enter the number of seconds for trivia questions to run for.</small>
+                </div>
+                <div class="form-group">
+                  <label for="triviaTimer">Number of questions</label>
+                  <input type="text" class="form-control" id="triviaNumber" name="triviaNumber" aria-describedby="triviaNumber" placeholder=""
+                   value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaNumber%>"<%}else{%><%=settings.triviaNumber%>"<%}%>>
+                  <small id="triviaNumberHelp" class="form-text text-muted">Enter the number of questions for each category to display.</small>
+                </div>
+
+                <label for="exampleFormControlSelect2">Trivia categories</label>
+                    <select multiple class="form-control triviaCategories" id="triviaCategories" name="triviaCategories" 
+                    value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaCategoriesr%>"<%}else{%><%=settings.triviaCategories%>"<%}%>>
+                      <option class="opt" value="9">General Knowledge</option>
+                      <option value="10">Books</option>
+                      <option value="11">Film</option>
+                      <option value="12">Music</option>
+                      <option value="14">Television</option>
+                      <option value="31">Anime and Manga</option>
+                      <option value="18">Computers</option>
+                      <option value="15">Video Games</option>
+                      <option value="16">Board Games</option>
+                      <option value="17">Science and Nature</option>
+                      <option value="19">Mathematics</option>
+                      <option value="13">Musicals and Theatres</option>
+                      <option value="20">Mythology</option>
+                      <option value="21">Sports</option>
+                      <option value="22">Geography</option>
+                      <option value="23">History</option>
+                      <option value="24">Politics</option>
+                      <option value="25">Art</option>
+                      <option value="26">Celebrities</option>
+                      <option value="27">Animals</option>
+                      <option value="28">Vehicles</option>
+                      <option value="29">Comics</option>
+                      <option value="30">Gadgets</option>
+                      <option value="32">Cartoon and Animation</option>
+                    </select>
+                  <div class="form-text text-muted"><small>Select trivia categories. (hold ctrl to multi-select)</small>
+                </div>
+
+                  <script lang="javascript">
+                  // select saved or forms triva categories
+                  var formCategories = [];
+                  var savedCategories = [];
+                  <%if(typeof formData !== 'undefined' && errors){%>
+                    formCategories = '<%=formData.triviaCategories%>'.split(',')%>;
+                    $('select[name=triviaCategories]').val(formCategories);
+                    //$('.triviaCategories').triviaCategories('refresh');
+                  <%}else{%>
+                    savedCategories = '<%=settings.triviaCategories%>'.split(',')%>;
+                    $('select[name=triviaCategories]').val(savedCategories);
+                    //$('.triviaCategories').triviaCategories('refresh');
+                  <%}%>
+                  </script>
+                
+
+              </div>
+              </div>
+            </div>  
+
 
 
 

@@ -3,15 +3,16 @@ const cType = require("../cards/CardType");
 const util = require('util');
 const axios = require("axios");
 const { CardTypeEnum } = require("../cards/CardType");
+const { triviaCategories } = require("../../consts");
 
  /**
  * @desc Used to get a list of custom pictures
  */
-class Triva {
+class Trivia {
   constructor() { }
 
   /**
-   * @desc Gets results from trivadb api call
+   * @desc Gets results from triviadb api call
    */
   async GetRawData(numberOfQuestions, category){
     let response;
@@ -33,7 +34,7 @@ class Triva {
       // displpay error if call failed
       let d = new Date();
       console.log(
-        d.toLocaleString() + " *Triva - Get raw data:",
+        d.toLocaleString() + " *Trivia - Get raw data:",
         err.message
       );
       throw err;
@@ -43,12 +44,41 @@ class Triva {
   }
 
   /**
-   * @desc Custom triva question slide array
+   * @desc Custom trivia question slide array
+   */
+  async GetAllQuestions(hasThemes, hasArt, numberOfQuestions, questionCategories) {
+    let categories = [].concat(questionCategories);
+    let allTrivCards = [];
+
+    // get questions for specific category
+    await categories.reduce(async (memo, md) => {
+        await memo;
+        let trivSet = await this.GetQuestions(hasThemes, hasArt, numberOfQuestions, md);
+        if(trivSet.length !== 0) {
+          allTrivCards = allTrivCards.concat(trivSet);
+        }
+      }, undefined);
+
+    let now = new Date();
+    if (allTrivCards.length == 0) {
+      console.log(
+        now.toLocaleString() + " No trivia questions found for any category");
+    } else {
+      console.log(
+        now.toLocaleString() + " Trivia categories and questions added");
+    }
+
+    return allTrivCards;
+  }
+
+
+  /**
+   * @desc Custom trivia question slide array
    */
   async GetQuestions(hasThemes, hasArt, numberOfQuestions, questionCategory) {
     let trivCards = [];
 
-    // get questions
+    // get questions for specific category
     const raw = await this.GetRawData(numberOfQuestions,questionCategory, hasThemes);
     // reutrn an empty array if no results
     if (raw !== null) {
@@ -56,7 +86,7 @@ class Triva {
       await raw.data.results.reduce(async (memo, md) => {
         await memo;
         const medCard = new mediaCard();
-        medCard.cardType = cType.CardTypeEnum.Triva;
+        medCard.cardType = cType.CardTypeEnum.Trivia;
         medCard.triviaQuestion = md.question;
         medCard.triviaType = md.type;
         medCard.triviaOptions =  md.incorrect_answers;
@@ -64,6 +94,16 @@ class Triva {
         medCard.mediaType = "trivia";
         medCard.triviaCategory = md.category;
         medCard.triviaDifficulty = "easy"
+
+        // prepare options output
+        
+        if(md.type=="boolean"){
+          medCard.triviaOptions = ["True", "False"];
+        }
+        else{
+          medCard.triviaOptions = md.incorrect_answers.concat(md.correct_answer).sort(() => Math.random() - 0.5);
+          //medCard = medCard.triviaOptions.sort(() => Math.random() - 0.5);
+        }
 
         if (hasThemes == "true") {
           //medCard.theme = md.theme;
@@ -87,15 +127,15 @@ class Triva {
     }
     let now = new Date();
     if (trivCards.length == 0) {
-      console.log(
-        now.toLocaleString() + " No triva questions found");
+      // console.log(
+      //   now.toLocaleString() + " No trivia questions found");
     } else {
-      console.log(
-        now.toLocaleString() + " Triva questions added");
+      // console.log(
+      //   now.toLocaleString() + " Trivia questions added");
     }
 
     return trivCards;
   }
 }
 
-module.exports = Triva;
+module.exports = Trivia;

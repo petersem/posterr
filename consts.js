@@ -52,7 +52,11 @@ const DEFAULT_SETTINGS = {
   onDemand: "",
   iframe: "",
   playing: "",
-  ebook: ""
+  ebook: "",
+  triviaTimer: 15,
+  triviaCategories: "",
+  enableTrivia: "false",
+  triviaNumber: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

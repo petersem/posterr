@@ -12,7 +12,7 @@ class CardType {
     IFrame: ["", ""], 
     Picture: ["Picture", ""], 
     EBook: ["E-Book Release", ""],
-    Triva: ["Trivia Question", ""]
+    Trivia: ["Trivia Question", ""]
   };
 }
 

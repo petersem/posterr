@@ -190,18 +190,20 @@
         //console.warn(e);
       });
 
-      // check if triva slide and if so, pause carousel and start timer
+      // check if trivia slide and if so, pause carousel and start timer
       isQuiz(1);
     }
 
     // check if marquee is needed
     var marquee = document.getElementById("marquee1");
     var tagLine = document.getElementById("tagLine1");
-    if(tagLine.scrollHeight > tagLine.clientHeight || tagLine.scrollWidth > tagLine.clientWidth){
-      marquee.start();
-    }
-    else{
-      marquee.stop();
+    if(tagLine !== null){
+      if(tagLine.scrollHeight > tagLine.clientHeight || tagLine.scrollWidth > tagLine.clientWidth){
+        marquee.start();
+      }
+      else{
+        marquee.stop();
+      }
     }
 
     Resize(1);
@@ -300,16 +302,23 @@
   })
 
   function isQuiz(id){
-    // check if triva slide and if so, pause carousel and start timer
-    
+    // check if trivia slide and if so, pause carousel and start timer
     var quizTimer = $('.timer' + id);
-    if(quizTimer.length !== 0) {
+    if(quizTimer.length !== 0 && quizTimer !== null) {
       // pause carousel
       $('#myCarousel').carousel('pause');
       // start timer
       var timeText = document.querySelector(".time_left_txt" + id);
       var timeCount = document.querySelector(".timer_sec" + id);
-      var timeValue = <%=quizTime%>;
+      var timeValue;
+
+      if('<%=quizTime%>'.length > 0){
+        timeValue = <%=quizTime%>;
+      }
+      else{
+        // default if comms issue where value didnt pass.
+        timeValue = 15;
+      }
       startTimer(timeValue, timeCount, timeText, id)
     }
   }
@@ -328,17 +337,19 @@
       });
     }
 
-    // check if triva slide and if so, pause carousel and start timer
+    // check if trivia slide and if so, pause carousel and start timer
     isQuiz(id);
 
     // check if marquee is needed
     var marquee = document.getElementById("marquee" + id);
-    var tagLine = document.getElementById("tagLine" + id);
-    if(tagLine.scrollHeight > tagLine.clientHeight || tagLine.scrollWidth > tagLine.clientWidth){
-      marquee.start();
-    }
-    else{
-      marquee.stop();
+    var tagLine = document.getElementById("tagLine" + id);  
+    if(tagLine !== null){
+      if(tagLine.scrollHeight > tagLine.clientHeight || tagLine.scrollWidth > tagLine.clientWidth){
+        marquee.start();
+      }
+      else{
+        marquee.stop();
+      }
     }
 
     // resize everything after move to new slide
@@ -380,7 +391,7 @@
           $('.time').addClass('timeG');
         }
         else{
-          if(time > Math.round(duration * .33)){
+          if(time >= Math.round(duration * .33)){
             $('.time').removeClass('timeG');
             $('.time').removeClass('timeY');
             $('.time').removeClass('timeR');
@@ -406,7 +417,7 @@
               $('#myCarousel').carousel('cycle');
               $('#myCarousel').carousel('next');
             },3000);
-          }
+        }
     }
   }
 
