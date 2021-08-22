@@ -283,7 +283,7 @@ body{margin-top:20px;
     }
 
     #triviaCategories {
-      height: 500px;
+      /* height: 500px; */
       padding: .375rem 1.75rem .375rem .75rem;
       font-size: 1.1rem;
       font-weight: 400;
@@ -304,24 +304,34 @@ body{margin-top:20px;
       white-space: nowrap;
       margin:0;
       transition: background-color .4s ease;
-  }
-  .checkbox-menu li input {
-      margin: 0px 5px;
-      top: 2px;
-      position: relative;
-  }
+    }
+
+    .dropdown-menu {
+      background-color: rgb(178, 178, 218);
+    }
+
+    .checkbox-menu li input {
+        margin: 0px 5px;
+        top: 2px;
+        position: relative;
+    }
   
-  .checkbox-menu li.active label {
-      background-color: #cbcbff;
-      font-weight:bold;
-  }
+    .checkbox-menu li.active label {
+        background-color: #cbcbff;
+        font-weight:bold;
+    }
   
-  .checkbox-menu li label:hover,
-  .checkbox-menu li label:focus {
-      background-color: #f5f5f5;
-  }
+    .checkbox-menu li label:hover,
+    .checkbox-menu li label:focus {
+        background-color: #f5f5f5;
+    }
   
-  .checkbox-menu li.active label:hover,
-  .checkbox-menu li.active label:focus {
-      background-color: #b8b8ff;
-  }
+    .checkbox-menu li.active label:hover,
+    .checkbox-menu li.active label:focus {
+        background-color: #b8b8ff;
+    }
+
+    .categoryTitle {
+      font-weight: bold;
+      font-size: large;
+    }

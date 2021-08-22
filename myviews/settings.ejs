@@ -14,18 +14,17 @@
 
   <!-- Additional js libs -->
   <!-- <script src="<%=baseUrl%>/js/jquery-3.3.1.slim.min.js"></script> -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-  <!-- <script src="<%=baseUrl%>/js/bootstrap.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
   <!-- <script src="<%=baseUrl%>/js/bootstrap-colourpicker.min.js"></script> -->
   <script src="/js/iro.min.js"></script>
 
   <!--- CSS -->
-  <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
-  <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="<%=baseUrl%>/css/settings-styles.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/light.min.css">
+  <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
   <!-- <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap-colourpicker.min.css"> -->
   <!-- <script src="/js/script.js"></script> -->
 
@@ -877,6 +876,7 @@
               </div>
               <div id="collapseTrivia" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTrivia">
                 <div class="panel-body">
+                  <small class="form-text text-muted">Questions are refreshed daily, or after a restart/save.</small><br>
                   <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="enableTrivia" id="enableTrivia" 
@@ -895,7 +895,7 @@
                   <label for="triviaTimer">Trivia timer</label>
                   <input type="text" class="form-control" id="triviaTimer" name="triviaTimer" aria-describedby="triviaTimer" placeholder="Suggest 15"
                    value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaTimer%>"<%}else{%><%=settings.triviaTimer%>"<%}%>>
-                  <small id="triviaTimerHelp" class="form-text text-muted">Enter the number of seconds for trivia questions to run for.</small>
+                  <small id="triviaTimerHelp" class="form-text text-muted">Enter the number of seconds for the trivia countdown timer.</small>
                 </div>
                 <div class="form-group">
                   <label for="triviaTimer">Number of questions</label>
@@ -905,70 +905,111 @@
                 </div>
 
                 <label for="exampleFormControlSelect2">Trivia categories</label>
-                    <select multiple class="form-control triviaCategories" id="triviaCategories" name="triviaCategories" 
-                    value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaCategoriesr%>"<%}else{%><%=settings.triviaCategories%>"<%}%>>
-                      <option value="9">General Knowledge</option>
-                      <option value="10">Books</option>
-                      <option value="11">Film</option>
-                      <option value="12">Music</option>
-                      <option value="14">Television</option>
-                      <option value="31">Anime and Manga</option>
-                      <option value="18">Computers</option>
-                      <option value="15">Video Games</option>
-                      <option value="16">Board Games</option>
-                      <option value="17">Science and Nature</option>
-                      <option value="19">Mathematics</option>
-                      <option value="13">Musicals and Theatres</option>
-                      <option value="20">Mythology</option>
-                      <option value="21">Sports</option>
-                      <option value="22">Geography</option>
-                      <option value="23">History</option>
-                      <option value="24">Politics</option>
-                      <option value="25">Art</option>
-                      <option value="26">Celebrities</option>
-                      <option value="27">Animals</option>
-                      <option value="28">Vehicles</option>
-                      <option value="29">Comics</option>
-                      <option value="30">Gadgets</option>
-                      <option value="32">Cartoon and Animation</option>
-                    </select>
-                  <div class="form-text text-muted"><small>Select trivia categories. (hold ctrl to multi-select)</small>
-                </div>
+                <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" 
+          id="dropdownMenu1" data-toggle="dropdown" 
+          aria-haspopup="true" aria-expanded="true">Question cateogries 
+    <i class=""></i>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu checkbox-menu allow-focus" aria-labelledby="dropdownMenu1" id="x" name="x">
+    <li><label class="categoryTitle"><b>General</b></label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="27">Animals</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="30">Gadgets</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="9">General Knowledge</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="20">Mythology</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="21">Sports</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="28">Vehicles</label></li>
+    <li><label class="categoryTitle"><b>Entertainment</b></label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="25">Art</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="16">Board Games</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="26">Celebrities</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="13">Musicals and Theatres</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="15">Video Games</label></li>
+    <li><label class="categoryTitle"><b>Media</b></label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="31">Anime and Manga</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="10">Books</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="32">Cartoon and Animation</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="29">Comics</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="11">Film</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="12">Music</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="14">Television</label></li>
+    <li><label class="categoryTitle"><b>Science &amp; Technology</b></label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="18">Computers</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="22">Geography</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="23">History</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="19">Mathematics</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="24">Politics</label></li>
+    <li><label><input type="checkbox" name="triviaCategories" value="17">Science and Nature</label></li>
+  </ul> 
+  <small class="form-text text-muted">Select the trivia categories you want to display.</small>
 
-                  <script lang="javascript">
-                  // select saved or forms triva categories
-                  var formCategories = [];
-                  var savedCategories = [];
-                  <%if(typeof formData !== 'undefined' && errors){%>
-                    formCategories = '<%=formData.triviaCategories%>'.split(',')%>;
-                    $('select[name=triviaCategories]').val(formCategories);
-                    //$('.triviaCategories').triviaCategories('refresh');
-                  <%}else{%>
-                    savedCategories = '<%=settings.triviaCategories%>'.split(',')%>;
-                    $('select[name=triviaCategories]').val(savedCategories);
-                    //$('.triviaCategories').triviaCategories('refresh');
-                  <%}%>
-                  </script>
+</div>
+
+<script type="text/javascript">
+  $(".checkbox-menu").on("change", "input[type='checkbox']", function() {
+    $(this).closest("li").toggleClass("active", this.checked);
+  });
+
+  $(document).on('click', '.allow-focus', function (e) {
+    e.stopPropagation();
+  });
+</script>
+
+  <script lang="javascript">
+    // select saved or forms triva categories
+    var formCategories = [];
+    var savedCategories = [];
+    // load posted form data
+    <%if(typeof formData !== 'undefined' && errors){%>
+      formCategories = '<%=formData.triviaCategories%>'.split(',')%>;
+      formCategories.forEach(function(id){
+        $('[name="triviaCategories"]').each( function() {   
+          if ( $(this).val() ==   id ){
+            $(this).attr('checked', true);
+            $(this).closest("li").toggleClass("active", this.checked);
+          }
+          else{
+            if ( $(this).attr('checked') == true){
+              $(this).attr('checked', false);
+            }
+          }
+        });
+      });
+    <%}else{%>
+      // load saved trivia selections
+      savedCategories = '<%=settings.triviaCategories%>'.split(',')%>;
+      savedCategories.forEach(function(id){
+        $('[name="triviaCategories"]').each( function() {   
+          if ( $(this).val() ==   id ){
+            $(this).attr('checked', true);
+            $(this).closest("li").toggleClass("active", this.checked);
+          }
+          else{
+            if ( $(this).attr('checked') == true){
+              $(this).attr('checked', false);
+            }
+          }
+        });
+      });
+    <%}%>
+  </script>
                 
 
               </div>
               </div>
             </div>  
-
-
-
-
           </div>
 
-                <hr />
-                <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload
-                      Saved</button>&nbsp;&nbsp;&nbsp; <button type="reset" class="btn btn-info"
-                      onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
-                    <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
-                    </form>
-                  </div>
+          <hr />
+          <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload
+            Saved</button>&nbsp;&nbsp;&nbsp; <button type="reset" class="btn btn-info"
+            onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
+          <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
+        </form>
+      </div>
 
-                  <% if(message !== undefined && message != ""){%>
+      <% if(message !== undefined && message != ""){%>
       <p id="rcorners"><%=message%></br>
       <%}%>
                   <!-- About -->
