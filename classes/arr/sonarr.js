@@ -124,7 +124,7 @@ class Sonarr {
             await core.CacheImage(url, fileName);
             medCard.posterURL = "/imagecache/" + fileName;
           } else {
-            medCard.posterUrl = "/images/no-poster-available.png";
+            medCard.posterURL = "/images/no-poster-available.png";
           }
 
           // cache art image
@@ -202,7 +202,7 @@ class Sonarr {
         medCard.posterAR = 1.47;
 
         // add media card to array (taking into account premieres option)
-        if (md.grabbed == false && premieres && md.episodeNumber == 1) {
+        if (md.hasFile == false && premieres && md.episodeNumber == 1) {
           csCards.push(medCard);
         } else {
           if (!premieres) {

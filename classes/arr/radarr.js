@@ -94,27 +94,39 @@ class Radarr {
         medCard.theme = "";
 
       // cache image
-      // if no poster available, use the generic one
-        if(await util.isEmpty(md.images[0])){
-          medCard.posterURL="/images/no-poster-available.png";
+      let fileName;
+      let url;
+      // cache poster
+      fileName = md.tmdbId + ".jpg";
+      // check art exists
+      md.images.forEach(i => {
+        if(i.coverType == "poster"){
+          url = i.url;
         }
-        else{
-          // cache poster image
-          let fileName = md.tmdbId + ".jpg";
-          let url = md.images[0].url;
-          await core.CacheImage(url, fileName);
-          medCard.posterURL = "/imagecache/" + fileName;
+      });
+      if (url !== undefined) {
+        await core.CacheImage(url, fileName);
+        medCard.posterURL = "/imagecache/" + fileName;
+      } else {
+        // if no poster available, use the generic one
+        medCard.posterURL = "/images/no-poster-available.png";
+      }
 
-          // cache art image
-          if(hasArt=='true'){
-            if(md.images[1] !== undefined){
-              fileName = md.tmdbId + "-art.jpg";
-              url = md.images[1].url;
-              await core.CacheImage(url, fileName);
-              medCard.posterArtURL = "/imagecache/" + fileName;
-            }
+      // cache art image
+      if(hasArt=='true'){
+        fileName = md.tmdbId + "-art.jpg";
+        // check art exists
+        md.images.forEach(i => {
+          if(i.coverType == "fanart"){
+            url = i.url;
           }
+        });
+        if (url !== undefined) {
+          await core.CacheImage(url, fileName);
+          medCard.posterArtURL = "/imagecache/" + fileName;
         }
+      }
+
 
         medCard.posterAR = 1.47;
 
@@ -182,7 +194,7 @@ class Radarr {
         // }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)
-        if (md.grabbed == false && md.status != "released" && !await util.isEmpty(md.digitalRelease) ) {
+        if (md.hasFile == false && md.status != "released" && !await util.isEmpty(md.digitalRelease) ) {
           csrCards.push(medCard);
         }
 
