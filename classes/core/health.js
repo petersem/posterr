@@ -42,35 +42,35 @@ class Health {
     });
 
     // return first movie library found
-    let key;
-    ms.client
-      .query("/library/sections")
-      .then(function (result) {
-        const children = result.MediaContainer.Directory;
-        return children.filter((dir) => (dir.type = "movie"));
-      })
-      .then(
-        function (result) {
-          // list directory objects
-          //for (let d=0; d < result.length; d++){
-          console.log(
-            "Library Name:",
-            result[0].title,
-            ", Key:",
-            result[0].key,
-            "(first 5 titles)"
-          );
-          key = parseInt(result[0].key);
-          //}
-          return;
-        },
-        function (err) {
-          let now = new Date();
-          console.log(
-            now.toLocaleString() + " *On-demand - get a library key:" + err
-          );
-        }
-      );
+    // let key;
+    // ms.client
+    //   .query("/library/sections")
+    //   .then(function (result) {
+    //     const children = result.MediaContainer.Directory;
+    //     return children.filter((dir) => (dir.type = "movie"));
+    //   })
+    //   .then(
+    //     function (result) {
+    //       // list directory objects
+    //       //for (let d=0; d < result.length; d++){
+    //       console.log(
+    //         "Library Name:",
+    //         result[0].title,
+    //         ", Key:",
+    //         result[0].key,
+    //         "(first 5 titles)"
+    //       );
+    //       key = parseInt(result[0].key);
+    //       //}
+    //       return;
+    //     },
+    //     function (err) {
+    //       let now = new Date();
+    //       console.log(
+    //         now.toLocaleString() + " *On-demand - get a library key:" + err
+    //       );
+    //     }
+    //   );
 
     // return first 5 titles in library
 
@@ -78,7 +78,7 @@ class Health {
       function (result) {
         let now = new Date();
         console.log(
-          now.toLocaleString() + " *On-demand - get titles from radom library");
+          now.toLocaleString() + " *On-demand - get titles from random library");
         for (let x = 0; x < 5; x++) {
           console.log(" -", result.MediaContainer.Metadata[x].title);
         }
@@ -245,9 +245,12 @@ async RadarrCheck() {
       this.PingSingleIP("Radarr", this.settings.radarrURL);
     if (this.settings.sonarrURL !== undefined)
       this.PingSingleIP("Sonarr", this.settings.sonarrURL);
+    if (this.settings.readarrURL !== undefined)
+      this.PingSingleIP("Readarr", this.settings.readarrURL);
     this.PingSingleIP("TVDB", "artworks.thetvdb.com");
     this.PingSingleIP("Plex Themes", "tvthemes.plexapp.com");
     this.PingSingleIP("IMDB", "https://image.tmdb.org");
+    this.PingSingleIP("Open Trivia DB", "https://opentdb.com");
     return Promise.resolve(0);
   }
 

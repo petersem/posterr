@@ -34,38 +34,50 @@
 <h3>Software Version</h3>
 <p>Posterr Verson: <%=version%></p>
 </br>
-<h3>Settings</h3>
-<ul>
-  <li>Slide Duration: <span class="settings"><%=settings.slideDuration%></span></li>
-  <li>Show background art: <span class="settings"><%=settings.hasArt%></span></li>
-  <li>TV Themes: <span class="settings"><%=settings.playThemes%></span></li>
-  <li>Movie Themes: <span class="settings"><%=settings.genericThemes%></span></li>
-  <li>Fade transition: <span class="settings"><%=settings.fade%></span></li>
-  <li>Plex IP: <span class="settings"><%=settings.plexIP%></span></li>
-  <li>Plex port: <span class="settings"><%=settings.plexPort%></span></li>
-  <li>Plex secure only: <span class="settings"><%=settings.plexHTTPS%></span></li>
-  <li>On-demand libraries: <span class="settings"><%=settings.onDemandLibraries%></span></li>
-  <li>Number on-demand: <span class="settings"><%=settings.numberOnDemand%></span></li>
-  <li>On-demand refresh period: <span class="settings"><%=settings.onDemandRefresh%>m</span></li>
-  <li>Sonarr URL: <span class="settings"><%=settings.sonarrURL%></span></li>
-  <li>Sonarr days to look ahead: <span class="settings"><%=settings.sonarrCalDays%></span></li>
-  <li>Sonarr season premieres: <span class="settings"><%=settings.sonarrPremieres%></span></li>
-  <li>Radarr URL: <span class="settings"><%=settings.radarrURL%></span></li>
-  <li>Radarr days to look ahead: <span class="settings"><%=settings.radarrCalDays%></span></li>
-  <li>Readarr URL: <span class="settings"><%=settings.readarrURL%></span></li>
-  <li>Readarr days to look ahead: <span class="settings"><%=settings.readarrCalDays%></span></li>
-</ul>
-</br>
-<h3>Other Tests</h3>
+<h3>Tests</h3>
 See logs for results
 <br/><br/>
-<button type="button" class="btn btn-success" onclick="location.href = '<%=baseUrl%>/';">Return</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/ping';">Ping Tests</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexns';">Now Screening Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexod';">On-demand Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/sonarr';">Sonarr Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/radarr';">Radarr Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/readarr';">Readarr Test</button>
-<button type="button" class="btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/trivia';">Open Trivia DB Test</button><br/>
+<button type="button" class="test btn btn-success" onclick="location.href = '<%=baseUrl%>/';">Return</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/ping';">Ping Tests</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexns';">Now Screening Test</button>
+<br><br>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexod';">On-demand Test</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/sonarr';">Sonarr Test</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/radarr';">Radarr Test</button>
+<br><br>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/readarr';">Readarr Test</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/trivia';">Open Trivia DB Test</button><br/>
+</br>
+</br>
+<h3>Settings</h3>
+<ul>
+  <ul>
+    <% 
+    var keyVal="";
+    for (let k of Object.keys(settings)) {
+      switch(k.toLowerCase()){
+        case "password":
+          keyVal = 'suppressed';
+          break;
+        case "plextoken":
+          keyVal = 'suppressed';
+          break;
+        case "radarrtoken":
+          keyVal = 'suppressed';
+          break;
+        case "sonarrtoken":
+          keyVal = 'suppressed';
+          break;
+        case "readarrtoken":
+          keyVal = 'suppressed';
+          break;
+        default:
+          keyVal = settings[k];
+          break;
+      }
+    %>
+      <li><%= k %>: <span class="settings"><%= keyVal %></span></li>
+    <% } %> 
+   </ul>
 </body>
 </html>
