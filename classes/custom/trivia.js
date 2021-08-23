@@ -12,21 +12,20 @@ class Trivia {
   constructor() { }
 
   /**
-   * @desc Gets results from triviadb api call
+   * @desc Gets triviadb token
    */
-  async GetRawData(numberOfQuestions, category){
+   async GetToken(){
     let response;
-
-    // call sonarr API and return results
+    // call trivia db get token and return results
     try {
       response = await axios
         .get(
-          this.sonarrUrl +
-            "https://opentdb.com/api.php?amount=" +
-            numberOfQuestions +
-            "&category=" +
-            category
+          "https://opentdb.com/api_token.php?command=request"
         )
+        .then((res) => {
+          console.log('✅ Got OTDB session token: ' + res.data.token);
+          return res;
+        })
         .catch((err) => {
           throw err;
         });
@@ -34,9 +33,76 @@ class Trivia {
       // displpay error if call failed
       let d = new Date();
       console.log(
-        d.toLocaleString() + " *Trivia - Get raw data:",
+        d.toLocaleString() + " *Trivia - Get new token:",
         err.message
       );
+      throw err;
+    }
+
+    return response.data.token;
+  }
+
+  /**
+   * @desc Gets results from triviadb api call
+   */
+  async GetRawData(numberOfQuestions, category, hasThemes, token){
+    let response;
+    // call sonarr API and return results
+    try {
+      // add token if supplied
+      let apiToken = "";
+      if(token !== undefined && token.length !== 0 && token !== 'false'){
+        apiToken = "&token=" + token
+      }
+      response = await axios
+        .get(
+          "https://opentdb.com/api.php?amount=" +
+            numberOfQuestions +
+            "&category=" +
+            category +
+            apiToken
+        )
+        .then((res) => {
+          let responseCode = res.data.response_code;
+          switch(responseCode){
+            // valid response
+            case 0:
+              return res;
+              break;
+            // not all requested results could be returned
+            case 1:
+              // still ok, as limited results may still return
+              break;
+            // Invalid parameters passed
+            case 2:
+              throw new Error("Open Trivia DB - Invalid parameters passed");
+              break;
+            // token not found
+            case 3:
+              throw new Error("Open Trivia DB Token not found");
+              // get a new token and requery
+              throw new Error("Open Trivia DB - All unique results returned. New token required");
+              break;
+            // All unique reponses returned for this token - new token required
+            case 4:
+              // Get a new token and requery
+              throw new Error("Open Trivia DB - All unique results returned. New token required");
+              break;
+            default:
+              throw new Error("Open Trivia DB - unknown error");
+              break;
+          }
+        })
+        .catch((err) => {
+          throw err;
+        });
+    } catch (err) {
+      // displpay error if call failed
+      // let d = new Date();
+      // console.log(
+      //   d.toLocaleString() + " *Trivia - Get raw data:",
+      //   err.message
+      // );
       throw err;
     }
 
@@ -46,14 +112,14 @@ class Trivia {
   /**
    * @desc Custom trivia question slide array
    */
-  async GetAllQuestions(hasThemes, hasArt, numberOfQuestions, questionCategories) {
+  async GetAllQuestions(hasThemes, hasArt, numberOfQuestions, questionCategories, token) {
     let categories = [].concat(questionCategories);
     let allTrivCards = [];
 
     // get questions for specific category
     await categories.reduce(async (memo, md) => {
         await memo;
-        let trivSet = await this.GetQuestions(hasThemes, hasArt, numberOfQuestions, md);
+        let trivSet = await this.GetQuestions(hasThemes, hasArt, numberOfQuestions, md, token);
         if(trivSet.length !== 0) {
           allTrivCards = allTrivCards.concat(trivSet);
         }
@@ -75,11 +141,11 @@ class Trivia {
   /**
    * @desc Custom trivia question slide array
    */
-  async GetQuestions(hasThemes, hasArt, numberOfQuestions, questionCategory) {
+  async GetQuestions(hasThemes, hasArt, numberOfQuestions, questionCategory, token) {
     let trivCards = [];
 
     // get questions for specific category
-    const raw = await this.GetRawData(numberOfQuestions,questionCategory, hasThemes);
+    const raw = await this.GetRawData(numberOfQuestions,questionCategory, hasThemes, token);
     // reutrn an empty array if no results
     if (raw !== null) {
       // move through results and populate media cards

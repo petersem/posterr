@@ -53,6 +53,8 @@ const DEFAULT_SETTINGS = {
   iframe: "",
   playing: "",
   ebook: "",
+  trivia: "",
+  triviaFrequency: 300,
   triviaTimer: 15,
   triviaCategories: "",
   enableTrivia: "false",

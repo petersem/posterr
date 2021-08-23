@@ -43,6 +43,7 @@ class Settings {
     this.playing = DEFAULT_SETTINGS.playing;
     this.picture = DEFAULT_SETTINGS.picture;
     this.ebook = DEFAULT_SETTINGS.ebook;
+    this.trivia = DEFAULT_SETTINGS.trivia;
     this.titleColour = DEFAULT_SETTINGS.titleColour;
     this.footColour = DEFAULT_SETTINGS.footColour;
     this.bgColour = DEFAULT_SETTINGS.bgColour;
@@ -68,6 +69,7 @@ class Settings {
     this.triviaCategories = DEFAULT_SETTINGS.triviaCategories;
     this.enableTrivia = DEFAULT_SETTINGS.enableTrivia;
     this.triviaNumber = DEFAULT_SETTINGS.triviaNumber;
+    this.triviaFrequency = DEFAULT_SETTINGS.triviaFrequency;
     return;
   }
 
@@ -279,6 +281,8 @@ class Settings {
     else this.ebook = cs.ebook;
     if (jsonObject.picture) this.picture = jsonObject.picture;
     else this.picture = cs.picture;
+    if (jsonObject.trivia) this.trivia = jsonObject.trivia;
+    else this.trivia = cs.trivia;
     if (jsonObject.titleColour) this.titleColour = jsonObject.titleColour;
     else this.titleColour = cs.titleColour;
     if (jsonObject.footColour) this.footColour = jsonObject.footColour;
@@ -329,6 +333,8 @@ class Settings {
     else this.triviaTimer = cs.triviaTimer;
     if (jsonObject.triviaNumber) this.triviaNumber = jsonObject.triviaNumber;
     else this.triviaNumber = cs.triviaNumber;
+    if (jsonObject.triviaFrequency) this.triviaFrequency = jsonObject.triviaFrequency;
+    else this.triviaFrequency = cs.triviaFrequency;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

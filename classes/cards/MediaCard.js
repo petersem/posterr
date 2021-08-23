@@ -80,6 +80,7 @@ class MediaCard {
     
     // get custom card title
     let cardCustomTitle = this.cardType[1] !== "" ? this.cardType[1] : this.cardType[0];
+
     this.triviaRender="";
     // if a trivia card, then prepare html
 

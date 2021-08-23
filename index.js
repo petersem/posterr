@@ -101,6 +101,7 @@ let latestVersion = "";
 let updateAvailable = false
 let sleep = "false";
 let sleepClock;
+let triviaToken = "";
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -166,7 +167,7 @@ function checkTime(i) {
  async function loadTrivia() {
   // stop the clock
   clearInterval(triviaClock);
-  let triviaTicks = 86400000; // daily
+  let triviaTicks = loadedSettings.triviaFrequency * 1000 * 60; // convert to seconds and then minutes
 
   // stop timers and dont run if disabled
   if (!isTriviaEnabled) {
@@ -176,19 +177,35 @@ function checkTime(i) {
   // instatntiate radarr class
   let trivia = new triv();
 
+  // get trivia token
+  if(triviaToken == ""){
+    try {
+      triviaToken = await trivia.GetToken();
+    }
+    catch(ex){
+      let now = new Date();
+      console.log(now.toLocaleString() + " *Trivia - get token: " + err);
+      triviaToken = "";
+      triviaTicks = 60000;
+      console.log("✘✘ WARNING ✘✘ - Next Trivia query will run in 1 minute.");
+      isTriviaUnavailable = true;
+      }
+  }
+
   // call trivia
   try {
-    trivCards = await trivia.GetAllQuestions('false',loadedSettings.hasArt, loadedSettings.triviaNumber, loadedSettings.triviaCategories);
+    trivCards = await trivia.GetAllQuestions('false',loadedSettings.hasArt, loadedSettings.triviaNumber, loadedSettings.triviaCategories, triviaToken);
     if (isTriviaUnavailable) {
       console.log(
         "✅ Trivia connection restored - defualt poll timers restored"
       );
       isTriviaUnavailable = false;
-      triviaTicks = 86400000; // daily
+      triviaTicks = loadedSettings.triviaFrequency * 1000 * 60; // convert to seconds and then minutes
     }
   } catch (err) {
     let now = new Date();
     console.log(now.toLocaleString() + " *Trivia questions: " + err);
+    triviaToken = "";
     triviaTicks = 60000;
     console.log("✘✘ WARNING ✘✘ - Next Trivia query will run in 1 minute.");
     isTriviaUnavailable = true;
@@ -929,7 +946,7 @@ async function startup(clearCache) {
   CardTypeEnum.Playing[1] = loadedSettings.playing !== undefined ? loadedSettings.playing : "";
   CardTypeEnum.Picture[1] = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
   CardTypeEnum.EBook[1] = loadedSettings.ebook !== undefined ? loadedSettings.ebook : "";
-  //CardTypeEnum.EBook[1] = loadedSettings.ebook !== undefined ? loadedSettings.ebook : ""; ToDO for trivia *********************************************************
+  CardTypeEnum.Trivia[1] = loadedSettings.trivia !== undefined ? loadedSettings.trivia : ""; 
 
   // initial load of card providers
   if (isSonarrEnabled) await loadSonarrComingSoon();
@@ -1449,6 +1466,7 @@ app.post(
       onDemand: req.body.onDemand,
       playing: req.body.playing,
       iframe: req.body.iframe,
+      trivia: req.body.trivia,
       picture: req.body.picture,
       ebook: req.body.ebook,
       titleColour: req.body.titleColour ? req.body.titleColour : DEFAULT_SETTINGS.titleColour,
@@ -1478,6 +1496,7 @@ app.post(
       triviaCategories: req.body.triviaCategories,
       enableTrivia: req.body.enableTrivia,
       triviaNumber: req.body.triviaNumber,
+      triviaFrequency: req.body.triviaFrequency,
       saved: false
     };
 

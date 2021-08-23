@@ -493,7 +493,13 @@
                       placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.ebook%>"<%}else{%><%=settings.ebook%>"<%}%>>
                     <small id="ebookHelp" class="form-text text-muted">Alternate text for 'E-Book Release'</small>
                   </div>
-
+  
+                  <div class="form-group">
+                    <label for="trivia">Trivia Question (Alternate text)</label>
+                    <input type="text" class="form-control" id="trivia" name="trivia" aria-describedby="triviaHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.trivia%>"<%}else{%><%=settings.trivia%>"<%}%>>
+                    <small id="triviaHelp" class="form-text text-muted">Alternate text for 'Trivia Questions'</small>
+                  </div>
                 </div>
               </div>
             </div>
@@ -902,6 +908,12 @@
                   <input type="text" class="form-control" id="triviaNumber" name="triviaNumber" aria-describedby="triviaNumber" placeholder=""
                    value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaNumber%>"<%}else{%><%=settings.triviaNumber%>"<%}%>>
                   <small id="triviaNumberHelp" class="form-text text-muted">Enter the number of questions for each category to display.</small>
+                </div>
+                <div class="form-group">
+                  <label for="triviaFrequency">Question refresh freqency</label>
+                  <input type="text" class="form-control" id="triviaFrequency" name="triviaFrequency" aria-describedby="triviaFrequency" placeholder="Suggest 300 minutes"
+                   value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.triviaFrequency%>"<%}else{%><%=settings.triviaFrequency%>"<%}%>>
+                  <small id="triviaFrequencyHelp" class="form-text text-muted">How often to get a new set of questions (minutes)</small>
                 </div>
 
                 <label for="exampleFormControlSelect2">Trivia categories</label>

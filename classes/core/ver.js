@@ -7,17 +7,19 @@ class Ver {
         this.endPoint = endPoint;
     }
     
-    async log(uuid,ver,nsEnabled,odEnabled,sEnabled,rEnabled,pEnabled,bEnabled) {
+    async log(uuid,ver,nsEnabled,odEnabled,sEnabled,rEnabled,pEnabled,bEnabled,rdEnabled, tEnabled) {
         let logzRes = "";
         await axios
             .post(this.endPoint, {
+                "uuid": uuid,
                 "version" : ver,
                 "nsEnabled" : nsEnabled,
                 "odEnabled" : odEnabled,
                 "sEnabled" : sEnabled,
                 "rEnabled" : rEnabled,
                 "pEnabled" : pEnabled,
-                "uuid": uuid
+                "rdEnabled": rdEnabled,
+                "tEnabled": tEnabled
             })
             .then(res => {
                 console.log("-------------------------------------------------------");
