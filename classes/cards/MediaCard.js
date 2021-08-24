@@ -230,7 +230,7 @@ class MediaCard {
         `">
         <source src="` +
         baseUrl + this.theme +
-        `" type="audio/mpeg">
+        `" type="audio/mpeg" preload="auto">
         Your browser does not support the audio element.
       </audio>
       <div class="myDiv">
