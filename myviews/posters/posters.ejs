@@ -16,6 +16,7 @@
   var connOk = true;
   var sleeping = false;
   var counter;
+  var curPlayID = 1;
 
   function openNav() {
     document.getElementById("myNav").style.width = "100%";
@@ -37,12 +38,12 @@
     // shutdown slides, audio, and then hide screen
     if(sleeping !== true){
       $('#myCarousel').carousel('pause');
-      StopAllAudio();
+      StopAudio(curPlayID);
       openNav();
       sleeping = true;
     }
     else{
-      StopAllAudio();
+      StopAudio(curPlayID);
     }
   }
 
@@ -98,14 +99,19 @@
       // this is only checked for if there are already slides configured, so should not happen for initial setup
       if(Seconds_Between_Dates<5){
         //console.log('unscheduled rapid restart of server. Client refreshing');
-        location.reload();
+        StopAudio(curPlayID);
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
       }
 
       // restore connection
       if(connOk==false){
         console.log('Connection restored!');
         connOk=true;
-        location.reload();
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
       }
       // connection ok!
       else{
@@ -166,6 +172,43 @@
     }
   }
 
+  function aud_fadeIn(myAudio) {
+    var timer
+    if (myAudio.volume < 1) {
+	    // console.log('fading in');
+		if(myAudio.volume > 0.995) {
+		  myAudio.volume = 1;
+		}
+		else{
+		  myAudio.volume += 0.005;
+		}
+    timer = setTimeout(aud_fadeIn,20,myAudio);
+    }
+	  else{
+	    // console.log('full volume');
+	  }
+  };
+
+  function aud_fadeOut(id) {
+    var timer
+    var myAudio = document.getElementById("audio" + id);
+    //console.log('working on fade for id: ' + id);
+    if (myAudio.volume > 0) {
+	    //console.log('fading out');
+		if(myAudio.volume < 0.005) {
+			myAudio.volume = 0;
+		}
+		else{
+			myAudio.volume -= 0.005;
+		}
+		timer = setTimeout(aud_fadeOut,5,id);
+    }
+  	else{
+	  	myAudio.pause();
+	    //console.log('Stopped');
+	  }
+  };
+
   // apply styles to cards and manage audio
   function initialLoad() {
     // make banner link to settings
@@ -182,13 +225,20 @@
     //resize for initial page load
     $('.myDiv').css({'height': (($(window).height())) + 'px' });
     StopAllAudio();
+    
     //trigger initial audio play if present
     if (document.getElementById("audio1")) {
       var x = document.getElementById("audio1");
+      // set volume to 0 and position 1 second in
+      x.volume = 0;
+      x.currentTime = 1;
       x.play().catch(e => {
         // ignore promise errors when paused during play
         //console.warn(e);
       });
+
+      // fade in theme
+      aud_fadeIn(x);
 
       // check if trivia slide and if so, pause carousel and start timer
       isQuiz(1);
@@ -287,7 +337,10 @@
       $('.banners').css({
         'background-color': '#18180d'
       })
-      location.reload();
+      StopAudio(curPlayID);
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     }
   });
 
@@ -326,19 +379,32 @@
   // pause carouselwhilst any videos are playing
   // [TODO!!! - ]
   $('#myCarousel').on('slid.bs.carousel', function (ev) {
-    StopAllAudio();
+    StopAudio(curPlayID);
+    
     // ensire carousel active if manually slid via touch
     $('#myCarousel').carousel('cycle');
 
     var id = ev.relatedTarget.id;
-    if(id==1) getCards();
+    if(id==1) {
+      curPlayID = 1;
+      getCards();
+    }
+
+    curPlayID = id;
 
     if (document.getElementById("audio" + id)) {
       var x = document.getElementById("audio" + id);
+      x.volume = 0;
+      x.currentTime = 1;
       x.play().catch(e => {
         // ignore promise errors when paused during play
       });
+
+      // fade in theme
+      aud_fadeIn(x);
     }
+
+
 
     // check if trivia slide and if so, pause carousel and start timer
     isQuiz(id);
@@ -424,15 +490,32 @@
     }
   }
 
-  function StopAllAudio() {
-    $('audio').each(function () {
+  function StopAudio(id) {
+    //$('audio').each(function (id) {
       try {
-        this.pause(); // Stop playing
-        this.currentTime = 0; // Reset time
+        //var audElement = document.getElementById("audio" + id);
+        //console.log('fading out id: ' + id);
+      //  console.log('aud: ' + audElement);
+        aud_fadeOut(id);
+        //this.pause(); // Stop playing
+        //this.currentme = 0;Ti // Reset time
       } catch (err) {
         //console.warn(err);
       }
-    });
+    //});
+  }
+
+  function StopAllAudio() {
+    // $('audio').each(function (id) {
+      try {
+        var audElement = document.getElementById("audio" + id);
+        aud_fadeOut(id);
+        // this.pause(); // Stop playing
+        // this.currentme = 0; // Reset time
+      } catch (err) {
+        //console.warn(err);
+      }
+    // });
   }
 
   //  });
