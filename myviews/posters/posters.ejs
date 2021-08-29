@@ -122,7 +122,7 @@
 
   // call posterr api to get currently generated card sets
   function getCards(){
-  //console.log('getting cards');
+    //console.log('getting cards');
     const xhr = new XMLHttpRequest();
     xhr.open('GET', window.location.href + 'getcards');
 
@@ -424,7 +424,7 @@
     // resize everything after move to new slide
     waitforload(0, id);
 
-    // if slide to last car, update the first to ensure smooth(er) transition
+    // if slide to last card, update the first to ensure smooth(er) transition
     //console.log(id, $('.carousel-item').length);
     if(id==$('.carousel-item').length){
       updateFirstCard();

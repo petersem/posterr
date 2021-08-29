@@ -170,8 +170,12 @@ class MediaCard {
     }
 
     if (!(await util.isEmpty(this.resCodec))) {
+      let resBadge = "badge-dark";
+      // if(this.resCodec.toLocaleLowerCase().includes('4k') && this.resCodec.toLocaleLowerCase().includes('main 10 hdr')){
+      //   resBadge = "badge-primary super-res";
+      // }
       resCodecPill =
-        "<span class='badge badge-pill badge-dark'> " +
+        "<span class='badge badge-pill " + resBadge + "'> " +
         this.resCodec +
         "</span>";
     }
