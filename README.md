@@ -1,9 +1,12 @@
 # Posterr
 Media display software for Plex, Sonarr, Radarr, and Readarr.
 
-![Music playing](https://github.com/petersem/posterr/blob/master/doco/music.png?raw=true)
-![Now screening](https://github.com/petersem/posterr/blob/master/doco/ns.png?raw=true)
-![On-demand](https://github.com/petersem/posterr/blob/master/doco/od.png?raw=true)
+![Docker Pulls](https://img.shields.io/docker/pulls/petersem/posterr) 
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/petersem/posterr/latest) 
+![GitHub last commit](https://img.shields.io/github/last-commit/petersem/posterr)
+[![User Guide](https://img.shields.io/badge/User_Guide-PosterrWiki-informational?style=flat&logo=bookstack)](https://github.com/petersem/posterr/wiki/Posterr-Configuration)
+
+![Slides](https://github.com/petersem/posterr/blob/master/doco/posterr.jpg?raw=true)
 
 - Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates
 - Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.

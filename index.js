@@ -1540,3 +1540,19 @@ app.post(
 app.listen(PORT, () => {
   console.log(`✅ Web server started on internal port ` + PORT);
 });
+
+
+// setTimeout(() => {
+//   let d = new Date();
+//   let h = checkTime(d.getHours());
+//   let m = checkTime(d.getMinutes() -5);
+//   let ms = checkTime(d.getMinutes() -3);
+//   loadedSettings.sleepEnd = h + ":" + m;
+//   loadedSettings.sleepStart = h + ":" + ms;
+//   console.log(loadedSettings.sleepEnd);
+//   sleep="true";
+//     suspend(); 
+  
+// }, 5000);
+
+
