@@ -806,7 +806,6 @@ async function checkEnabled() {
 
   // check Trivia
 
-  if(typeof loadedSettings.triviaTimer=='undefined') console.log('nope');
   if (
     loadedSettings.triviaCategories !== undefined &&
     loadedSettings.triviaCategories.length !== 0 &&
