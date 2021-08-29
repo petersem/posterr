@@ -139,6 +139,7 @@ class Plex {
 
             medCard.posterAR = 1;
 
+            medCard.resCodec = md.Media[0].bitrate + " Kbps"
             medCard.audioCodec = md.Media[0].audioCodec;
             medCard.runTime = Math.round(md.Media[0].duration / 60000);
             medCard.cardType = cType.CardTypeEnum.Playing;
