@@ -16,7 +16,8 @@ class globalPage {
     footColour,
     bgColour,
     hasArt,
-    quizTime
+    quizTime,
+    hideSettingsLinks
   ) {
     this.slideDuration = slideDuration;
     this.fadeTransition = fadeTransition;
@@ -26,6 +27,7 @@ class globalPage {
     this.bgColour = bgColour;
     this.cards = [];
     this.quizTime = quizTime
+    this.hideSettingsLinks = hideSettingsLinks
     return;
   }
 

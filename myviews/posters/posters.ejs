@@ -1,5 +1,10 @@
 <div id="myNav" class="overlay">
-  <div class="overlay-content" onclick="location.href = '<%=baseUrl%>/settings';">
+  <%if(globals.hideSettingsLinks !== undefined && globals.hideSettingsLinks == 'true'){ %>
+    <div class="overlay-content">
+  <%}
+  else{%>
+    <div class="overlay-content" onclick="location.href = '<%=baseUrl%>/settings';">
+  <%}%>
     <!-- <a href="< %=baseUrl%>/settings" class="overlay-link">Zzzzzzz...</a> -->
   </div>
 </div>
@@ -211,16 +216,21 @@
 
   // apply styles to cards and manage audio
   function initialLoad() {
-    // make banner link to settings
-    $(".bannerBigText").click(function() {
-      window.location = "<%=baseUrl%>/settings"; 
-      return false;
-    });
-    // if full screen, then make poster the link
-    $(".poster").click(function() {
-      window.location = "<%=baseUrl%>/settings"; 
-      return false;
-    });
+    <%if(globals.hideSettingsLinks !== undefined && globals.hideSettingsLinks == 'true'){ 
+      // do nothing
+    }
+    else{%>
+      // make banner link to settings
+      $(".bannerBigText").click(function() {
+        window.location = "<%=baseUrl%>/settings"; 
+        return false;
+      });
+      // if full screen, then make poster the link
+      $(".poster").click(function() {
+        window.location = "<%=baseUrl%>/settings"; 
+        return false;
+      });
+    <%}%>
 
     //resize for initial page load
     $('.myDiv').css({'height': (($(window).height())) + 'px' });

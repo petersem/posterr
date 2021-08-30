@@ -6,8 +6,13 @@
 
 <% } %>
 
-<%if(globals===undefined || globals==null || globals==="" || globals.cards.length===0){%>
-    <%- include('no-content.ejs') %>
+<%
+let noLinks='false';
+if(globals.hideSettingsLinks !== undefined && globals.hideSettingsLinks == 'true'){ 
+    noLinks = globals.hideSettingsLinks;
+}
+if(globals===undefined || globals==null || globals==="" || globals.cards.length===0){%>
+    <%- include('no-content.ejs', {noLinks}) %>
 <%}
 else
 {%>

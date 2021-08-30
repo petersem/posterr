@@ -102,6 +102,7 @@ let updateAvailable = false
 let sleep = "false";
 let sleepClock;
 let triviaToken = "";
+let theaterMode = false
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -460,6 +461,11 @@ async function loadNowScreening() {
   if (!isNowShowingEnabled) { nsCards.length = 0 };
 
   if (nsCards.length > 0) {
+    // check for theater mode and enable
+    if(loadedSettings.theaterRoomMode !== undefined && loadedSettings.theaterRoomMode == 'true'){
+      theaterOn();
+    }
+
     if (loadedSettings.pinNS !== "true") {
       if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
         mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5));
@@ -489,6 +495,12 @@ async function loadNowScreening() {
     }
     globalPage.cards = mCards;
   } else {
+    // check for theater mode and disable if nothing playing
+    if(loadedSettings.theaterRoomMode !== undefined && loadedSettings.theaterRoomMode == 'true' && theaterMode==true){
+      theaterOff(true);
+    }
+    
+
     pinnedMode = false;
     if (odCards.length > 0) {
       if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
@@ -584,6 +596,7 @@ async function loadNowScreening() {
   globalPage.bgColour = loadedSettings.bgColour;
   globalPage.hasArt = loadedSettings.hasArt;
   globalPage.quizTime = loadedSettings.triviaTimer !== undefined ? loadedSettings.triviaTimer : 15;
+  globalPage.hideSettingsLinks = loadedSettings.hideSettingsLinks !== undefined ? loadedSettings.hideSettingsLinks : 'false';
 
   // restart the clock
   nowScreeningClock = setInterval(loadNowScreening, pollInterval);
@@ -865,7 +878,36 @@ async function checkEnabled() {
   return;
 }
 
-async function suspend() {
+async function theaterOn(){
+  let d = new Date();
+  let h = checkTime(d.getHours());
+  let m = checkTime(d.getMinutes() -5);
+  let ms = checkTime(d.getMinutes() -3);
+  loadedSettings.sleepEnd = h + ":" + m;
+  loadedSettings.sleepStart = h + ":" + ms;
+  sleep="true";
+  loadedSettings.playThemes = 'false';
+  loadedSettings.genericThemes = 'false';
+  loadedSettings.enableCustomPictureTheme = 'false';
+  if(theaterMode ==false) suspend(true);  
+}
+
+async function theaterOff(theater) {
+  sleep = "false";
+  let d = new Date();
+  if(theater !== undefined && theater == true && theaterMode == true){
+    theaterMode = false;
+    isSleepEnabled = false;
+    loadedSettings.enableSleep = 'false';
+    console.log(d.toLocaleString() + ` ** Theater mode deactivated`);
+    loadedSettings = await Promise.resolve(await loadSettings());
+
+  }
+}
+
+
+
+async function suspend(theater) {
   // stop all clocks
   clearInterval(nowScreeningClock);
   clearInterval(onDemandClock);
@@ -876,12 +918,22 @@ async function suspend() {
   clearInterval(readarrClock);
   // set to sleep
   sleep = "true";
+  loadedSettings.playThemes = 'false';
+  loadedSettings.genericThemes = 'false';
+  loadedSettings.enableCustomPictureThemes = 'false';
+
   let d = new Date();
-  console.log(d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)
-  `);
+  if(theater !== undefined && theater == true){
+    console.log(d.toLocaleString() + ` ** Theater mode active`);
+    theaterMode = true;
+  }
+  else{
+    console.log(d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)`);
+  }
 }
 
-async function wake() {
+
+async function wake(theater) {
   sleep = "false";
   if (isSonarrEnabled) await loadSonarrComingSoon();
   if (isRadarrEnabled) await loadRadarrComingSoon();
@@ -891,8 +943,7 @@ async function wake() {
   if (isTriviaEnabled) await loadTrivia();
   await loadNowScreening();
   let d = new Date();
-  console.log(d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)
-  `);
+  console.log(d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)`);
 }
 
 /**
@@ -929,6 +980,9 @@ async function startup(clearCache) {
   else {
     console.log(`✅ Settings loaded
   `);
+
+  // set values for noLinks
+  globalPage.hideSettingsLinks = loadedSettings.hideSettingsLinks !== undefined ? loadedSettings.hideSettingsLinks : 'false';
 
     // restart timer for houseKeeping
     setInterval(houseKeeping, 86400000); // daily
@@ -1440,6 +1494,8 @@ app.post(
       genericSwitch: req.body.genericSwitch,
       fadeOption: req.body.fadeOption,
       shuffleSwitch: req.body.shuffleSwitch,
+      hideSettingsLinks: req.body.hideSettingsLinks,
+      theaterRoomMode: req.body.theaterRoomMode,
       plexToken: req.body.plexToken,
       plexIP: req.body.plexIP,
       plexHTTPSSwitch: req.body.plexHTTPSSwitch,
@@ -1539,19 +1595,3 @@ app.post(
 app.listen(PORT, () => {
   console.log(`✅ Web server started on internal port ` + PORT);
 });
-
-
-// setTimeout(() => {
-//   let d = new Date();
-//   let h = checkTime(d.getHours());
-//   let m = checkTime(d.getMinutes() -5);
-//   let ms = checkTime(d.getMinutes() -3);
-//   loadedSettings.sleepEnd = h + ":" + m;
-//   loadedSettings.sleepStart = h + ":" + ms;
-//   console.log(loadedSettings.sleepEnd);
-//   sleep="true";
-//     suspend(); 
-  
-// }, 5000);
-
-

@@ -4,6 +4,8 @@ const DEFAULT_SETTINGS = {
   playThemes : "true",
   genericThemes : "true",
   fade : "true",
+  hideSettingsLinks : "false",
+  theaterRoomMode : "false",
   plexIP : "",
   plexHTTPS : "false",
   plexPort : 32400,

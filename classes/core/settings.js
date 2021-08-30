@@ -15,6 +15,8 @@ class Settings {
     this.playThemes = DEFAULT_SETTINGS.playThemes;
     this.genericThemes = DEFAULT_SETTINGS.genericThemes;
     this.fade = DEFAULT_SETTINGS.fade;
+    this.hideSettingsLinks = DEFAULT_SETTINGS.hideSettingsLinks;
+    this.theaterRoomMode = DEFAULT_SETTINGS.theaterRoomMode;
     this.plexIP = DEFAULT_SETTINGS.plexIP;
     this.plexHTTPS = DEFAULT_SETTINGS.plexHTTPS;
     this.plexPort = DEFAULT_SETTINGS.plexPort;
@@ -219,6 +221,10 @@ class Settings {
     else this.genericThemes = "false";
     if (jsonObject.fadeOption) this.fade = jsonObject.fadeOption;
     else this.fade = cs.fade;
+    if (jsonObject.hideSettingsLinks) this.hideSettingsLinks = jsonObject.hideSettingsLinks;
+    else this.hideSettingsLinks = "false";
+    if (jsonObject.theaterRoomMode) this.theaterRoomMode = jsonObject.theaterRoomMode;
+    else this.theaterRoomMode = "false";
     if (jsonObject.plexIP) this.plexIP = jsonObject.plexIP;
     else this.plexIP = cs.plexIP;
     if (jsonObject.plexHTTPSSwitch) this.plexHTTPS = jsonObject.plexHTTPSSwitch;

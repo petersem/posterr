@@ -24,7 +24,7 @@ Media display software for Plex, Sonarr, Radarr, and Readarr.
  - Shows coming soon titles from Radarr.
  - Shows coming soon books from Readarr.
  - Optionally plays TV and Movies themes, if available
- - A progress bar (green for direct play and red for transcoding) displays for playing titles
+ - A playing progress bar (green for direct play and red for transcoding)
  - Various metadata displayed, such as run time, content rating, studio, etc. 
  - Move the mouse cursor to the bottom footer of the page to hide it
  - Background artwork option for improved landscape view (when available)
@@ -32,26 +32,9 @@ Media display software for Plex, Sonarr, Radarr, and Readarr.
  - Sleep timer 
  - Trivia Quiz (multiple selectable topics)
 
-## Possible Uses
- - Mount a monitor on your wall and showcase your home media setup
- - Use it on a second monitor to keep an eye on what is running
- - Run it on a small screen mounted outside your theater room to show when a movie is in progress
- - Use a reverse proxy, or port-forward, to let your friends see what is playing, available, and coming soon
-
-## Technical Features
- - Built in Node JS, and packaged as a Docker image. (included image health check)
- - Direct binary files also provided for MacOS, Linux, and Windows.
- - Low resource usage. Memory: 20-35mb, Diskspace: ~75mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
- - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
- - Browser-based, so can run the app on one machine and a browser on another.
- - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
- - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
- - Supports reverse proxy setup for wildcard dns or alternate base path.
- - Built-in recovery features should the Poster app, or Plex, go offline.
-
 ## Installation
 Installation details are as follows:
-### Docker Compose
+### Docker Compose (X86, ARM32, ARM64)
 Create the following directories in your docker folder:
  - ./docker/posterr/config
  - ./docker/posterr/custom
@@ -82,11 +65,11 @@ services:
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
 |BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out, or value left blank** if you dont use alternate paths. |
 
-### UNRAID
+### Unraid
  - Use the Posterr template in community apps.
  - I do not maintain or control the Posterr template in the community apps. If there is something missing or incorrect in this template, please contact the template author, so they can update it. 
 
-### Binaries
+### Binaries (Windows, Linux, MacOS)
 - Get the latest binary release package from [here](https://github.com/petersem/posterr/releases)
 - Create a directory called `posterr` anywhere on your machine
 - Extract the appropriate binary for your machine and place it in this folder.
@@ -106,7 +89,7 @@ services:
  - From v1.10.1, there will be a notice at the top of the settings screen informing you if you are running an old version. 
  - Use containrr/watchtower to auto-update Posterr in Docker environments
  - Update in the usual way for Unraid
- - Direct binaries should just be overwritten with a new version. 
+ - Direct binaries should just be overwritten with thea new version. 
  
 ## Setup
 Get to the settings page in a number of ways:
@@ -117,10 +100,22 @@ Get to the settings page in a number of ways:
 
 *The default password is:* **raidisnotabackup**
 
-Buttons are:
- - `Reload Saved` - Discards any changes and reloads last saved settings
- - `Main Page` - Navigates to main Posterr page (unsaved changes lost)
- - `Save` - Saves and restarts the application.
+## Possible Uses
+ - Mount a monitor on your wall and showcase your home media setup
+ - Use it on a second monitor to keep an eye on what is running
+ - Run it on a small screen mounted outside your theater room to show when a movie is in progress
+ - Use a reverse proxy, or port-forward, to let your friends see what is playing, available, and coming soon
+
+## Technical Features
+ - Built in Node JS, and packaged as a Docker image. (included image health check)
+ - Direct binary files also provided for MacOS, Linux, and Windows.
+ - Low resource usage. Memory: 20-35mb, Diskspace: ~75mb, CPU: < 1% (running on a Synology NAS with a Celeron processor)
+ - Checks for updates in Now Screening / Playing every 10 seconds (Will not display updates until browser refreshed or all slides cycled through)
+ - Browser-based, so can run the app on one machine and a browser on another.
+ - Browser connectivity checks and auto-reconnect when the Posterr app restarts. (eg During container updates) 
+ - Supports screen resolution heights from 320 pixels to around 3500 pixels. 
+ - Supports reverse proxy setup for wildcard dns or alternate base path.
+ - Built-in recovery features should the Poster app, or Plex, go offline.
 
  > Please see the [Posterr Wiki](https://github.com/petersem/posterr/wiki/Posterr-Configuration) for more information.
 
