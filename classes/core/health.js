@@ -249,7 +249,7 @@ async RadarrCheck() {
       this.PingSingleIP("Readarr", this.settings.readarrURL);
     this.PingSingleIP("TVDB", "artworks.thetvdb.com");
     this.PingSingleIP("Plex Themes", "tvthemes.plexapp.com");
-    this.PingSingleIP("IMDB", "https://image.tmdb.org");
+    this.PingSingleIP("TMDB", "https://image.tmdb.org");
     this.PingSingleIP("Open Trivia DB", "https://opentdb.com");
     return Promise.resolve(0);
   }

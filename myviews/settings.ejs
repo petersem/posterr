@@ -213,7 +213,22 @@
                     <small id="suffleSwitchHelp" class="form-text text-muted">Shuffles on-demand, coming soon (radar) & coming soon (Sonarr)</small>
                   </div>
                 </div>
-
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="hideSettingsLinks" id="hideSettingsLinks"
+                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.hideSettingsLinks ? 'checked' : '' %><%}else{%><%=(settings.hideSettingsLinks == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="hideSettingsLinks">Remove settings links</label>
+                    <small id="hideSettingsLinksHelp" class="form-text text-muted">Removes all settings links. (You must type in /settings)</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="theaterRoomMode" id="theaterRoomMode"
+                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.theaterRoomMode ? 'checked' : '' %><%}else{%><%=(settings.theaterRoomMode == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="theaterRoomMode">Theatre room mode</label>
+                    <small id="theaterRoomModeHelp" class="form-text text-muted">Posterr sleeps whenever anything playing (Requires 'Now Screening' enabled)</small>
+                  </div>
+                </div>
                 
               </div>
             </div>
