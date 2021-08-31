@@ -180,14 +180,14 @@
   function aud_fadeIn(myAudio) {
     var timer
     if (myAudio.volume < 1) {
-	    // console.log('fading in');
-		if(myAudio.volume > 0.995) {
-		  myAudio.volume = 1;
-		}
-		else{
-		  myAudio.volume += 0.005;
-		}
-    timer = setTimeout(aud_fadeIn,20,myAudio);
+	    // console.log('fading in: ', myAudio.volume);
+		  if(myAudio.volume > 0.995) {
+		    myAudio.volume = 1;
+		  }
+		  else{
+		    myAudio.volume += 0.003;
+		  }
+      timer = setTimeout(aud_fadeIn,5 ,myAudio);
     }
 	  else{
 	    // console.log('full volume');
@@ -199,18 +199,18 @@
     var myAudio = document.getElementById("audio" + id);
     //console.log('working on fade for id: ' + id);
     if (myAudio.volume > 0) {
-	    //console.log('fading out');
-		if(myAudio.volume < 0.005) {
-			myAudio.volume = 0;
-		}
-		else{
-			myAudio.volume -= 0.005;
-		}
-		timer = setTimeout(aud_fadeOut,5,id);
+	    // console.log('fading out');
+		  if(myAudio.volume < 0.005) {
+			  myAudio.volume = 0;
+      }
+		  else{
+			  myAudio.volume -= 0.005;
+		  }
+		  timer = setTimeout(aud_fadeOut,5,id);
     }
   	else{
 	  	myAudio.pause();
-	    //console.log('Stopped');
+	    // console.log('Stopped');
 	  }
   };
 
@@ -241,7 +241,7 @@
       var x = document.getElementById("audio1");
       // set volume to 0 and position 1 second in
       x.volume = 0;
-      x.currentTime = 1;
+      x.currentTime = 0;
       x.play().catch(e => {
         // ignore promise errors when paused during play
         //console.warn(e);
