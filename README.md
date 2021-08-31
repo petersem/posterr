@@ -2,9 +2,12 @@
 Media display software for Plex, Sonarr, Radarr, and Readarr.
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/petersem/posterr) 
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/petersem/posterr/latest) 
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/petersem/posterr/latest?logo=docker) 
+![Image Build](https://img.shields.io/github/workflow/status/petersem/posterr/ci?color=green)
+![Version](https://img.shields.io/github/package-json/v/petersem/posterr?logoColor=blue)
 ![GitHub last commit](https://img.shields.io/github/last-commit/petersem/posterr)
-[![User Guide](https://img.shields.io/badge/User_Guide-PosterrWiki-informational?style=flat&logo=bookstack)](https://github.com/petersem/posterr/wiki/Posterr-Configuration)
+![User Guide](https://img.shields.io/badge/platforms-docker%2C%20windows%2C%20macos%2C%20linux-blue)
+![Platforms](https://img.shields.io/badge/user_guide-wiki-informational?logo=github)
 
 ![Slides](https://github.com/petersem/posterr/blob/master/doco/posterr.jpg?raw=true)
 
@@ -74,6 +77,7 @@ services:
 - Create a directory called `posterr` anywhere on your machine
 - Extract the appropriate binary for your machine and place it in this folder.
 - Run the executable file (double click or type posterr-windows.exe from windows, or ./posterr-xxx from Linux/MacOS)
+- Read the text file in the zip for parameter options
   
 |Parameter|Details|
 |--|--|
