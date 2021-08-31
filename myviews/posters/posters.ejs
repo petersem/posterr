@@ -140,7 +140,7 @@
   //    console.log('got response');
 
       const posterr = xhr.response;
-      if(!posterr == null || posterr.globalPage.cards.length !== 0) {
+      if((!posterr == null || posterr.globalPage.cards.length !== 0) && sleeping !== "true") {
         let cardHtml = "";
         posterr.globalPage.cards.forEach(card => {
           cardHtml += card.rendered;

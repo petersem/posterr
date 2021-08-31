@@ -103,6 +103,8 @@ let sleep = "false";
 let sleepClock;
 let triviaToken = "";
 let theaterMode = false
+let tmpSleepStart;
+let tmpSleepEnd;
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -462,7 +464,7 @@ async function loadNowScreening() {
 
   if (nsCards.length > 0) {
     // check for theater mode and enable
-    if(loadedSettings.theaterRoomMode !== undefined && loadedSettings.theaterRoomMode == 'true'){
+    if(loadedSettings.theaterRoomMode !== undefined && loadedSettings.theaterRoomMode == 'true' && theaterMode !== true){
       theaterOn();
     }
 
@@ -879,6 +881,9 @@ async function checkEnabled() {
 }
 
 async function theaterOn(){
+  tmpSleepStart = loadedSettings.sleepStart;
+  tmpSleepEnd = loadedSettings.sleepEnd;
+
   let d = new Date();
   let h = checkTime(d.getHours());
   let m = checkTime(d.getMinutes() -5);
@@ -886,28 +891,24 @@ async function theaterOn(){
   loadedSettings.sleepEnd = h + ":" + m;
   loadedSettings.sleepStart = h + ":" + ms;
   sleep="true";
-  loadedSettings.playThemes = 'false';
-  loadedSettings.genericThemes = 'false';
-  loadedSettings.enableCustomPictureTheme = 'false';
-  if(theaterMode ==false) suspend(true);  
+  console.log(d.toLocaleString() + ` ** Theatre mode active`);
+  theaterMode = true;
 }
 
 async function theaterOff(theater) {
   sleep = "false";
   let d = new Date();
   if(theater !== undefined && theater == true && theaterMode == true){
+    loadedSettings.sleepStart = tmpSleepStart;
+    loadedSettings.sleepEnd = tmpSleepEnd;
     theaterMode = false;
     isSleepEnabled = false;
-    loadedSettings.enableSleep = 'false';
-    console.log(d.toLocaleString() + ` ** Theater mode deactivated`);
-    loadedSettings = await Promise.resolve(await loadSettings());
-
+    //loadedSettings.enableSleep = 'false';
+    console.log(d.toLocaleString() + ` ** Theatre mode deactivated`);
   }
 }
 
-
-
-async function suspend(theater) {
+async function suspend() {
   // stop all clocks
   clearInterval(nowScreeningClock);
   clearInterval(onDemandClock);
@@ -918,23 +919,18 @@ async function suspend(theater) {
   clearInterval(readarrClock);
   // set to sleep
   sleep = "true";
-  loadedSettings.playThemes = 'false';
-  loadedSettings.genericThemes = 'false';
-  loadedSettings.enableCustomPictureThemes = 'false';
+  // loadedSettings.playThemes = 'false';
+  // loadedSettings.genericThemes = 'false';
+  // loadedSettings.enableCustomPictureThemes = 'false';
 
   let d = new Date();
-  if(theater !== undefined && theater == true){
-    console.log(d.toLocaleString() + ` ** Theater mode active`);
-    theaterMode = true;
-  }
-  else{
-    console.log(d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)`);
-  }
+  console.log(d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)`);
 }
 
 
 async function wake(theater) {
   sleep = "false";
+  loadedSettings = await loadSettings();
   if (isSonarrEnabled) await loadSonarrComingSoon();
   if (isRadarrEnabled) await loadRadarrComingSoon();
   if (isOnDemandEnabled) await loadOnDemand();
@@ -943,7 +939,7 @@ async function wake(theater) {
   if (isTriviaEnabled) await loadTrivia();
   await loadNowScreening();
   let d = new Date();
-  console.log(d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)`);
+  if(theater !== true) console.log(d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)`);
 }
 
 /**
@@ -1079,28 +1075,24 @@ async function startup(clearCache) {
   if(isSleepEnabled==true){
     // check times every 5 seconds
     sleepClock = setInterval(() => {
-      let startSleep = new Date("2100-01-01T" + loadedSettings.sleepStart);
-      let endSleep = new Date("2100-01-01T" + loadedSettings.sleepEnd);
-      let cur = new Date();
-      let curDate = new Date("2100-01-01T" + checkTime(cur.getHours()) + ":" + checkTime(cur.getMinutes()));
+      if(theaterMode !== true){
+        let startSleep = new Date("2100-01-01T" + loadedSettings.sleepStart);
+        let endSleep = new Date("2100-01-01T" + loadedSettings.sleepEnd);
+        let cur = new Date();
+        let curDate = new Date("2100-01-01T" + checkTime(cur.getHours()) + ":" + checkTime(cur.getMinutes()));
 
-
-
-      // console.log("S:" + startSleep.toTimeString());
-      // console.log("C:" + curDate.toTimeString());
-      // console.log("E:" + endSleep.toTimeString());
-      // console.log('--------------------');
-      if((curDate.getTime() >= startSleep.getTime() && curDate.getTime() < endSleep.getTime() && endSleep.getTime() > startSleep.getTime()) || (endSleep.getTime() < startSleep.getTime() && (curDate.getTime() < endSleep.getTime() || curDate.getTime() >= startSleep.getTime())) ){
-        if(sleep !== "true"){
-          sleep="true";
-          suspend();
+        if((curDate.getTime() >= startSleep.getTime() && curDate.getTime() < endSleep.getTime() && endSleep.getTime() > startSleep.getTime()) || (endSleep.getTime() < startSleep.getTime() && (curDate.getTime() < endSleep.getTime() || curDate.getTime() >= startSleep.getTime())) ){
+          if(sleep !== "true"){
+            sleep="true";
+            suspend();
+          }
         }
-      }
-      else{
-        if(sleep=="true"){
-          wake();
-          sleep="false";
-        } 
+        else{
+          if(sleep=="true"){
+            wake();
+            sleep="false";
+          } 
+        }
       }
     }, 5000);
   }
@@ -1108,7 +1100,6 @@ async function startup(clearCache) {
     clearInterval(sleepClock);
     sleep = "false";
   }
-
   return;
 }
 
