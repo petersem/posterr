@@ -335,3 +335,16 @@ body{margin-top:20px;
       font-weight: bold;
       font-size: large;
     }
+
+    .general > a {
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: lightblue;
+      font-style: italic;
+    }
+    
+    
+    .general > a:hover {
+      color: #ebf0fa;
+    }
