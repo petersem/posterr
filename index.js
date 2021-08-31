@@ -827,6 +827,7 @@ async function checkEnabled() {
     loadedSettings.triviaCategories.length !== 0 &&
     loadedSettings.triviaTimer !== undefined &&
     loadedSettings.triviaNumber !== undefined &&
+    loadedSettings.triviaFrequency !== undefined &&
     loadedSettings.enableTrivia !== 'false'
   ) {
     isTriviaEnabled = true;
