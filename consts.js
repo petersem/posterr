@@ -11,6 +11,7 @@ const DEFAULT_SETTINGS = {
   plexPort : 32400,
   plexToken : "",
   pinNS : "false",
+  hideUser: "false",
   onDemandLibraries : "",
   numberOnDemand : 2,
   onDemandRefresh : 30,

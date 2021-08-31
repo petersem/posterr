@@ -643,6 +643,15 @@
               </div>
 
               <div class="form-group">
+                <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                  <input type="checkbox" class="custom-control-input" name="hideUser" id="hideUser" 
+                    value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.hideUser ? 'checked' : '' %><%}else{%><%=(settings.hideUser == 'true') ? 'checked' : '' %><%}%>>
+                  <label class="custom-control-label" for="hideUser">Hide user info</label>
+                  <small id="hideUserHelp" class="form-text text-muted">Hides user information being displayed at bottom of slide</small>
+                </div>
+              </div>
+
+              <div class="form-group">
                 <label for="filterDevices">Filter by device(s)</label>
                 <input type="text" class="form-control" id="filterDevices" name="filterDevices" aria-describedby="filterDevicesHelp"
                   placeholder="examples -> chromecast,chrome,Roku Ultra - XYZ123456789" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.filterDevices%>"<%}else{%><%=settings.filterDevices%>"<%}%>>

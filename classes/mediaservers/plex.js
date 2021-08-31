@@ -58,7 +58,7 @@ class Plex {
    * @desc Gets now screening cards
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-    async GetNowScreening(playThemes, playGenenericThemes, hasArt, filterRemote, filterLocal, filterDevices, filterUsers) {
+    async GetNowScreening(playThemes, playGenenericThemes, hasArt, filterRemote, filterLocal, filterDevices, filterUsers, hideUser) {
     // get raw data first
     let nsCards = [];
     let nsRaw;
@@ -358,8 +358,11 @@ class Plex {
 
         // populate common data
         medCard.mediaType = md.type;
-        medCard.user = md.User.title;
-        medCard.device = md.Player.device;
+        //hide identifiable info if set
+        if(hideUser !== "true") {
+          medCard.user = md.User.title;
+          medCard.device = md.Player.device;
+        }
 
         medCard.runTime = Math.round(md.Media[0].duration / 60000);
         medCard.progress = Math.round(md.viewOffset / 60000);

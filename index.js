@@ -438,7 +438,8 @@ async function loadNowScreening() {
       loadedSettings.filterRemote,
       loadedSettings.filterLocal,
       loadedSettings.filterDevices,
-      loadedSettings.filterUsers
+      loadedSettings.filterUsers,
+      loadedSettings.hideUser
     );
     // restore defaults if plex now available after an error
     if (isPlexUnavailable) {
@@ -1493,6 +1494,7 @@ app.post(
       plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : DEFAULT_SETTINGS.plexPort,
       plexLibraries: req.body.plexLibraries,
       pinNSSwitch: req.body.pinNSSwitch,
+      hideUser: req.body.hideUser,
       numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
       onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
       genres: req.body.genres,

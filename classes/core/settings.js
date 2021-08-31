@@ -72,6 +72,8 @@ class Settings {
     this.enableTrivia = DEFAULT_SETTINGS.enableTrivia;
     this.triviaNumber = DEFAULT_SETTINGS.triviaNumber;
     this.triviaFrequency = DEFAULT_SETTINGS.triviaFrequency;
+    this.pinNS = DEFAULT_SETTINGS.pinNS;
+    this.hideUser = DEFAULT_SETTINGS.hideUser;
     return;
   }
 
@@ -271,6 +273,8 @@ class Settings {
     else this.genres = cs.genres;
     if (jsonObject.pinNSSwitch) this.pinNS = jsonObject.pinNSSwitch;
     else this.pinNS = cs.pinNS;
+    if (jsonObject.hideUser) this.hideUser = jsonObject.hideUser;
+    else this.hideUser = cs.hideUser;
     if (jsonObject.titleFont) this.custBrand = jsonObject.titleFont;
     else this.custBrand = cs.custBrand;
     if (jsonObject.nowScreening) this.nowScreening = jsonObject.nowScreening;
