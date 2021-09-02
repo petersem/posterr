@@ -7,7 +7,7 @@ class Ver {
         this.endPoint = endPoint;
     }
     
-    async log(uuid,ver,nsEnabled,odEnabled,sEnabled,rEnabled,pEnabled,bEnabled,rdEnabled, tEnabled) {
+    async log(uuid,ver,nsEnabled,odEnabled,sEnabled,rEnabled,pEnabled,rdEnabled,tEnabled) {
         let logzRes = "";
         await axios
             .post(this.endPoint, {
