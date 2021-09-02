@@ -359,7 +359,6 @@ class Plex {
         // populate common data
         medCard.mediaType = md.type;
         //hide identifiable info if set
-        console.log('hide user: ' + hideUser);
         if(hideUser !== "true") {
           medCard.user = md.User.title;
           medCard.device = md.Player.device;
