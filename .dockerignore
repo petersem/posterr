@@ -23,6 +23,5 @@
 **/values.dev.yaml
 README.md
 /public/custom/pictures/**
-**/*.json
 
 !keep
