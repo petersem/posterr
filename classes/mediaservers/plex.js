@@ -359,6 +359,7 @@ class Plex {
         // populate common data
         medCard.mediaType = md.type;
         //hide identifiable info if set
+        console.log('hide user: ' + hideUser);
         if(hideUser !== "true") {
           medCard.user = md.User.title;
           medCard.device = md.Player.device;
@@ -433,7 +434,6 @@ class Plex {
         medCard.playerDevice = md.Player.title;
         medCard.playerIP = md.Player.address;
         medCard.playerLocal = md.Player.local;
-        medCard.user = md.User.title;
 
         // console.log(" ");
         // console.log('Device Name: ' + medCard.playerDevice);
