@@ -1038,16 +1038,18 @@
 
           <hr />
           <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload
-            Saved</button>&nbsp;&nbsp;&nbsp; <button type="reset" class="btn btn-info"
+            Saved</button>&nbsp;&nbsp; <button type="reset" class="btn btn-info"
             onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
+            &nbsp;<button type="reset" class="btn btn-success"
+            onclick="window.open('https://github.com/petersem/posterr/wiki/Posterr-Configuration');">Doco</button>
           <button type="submit" class="btn btn-danger" style="float: right;">Save</button>
         </form>
-        </br></br><div class='general'><a href='https://github.com/petersem/posterr/wiki/Posterr-Configuration' target="_blank">Settings documentation here</a></div>
-      </div>
-
-      <% if(message !== undefined && message != ""){%>
+        <% if(message !== undefined && message != ""){%>
       <p id="rcorners"><%=message%></br>
       <%}%>
+      </div>
+
+
                   <!-- About -->
                   <div class="tab-pane" id="about">
                     <h5>ABOUT POSTERR</h5>
