@@ -93,7 +93,7 @@ services:
  - From v1.10.1, there will be a notice at the top of the settings screen informing you if you are running an old version. 
  - Use containrr/watchtower to auto-update Posterr in Docker environments
  - Update in the usual way for Unraid
- - Direct binaries should just be overwritten with thea new version. 
+ - Direct binaries should just be overwritten with the new version. 
  
 ## Setup
 Get to the settings page in a number of ways:
