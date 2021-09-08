@@ -98,7 +98,7 @@ services:
 ## Setup
 Get to the settings page in a number of ways:
  - On initial load, you will be prompted.
- - Change the URL to _'http://hostIP:3000/settings'_
+ - Change the URL to _'http://hostIP:9876/settings'_ (where `hostIP` is the IP number of the machine that Posterr is installed on. Change the port number if you set a different value. 3000 is the default for the binary executables)
  - Clicking on the top banner title of any slide.
  - If on the 'no content' page, then click this text
 
