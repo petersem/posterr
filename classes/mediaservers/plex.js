@@ -270,7 +270,7 @@ class Plex {
             break;
           case "movie":
             // cache movie poster
-            let movieFileName = md.updatedAt + ".jpg";
+            let movieFileName = md.ratingKey + ".jpg";
             medCard.genre = md.Genre;
             let moviePlexPrefix = "http://";
             if (this.https) moviePlexPrefix = "https://";
@@ -288,7 +288,7 @@ class Plex {
             //download poster
             // check art exists
             if (md.art !== undefined && hasArt == "true") {
-              movieFileName = md.updatedAt + "-art.jpg";
+              movieFileName = md.ratingKey + "-art.jpg";
               if (this.https) moviePlexPrefix = "https://";
               movieUrl =
                 moviePlexPrefix +
@@ -310,7 +310,7 @@ class Plex {
               }
               else{
                 // download mp3 file to local server
-                fileName = md.updatedAt + ".mp3";
+                fileName = md.ratingKey + ".mp3";
               prefix = "http://";
               if (this.https) prefix = "https://";
               url =
@@ -615,7 +615,7 @@ class Plex {
           case "movie":
             // cache movie poster
             //     console.log(md);
-            let movieFileName = md.updatedAt + ".jpg";
+            let movieFileName = md.ratingKey + ".jpg";
             let moviePlexPrefix = "http://";
             if (this.https) moviePlexPrefix = "https://";
             let movieUrl =
@@ -632,7 +632,7 @@ class Plex {
             //download poster
             // check art exists
             if (md.art !== undefined && hasArt == "true") {
-              movieFileName = md.updatedAt + "-art.jpg";
+              movieFileName = md.ratingKey + "-art.jpg";
               if (this.https) moviePlexPrefix = "https://";
               movieUrl =
                 moviePlexPrefix +
@@ -657,7 +657,7 @@ class Plex {
               }
               else{
                 // download mp3 file to local server
-                themeFile = md.updatedAt + ".mp3";
+                themeFile = md.ratingKey + ".mp3";
               let prefix = "http://";
               if (this.https) prefix = "https://";
               let url =
