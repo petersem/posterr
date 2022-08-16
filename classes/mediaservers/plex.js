@@ -189,6 +189,24 @@ class Plex {
               medCard.rating = Math.round(md.rating * 10) + "%";
             }
 
+            if (await util.isEmpty(md.audienceRating)) {
+              medCard.audienceRating = "";
+            } else {
+              medCard.audienceRating = Math.round(md.audienceRating * 10) + "%";
+            }
+
+            if (await util.isEmpty(md.audienceRatingImage)) {
+              medCard.audienceRatingImage = "";
+            } else {
+              medCard.audienceRatingImage = md.audienceRatingImage;
+            }
+
+            if (await util.isEmpty(md.ratingImage)) {
+              medCard.ratingImage = "";
+            } else {
+              medCard.ratingImage = md.ratingImage;
+            }
+
             // download poster image to local server
             fileName = mediaId + ".jpg";
             prefix = "http://";
@@ -332,6 +350,24 @@ class Plex {
               medCard.rating = "";
             } else {
               medCard.rating = Math.round(md.audienceRating * 10) + "%";
+            }
+
+            if (await util.isEmpty(md.audienceRating)) {
+              medCard.audienceRating = "";
+            } else {
+              medCard.audienceRating = Math.round(md.audienceRating * 10) + "%";
+            }
+
+            if (await util.isEmpty(md.audienceRatingImage)) {
+              medCard.audienceRatingImage = "";
+            } else {
+              medCard.audienceRatingImage = md.audienceRatingImage;
+            }
+
+            if (await util.isEmpty(md.ratingImage)) {
+              medCard.ratingImage = "";
+            } else {
+              medCard.ratingImage = md.ratingImage;
             }
 
             medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
@@ -565,10 +601,29 @@ class Plex {
               await core.CachePlexMP3(url, fileName);
               medCard.theme = "/mp3cache/" + fileName;
             }
+            
             if (await util.isEmpty(md.rating)) {
               medCard.rating = "";
             } else {
               medCard.rating = Math.round(md.rating * 10) + "%";
+            }
+
+            if (await util.isEmpty(md.audienceRating)) {
+              medCard.audienceRating = "";
+            } else {
+              medCard.audienceRating = Math.round(md.audienceRating * 10) + "%";
+            }
+
+            if (await util.isEmpty(md.audienceRatingImage)) {
+              medCard.audienceRatingImage = "";
+            } else {
+              medCard.audienceRatingImage = md.audienceRatingImage;
+            }
+
+            if (await util.isEmpty(md.ratingImage)) {
+              medCard.ratingImage = "";
+            } else {
+              medCard.ratingImage = md.ratingImage;
             }
 
             // download poster image from plex server
@@ -680,13 +735,23 @@ class Plex {
             medCard.title = md.title;
             medCard.runTime = Math.round(md.Media[0].duration / 60000);
 
-            if (!(await util.isEmpty(medCard.resCodec))) {
+
+            // medCard.resCodec = md.Media[0].Part[0].Stream[0].displayTitle
+            //   .replace("(", "")
+            //   .replace(")", "");
+            // medCard.audioCodec = md.Media[0].Part[0].Stream[1].displayTitle
+            //   .replace("Unknown ", "")
+            //   .replace("(", "")
+            //   .replace(")", "");
+
+            
+            if (md.Media[0].videoResolution && md.Media[0].audioChannels) {
               medCard.resCodec =
                 md.Media[0].videoResolution +
                 " " +
                 md.Media[0].videoCodec.toUpperCase();
             }
-            if (!(await util.isEmpty(medCard.audioCodec))) {
+            if (md.Media[0].audioCodec && md.Media[0].audioChannels) {
               medCard.audioCodec =
                 md.Media[0].audioCodec.toUpperCase() +
                 " " +
@@ -770,6 +835,30 @@ class Plex {
         medCard.year = md.year;
         medCard.genre = await util.emptyIfNull(md.Genre);
         medCard.summary = md.summary;
+
+        if (await util.isEmpty(md.rating)) {
+          medCard.rating = "";
+        } else {
+          medCard.rating = Math.round(md.rating * 10) + "%";
+        }
+
+        if (await util.isEmpty(md.audienceRating)) {
+          medCard.audienceRating = "";
+        } else {
+          medCard.audienceRating = Math.round(md.audienceRating * 10) + "%";
+        }
+
+        if (await util.isEmpty(md.audienceRatingImage)) {
+          medCard.audienceRatingImage = "";
+        } else {
+          medCard.audienceRatingImage = md.audienceRatingImage;
+        }
+
+        if (await util.isEmpty(md.ratingImage)) {
+          medCard.ratingImage = "";
+        } else {
+          medCard.ratingImage = md.ratingImage;
+        }
 
         // add media card to array
         odCards.push(medCard);
