@@ -16,5 +16,5 @@ services:
       - /c/docker/posterr/custom:/usr/src/app/public/custom
       - /c/docker/posterr/config:/usr/src/app/config
     ports:
-      - 9877:3000
+      - 8082:3000
 

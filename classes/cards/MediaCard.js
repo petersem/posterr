@@ -1,5 +1,15 @@
 const util = require("./../core/utility");
 
+const rtCert = "https://rottentomatoes.com/assets/pizza-pie/images/icons/tomatometer/certified_fresh.75211285dbb.svg";
+const rtFresh = "https://rottentomatoes.com/assets/pizza-pie/images/icons/tomatometer/tomatometer-fresh.149b5e8adc3.svg";
+const rtSplat = "https://rottentomatoes.com/assets/pizza-pie/images/icons/tomatometer/tomatometer-rotten.f1ef4f02ce3.svg";
+const rtPopcorn = "https://rottentomatoes.com/assets/pizza-pie/images/icons/audience/aud_score-fresh.6c24d79faaf.svg";
+const rtSpilled = "https://rottentomatoes.com//assets/pizza-pie/images/icons/audience/aud_score-rotten.f419e4046b7.svg";
+const imdb = "https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg";
+const tmdb = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tmdb.new.logo.svg/320px-Tmdb.new.logo.svg.png";
+const audienceUnknown = "https://rottentomatoes.com/assets/pizza-pie/images/icons/tomatometer/tomatometer-empty.cd930dab34a.svg";
+const criticUnknown = "https://rottentomatoes.com//assets/pizza-pie/images/icons/audience/aud_score-empty.eb667b7a1c7.svg";
+
 /**
  * @desc mediaCards base class for defining every card that is showed in the poster app
  * @returns nothing
@@ -17,6 +27,8 @@ class MediaCard {
     this.posterAR = "";
     this.contentRating = "";
     this.ratingColour = "";
+    this.audienceRating = "";
+    this.audienceRatingImage = "";
     this.rating = "";
     this.summary = "";
     this.tagLine = "";
@@ -114,6 +126,7 @@ class MediaCard {
     let resCodecPill = "";
     let audioCodecPill = "";
     let runTimePill = "";
+    let audienceRatingPill = "";
     let ratingPill = "";
     let networkPill = "";
     let studioPill = "";
@@ -171,9 +184,9 @@ class MediaCard {
 
     if (!(await util.isEmpty(this.resCodec))) {
       let resBadge = "badge-dark";
-      // if(this.resCodec.toLocaleLowerCase().includes('4k') && this.resCodec.toLocaleLowerCase().includes('main 10 hdr')){
-      //   resBadge = "badge-primary super-res";
-      // }
+      if(this.resCodec.toLocaleLowerCase().includes('4k') && this.resCodec.toLocaleLowerCase().includes('hdr')){
+        resBadge = "badge-primary super-res";
+      }
       resCodecPill =
         "<span class='badge badge-pill " + resBadge + "'> " +
         this.resCodec +
@@ -215,9 +228,18 @@ class MediaCard {
         "m</span>";
     }
 
+    let audienceRatingIcon = this.audienceRatingImage.includes("upright") ? rtPopcorn : this.audienceRatingImage.includes("spilled") ? rtSpilled : this.audienceRatingImage.includes("imdb") ? imdb : this.audienceRatingImage.includes("tmdb") ? tmdb : audienceUnknown;
+
+    if (!(await util.isEmpty(this.audienceRating))) {
+      audienceRatingPill =
+        "<span class='badge badge-pill badge-dark'> <img src='" + audienceRatingIcon + "' height='12px' width='12px' style='margin-right: 6px' />" + this.audienceRating + "</span>";
+    }
+    
+    let ratingIcon = this.ratingImage.includes("cert") ? rtCert : this.ratingImage.includes("fresh") ? rtFresh : this.ratingImage.includes("rotten") ? rtSplat : this.ratingImage.includes("imdb")? imdb : this.ratingImage.includes("tmdb") ? tmdb : criticUnknown;
+
     if (!(await util.isEmpty(this.rating))) {
       ratingPill =
-        "<span class='badge badge-pill badge-dark'> " + this.rating + "</span>";
+        "<span class='badge badge-pill badge-dark'> <img src='" + ratingIcon + "' height='12px' width='12px' style='margin-right: 6px' />" + this.rating + "</span>";
     }
 
 
@@ -295,6 +317,7 @@ class MediaCard {
       runTimePill +
       pagePill +
       ratingPill +
+      audienceRatingPill +
       userPill +
       devicePill + 
       ipPill +
