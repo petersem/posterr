@@ -228,15 +228,28 @@ class MediaCard {
         "m</span>";
     }
 
-    let audienceRatingIcon = this.audienceRatingImage.includes("upright") ? rtPopcorn : this.audienceRatingImage.includes("spilled") ? rtSpilled : this.audienceRatingImage.includes("imdb") ? imdb : this.audienceRatingImage.includes("tmdb") ? tmdb : audienceUnknown;
-
+    
+    let audienceRatingIcon;
+    if (!(await util.isEmpty(this.audienceRatingImage))) {
+      audienceRatingIcon = this.audienceRatingImage.includes("upright") ? rtPopcorn : this.audienceRatingImage.includes("spilled") ? rtSpilled : this.audienceRatingImage.includes("imdb") ? imdb : this.audienceRatingImage.includes("tmdb") ? tmdb : audienceUnknown;
+    }
+    else {
+      audienceRatingIcon = "";
+    }
+    
     if (!(await util.isEmpty(this.audienceRating))) {
       audienceRatingPill =
         "<span class='badge badge-pill badge-dark'> <img src='" + audienceRatingIcon + "' height='12px' width='12px' style='margin-right: 6px' />" + this.audienceRating + "</span>";
     }
     
-    let ratingIcon = this.ratingImage.includes("cert") ? rtCert : this.ratingImage.includes("fresh") ? rtFresh : this.ratingImage.includes("rotten") ? rtSplat : this.ratingImage.includes("imdb")? imdb : this.ratingImage.includes("tmdb") ? tmdb : criticUnknown;
-
+    let ratingIcon;
+    if (!(await util.isEmpty(this.ratingImage))) {
+      ratingIcon = this.ratingImage.includes("cert") ? rtCert : this.ratingImage.includes("fresh") ? rtFresh : this.ratingImage.includes("rotten") ? rtSplat : this.ratingImage.includes("imdb")? imdb : this.ratingImage.includes("tmdb") ? tmdb : criticUnknown;
+    }
+    else {
+      ratingIcon = "";
+    }
+    
     if (!(await util.isEmpty(this.rating))) {
       ratingPill =
         "<span class='badge badge-pill badge-dark'> <img src='" + ratingIcon + "' height='12px' width='12px' style='margin-right: 6px' />" + this.rating + "</span>";
