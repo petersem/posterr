@@ -210,7 +210,7 @@ async RadarrCheck() {
     resp = await axios
       .get(
         this.settings.radarrURL +
-          "/api/calendar?apikey=" +
+          "/api/v3/calendar?apikey=" +
           this.settings.radarrToken +
           "&start=" +
           startDate +
