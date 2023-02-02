@@ -78,7 +78,7 @@ class Readarr {
    * @returns {Promise<object>} json results - results of search
    */
   async GetComingSoonRawData(startDate, endDate) {
-    console.log(this.readarrUrl + "/api/v1/calendar?unmonitored=false&apikey=" + this.readarrToken + "&start=" + startDate + "&end=" + endDate);
+    //console.log(this.readarrUrl + "/api/v1/calendar?unmonitored=false&apikey=" + this.readarrToken + "&start=" + startDate + "&end=" + endDate);
     let response;
     try {
       response = await axios
@@ -108,7 +108,7 @@ class Readarr {
    * @returns {Promise<object>} json results - results of search
    */
   async GetBookRawData(bookId) {
-    console.log(this.readarrUrl + "/api/v1/book/" + bookId + "?apikey=" + this.readarrToken);
+    //console.log(this.readarrUrl + "/api/v1/book/" + bookId + "?apikey=" + this.readarrToken);
     let response;
     try {
       response = await axios
