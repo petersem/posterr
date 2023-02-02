@@ -20,7 +20,7 @@ class Cache {
    */
   static async CacheImage(url, fileName) {
     const savePath = "./saved/imagecache/" + fileName;
-    const result = await this.download(url, savePath, fileName)
+    const result = await this.download(url, savePath, fileName);
     return result;
   }
 
@@ -62,6 +62,7 @@ class Cache {
     const download = (url, savePath, callback) => {
       // request.head(url, (err, res, body) => {
       request(url, function (err, res, body) {
+        //console.log(res.rawHeaders[1]);
         // check to see if no content, then if mp3, throw exception
 //         var size = parseInt(res.headers["content-length"], 10);
 // //        console.log("file size: " + size);

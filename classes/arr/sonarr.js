@@ -29,13 +29,12 @@ class Sonarr {
     try {
       response = await axios
         .get(
-          this.sonarrUrl +
-            "/api/calendar?apikey=" +
-            this.sonarrToken +
-            "&start=" +
-            startDate +
-            "&end=" +
-            endDate
+          this.sonarrUrl + 
+            "/api/v3/calendar?apikey=" + 
+            this.sonarrToken + 
+            "&start=" + 
+            startDate + 
+            "&end=" + endDate
         )
         .catch((err) => {
           throw err;
@@ -49,8 +48,40 @@ class Sonarr {
       );
       throw err;
     }
+    return await response;
+  }
 
-    return response;
+  /**
+   * @desc Gets the tv titles that fall within the range specified
+   * @param {object} calendarEpisode - calendar instance of episode
+   * @returns {Promise<object>} json results - results of search
+   */
+  async GetSeriesRawData(seriesID) {
+    let response;
+
+    // call sonarr API and return results
+    try {
+      response = await axios
+        .get(
+          this.sonarrUrl +
+            "/api/v3/series/" + 
+            seriesID + 
+            "?apikey=" +
+            this.sonarrToken
+        )
+        .catch((err) => {
+          throw err;
+        });
+    } catch (err) {
+      // displpay error if call failed
+      let d = new Date();
+      console.log(
+        d.toLocaleString() + " *Sonarr - Get episode data:",
+        err.message
+      );
+      throw err;
+    }
+    return await response;
   }
 
   /**
@@ -76,6 +107,19 @@ class Sonarr {
       // move through results and populate media cards
       await raw.data.reduce(async (memo, md) => {
         await memo;
+
+        // get series raw data
+        let rawSeries;
+        try {
+          rawSeries = await this.GetSeriesRawData(md.seriesId);
+        } catch (err) {
+          let d = new Date();
+          console.log(d.toLocaleString() + " *Sonarr - Get series raw data: " + err);
+          throw err;
+        }
+    
+
+        // populate cards
         const medCard = new mediaCard();
 
         medCard.tagLine =
@@ -89,14 +133,14 @@ class Sonarr {
           md.airDate +
           ")";
         medCard.title = md.title;
-        medCard.DBID = md.series.tvdbId;
-        medCard.year = md.series.year;
-        medCard.runTime = md.series.runtime;
-        medCard.genre = md.series.genres;
-        medCard.summary = await util.emptyIfNull(md.overview);
+        medCard.DBID = rawSeries.data.tvdbId;
+        medCard.year = md.airDate;
+        medCard.runTime = rawSeries.data.runtime;
+        medCard.genre = rawSeries.data.genres;
+        medCard.summary = await util.emptyIfNull(rawSeries.data.overview);
         medCard.mediaType = "episode";
         medCard.cardType = cType.CardTypeEnum.ComingSoon;
-        medCard.network = md.series.network;
+        medCard.network = rawSeries.data.network;
 
         let fileName;
         // dont bother to download if only looking for premiers
@@ -106,18 +150,18 @@ class Sonarr {
           // only downlad mp3 if playThemes enabled
           if (playThemes == "true") {
             // cache mp3 file
-            let mp3 = md.series.tvdbId + ".mp3";
+            let mp3 = rawSeries.data.tvdbId + ".mp3";
             await core.CacheMP3(mp3);
             medCard.theme = "/mp3cache/" + mp3;
           }
 
           let url;
           // cache poster
-          fileName = md.series.tvdbId + ".jpg";
+          fileName = rawSeries.data.tvdbId + ".jpg";
           // check art exists
-          md.series.images.forEach(i => {
+          rawSeries.data.images.forEach(i => {
             if(i.coverType == "poster"){
-              url = i.url;
+              url = i.remoteUrl;
             }
           });
           if (url !== undefined) {
@@ -129,11 +173,11 @@ class Sonarr {
 
           // cache art image
           if(hasArt=='true'){
-            fileName = md.series.tvdbId + "-art.jpg";
+            fileName = rawSeries.data.tvdbId + "-art.jpg";
             // check art exists
-            md.series.images.forEach(i => {
+            rawSeries.data.images.forEach(i => {
               if(i.coverType == "fanart"){
-                url = i.url;
+                url = i.remoteUrl;
               }
             });
             if (url !== undefined) {
@@ -145,8 +189,8 @@ class Sonarr {
 
         // content rating and colour
         let contentRating = "NR";
-        if (!(await util.isEmpty(md.series.certification))) {
-          contentRating = md.series.certification;
+        if (!(await util.isEmpty(rawSeries.data.certification))) {
+          contentRating = rawSeries.data.certification;
         }
         medCard.contentRating = contentRating;
 

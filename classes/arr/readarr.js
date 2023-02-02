@@ -78,6 +78,7 @@ class Readarr {
    * @returns {Promise<object>} json results - results of search
    */
   async GetComingSoonRawData(startDate, endDate) {
+    console.log(this.readarrUrl + "/api/v1/calendar?unmonitored=false&apikey=" + this.readarrToken + "&start=" + startDate + "&end=" + endDate);
     let response;
     try {
       response = await axios
@@ -96,6 +97,34 @@ class Readarr {
     } catch (err) {
       let d = new Date();
       console.log(d.toLocaleString() + " *Readarr - Get calendar data:", err.message);
+      throw err;
+    }
+    return response;
+  }
+
+  /**
+   * @desc Gets book info
+   * @param {integer} bookId - The ID of the book in readarr
+   * @returns {Promise<object>} json results - results of search
+   */
+  async GetBookRawData(bookId) {
+    console.log(this.readarrUrl + "/api/v1/book/" + bookId + "?apikey=" + this.readarrToken);
+    let response;
+    try {
+      response = await axios
+        .get(
+          this.readarrUrl +
+          "/api/v1/book/" +
+          bookId + 
+          "?apikey=" +
+          this.readarrToken
+        )
+        .catch((err) => {
+          throw err;
+        });
+    } catch (err) {
+      let d = new Date();
+      console.log(d.toLocaleString() + " *Readarr - Get book data:", err.message);
       throw err;
     }
     return response;
@@ -127,6 +156,18 @@ class Readarr {
       await raw.data.reduce(async (memo, md) => {
         await memo;
         const medCard = new mediaCard();
+
+        // get book info
+        let rawBook;
+        try {
+          rawBook = await this.GetBookRawData(md.id);
+        }
+        catch (err) {
+          let d = new Date();
+          console.log(d.toLocaleString() + " *Readarr - Get book Data: " + err);
+          throw err;
+        }
+
         let bookReleaseDate;
         if (!await util.isEmpty(md.releaseDate)) {
           let releaseDate = new Date(md.releaseDate);
@@ -135,9 +176,9 @@ class Readarr {
         else {
           bookReleaseDate = "No release date";
         }
-        let series = ""
+        let series = "";
         if (md.seriesTitle !== null && md.seriesTitle.length > 0) {
-          series = ", " + md.seriesTitle
+          series = ", " + md.seriesTitle;
         }
         medCard.tagLine =
           md.title + series + " (" + bookReleaseDate + ")";
@@ -148,14 +189,14 @@ class Readarr {
         medCard.summary = await util.emptyIfNull(md.overview);
         medCard.mediaType = "ebook";
         medCard.cardType = cType.CardTypeEnum.EBook;
-        medCard.studio = md.author.authorName;
+        medCard.studio = rawBook.data.author.authorName;
         if (Math.round(md.ratings.value * 20) !== 0) medCard.rating = Math.round(md.ratings.value * 20) + "%";
         medCard.theme = "";
         medCard.pageCount = md.pageCount;
 
         // try to get book cover
         let cover = 'none';
-        if(md.editions[0].images[0] !== undefined){
+        if(md.images[0] !== undefined && md.images[0].url.includes('lastWrite')==true ){ 
           cover = this.readarrUrl + "/api/v1/mediacover/book/" + md.id + "/cover.jpg?apikey=" +  this.readarrToken;
         }
         else{
@@ -171,10 +212,11 @@ class Readarr {
           // cache poster image
           let fileName = md.foreignBookId + ".jpg";
           let url = cover;
-          await core.CacheImage(url, fileName);
+          let dlResult;
+          dlResult = await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
         }
-        if(hasArt='true') medCard.posterArtURL = "/images/german.png";
+        if(hasArt=='true') medCard.posterArtURL = "/images/german.png";
         medCard.posterAR = 1.47;
 
         if (md.grabbed == false && !await util.isEmpty(md.releaseDate)) {
