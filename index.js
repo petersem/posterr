@@ -1144,8 +1144,8 @@ startup(true);
 
 //use ejs templating engine
 app.set("view engine", "ejs");
-app.set('views', path.join(__dirname, '/myviews'));
-
+app.set('views', path.join(__dirname, 'myviews'));
+//console.log('app.set:' + __dirname);
 
 // Express settings
 app.use(express.json());
@@ -1199,7 +1199,13 @@ else {
 
 // set routes
 app.get(BASEURL + "/", (req, res) => {
+  // try {
   res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand, hasArt: globalPage.hasArt, quizTime: globalPage.quizTime }); // index refers to index.ejs
+  // }
+  // catch (ex) {
+  //   console.log('res.render:' + __dirname);
+  //   res.render(path.join(__dirname, 'myviews', 'index'), { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand, hasArt: globalPage.hasArt, quizTime: globalPage.quizTime }); // index refers to index.ejs
+  // }
 });
 
 app.get(BASEURL + "/getcards", (req, res) => {
