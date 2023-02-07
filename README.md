@@ -1,5 +1,5 @@
 # Posterr
-Media display software for Plex, Sonarr, Radarr, and Readarr.
+## Media display software for Plex, Sonarr, Radarr, and Readarr. (Just like the display screens outside movie theatres)
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/petersem/posterr) 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/petersem/posterr/latest?logo=docker) 
@@ -17,8 +17,9 @@ Media display software for Plex, Sonarr, Radarr, and Readarr.
 - **The default password is:** raidisnotabackup
 
  > **IMPORTANT NOTE ON UPGRADES**
- > - Whilst I work hard to ensure that upgrades are backwards compatible, there are rare times that you will need to update settings. Check [here](https://github.com/petersem/posterr/wiki/Latest-changes) for detailed notes on each updated.
+ > - There are rare times that you will need to update settings. Check [here](https://github.com/petersem/posterr/wiki/Latest-changes) for detailed notes on each updated.
 
+---
 ## Features
  - Displays movies, shows, music poster for what is currently playing.
  - Displays random (on-demand) titles from multiple Plex libraries.
@@ -32,12 +33,22 @@ Media display software for Plex, Sonarr, Radarr, and Readarr.
  - Move the mouse cursor to the bottom footer of the page to hide it
  - Background artwork option for improved landscape view (when available)
  - Automatically scales for most display sizes and orientation.
- - Sleep timer 
+ - 'Sleep timer' disables the display during set hours.
  - Trivia Quiz (multiple selectable topics)
+---
+## Prerequisites
+### Mandatory
+ - Plex
+
+### Optional
+ - Sonarr v3.0
+ - Radarr v4.3
+ - Readarr v0.1.3
+---
 
 ## Installation
 Installation details are as follows:
-### Docker Compose (X86, ARM32, ARM64)
+### <ins>Docker Compose (X86, ARM32, ARM64)</ins>
 Create the following directories in your docker folder:
  - ./docker/posterr/config
  - ./docker/posterr/custom
@@ -68,11 +79,12 @@ services:
 |Ports|Change first part to a different port if needed. e.g. 9876:3000|
 |BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out, or value left blank** if you dont use alternate paths. |
 
-### Unraid
+### <ins>Unraid</ins>
  - Use the Posterr template in community apps.
  - I do not maintain or control the Posterr template in the community apps. If there is something missing or incorrect in this template, please contact the template author, so they can update it. 
 
-### Binaries (Windows, Linux, MacOS)
+### <ins>Binaries (Windows, Linux, MacOS)</ins>
+> Currently not working until I can fix a bug. Sorry! 
 - Get the latest binary release package from [here](https://github.com/petersem/posterr/releases)
 - Create a directory called `posterr` anywhere on your machine
 - Extract the appropriate binary for your machine and place it in this folder.
@@ -88,13 +100,14 @@ services:
  
  > Not yet tested on Linux or MacOS running as a service, however I expect it should work.
 
-
+---
 ## Updates
  - From v1.10.1, there will be a notice at the top of the settings screen informing you if you are running an old version. 
  - Use containrr/watchtower to auto-update Posterr in Docker environments
  - Update in the usual way for Unraid
  - Direct binaries should just be overwritten with the new version. 
- 
+
+---
 ## Setup
 Get to the settings page in a number of ways:
  - On initial load, you will be prompted.
@@ -104,12 +117,14 @@ Get to the settings page in a number of ways:
 
 *The default password is:* **raidisnotabackup**
 
+---
 ## Possible Uses
  - Mount a monitor on your wall and showcase your home media setup
  - Use it on a second monitor to keep an eye on what is running
  - Run it on a small screen mounted outside your theater room to show when a movie is in progress
  - Use a reverse proxy, or port-forward, to let your friends see what is playing, available, and coming soon
 
+---
 ## Technical Features
  - Built in Node JS, and packaged as a Docker image. (included image health check)
  - Direct binary files also provided for MacOS, Linux, and Windows.
@@ -123,13 +138,16 @@ Get to the settings page in a number of ways:
 
  > Please see the [Posterr Wiki](https://github.com/petersem/posterr/wiki/Posterr-Configuration) for more information.
 
+---
 ## Troubleshooting
 Should you encounter a problem, the solution may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
 
+---
 ## Support
  - There is no _'official'_ support for this product, however should you encounter issues, raise an issue on the github page.
  - Limited support in [Discord](https://discord.gg/pucjF6j8k9)
 
+---
 ### Support my efforts and continued development 
 
 > [![](https://github.com/petersem/posterr/blob/master/doco/coffeesmall.gif?raw=true)](https://www.paypal.com/paypalme/thanksmp)
@@ -139,6 +157,7 @@ Thanks,
 
 Matt Petersen (April 2021)
 
+---
 ## Technical Details
 Posterr uses the following:
  - Node & Node Express
@@ -152,9 +171,11 @@ Posterr uses the following:
  - Readarr (via API)
  - Posters and artwork from Plex, TVDB and TMDB.
 
+---
 ## Notice
 > Posterr is dependant on third party applications and services. Some features may fail temporarily or permenantly if the dependancies are unavailable, or become incompatible for any technical or legal reason. This software comes with no warranty or guarantee of any kind. Images and themes that you download through Posterr may be copyrighted, and are the property of the respective copyright holders.
 
+---
 ## License
 
 MIT
