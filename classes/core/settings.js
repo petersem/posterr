@@ -41,6 +41,8 @@ class Settings {
     this.nowScreening = DEFAULT_SETTINGS.nowScreening;
     this.comingSoon = DEFAULT_SETTINGS.comingSoon;
     this.onDemand = DEFAULT_SETTINGS.onDemand;
+    this.recentlyAddedDays = DEFAULT_SETTINGS.recentlyAddedDays;
+    this.recentlyAdded = DEFAULT_SETTINGS.recentlyAdded;
     this.iframe = DEFAULT_SETTINGS.iframe;
     this.playing = DEFAULT_SETTINGS.playing;
     this.picture = DEFAULT_SETTINGS.picture;
@@ -133,6 +135,7 @@ class Settings {
       if(readSettings.customPictureTheme==undefined) readSettings.customPictureTheme = 'default';
       if(readSettings.enableSleep==undefined) readSettings.enableSleep = 'false';
       if(readSettings.enableTrivia==undefined) readSettings.enableTrivia = 'false';
+      if(readSettings.recentlyAddedDays==undefined) readSettings.recentlyAddedDays = 0;
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -279,6 +282,10 @@ class Settings {
     else this.custBrand = cs.custBrand;
     if (jsonObject.nowScreening) this.nowScreening = jsonObject.nowScreening;
     else this.nowScreening = cs.nowScreening;
+    if (jsonObject.recentlyAddedDays) this.recentlyAddedDays = jsonObject.recentlyAddedDays;
+    else this.recentlyAddedDays = cs.recentlyAddedDays;
+    if (jsonObject.recentlyAdded) this.recentlyAdded = jsonObject.recentlyAdded;
+    else this.recentlyAdded = cs.recentlyAdded;
     if (jsonObject.onDemand) this.onDemand = jsonObject.onDemand;
     else this.onDemand = cs.onDemand;
     if (jsonObject.comingSoon) this.comingSoon = jsonObject.comingSoon;

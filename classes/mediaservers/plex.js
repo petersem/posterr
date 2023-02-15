@@ -494,6 +494,7 @@ class Plex {
    * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
    * @param {number} The number of titles to pull from each library
    * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
+   * @param {number} recentlyAdded days to  pull titles from added date
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
   async GetOnDemand(
@@ -502,7 +503,8 @@ class Plex {
     playThemes,
     playGenenericThemes,
     hasArt,
-    genres
+    genres,
+    recentlyAdded
   ) {
     let odCards = [];
     let odRaw;
@@ -512,7 +514,7 @@ class Plex {
     genres = genres.replace(", ",",").replace(" ,",",").split(",");
 //console.log(genres);
     try {
-      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres);
+      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded);
     } catch (err) {
       let now = new Date();
       console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
@@ -530,6 +532,7 @@ class Plex {
       // move through results and populate media cards
       await odRaw.reduce(async (memo, md) => {
         await memo;
+        
         const medCard = new mediaCard();
         // modify inputs, based upon tv episode or movie result structures
         switch (md.type) {
@@ -771,8 +774,19 @@ class Plex {
         medCard.genre = await util.emptyIfNull(md.Genre);
         medCard.summary = md.summary;
 
+
+        // calculate for recently added (if set)
+        var includeTitle = false;
+        //console.log("ra:" + recentlyAdded);
+    
+        // change title to recently added
+        if(recentlyAdded > 0){
+            medCard.cardType = cType.CardTypeEnum.RecentlyAdded;
+        }
+
         // add media card to array
         odCards.push(medCard);
+
       }, undefined);
     }
     let now = new Date();
@@ -842,36 +856,59 @@ class Plex {
    * @param {number} libKey - The plex library key number
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetAllMediaForLibrary(libKey, genres) {
+  async GetAllMediaForLibrary(libKey, genres, recentlyAdded) {
     let mediaCards = [];
+    var odQuery = "/library/sections/" + libKey + "/all";
+
+    // modify query if recently added value added
+    if(recentlyAdded > 0){
+      // calculate date to search from
+      var fromDate = new Date();
+      fromDate.setDate(fromDate.getDate() - recentlyAdded);
+      // set to midnight
+      fromDate.setHours(0,0,0,0);
+      // convert to epoch time
+      var fromEpochDate = fromDate.getTime()/1000;
+      //console.log(fromDate);
+      //console.log(fromEpochDate);
+      odQuery = "/library/sections/" + libKey + "/all?sort=addedAt&addedAt>>=" + fromEpochDate;
+    }
+    //console.log(odQuery);
     try {
       return await this.client
-        .query("/library/sections/" + libKey + "/all")
+        .query(odQuery)
         .then(
           function (result) {
+
             // populate a complete list of all titles into an array
             if (result.MediaContainer.size > 0) {
-
-              // if genre filters present, then filter results 
-              const mapGenre = (arr, gs) => {
-                return gs.reduce((acc, val) => {
-                  const libMatches = arr.filter(m => m.Genre !== undefined && JSON.stringify(m.Genre).toLowerCase().includes(val.toLowerCase()));
-        //console.log("Library matches for genre '"+val+"':",libMatches.length);
-                  if(libMatches.length > 0){
-                    return acc.concat(libMatches);
-                  }
-                  else{
-                    return acc;
-                  }
-                }, []);
-              }
-
               let mediaResults = result.MediaContainer.Metadata;
-              // check if supplying genres, then filter
-              if(genres !== undefined && genres.length > 0){
-                let mediaFiltered = result.MediaContainer.Metadata;
-                mediaResults = mapGenre(mediaFiltered, genres);
-              }
+              // ignore genre if recently added set
+              if(recentlyAdded == 0){
+                // if genre filters present, then filter results 
+                const mapGenre = (arr, gs) => {
+                  return gs.reduce((acc, val) => {
+                    const libMatches = arr.filter(m => m.Genre !== undefined && JSON.stringify(m.Genre).toLowerCase().includes(val.toLowerCase()));
+          //console.log("Library matches for genre '"+val+"':",libMatches.length);
+                    if(libMatches.length > 0 ){
+                      return acc.concat(libMatches);
+                    }
+                    else{
+                      return acc;
+                    }
+                  }, []);
+                };
+
+                
+                // check if supplying genres, then filter
+                if(genres !== undefined && genres.length > 0){
+                  let mediaFiltered = result.MediaContainer.Metadata;
+                  mediaResults = mapGenre(mediaFiltered, genres);
+                }
+            }
+            else{
+             // let mediaResults = result.MediaContainer.Metadata;
+            }
 
               // send selected card to filtered array
               mediaResults.forEach((mt) => {
@@ -900,7 +937,7 @@ class Plex {
    * @param {number} numberOnDemand - the number of results to return from each library
    * @returns {object} mediaCard[] - Returns an array of on-demand mediaCards
    */
-  async GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres) {
+  async GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded) {
     // Get a list of random titles from selected libraries
     let odSet = [];
 
@@ -913,10 +950,11 @@ class Plex {
         const p = await keys.reduce(async (acc, value) => {
           return (
             (await acc) +
-            (await this.GetAllMediaForLibrary(value, genres).then(async function (
+            (await this.GetAllMediaForLibrary(value, genres, recentlyAdded).then(async function (
               result
             ) {
-              const od = await util.build_random_od_set(numberOnDemand, result);
+              // get titles
+              const od = await util.build_random_od_set(numberOnDemand, result, recentlyAdded);
               await od.reduce(async (cb, odc) => {
                 odSet.push(odc);
                 return await cb;
@@ -933,7 +971,6 @@ class Plex {
       );
       throw err;
     }
-
     return odSet;
   }
 }

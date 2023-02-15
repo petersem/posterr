@@ -102,9 +102,10 @@ let updateAvailable = false
 let sleep = "false";
 let sleepClock;
 let triviaToken = "";
-let theaterMode = false
+let theaterMode = false;
 let tmpSleepStart;
 let tmpSleepEnd;
+let recentlyAddedDays;
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -645,7 +646,8 @@ async function loadOnDemand() {
       loadedSettings.playThemes,
       loadedSettings.genericThemes,
       loadedSettings.hasArt,
-      loadedSettings.genres
+      loadedSettings.genres,
+      loadedSettings.recentlyAddedDays
     );
   } catch (err) {
     let d = new Date();
@@ -730,7 +732,7 @@ async function checkEnabled() {
   }
   catch (ex) {
     console.log("*Invalid sleep start time entered");
-    isSleepEnabled = false
+    isSleepEnabled = false;
   }
 
   try {
@@ -739,7 +741,7 @@ async function checkEnabled() {
   }
   catch (ex) {
     console.log("*Invalid sleep end time entered");
-    isSleepEnabled = false
+    isSleepEnabled = false;
   }
 
   try {
@@ -753,7 +755,7 @@ async function checkEnabled() {
   }
   catch(ex){
     console.log("*Invalid sleep timer settings");
-    isSleepEnabled = false
+    isSleepEnabled = false;
   }
 
   // check Plex
@@ -990,9 +992,10 @@ async function startup(clearCache) {
   await checkEnabled();
 
   // set custom titles if available
-  CardTypeEnum.NowScreening[1] = loadedSettings.nowScreening !== undefined ? loadedSettings.nowScreening : ""
-  CardTypeEnum.OnDemand[1] = loadedSettings.onDemand !== undefined ? loadedSettings.onDemand : ""
-  CardTypeEnum.ComingSoon[1] = loadedSettings.comingSoon !== undefined ? loadedSettings.comingSoon : ""
+  CardTypeEnum.NowScreening[1] = loadedSettings.nowScreening !== undefined ? loadedSettings.nowScreening : "";
+  CardTypeEnum.OnDemand[1] = loadedSettings.onDemand !== undefined ? loadedSettings.onDemand : "";
+  CardTypeEnum.RecentlyAdded[1] = loadedSettings.recentlyAdded !== undefined ? loadedSettings.recentlyAdded : "";
+  CardTypeEnum.ComingSoon[1] = loadedSettings.comingSoon !== undefined ? loadedSettings.comingSoon : "";
   CardTypeEnum.IFrame[1] = loadedSettings.iframe !== undefined ? loadedSettings.iframe : "";
   CardTypeEnum.Playing[1] = loadedSettings.playing !== undefined ? loadedSettings.playing : "";
   CardTypeEnum.Picture[1] = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
@@ -1503,6 +1506,8 @@ app.post(
       pinNSSwitch: req.body.pinNSSwitch,
       hideUser: req.body.hideUser,
       numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
+      recentlyAddedDays: !isNaN(parseInt(req.body.recentlyAddedDays)) ? parseInt(req.body.recentlyAddedDays) : DEFAULT_SETTINGS.recentlyAddedDays, 
+      recentlyAdded: req.body.recentlyAdded,
       onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
       genres: req.body.genres,
       sonarrUrl: req.body.sonarrUrl,

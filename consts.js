@@ -53,6 +53,8 @@ const DEFAULT_SETTINGS = {
   nowScreening: "",
   comingSoon: "",
   onDemand: "",
+  recentlyAdded: "",
+  recentlyAddedDays: "0",
   iframe: "",
   playing: "",
   ebook: "",
