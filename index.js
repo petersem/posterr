@@ -774,7 +774,7 @@ async function checkEnabled() {
   if (loadedSettings.onDemandLibraries !== undefined &&
     isPlexEnabled &&
     loadedSettings.numberOnDemand !== undefined &&
-    loadedSettings.numberOnDemand !== 0 &&
+    //loadedSettings.numberOnDemand !== 0 &&
     loadedSettings.enableOD !== 'false'
   ) {
     isOnDemandEnabled = true;

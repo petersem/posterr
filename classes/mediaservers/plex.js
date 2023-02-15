@@ -3,6 +3,7 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
+const { CardTypeEnum } = require("./../cards/CardType");
 // const sizeOf = require("image-size");
 
 /**
@@ -513,8 +514,12 @@ class Plex {
     genres = genres !== undefined ? genres : "";
     genres = genres.replace(", ",",").replace(" ,",",").split(",");
 //console.log(genres);
+    //var recentlyAdded = false;
     try {
       odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded);
+      if(recentlyAdded > 0){
+        odRaw = odRaw.concat(await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, 0));
+      }
     } catch (err) {
       let now = new Date();
       console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
@@ -534,7 +539,7 @@ class Plex {
         await memo;
         
         const medCard = new mediaCard();
-        // modify inputs, based upon tv episode or movie result structures
+        // modify inputs, based upon tv episode or movie result structure
         switch (md.type) {
           case "show":
             medCard.tagLine = md.title;
@@ -713,7 +718,7 @@ class Plex {
 
         if (medCard.tagLine == "") medCard.tagLine = medCard.title;
         medCard.mediaType = md.type;
-        medCard.cardType = cType.CardTypeEnum.OnDemand;
+        //medCard.cardType = cType.CardTypeEnum.OnDemand;
 
         let contentRating = "NR";
         if (!(await util.isEmpty(md.contentRating))) {
@@ -779,10 +784,8 @@ class Plex {
         var includeTitle = false;
         //console.log("ra:" + recentlyAdded);
     
-        // change title to recently added
-        if(recentlyAdded > 0){
-            medCard.cardType = cType.CardTypeEnum.RecentlyAdded;
-        }
+
+        medCard.cardType = md.ctype;
 
         // add media card to array
         odCards.push(medCard);
@@ -956,6 +959,12 @@ class Plex {
               // get titles
               const od = await util.build_random_od_set(numberOnDemand, result, recentlyAdded);
               await od.reduce(async (cb, odc) => {
+                if(recentlyAdded>0){
+                  odc.ctype = CardTypeEnum.RecentlyAdded;
+                }
+                else{
+                  odc.ctype = CardTypeEnum.OnDemand;
+                }
                 odSet.push(odc);
                 return await cb;
               }, Promise.resolve(0));
