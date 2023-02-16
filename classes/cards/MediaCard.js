@@ -46,6 +46,8 @@ class MediaCard {
     this.triviaQuestion = "";
     this.triviaOptions = [];
     this.triviaDifficulty = "";
+    this.runDuration = "";
+    this.runProgress = "";
   }
 
   /**
@@ -80,6 +82,13 @@ class MediaCard {
     
     // get custom card title
     let cardCustomTitle = this.cardType[1] !== "" ? this.cardType[1] : this.cardType[0];
+
+    var decRemainingTime = this.runDuration - this.runProgress;
+    var et = new Date();
+    et.setMinutes(et.getMinutes()+decRemainingTime);
+    //console.log(decRemainingTime);
+    //console.log(et.toLocaleTimeString());
+    var endTime = et.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'});
 
     this.triviaRender="";
     // if a trivia card, then prepare html
@@ -122,6 +131,7 @@ class MediaCard {
     let devicePill = "";
     let yearPill = "";
     let pagePill = "";
+    let endTimePill = "";
 
     // toggle background art as per settings
     if(hasArt=="true") {
@@ -220,6 +230,10 @@ class MediaCard {
         "<span class='badge badge-pill badge-dark'> " + this.rating + "</span>";
     }
 
+    if(this.cardType[0] == "Now Screening" || this.cardType[0] == "Playing") {
+      endTimePill =
+        "<span class='badge badge-pill badge-dark'>End: " + endTime + "</span>";
+    }
 
     // render data into html
     this.rendered =
@@ -249,7 +263,7 @@ class MediaCard {
       `">` +
       cardCustomTitle +
       `</div>
-        </div> 
+       </div> 
 
       <div id="poster` +
       this.ID +
@@ -299,6 +313,7 @@ class MediaCard {
       devicePill + 
       ipPill +
       yearPill +
+      endTimePill +
       `</div>
       </div>
       </div>

@@ -186,8 +186,20 @@ h1 {
   /* overflow: hidden;  */
   word-wrap: break-word; 
   white-space: nowrap;
-
 }
+
+.remaining {
+  color: rgb(255, 255, 255);
+  /* font-size: 14px; */
+  /* font-style: italic; */
+  /* margin-bottom: 10px; */
+  text-align: center;
+  width: 100%;
+  /* overflow: hidden;  */
+  word-wrap: break-word; 
+  white-space: nowrap;
+}
+
 
 iframe {
   position: fixed;
