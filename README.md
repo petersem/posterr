@@ -6,7 +6,7 @@
 ![Image Build](https://img.shields.io/github/workflow/status/petersem/posterr/ci?color=green)
 ![Version](https://img.shields.io/github/package-json/v/petersem/posterr?logoColor=blue)
 ![GitHub last commit](https://img.shields.io/github/last-commit/petersem/posterr)
-![Platforms](https://img.shields.io/badge/platforms-docker%20|%20windows%20|%20macos%20|%20linux-blue)
+![Platforms](https://img.shields.io/badge/platform-docker-blue)
 [![User Guide](https://img.shields.io/badge/user_guide-wiki-informational?logo=github)](https://github.com/petersem/posterr/wiki/Posterr-Configuration)
 
 ![Slides](https://github.com/petersem/posterr/blob/master/doco/posterr.jpg?raw=true)
