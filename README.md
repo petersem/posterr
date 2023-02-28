@@ -80,32 +80,14 @@ services:
 |BASEPATH|_"/path"_ Use this for reverse proxy setups which require a base path value. **This line can be left out, or value left blank** if you dont use alternate paths. |
 
 ### <ins>Unraid</ins>
- - Use the Posterr template in community apps.
+ - Use the Posterr template in community apps. (Being replaced with new version)
  - I do not maintain or control the Posterr template in the community apps. If there is something missing or incorrect in this template, please contact the template author, so they can update it. 
-
-### <ins>Binaries (Windows, Linux, MacOS)</ins>
-> Currently not working until I can fix a bug. Sorry! 
-- Get the latest binary release package from [here](https://github.com/petersem/posterr/releases)
-- Create a directory called `posterr` anywhere on your machine
-- Extract the appropriate binary for your machine and place it in this folder.
-- Run the executable file (double click or type posterr-windows.exe from windows, or ./posterr-xxx from Linux/MacOS)
-- Read the text file in the zip for parameter options
-  
-|Parameter|Details|
-|--|--|
-|Port number|Add a port number after the executable name like: 'poster-win 6969' (no parameter defaults to 3000)|
-|Base path|Use this for reverse proxies that require a base path value. If you need this, you must also enter a port number. (e.g. 'posterr-win 3000 /posterr')|
-
- > Posterr also works well on Windows as a service, using [NSSM](https://nssm.cc/)
- 
- > Not yet tested on Linux or MacOS running as a service, however I expect it should work.
 
 ---
 ## Updates
  - From v1.10.1, there will be a notice at the top of the settings screen informing you if you are running an old version. 
  - Use containrr/watchtower to auto-update Posterr in Docker environments
  - Update in the usual way for Unraid
- - Direct binaries should just be overwritten with the new version. 
 
 ---
 ## Setup
