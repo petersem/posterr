@@ -459,13 +459,13 @@ class Plex {
           // Sanitise inputs and apply filter checks
           let okToAdd = false;
           let devices = filterDevices !== undefined ? filterDevices : "";
-          devices = devices.toLowerCase().replace(", ",",").replace(" ,",",").split(",");
+          devices = devices.toLowerCase().replace(", ",",").replace(" ,",",").replace(/,+$/, "").split(",");
           let users = filterUsers !== undefined ? filterUsers : "";
-          users = users.toLowerCase().replace(", ",",").replace(" ,",",").split(",");
+          users = users.toLowerCase().replace(", ",",").replace(" ,",",").replace(/,+$/, "").split(",");
           // apply filter checks
           if(filterRemote=='true' && medCard.playerLocal == false) okToAdd = true;
           if(filterLocal=='true' && medCard.playerLocal == true) okToAdd = true;
-          if(users.length > 0 && users.includes(medCard.user.toLowerCase())==false && users[0] !== "") okToAdd = false;
+          if(users.length > 0 && users.includes(md.User.title.toLowerCase())==false && users[0] !== "") okToAdd = false;
           if(devices.length > 0 && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
 
           // add if all criteria matched
