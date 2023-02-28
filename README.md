@@ -13,7 +13,7 @@
 
 - Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates
 - Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
-- Visit the [Discord Group](https://discord.gg/c5mHXaY5) for discussions and limited support.
+- Visit the [Discord Group](https://discord.gg/TcnEkMEf9J) for discussions and limited support.
 - **The default password is:** raidisnotabackup
 
  > **IMPORTANT NOTE ON UPGRADES**
@@ -127,7 +127,7 @@ Should you encounter a problem, the solution may be listed [HERE](https://github
 ---
 ## Support
  - There is no _'official'_ support for this product, however should you encounter issues, raise an issue on the github page.
- - Limited support in [Discord](https://discord.gg/pucjF6j8k9)
+ - Limited support in [Discord](https://discord.gg/TcnEkMEf9J)
 
 ---
 ### Support my efforts and continued development 
