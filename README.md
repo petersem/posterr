@@ -81,7 +81,6 @@ services:
 
 ### <ins>Unraid</ins>
  - Use the Posterr template in community apps. (Being replaced with new version)
- - I do not maintain or control the Posterr template in the community apps. If there is something missing or incorrect in this template, please contact the template author, so they can update it. 
 
 ---
 ## Updates
