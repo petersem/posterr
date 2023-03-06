@@ -63,7 +63,8 @@ const DEFAULT_SETTINGS = {
   triviaTimer: 15,
   triviaCategories: "",
   enableTrivia: "false",
-  triviaNumber: ""
+  triviaNumber: "",
+  contentRatings: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

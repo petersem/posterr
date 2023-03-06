@@ -749,6 +749,12 @@
                     placeholder="genre1,genre2" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.genres%>"<%}else{%><%=settings.genres%>"<%}%>>
                   <small id="genres" class="form-text text-muted">Filter on-demand/recently added to only show selected genres (not cumulative). Ignored if recently added is non-zero</small>
                 </div>
+                <div class="form-group">
+                  <label for="contentRatings">Hide Ratings</label>
+                  <input type="text" class="form-control" id="contentRatings" name="contentRatings" aria-describedby="contentRatings"
+                    placeholder="r,nc-17,pg-13" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.contentRatings%>"<%}else{%><%=settings.contentRatings%>"<%}%>>
+                  <small id="contentRatings" class="form-text text-muted">Do not show titles with these ratings. (based on agent metadata country in plex) Ignored if recently added is non-zero</small>
+                </div>
 
                 <h6>Hide Banners</h6>
               <div class="form-group">

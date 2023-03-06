@@ -106,6 +106,7 @@ let theaterMode = false;
 let tmpSleepStart;
 let tmpSleepEnd;
 let recentlyAddedDays;
+let contentRatings;
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -647,7 +648,8 @@ async function loadOnDemand() {
       loadedSettings.genericThemes,
       loadedSettings.hasArt,
       loadedSettings.genres,
-      loadedSettings.recentlyAddedDays
+      loadedSettings.recentlyAddedDays,
+      loadedSettings.contentRatings
     );
   } catch (err) {
     let d = new Date();
@@ -1508,6 +1510,7 @@ app.post(
       numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
       recentlyAddedDays: !isNaN(parseInt(req.body.recentlyAddedDays)) ? parseInt(req.body.recentlyAddedDays) : DEFAULT_SETTINGS.recentlyAddedDays, 
       recentlyAdded: req.body.recentlyAdded,
+      contentRatings: req.body.contentRatings,
       onDemandRefresh: parseInt(req.body.onDemandRefresh) ? parseInt(req.body.onDemandRefresh) : DEFAULT_SETTINGS.onDemandRefresh,
       genres: req.body.genres,
       sonarrUrl: req.body.sonarrUrl,

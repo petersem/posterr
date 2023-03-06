@@ -26,8 +26,8 @@ class globalPage {
     this.footColour = footColour;
     this.bgColour = bgColour;
     this.cards = [];
-    this.quizTime = quizTime
-    this.hideSettingsLinks = hideSettingsLinks
+    this.quizTime = quizTime;
+    this.hideSettingsLinks = hideSettingsLinks;
     return;
   }
 

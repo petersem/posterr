@@ -76,6 +76,7 @@ class Settings {
     this.triviaFrequency = DEFAULT_SETTINGS.triviaFrequency;
     this.pinNS = DEFAULT_SETTINGS.pinNS;
     this.hideUser = DEFAULT_SETTINGS.hideUser;
+    this.contentRatings = DEFAULT_SETTINGS.contentRatings;
     return;
   }
 
@@ -352,6 +353,8 @@ class Settings {
     else this.triviaNumber = cs.triviaNumber;
     if (jsonObject.triviaFrequency) this.triviaFrequency = jsonObject.triviaFrequency;
     else this.triviaFrequency = cs.triviaFrequency;
+    if (jsonObject.contentRatings) this.contentRatings = jsonObject.contentRatings;
+    else this.contentRatings = cs.contentRatings;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
