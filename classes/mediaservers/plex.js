@@ -552,9 +552,9 @@ class Plex {
     }
 
 
-  odRaw.reduce((memo,m) => {
-    console.log(m.title);
-  });
+  // odRaw.reduce((memo,m) => {
+  //   console.log(m.title);
+  // });
 
   if(JSON.stringify(odRaw) == "[null,null]"){
     odRaw = [];
