@@ -526,18 +526,35 @@ class Plex {
     if(contentRatings !== undefined){
       contentRatings = contentRatings.replace(", ",",").replace(" ,",",").split(",");
     }
+    let addOD;
 //console.log(genres);
     //var recentlyAdded = false;
     try {
-      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded, contentRatings);
+      //odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded, contentRatings);
+
       if(recentlyAdded > 0){
-        odRaw = odRaw.concat(await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded, contentRatings));
+        // if(addOD !== undefined){
+          odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded, contentRatings);  
+          if(odRaw !== undefined){
+            odRaw = odRaw.concat(await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, 0, contentRatings));
+          }
+          else {
+            odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, 0, contentRatings);
+          }
       }
+        else{
+          odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, 0, contentRatings,true);
+        }
     } catch (err) {
       let now = new Date();
       console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
       throw err;
     }
+
+
+  odRaw.reduce((memo,m) => {
+    console.log(m.title);
+  });
 
   if(JSON.stringify(odRaw) == "[null,null]"){
     odRaw = [];
