@@ -462,7 +462,7 @@ async function loadNowScreening() {
   // Concatenate cards for all objects load now showing and on-demand cards, else just on-demand (if present)
   // TODO - move this into its own function!
   let mCards = [];
-  // id now screening false, then clear array
+  // is now screening false, then clear array
   if (!isNowShowingEnabled) { nsCards.length = 0 };
 
   if (nsCards.length > 0) {
@@ -505,6 +505,8 @@ async function loadNowScreening() {
       theaterOff(true);
     }
     
+    // clear nscards if nothing playing
+  //  mCards = [];
 
     pinnedMode = false;
     if (odCards.length > 0) {
@@ -579,6 +581,7 @@ async function loadNowScreening() {
         }
       }
     }
+//    globalPage.cards = mCards;
   }
 
   // setup transition - fade or default slide
