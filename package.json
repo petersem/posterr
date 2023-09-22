@@ -48,7 +48,7 @@
     "font-awesome": "^4.7.0",
     "fs-extra": "^9.1.0",
     "image-size": "^0.9.7",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.4",
     "memorystore": "^1.6.6",
     "ping": "^0.4.1",
     "plex-api": "^5.3.1",
