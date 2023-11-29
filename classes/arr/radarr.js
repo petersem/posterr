@@ -102,9 +102,10 @@ class Radarr {
       // check art exists
       md.images.forEach(i => {
         if(i.coverType == "poster"){
-          url = i.url;
+          url = i.remoteUrl;
         }
       });
+
       if (url !== undefined) {
         await core.CacheImage(url, fileName);
         medCard.posterURL = "/imagecache/" + fileName;
