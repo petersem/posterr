@@ -120,7 +120,7 @@ class Radarr {
         // check art exists
         md.images.forEach(i => {
           if(i.coverType == "fanart"){
-            url = i.url;
+            url = i.remoteUrl;
           }
         });
         if (url !== undefined) {
