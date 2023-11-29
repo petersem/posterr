@@ -4,7 +4,7 @@ const util = require('util');
 const axios = require("axios");
 const { CardTypeEnum } = require("../cards/CardType");
 const { triviaCategories } = require("../../consts");
-
+const delay = time => new Promise(res=>setTimeout(res,time));
  /**
  * @desc Used to get a list of custom pictures
  */
@@ -60,7 +60,6 @@ class Trivia {
       "&category=" +
       category +
       apiToken)
-
        
       response = await axios
         .get(
@@ -127,6 +126,7 @@ class Trivia {
     // get questions for specific category
     await categories.reduce(async (memo, md) => {
         await memo;
+        
         let trivSet = await this.GetQuestions(hasThemes, hasArt, numberOfQuestions, md, token);
         if(trivSet.length !== 0) {
           allTrivCards = allTrivCards.concat(trivSet);
@@ -154,6 +154,7 @@ class Trivia {
 
     // get questions for specific category
 
+    await delay(5000);
     const raw = await this.GetRawData(numberOfQuestions,questionCategory, hasThemes, token);
 
 
