@@ -48,6 +48,7 @@ class MediaCard {
     this.triviaDifficulty = "";
     this.runDuration = "";
     this.runProgress = "";
+    this.linkUrl = "";
   }
 
   /**
@@ -64,7 +65,7 @@ class MediaCard {
     if(hideTitle=='true' && this.cardType[0] == "On-demand") hiddenTitle = "hidden";
     if(hideFooter=='true' && this.cardType[0] == "On-demand") hiddenFooter = "hidden";
     if(hiddenTitle !== "" && hiddenFooter !== "") fullScreen="fullscreen";
-    if(this.cardType[0] == "Picture" || this.cardType == "Trivia Question"){
+    if(this.cardType[0] == "Picture" || this.cardType == "Trivia Question" || this.cardType == "WebURL"){
       hiddenTitle="hidden";
       hiddenFooter="hidden";
       if(hasArt && this.posterArtURL !== ""){
@@ -117,6 +118,15 @@ class MediaCard {
         </div>
       </div>`;
     }
+
+    if(this.cardType[0] == "WebURL"){
+      hiddenFooter = "hidden";
+      fullScreen="fullscreen";
+      hiddenTitle="hidden";
+      //this.linkRender = `<embed type="text/html" src="` + this.linkUrl + `" width=100% height=100%>`
+      this.linkRender = `<iframe scrolling="no" src="` + this.linkUrl + `" width=100% height=100%  style="border: none; overflow: hidden;" >`
+    }
+
 
     // pill variables
     let contentRatingPill = "";
@@ -290,6 +300,9 @@ class MediaCard {
         </div>
       <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>` +
       this.triviaRender +
+      `</div>
+      <div class="hidden" id="link` + this.ID + `AR"></div>` +
+      this.linkRender +
       `</div>
 
       <div class="bottomBanner mx-auto transparent` +

@@ -77,6 +77,9 @@ class Settings {
     this.pinNS = DEFAULT_SETTINGS.pinNS;
     this.hideUser = DEFAULT_SETTINGS.hideUser;
     this.contentRatings = DEFAULT_SETTINGS.contentRatings;
+    this.links = DEFAULT_SETTINGS.links;
+    this.enableLinks = DEFAULT_SETTINGS.enableLinks;
+    this.linkFrequency = DEFAULT_SETTINGS.linkFrequency;
     return;
   }
 
@@ -130,12 +133,14 @@ class Settings {
       if(readSettings.enableSonarr==undefined) readSettings.enableSonarr = 'true';
       if(readSettings.enableReadarr==undefined) readSettings.enableReadarr = 'true';
       if(readSettings.enableRadarr==undefined) readSettings.enableRadarr = 'true';
+      if(readSettings.enableLinks==undefined) readSettings.enableLinks = "false";
       if(readSettings.filterRemote==undefined) readSettings.filterRemote = 'true';
       if(readSettings.filterLocal==undefined) readSettings.filterLocal = 'true';
       if(readSettings.enableCustomPictures==undefined) readSettings.enableCustomPictures = 'false';
       if(readSettings.customPictureTheme==undefined) readSettings.customPictureTheme = 'default';
       if(readSettings.enableSleep==undefined) readSettings.enableSleep = 'false';
       if(readSettings.enableTrivia==undefined) readSettings.enableTrivia = 'false';
+      if(readSettings.enableLinks==undefined) readSettings.enableLinks = 'false';
       if(readSettings.recentlyAddedDays==undefined) readSettings.recentlyAddedDays = 0;
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
@@ -167,6 +172,7 @@ class Settings {
     this.enableRadarr = 'false';
     this.enableReadarr = 'false';
     this.enableTrivia = 'false';
+    this.enableLinks = 'false';
 
     const data = JSON.stringify(this, null, 4);
 
@@ -355,7 +361,12 @@ class Settings {
     else this.triviaFrequency = cs.triviaFrequency;
     if (jsonObject.contentRatings) this.contentRatings = jsonObject.contentRatings;
     else this.contentRatings = cs.contentRatings;
-
+    if (jsonObject.links) this.links = jsonObject.links;
+    else this.links = cs.links;
+    if (jsonObject.enableLinks) this.enableLinks = jsonObject.enableLinks;
+    else this.enableLinks = cs.enableLinks;
+    if (jsonObject.linkFrequency) this.linkFrequency = jsonObject.linkFrequency;
+    else this.linkFrequency = cs.linkFrequency;
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
 

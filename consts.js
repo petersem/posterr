@@ -64,7 +64,9 @@ const DEFAULT_SETTINGS = {
   triviaCategories: "",
   enableTrivia: "false",
   triviaNumber: "",
-  contentRatings: ""
+  contentRatings: "",
+  links: "",
+  enableLinks: "false"
 };
 
 module.exports = DEFAULT_SETTINGS;

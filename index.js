@@ -23,6 +23,7 @@ const health = require("./classes/core/health");
 const pjson = require("./package.json");
 const MAX_OD_SLIDES = 150;  // this is with themes. Will be double this if tv and movie themes are off
 const triv = require("./classes/custom/trivia");
+const links = require("./classes/custom/links");
 
 // just in case someone puts in a / for the basepath value
 if (process.env.BASEPATH == "/") process.env.BASEPATH = "";
@@ -63,6 +64,7 @@ let csrCards = [];
 let picCards = [];
 let csbCards = [];
 let trivCards = [];
+let linkCards = [];
 let globalPage = new glb();
 let nowScreeningClock;
 let onDemandClock;
@@ -72,6 +74,7 @@ let radarrClock;
 let readarrClock;
 let houseKeepingClock;
 let picturesClock;
+let linksClock;
 let setng = new settings();
 let loadedSettings;
 //let endPoint = "https://logz-dev.nesretep.net/pstr";
@@ -91,6 +94,8 @@ let isSonarrUnavailable = false;
 let isRadarrUnavailable = false;
 let isReadarrUnavailable = false;
 let isTriviaUnavailable = false;
+let isLinksEnabled = false;
+let isLinksUnavailable = false;
 let hasReported = false;
 let cold_start_time = new Date();
 let customPicFolders = [];
@@ -115,6 +120,7 @@ const { CardTypeEnum } = require("./classes/cards/CardType");
 const { titleColour, enableSleep, sleepStart, sleepEnd, numberOnDemand } = require("./consts");
 const CardType = require("./classes/cards/CardType");
 const MediaCard = require("./classes/cards/MediaCard");
+const Links = require("./classes/custom/links");
 
 var dir = './config';
 
@@ -166,6 +172,39 @@ function checkTime(i) {
 }
 
 /**
+ * @desc Wrapper function to call links.
+ * @returns {Promise<object>} mediaCards array - LINKS
+ */
+async function loadLinks() {
+  // stop the clock
+  clearInterval(linksClock);
+  let linkTicks = loadedSettings.linkFrequency * 1000 * 60; // convert to seconds and then minutes
+
+  // stop timers and dont run if disabled
+  if (!isLinksEnabled) {
+    return linkCards;
+  }
+
+  // instatntiate link class
+  let linkArray = loadedSettings.links.split(";");
+  let links = new Links();
+  // call links
+  try {
+    linkCards = await links.GetAllLinks(linkArray);
+  } catch (err) {
+    let now = new Date();
+    console.log(now.toLocaleString() + " *Links: " + err);
+    linkTicks = 60000;
+    console.log("✘✘ WARNING ✘✘ - Next links query will run in 1 minute.");
+    isLinksUnavailable = true;
+  }
+  // restart the 24 hour timer
+  linksClock = setInterval(loadLinks, linkTicks); // daily
+  const lc = linkCards;
+  return linkCards;
+}
+
+/**
  * @desc Wrapper function to call Trivia.
  * @returns {Promise<object>} mediaCards array - trivia
  */
@@ -179,7 +218,7 @@ function checkTime(i) {
     return trivCards;
   }
 
-  // instatntiate radarr class
+  // instatntiate trivia class
   let trivia = new triv();
 
   // get trivia token
@@ -473,7 +512,7 @@ async function loadNowScreening() {
 
     if (loadedSettings.pinNS !== "true") {
       if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5));
+        mCards = nsCards.concat(odCards.concat(csCards.concat(csrCards).concat(picCards).concat(linkCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5));
       }
       else {
         mCards = nsCards.concat(odCards);
@@ -482,6 +521,7 @@ async function loadNowScreening() {
         mCards = mCards.concat(csrCards);
         mCards = mCards.concat(csbCards);
         mCards = mCards.concat(trivCards);
+        mCards = mCards.concat(linkCards);
       }
       pinnedMode = false;
     }
@@ -511,7 +551,7 @@ async function loadNowScreening() {
     pinnedMode = false;
     if (odCards.length > 0) {
       if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-        mCards = odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5);
+        mCards = odCards.concat(csCards.concat(csrCards).concat(picCards).concat(csbCards).concat(linkCards).concat(trivCards)).sort(() => Math.random() - 0.5);
       }
       else {
         mCards = odCards.concat(csCards);
@@ -519,29 +559,32 @@ async function loadNowScreening() {
         mCards = mCards.concat(csrCards);
         mCards = mCards.concat(csbCards);
         mCards = mCards.concat(trivCards);
+        mCards = mCards.concat(linkCards);
       }
       globalPage.cards = mCards;
     } else {
       if (csCards.length > 0) {
         if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-          mCards = csCards.concat(csrCards.concat(picCards).concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5);
+          mCards = csCards.concat(csrCards.concat(picCards).concat(csbCards).concat(linkCards).concat(trivCards)).sort(() => Math.random() - 0.5);
         }
         else {
           mCards = csCards.concat(csrCards);
           mCards = mCards.concat(picCards);
           mCards = mCards.concat(csbCards);
           mCards = mCards.concat(trivCards);
+          mCards = mCards.concat(linkCards);
         }
         globalPage.cards = mCards;
       } else {
         if (csrCards.length > 0) {
           if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-            mCards = csrCards.concat(picCards.concat(csbCards).concat(trivCards)).sort(() => Math.random() - 0.5);
+            mCards = csrCards.concat(picCards.concat(csbCards).concat(linkCards).concat(trivCards)).sort(() => Math.random() - 0.5);
           }
           else {
             mCards = csrCards.concat(picCards);
             mCards = mCards.concat(csbCards);
             mCards = mCards.concat(trivCards);
+            mCards = mCards.concat(linkCards);
           }
           globalPage.cards = mCards;
 
@@ -550,30 +593,33 @@ async function loadNowScreening() {
         else {
           if (csbCards.length > 0) {
             if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-              mCards = csbCards.concat(picCards.concat(trivCards)).sort(() => Math.random() - 0.5);
+              mCards = csbCards.concat(picCards.concat(trivCards)).concat(linkCards).sort(() => Math.random() - 0.5);
             }
             else {
               mCards = csbCards.concat(picCards);
               mCards = mCards.concat(trivCards);
+              mCards = mCards.concat(linkCards);
             }
             globalPage.cards = mCards;
           }
           else {
             if(picCards.length > 0) {
               if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-                mCards = picCards.concat(trivCards).sort(() => Math.random() - 0.5);
+                mCards = picCards.concat(trivCards).concat(linkCards).sort(() => Math.random() - 0.5);
               }
               else {
                 mCards = picCards.concat(trivCards);
+                mCards = mCards.concat(linkCards);
               }
               globalPage.cards = mCards;
             }
             else {
               if (loadedSettings.shuffleSlides !== undefined && loadedSettings.shuffleSlides == "true") {
-                mCards = trivCards.sort(() => Math.random() - 0.5);
+                mCards = trivCards.concat(linkCards).sort(() => Math.random() - 0.5);
               }
               else {
                 mCards = trivCards;
+                mCards = mCards.concat(linkCards);
               }
               globalPage.cards = mCards;
             }
@@ -581,6 +627,7 @@ async function loadNowScreening() {
         }
       }
     }
+
 //    globalPage.cards = mCards;
   }
 
@@ -710,10 +757,14 @@ async function checkEnabled() {
   isReadarrEnabled = false;
   isSleepEnabled = false;
   isTriviaEnabled = false;
+  isLinksEnabled = false;
 
   let sleepStart;
   let sleepEnd;
   let sleepTicks;
+
+  // check links
+  if (loadedSettings.enableLinks == 'true') isLinksEnabled = true;
 
   // check trivia
   if (loadedSettings.enableTrivia == 'true') isTriviaEnabled = true;
@@ -843,6 +894,17 @@ async function checkEnabled() {
     isTriviaEnabled = false;
   }
 
+// check links
+  if (
+    loadedSettings.links !== undefined &&
+    loadedSettings.enableLinks !== 'false'
+  ) {
+    isLinksEnabled = true;
+  }
+  else{
+    isLinksEnabled = false;
+  }
+
   // display status
   let sleepRange = " (Invalid or no date range set)";
   if (isSleepEnabled == true) {
@@ -883,6 +945,9 @@ async function checkEnabled() {
     `
    Trivia: ` +
     isTriviaEnabled + 
+    `
+   Links: ` +
+    isLinksEnabled + 
     `
    `
   );
@@ -926,6 +991,7 @@ async function suspend() {
   clearInterval(houseKeepingClock);
   clearInterval(picturesClock);
   clearInterval(readarrClock);
+  clearInterval(linksClock);
   // set to sleep
   sleep = "true";
   // loadedSettings.playThemes = 'false';
@@ -946,6 +1012,7 @@ async function wake(theater) {
   if (isPicturesEnabled) await loadPictures();
   if (isReadarrEnabled) await loadReadarrComingSoon();
   if (isTriviaEnabled) await loadTrivia();
+  if (isLinksEnabled) await loadLinks();
   await loadNowScreening();
   let d = new Date();
   if(theater !== true) console.log(d.toLocaleString() + ` ** Sleep mode terminated (next activation at ` + loadedSettings.sleepStart + `)`);
@@ -965,6 +1032,7 @@ async function startup(clearCache) {
   clearInterval(picturesClock);
   clearInterval(readarrClock);
   clearInterval(triviaClock);
+  clearInterval(linksClock);
 
   picCards = [];
   odCards = [];
@@ -973,6 +1041,7 @@ async function startup(clearCache) {
   csrCards = [];
   csbCards = [];
   trivCards = [];
+  linkCards = [];
 
   // run housekeeping job 
   if (clearCache !== false) await houseKeeping();
@@ -1006,6 +1075,7 @@ async function startup(clearCache) {
   CardTypeEnum.Picture[1] = loadedSettings.picture !== undefined ? loadedSettings.picture : "";
   CardTypeEnum.EBook[1] = loadedSettings.ebook !== undefined ? loadedSettings.ebook : "";
   CardTypeEnum.Trivia[1] = loadedSettings.trivia !== undefined ? loadedSettings.trivia : ""; 
+  CardTypeEnum.WebURL[1] = loadedSettings.links !== undefined ? loadedSettings.links : ""; 
 
   // initial load of card providers
   if (isSonarrEnabled) await loadSonarrComingSoon();
@@ -1014,6 +1084,8 @@ async function startup(clearCache) {
   if (isPicturesEnabled) await loadPictures();
   if (isReadarrEnabled) await loadReadarrComingSoon();
   if (isTriviaEnabled) await loadTrivia();
+  if (isLinksEnabled) await loadLinks();
+
   await loadNowScreening();
 
   // let now = new Date();
@@ -1034,7 +1106,7 @@ async function startup(clearCache) {
 
   if (hasReported == false && loadedSettings !== undefined) {
     let v = new vers(endPoint);
-    const logzResponse = await v.log(loadedSettings.serverID, pjson.version, isNowShowingEnabled, isOnDemandEnabled, isSonarrEnabled, isRadarrEnabled, isPicturesEnabled, isReadarrEnabled, isTriviaEnabled);
+    const logzResponse = await v.log(loadedSettings.serverID, pjson.version, isNowShowingEnabled, isOnDemandEnabled, isSonarrEnabled, isRadarrEnabled, isPicturesEnabled, isReadarrEnabled, isTriviaEnabled, isLinksEnabled);
     message = logzResponse.message;
     latestVersion = logzResponse.version;
     hasReported = true;
@@ -1128,6 +1200,7 @@ async function saveReset(formObject) {
   clearInterval(houseKeepingClock);
   clearInterval(picturesClock);
   clearInterval(triviaClock);
+  clearInterval(linksClock);
 
   // clear cards
   nsCards = [];
@@ -1137,6 +1210,7 @@ async function saveReset(formObject) {
   picCards = [];
   csbCards = [];
   trivCards = [];
+  linkCards = [];
 
   console.log(
     "✘✘ WARNING ✘✘ - Restarting. Please wait while current jobs complete"

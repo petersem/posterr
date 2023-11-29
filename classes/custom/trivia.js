@@ -46,6 +46,7 @@ class Trivia {
    * @desc Gets results from triviadb api call
    */
   async GetRawData(numberOfQuestions, category, hasThemes, token){
+
     let response;
     // call sonarr API and return results
     try {
@@ -54,6 +55,13 @@ class Trivia {
       if(token !== undefined && token.length !== 0 && token !== 'false'){
         apiToken = "&token=" + token
       }
+      console.log("https://opentdb.com/api.php?amount=" +
+      numberOfQuestions +
+      "&category=" +
+      category +
+      apiToken)
+
+       
       response = await axios
         .get(
           "https://opentdb.com/api.php?amount=" +
@@ -145,7 +153,10 @@ class Trivia {
     let trivCards = [];
 
     // get questions for specific category
+
     const raw = await this.GetRawData(numberOfQuestions,questionCategory, hasThemes, token);
+
+
     // reutrn an empty array if no results
     if (raw !== null) {
       // move through results and populate media cards
@@ -199,7 +210,6 @@ class Trivia {
       // console.log(
       //   now.toLocaleString() + " Trivia questions added");
     }
-
     return trivCards;
   }
 }

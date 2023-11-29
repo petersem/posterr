@@ -813,7 +813,6 @@ class Plex {
         // calculate for recently added (if set)
         var includeTitle = false;
         medCard.cardType = md.ctype;
-
         // add media card to array
         odCards.push(medCard);
 

@@ -13,7 +13,8 @@ class CardType {
     Picture: ["Picture", ""], 
     EBook: ["E-Book Release", ""],
     Trivia: ["Trivia Question", ""],
-    RecentlyAdded: ["Recently Added", ""]
+    RecentlyAdded: ["Recently Added", ""],
+    WebURL: ["WebURL", ""]
   };
 }
 

@@ -49,7 +49,7 @@ class globalPage {
         } else {
           card.active = "";
         }
-        // console.log(card);
+       // console.log(card);
         await card.Render(hasArt,baseUrl,hideTitle,hideFooter);
       }, undefined);
     }
