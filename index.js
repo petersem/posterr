@@ -978,8 +978,8 @@ async function theaterOff(theater) {
     theaterMode = false;
     isSleepEnabled = false;
     //loadedSettings.enableSleep = 'false';
-    console.log(d.toLocaleString() + ` ** Theatre mode deactivated`);
   }
+    console.log(d.toLocaleString() + ` ** Theatre mode deactivated`);
 }
 
 async function suspend() {
@@ -1385,6 +1385,39 @@ function getDirectories(path) {
   });
 }
 
+app.get('/api/sleep', (req, res) => {
+  res.send({
+    theatreMode: theaterMode
+  })
+})
+
+app.post(
+  BASEURL + "/api/sleep", (req, res) => {
+    if(req.body.psw==loadedSettings.password){
+      if(theaterMode==true){
+        theaterMode=false;
+        theaterOff()
+        res.send({
+          status: theaterMode
+        })
+      }
+      else{
+        theaterMode=true;
+        theaterOn()
+        res.send({
+          status: theaterMode
+        })
+      }
+    }
+    else {
+      res.send({
+        error: 'Incorrect password'
+      })
+    }
+  }
+)
+
+
 app.post(
   BASEURL + "/logon",
   [
@@ -1566,7 +1599,6 @@ app.post(
   ],
   (req, res) => {
     //fields value holder. Also sets default values in form passed without them.
-
     let form = {
       password: req.body.password,
       slideDuration: req.body.slideDuration ? parseInt(req.body.slideDuration) : DEFAULT_SETTINGS.slideDuration,
