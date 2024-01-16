@@ -1595,7 +1595,22 @@ app.post(
       .custom((value, { req }) => {
         if(isNaN(Date.parse("2100-01-01T" + value)) == true && value.length !== 0) throw new Error("Sleep end time must be in 24 hour format hh:mm (eg. 07:15 or 23:30)");
         return true;
-      })    
+      }),
+    check("sonarrUrl")
+      .custom((value, { req }) => {
+        if(value.endsWith('/') == true && value.length !== 0) throw new Error("Sonarr URL cannot have a trailing slash");
+        return true;
+      }),
+      check("radarrUrl")
+        .custom((value, { req }) => {
+          if(value.endsWith('/') == true && value.length !== 0) throw new Error("Radarr URL cannot have a trailing slash");
+          return true;
+        }),
+      check("readarrUrl")
+        .custom((value, { req }) => {
+          if(value.endsWith('/') == true && value.length !== 0) throw new Error("Readarr URL cannot have a trailing slash");
+          return true;
+        })        
   ],
   (req, res) => {
     //fields value holder. Also sets default values in form passed without them.
