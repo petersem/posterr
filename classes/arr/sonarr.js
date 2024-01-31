@@ -25,6 +25,14 @@ class Sonarr {
   async GetComingSoonRawData(startDate, endDate) {
     let response;
 
+// console.log(          this.sonarrUrl + 
+//   "/api/v3/calendar?apikey=" + 
+//   this.sonarrToken + 
+//   "&start=" + 
+//   startDate + 
+//   "&end=" + endDate
+// );
+
     // call sonarr API and return results
     try {
       response = await axios

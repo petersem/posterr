@@ -105,7 +105,7 @@ async SonarrCheck() {
     response = await axios
       .get(
         this.settings.sonarrURL +
-          "/api/calendar?apikey=" +
+          "/api/v3/calendar?apikey=" +
           this.settings.sonarrToken +
           "&start=" +
           startDate +
@@ -124,8 +124,9 @@ async SonarrCheck() {
     );
     throw err;
   }
+  // console.log(response.data);
   response.data.forEach(tvShow => {
-    console.log(tvShow.series.title,tvShow.title,tvShow.airDate);
+    console.log(tvShow.title,tvShow.airDate);
   });
   return;
 }
