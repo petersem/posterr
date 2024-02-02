@@ -301,9 +301,6 @@ class MediaCard {
       <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>` +
       this.triviaRender +
       `</div>
-      <div class="hidden" id="link` + this.ID + `AR"></div>` +
-      this.linkRender +
-      `</div>
 
       <div class="bottomBanner mx-auto transparent` +
       ` ` + hiddenFooter + 

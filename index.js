@@ -24,6 +24,7 @@ const pjson = require("./package.json");
 const MAX_OD_SLIDES = 150;  // this is with themes. Will be double this if tv and movie themes are off
 const triv = require("./classes/custom/trivia");
 const links = require("./classes/custom/links");
+const awtrix = require("./classes/custom/awtrix");
 
 // just in case someone puts in a / for the basepath value
 if (process.env.BASEPATH == "/") process.env.BASEPATH = "";
@@ -112,6 +113,7 @@ let tmpSleepStart;
 let tmpSleepEnd;
 let recentlyAddedDays;
 let contentRatings;
+let oldAwtrixJson = "";
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -482,6 +484,44 @@ async function loadNowScreening() {
       loadedSettings.filterUsers,
       loadedSettings.hideUser
     );
+
+    // Send to Awtrix, if enabled
+    var awt = new awtrix();
+    var awtrixJson = [{
+      'text': "AlienS (1979)",
+      'pushIcon': 0,
+      'icon': "1944",
+      'color': [255,0,0],
+      'duration': 10,
+      'textCase': 2,
+      'scrollSpeed': 50,
+      'progress': 15,
+      'progressC': [255,0,0]
+      },
+      {
+      'text': "Buck Rojers (1980)",
+      'pushIcon': 0,
+      'icon': "1944",
+      'color': [255,255,0],
+      'duration': 10,
+      'textCase': 2,
+      'scrollSpeed': 50,
+      'progress': 60,
+      'progressC': [255,255,0]
+      }]
+  
+    //console.log(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson));
+    
+    if(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson)){
+      await awt.post("http://192.168.1.28",awtrixJson);
+      oldAwtrixJson = awtrixJson;
+      //console.log('updated awtrix');
+    }
+    else{
+      //console.log('skipped awtrix update');
+    }
+
+
     // restore defaults if plex now available after an error
     if (isPlexUnavailable) {
       console.log("✅ Plex connection restored - defualt poll timers restored");
@@ -782,6 +822,15 @@ async function checkEnabled() {
   // check sleep mode
   // let startTime = await util.emptyIfNull(loadedSettings.sleepStart);
   // let endTime = await util.emptyIfNull(loadedSettings.sleepEnd);
+  try {
+    if(loadedSettings.isSleepEnabled == "true")
+    isSleepEnabled = true;
+  }
+  catch (ex) {
+    isSleepEnabled = false;
+  }
+
+
   try {
     sleepStart = new Date("2100-01-01T" + loadedSettings.sleepStart);
     isSleepEnabled = true;
