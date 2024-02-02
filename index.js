@@ -512,14 +512,14 @@ async function loadNowScreening() {
   
     //console.log(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson));
     
-    if(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson)){
-      await awt.post("http://192.168.1.28",awtrixJson);
-      oldAwtrixJson = awtrixJson;
-      //console.log('updated awtrix');
-    }
-    else{
-      //console.log('skipped awtrix update');
-    }
+    // if(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson)){
+    //   await awt.post("http://192.168.1.28",awtrixJson);
+    //   oldAwtrixJson = awtrixJson;
+    //   //console.log('updated awtrix');
+    // }
+    // else{
+    //   //console.log('skipped awtrix update');
+    // }
 
 
     // restore defaults if plex now available after an error
