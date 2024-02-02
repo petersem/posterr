@@ -17,4 +17,3 @@ services:
       - /c/docker/posterr/config:/usr/src/app/config
     ports:
       - 8082:3000
-

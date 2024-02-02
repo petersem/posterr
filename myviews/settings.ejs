@@ -448,9 +448,11 @@
                       <option value="laconicaregular" style="font-family: 'laconicaregular';">Laconica</option>
                       <option value="limelightregular" style="font-family: 'limelightregular';">Limelight</option>
                       <option value="midnight_championregular" style="font-family: 'midnight_championregular';">Midnight Champion</option>
+                      <option value="montserratthin" style="font-family: 'montserratthin';">Montserrat</option>   
                       <option value="moulinrougeflfregular" style="font-family: 'moulinrougeflfregular';">Moulinrouge Flf</option>       
                       <option value="movie_timesregular" style="font-family: 'movie_timesregular';">Movie Times</option>
-                      <option value="r1999regular" style="font-family: 'r1999regular';">R1999</option>   
+                      <option value="open_sansregular" style="font-family: 'open_sansregular';">Open Sans</option>
+                      <option value="r1999regular" style="font-family: 'r1999regular';">R1999</option>  
                       <option value="reach_the_endregular" style="font-family: 'reach_the_endregular';">Reach The End</option>
                       <option value="riemann_theatreregular" style="font-family: 'riemann_theatreregular';">Riemann Theatre</option>
                       <option value="showtimenormal" style="font-family: 'showtimenormal';">Showtime</option>
@@ -487,7 +489,14 @@
                       placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.onDemand%>"<%}else{%><%=settings.onDemand%>"<%}%>>
                     <small id="onDemandHelp" class="form-text text-muted">Alternate text for 'On-demand'</small>
                   </div>
-  
+
+                  <div class="form-group">
+                    <label for="recentlyAdded">Recently Added (Alternate text)</label>
+                    <input type="text" class="form-control" id="recentlyAdded" name="recentlyAdded" aria-describedby="recentlyAddedHelp"
+                      placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.recentlyAdded%>"<%}else{%><%=settings.recentlyAdded%>"<%}%>>
+                    <small id="recentlyAddedHelp" class="form-text text-muted">Alternate text for 'Recently Added'</small>
+                  </div>
+
                   <div class="form-group">
                     <label for="playing">Playing (Alternate text)</label>
                     <input type="text" class="form-control" id="playing" name="playing" aria-describedby="playingHelp"
@@ -714,12 +723,20 @@
                     (Leave blank to disable)</small>
                 </div>
                 <div class="form-group">
+                  <label for="recentlyAddedDays">Recently Added In Last n Days</label>
+                  <input type="text" class="form-control" id="recentlyAddedDays" name="recentlyAddedDays" aria-describedby="recentlyAddedDaysHelp"
+                    placeholder="suggest no more than 45." value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.recentlyAddedDays%>"<%}else{%><%=settings.recentlyAddedDays%>"<%}%>>
+                  <small id="recentlyAddedDaysHelp" class="form-text text-muted">Show recently added titles from
+                    each specified Plex library. <b>'Content rating'</b> and <b>'Genre' <u>are ignored</u> if this is set to a non-zero value.</b></small>
+                </div>
+                <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
-                  <input type="text" class="form-control" id="numberOnDemand" name="numberOnDemand" aria-describedby="numberOnDemand"
+                  <input type="text" class="form-control" id="numberOnDemand" name="numberOnDemand" aria-describedby="numberOnDemandHelp"
                     placeholder="suggest 5 or 6. (lower numbers perform better)" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
                   <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to display from
                     each specified Plex library.</small>
                 </div>
+
                 <div class="form-group">
                   <label for="onDemandRefresh">On-demand Refresh Period</label>
                   <input type="text" class="form-control" id="onDemandRefresh" name="onDemandRefresh" aria-describedby="onDemandRefresh"
@@ -730,7 +747,13 @@
                   <label for="genres">Genres</label>
                   <input type="text" class="form-control" id="genres" name="genres" aria-describedby="genres"
                     placeholder="genre1,genre2" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.genres%>"<%}else{%><%=settings.genres%>"<%}%>>
-                  <small id="genres" class="form-text text-muted">Filter on-demand to only show selected genres (not cumulative)</small>
+                  <small id="genres" class="form-text text-muted">Filter on-demand/recently added to only show selected genres (not cumulative). Ignored if recently added is non-zero</small>
+                </div>
+                <div class="form-group">
+                  <label for="contentRatings">Hide Ratings</label>
+                  <input type="text" class="form-control" id="contentRatings" name="contentRatings" aria-describedby="contentRatings"
+                    placeholder="r,nc-17,pg-13" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.contentRatings%>"<%}else{%><%=settings.contentRatings%>"<%}%>>
+                  <small id="contentRatings" class="form-text text-muted">Do not show titles with these ratings. (based on agent metadata country in plex) Ignored if recently added is non-zero</small>
                 </div>
 
                 <h6>Hide Banners</h6>
@@ -1037,8 +1060,7 @@
           </div>
 
           <hr />
-          <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Reload
-            Saved</button>&nbsp;&nbsp; <button type="reset" class="btn btn-info"
+          <button type="reset" class="btn btn-info" onclick="location.href = '<%=baseUrl%>/settings';">Exit</button>&nbsp;&nbsp; <button type="reset" class="btn btn-info"
             onclick="location.href = '<%=baseUrl%>/';">Main Page</button>
             &nbsp;<button type="reset" class="btn btn-success"
             onclick="window.open('https://github.com/petersem/posterr/wiki/Posterr-Configuration');">Doco</button>
@@ -1082,6 +1104,8 @@
                         <li>GitHub repository: <a href="https://github.com/petersem/posterr" target="_blank">Here</a>
                         </li>
                         <li>Docker repository: <a href="https://hub.docker.com/repository/docker/petersem/posterr"
+                            target="_blank">Here</a></li>
+                        <li>Discord: <a href="https://discord.gg/TcnEkMEf9J"
                             target="_blank">Here</a></li>
                       </ul>
                     </p>

@@ -58,6 +58,9 @@ class MediaCard {
     this.triviaQuestion = "";
     this.triviaOptions = [];
     this.triviaDifficulty = "";
+    this.runDuration = "";
+    this.runProgress = "";
+    this.linkUrl = "";
   }
 
   /**
@@ -74,7 +77,7 @@ class MediaCard {
     if(hideTitle=='true' && this.cardType[0] == "On-demand") hiddenTitle = "hidden";
     if(hideFooter=='true' && this.cardType[0] == "On-demand") hiddenFooter = "hidden";
     if(hiddenTitle !== "" && hiddenFooter !== "") fullScreen="fullscreen";
-    if(this.cardType[0] == "Picture" || this.cardType == "Trivia Question"){
+    if(this.cardType[0] == "Picture" || this.cardType == "Trivia Question" || this.cardType == "WebURL"){
       hiddenTitle="hidden";
       hiddenFooter="hidden";
       if(hasArt && this.posterArtURL !== ""){
@@ -92,6 +95,13 @@ class MediaCard {
     
     // get custom card title
     let cardCustomTitle = this.cardType[1] !== "" ? this.cardType[1] : this.cardType[0];
+
+    var decRemainingTime = this.runDuration - this.runProgress;
+    var et = new Date();
+    et.setMinutes(et.getMinutes()+decRemainingTime);
+    //console.log(decRemainingTime);
+    //console.log(et.toLocaleTimeString());
+    var endTime = et.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'});
 
     this.triviaRender="";
     // if a trivia card, then prepare html
@@ -121,6 +131,15 @@ class MediaCard {
       </div>`;
     }
 
+    if(this.cardType[0] == "WebURL"){
+      hiddenFooter = "hidden";
+      fullScreen="fullscreen";
+      hiddenTitle="hidden";
+      //this.linkRender = `<embed type="text/html" src="` + this.linkUrl + `" width=100% height=100%>`
+      this.linkRender = `<iframe scrolling="no" src="` + this.linkUrl + `" width=100% height=100%  style="border: none; overflow: hidden;" >`
+    }
+
+
     // pill variables
     let contentRatingPill = "";
     let resCodecPill = "";
@@ -135,6 +154,7 @@ class MediaCard {
     let devicePill = "";
     let yearPill = "";
     let pagePill = "";
+    let endTimePill = "";
 
     // toggle background art as per settings
     if(hasArt=="true") {
@@ -255,6 +275,10 @@ class MediaCard {
         "<span class='badge badge-pill badge-dark'> <img src='" + ratingIcon + "' height='12px' width='12px' style='margin-right: 6px' />" + this.rating + "</span>";
     }
 
+    if(this.cardType[0] == "Now Screening" || this.cardType[0] == "Playing") {
+      endTimePill =
+        "<span class='badge badge-pill badge-dark'>End: " + endTime + "</span>";
+    }
 
     // render data into html
     this.rendered =
@@ -284,7 +308,7 @@ class MediaCard {
       `">` +
       cardCustomTitle +
       `</div>
-        </div> 
+       </div> 
 
       <div id="poster` +
       this.ID +
@@ -312,6 +336,9 @@ class MediaCard {
       <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>` +
       this.triviaRender +
       `</div>
+      <div class="hidden" id="link` + this.ID + `AR"></div>` +
+      this.linkRender +
+      `</div>
 
       <div class="bottomBanner mx-auto transparent` +
       ` ` + hiddenFooter + 
@@ -335,6 +362,7 @@ class MediaCard {
       devicePill + 
       ipPill +
       yearPill +
+      endTimePill +
       `</div>
       </div>
       </div>

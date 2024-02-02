@@ -136,6 +136,22 @@
     font-style: normal;
   }
 
+  @font-face {
+    font-family: 'montserratthin';
+    src: url('/webfontkit/montserrat-variablefont_wght-webfont.woff2') format('woff2'),
+         url('/webfontkit/montserrat-variablefont_wght-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+  }
+
+  @font-face {
+    font-family: 'open_sansregular';
+    src: url('/webfontkit/opensans-variablefont_wdthwght-webfont.woff2') format('woff2'),
+         url('/webfontkit/opensans-variablefont_wdthwght-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
 
 /* custom styling for all FA icons  */
 i.fas,

@@ -26,8 +26,8 @@ class globalPage {
     this.footColour = footColour;
     this.bgColour = bgColour;
     this.cards = [];
-    this.quizTime = quizTime
-    this.hideSettingsLinks = hideSettingsLinks
+    this.quizTime = quizTime;
+    this.hideSettingsLinks = hideSettingsLinks;
     return;
   }
 
@@ -49,7 +49,7 @@ class globalPage {
         } else {
           card.active = "";
         }
-        // console.log(card);
+       // console.log(card);
         await card.Render(hasArt,baseUrl,hideTitle,hideFooter);
       }, undefined);
     }

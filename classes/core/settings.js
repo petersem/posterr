@@ -41,6 +41,8 @@ class Settings {
     this.nowScreening = DEFAULT_SETTINGS.nowScreening;
     this.comingSoon = DEFAULT_SETTINGS.comingSoon;
     this.onDemand = DEFAULT_SETTINGS.onDemand;
+    this.recentlyAddedDays = DEFAULT_SETTINGS.recentlyAddedDays;
+    this.recentlyAdded = DEFAULT_SETTINGS.recentlyAdded;
     this.iframe = DEFAULT_SETTINGS.iframe;
     this.playing = DEFAULT_SETTINGS.playing;
     this.picture = DEFAULT_SETTINGS.picture;
@@ -74,6 +76,10 @@ class Settings {
     this.triviaFrequency = DEFAULT_SETTINGS.triviaFrequency;
     this.pinNS = DEFAULT_SETTINGS.pinNS;
     this.hideUser = DEFAULT_SETTINGS.hideUser;
+    this.contentRatings = DEFAULT_SETTINGS.contentRatings;
+    this.links = DEFAULT_SETTINGS.links;
+    this.enableLinks = DEFAULT_SETTINGS.enableLinks;
+    this.linkFrequency = DEFAULT_SETTINGS.linkFrequency;
     return;
   }
 
@@ -127,12 +133,15 @@ class Settings {
       if(readSettings.enableSonarr==undefined) readSettings.enableSonarr = 'true';
       if(readSettings.enableReadarr==undefined) readSettings.enableReadarr = 'true';
       if(readSettings.enableRadarr==undefined) readSettings.enableRadarr = 'true';
+      if(readSettings.enableLinks==undefined) readSettings.enableLinks = "false";
       if(readSettings.filterRemote==undefined) readSettings.filterRemote = 'true';
       if(readSettings.filterLocal==undefined) readSettings.filterLocal = 'true';
       if(readSettings.enableCustomPictures==undefined) readSettings.enableCustomPictures = 'false';
       if(readSettings.customPictureTheme==undefined) readSettings.customPictureTheme = 'default';
       if(readSettings.enableSleep==undefined) readSettings.enableSleep = 'false';
       if(readSettings.enableTrivia==undefined) readSettings.enableTrivia = 'false';
+      if(readSettings.enableLinks==undefined) readSettings.enableLinks = 'false';
+      if(readSettings.recentlyAddedDays==undefined) readSettings.recentlyAddedDays = 0;
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -163,6 +172,7 @@ class Settings {
     this.enableRadarr = 'false';
     this.enableReadarr = 'false';
     this.enableTrivia = 'false';
+    this.enableLinks = 'false';
 
     const data = JSON.stringify(this, null, 4);
 
@@ -279,6 +289,10 @@ class Settings {
     else this.custBrand = cs.custBrand;
     if (jsonObject.nowScreening) this.nowScreening = jsonObject.nowScreening;
     else this.nowScreening = cs.nowScreening;
+    if (jsonObject.recentlyAddedDays) this.recentlyAddedDays = jsonObject.recentlyAddedDays;
+    else this.recentlyAddedDays = cs.recentlyAddedDays;
+    if (jsonObject.recentlyAdded) this.recentlyAdded = jsonObject.recentlyAdded;
+    else this.recentlyAdded = cs.recentlyAdded;
     if (jsonObject.onDemand) this.onDemand = jsonObject.onDemand;
     else this.onDemand = cs.onDemand;
     if (jsonObject.comingSoon) this.comingSoon = jsonObject.comingSoon;
@@ -345,7 +359,14 @@ class Settings {
     else this.triviaNumber = cs.triviaNumber;
     if (jsonObject.triviaFrequency) this.triviaFrequency = jsonObject.triviaFrequency;
     else this.triviaFrequency = cs.triviaFrequency;
-
+    if (jsonObject.contentRatings) this.contentRatings = jsonObject.contentRatings;
+    else this.contentRatings = cs.contentRatings;
+    if (jsonObject.links) this.links = jsonObject.links;
+    else this.links = cs.links;
+    if (jsonObject.enableLinks) this.enableLinks = jsonObject.enableLinks;
+    else this.enableLinks = cs.enableLinks;
+    if (jsonObject.linkFrequency) this.linkFrequency = jsonObject.linkFrequency;
+    else this.linkFrequency = cs.linkFrequency;
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
 

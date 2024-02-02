@@ -26,6 +26,7 @@ class Radarr {
   async GetComingSoonRawData(startDate, endDate) {
     let response;
     try {
+      //console.log(this.radarrUrl + "/api/v3/calendar?unmonitored=false&apikey=" + this.radarrToken + "&start=" + startDate + "&end=" + endDate);
       response = await axios
         .get(
           this.radarrUrl +
@@ -78,7 +79,7 @@ class Radarr {
           releaseDate = digitalRelease.toISOString().split("T")[0];
         }
         else {
-          releaseDate = "No release date";
+          releaseDate = "No digital release date";
         }
         medCard.tagLine =
           md.title + " (" + releaseDate + ")";
@@ -101,9 +102,10 @@ class Radarr {
       // check art exists
       md.images.forEach(i => {
         if(i.coverType == "poster"){
-          url = i.url;
+          url = i.remoteUrl;
         }
       });
+
       if (url !== undefined) {
         await core.CacheImage(url, fileName);
         medCard.posterURL = "/imagecache/" + fileName;
@@ -118,7 +120,7 @@ class Radarr {
         // check art exists
         md.images.forEach(i => {
           if(i.coverType == "fanart"){
-            url = i.url;
+            url = i.remoteUrl;
           }
         });
         if (url !== undefined) {
@@ -194,7 +196,7 @@ class Radarr {
         // }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)
-        if (md.hasFile == false && md.status != "released" && !await util.isEmpty(md.digitalRelease) ) {
+        if (md.hasFile == false && md.status != "released"){ //&& !await util.isEmpty(md.digitalRelease) ) {
           csrCards.push(medCard);
         }
 

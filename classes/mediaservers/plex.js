@@ -3,6 +3,7 @@ const mediaCard = require("./../cards/MediaCard");
 const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
+const { CardTypeEnum } = require("./../cards/CardType");
 // const sizeOf = require("image-size");
 
 /**
@@ -405,7 +406,11 @@ class Plex {
         medCard.progressPercent = Math.round(
           (md.viewOffset / md.Media[0].duration) * 100
         );
+        medCard.runDuration = Math.round(md.Media[0].duration / 600)/100;
+        medCard.runProgress = Math.round(md.viewOffset/600) / 100;
+
         
+
         // set colours for rating badges
         if(contentRating==undefined) contentRating="nr";
         let ratingColour = "";
@@ -490,13 +495,13 @@ class Plex {
           // Sanitise inputs and apply filter checks
           let okToAdd = false;
           let devices = filterDevices !== undefined ? filterDevices : "";
-          devices = devices.toLowerCase().replace(", ",",").replace(" ,",",").split(",");
+          devices = devices.toLowerCase().replace(", ",",").replace(" ,",",").replace(/,+$/, "").split(",");
           let users = filterUsers !== undefined ? filterUsers : "";
-          users = users.toLowerCase().replace(", ",",").replace(" ,",",").split(",");
+          users = users.toLowerCase().replace(", ",",").replace(" ,",",").replace(/,+$/, "").split(",");
           // apply filter checks
           if(filterRemote=='true' && medCard.playerLocal == false) okToAdd = true;
           if(filterLocal=='true' && medCard.playerLocal == true) okToAdd = true;
-          if(users.length > 0 && users.includes(medCard.user.toLowerCase())==false && users[0] !== "") okToAdd = false;
+          if(users.length > 0 && users.includes(md.User.title.toLowerCase())==false && users[0] !== "") okToAdd = false;
           if(devices.length > 0 && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
 
           // add if all criteria matched
@@ -530,6 +535,8 @@ class Plex {
    * @param {string} onDemandLibraries - a comma seperated lists of the libraries to pull on-demand titles from
    * @param {number} The number of titles to pull from each library
    * @param {string} playGenericThemes - will set movies to play a random generic theme fro the /randomthemes folder
+   * @param {number} recentlyAdded days to  pull titles from added date
+   * @param {number} contentRatings Hide titles with the specified ratings
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
   async GetOnDemand(
@@ -538,22 +545,52 @@ class Plex {
     playThemes,
     playGenenericThemes,
     hasArt,
-    genres
+    genres,
+    recentlyAdded,
+    contentRatings
   ) {
     let odCards = [];
     let odRaw;
     let mediaId;
     // sanitise genres input
-    genres = genres !== undefined ? genres : "";
-    genres = genres.replace(", ",",").replace(" ,",",").split(",");
+    //genres = genres !== undefined ? genres : "";
+    if(genres != undefined){
+      genres = genres.replace(", ",",").replace(" ,",",").split(",");
+    }
+    // sanitise content ratings input
+    //contentRatings = contentRatings !== undefined ? contentRatings : "";
+    if(contentRatings !== undefined){
+      contentRatings = contentRatings.replace(", ",",").replace(" ,",",").split(",");
+    }
+    let addOD;
 //console.log(genres);
+    //var recentlyAdded = false;
     try {
-      odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres);
+      //odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded, contentRatings);
+
+      if(recentlyAdded > 0){
+        // if(addOD !== undefined){
+          odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded, contentRatings);  
+          if(odRaw !== undefined){
+            odRaw = odRaw.concat(await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, 0, contentRatings));
+          }
+          else {
+            odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, 0, contentRatings);
+          }
+      }
+        else{
+          odRaw = await this.GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, 0, contentRatings,true);
+        }
     } catch (err) {
       let now = new Date();
       console.log(now.toLocaleString() + " *On-demand - Get raw data: " + err);
       throw err;
     }
+
+
+  // odRaw.reduce((memo,m) => {
+  //   console.log(m.title);
+  // });
 
   if(JSON.stringify(odRaw) == "[null,null]"){
     odRaw = [];
@@ -566,8 +603,9 @@ class Plex {
       // move through results and populate media cards
       await odRaw.reduce(async (memo, md) => {
         await memo;
+        
         const medCard = new mediaCard();
-        // modify inputs, based upon tv episode or movie result structures
+        // modify inputs, based upon tv episode or movie result structure
         switch (md.type) {
           case "show":
             medCard.tagLine = md.title;
@@ -775,7 +813,7 @@ class Plex {
 
         if (medCard.tagLine == "") medCard.tagLine = medCard.title;
         medCard.mediaType = md.type;
-        medCard.cardType = cType.CardTypeEnum.OnDemand;
+        //medCard.cardType = cType.CardTypeEnum.OnDemand;
 
         let contentRating = "NR";
         if (!(await util.isEmpty(md.contentRating))) {
@@ -860,8 +898,37 @@ class Plex {
           medCard.ratingImage = md.ratingImage;
         }
 
+        if (await util.isEmpty(md.rating)) {
+          medCard.rating = "";
+        } else {
+          medCard.rating = Math.round(md.rating * 10) + "%";
+        }
+
+        if (await util.isEmpty(md.audienceRating)) {
+          medCard.audienceRating = "";
+        } else {
+          medCard.audienceRating = Math.round(md.audienceRating * 10) + "%";
+        }
+
+        if (await util.isEmpty(md.audienceRatingImage)) {
+          medCard.audienceRatingImage = "";
+        } else {
+          medCard.audienceRatingImage = md.audienceRatingImage;
+        }
+
+        if (await util.isEmpty(md.ratingImage)) {
+          medCard.ratingImage = "";
+        } else {
+          medCard.ratingImage = md.ratingImage;
+        }
+
+
+        // calculate for recently added (if set)
+        var includeTitle = false;
+        medCard.cardType = md.ctype;
         // add media card to array
         odCards.push(medCard);
+
       }, undefined);
     }
     let now = new Date();
@@ -931,36 +998,92 @@ class Plex {
    * @param {number} libKey - The plex library key number
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-  async GetAllMediaForLibrary(libKey, genres) {
+  async GetAllMediaForLibrary(libKey, genres, recentlyAdded, contentRatings) {
     let mediaCards = [];
+    var odQuery = "/library/sections/" + libKey + "/all";
+
+    // modify query if recently added value added
+    if(recentlyAdded > 0){
+      // calculate date to search from
+      var fromDate = new Date();
+      fromDate.setDate(fromDate.getDate() - recentlyAdded);
+      // set to midnight
+      fromDate.setHours(0,0,0,0);
+      // convert to epoch time
+      var fromEpochDate = fromDate.getTime()/1000;
+      //console.log(fromDate);
+      //console.log(fromEpochDate);
+      odQuery = "/library/sections/" + libKey + "/all?sort=addedAt&addedAt>>=" + fromEpochDate;
+    }
+    //console.log(odQuery);
     try {
       return await this.client
-        .query("/library/sections/" + libKey + "/all")
+        .query(odQuery)
         .then(
           function (result) {
+
             // populate a complete list of all titles into an array
             if (result.MediaContainer.size > 0) {
-
-              // if genre filters present, then filter results 
-              const mapGenre = (arr, gs) => {
-                return gs.reduce((acc, val) => {
-                  const libMatches = arr.filter(m => m.Genre !== undefined && JSON.stringify(m.Genre).toLowerCase().includes(val.toLowerCase()));
-        //console.log("Library matches for genre '"+val+"':",libMatches.length);
-                  if(libMatches.length > 0){
-                    return acc.concat(libMatches);
-                  }
-                  else{
-                    return acc;
-                  }
-                }, []);
-              }
-
               let mediaResults = result.MediaContainer.Metadata;
-              // check if supplying genres, then filter
-              if(genres !== undefined && genres.length > 0){
-                let mediaFiltered = result.MediaContainer.Metadata;
-                mediaResults = mapGenre(mediaFiltered, genres);
-              }
+              // ignore genre if recently added set
+                if(recentlyAdded == 0){
+                // if genre filters present, then filter results 
+                const mapGenre = (arr, gs) => {
+                  return gs.reduce((acc, val) => {
+                    const libMatches = arr.filter(m => m.Genre !== undefined && JSON.stringify(m.Genre).toLowerCase().includes(val.toLowerCase()));
+          //console.log("Library matches for genre '"+val+"':",libMatches.length);
+                    if(libMatches.length > 0 ){
+                      //return acc.concat(libMatches);
+                      return acc.concat(libMatches);
+                    }
+                    else{
+                      return acc;
+                    }
+                  }, []);
+                };
+
+                // if content rating filters present, then filter results (do not display)
+                const mapContentRating = (arr, gs) => {
+                  return gs.reduce((acc, val) => {
+                    const libMatches = arr.filter(m => m.contentRating !== undefined && (m.contentRating).toLowerCase()===(val.toLowerCase()));
+                    //console.log("Library '" + libKey + "' filter out for content rating '" + val + "': " + libMatches.length + " excluded");
+                    // if no matches, then return content
+                    let crArray;
+                    if(libMatches.length > 0){
+                      return acc.concat(libMatches);
+                    }
+                    else{
+                      return acc;
+                    }
+                  }, []);
+                };            
+
+                
+                // check if supplying genres, then filter
+                if(genres !== undefined && genres.length > 0){
+                  let mediaFiltered = result.MediaContainer.Metadata;
+                  mediaResults = mapGenre(mediaFiltered, genres);
+                }
+
+               // check if supplying content ratings, then filter
+                if(contentRatings !== undefined && contentRatings.length > 0){
+                  let mediaFiltered = mediaResults;
+                  let excludeArray = mapContentRating(mediaFiltered, contentRatings);
+
+                  const itemsToDeleteSet = new Set(excludeArray);
+                  const reducedArray = mediaResults.filter((c) => {
+                    // return those elements not in the namesToDeleteSet
+                    return !itemsToDeleteSet.has(c);
+                  });
+                  
+                  mediaResults=reducedArray;
+
+                }
+
+            }
+            else{
+             // let mediaResults = result.MediaContainer.Metadata;
+            }
 
               // send selected card to filtered array
               mediaResults.forEach((mt) => {
@@ -989,7 +1112,7 @@ class Plex {
    * @param {number} numberOnDemand - the number of results to return from each library
    * @returns {object} mediaCard[] - Returns an array of on-demand mediaCards
    */
-  async GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres) {
+  async GetOnDemandRawData(onDemandLibraries, numberOnDemand, genres, recentlyAdded, contentRating) {
     // Get a list of random titles from selected libraries
     let odSet = [];
 
@@ -1002,11 +1125,18 @@ class Plex {
         const p = await keys.reduce(async (acc, value) => {
           return (
             (await acc) +
-            (await this.GetAllMediaForLibrary(value, genres).then(async function (
+            (await this.GetAllMediaForLibrary(value, genres, recentlyAdded, contentRating).then(async function (
               result
             ) {
-              const od = await util.build_random_od_set(numberOnDemand, result);
+              // get titles
+              const od = await util.build_random_od_set(numberOnDemand, result, recentlyAdded);
               await od.reduce(async (cb, odc) => {
+                if(recentlyAdded>0){
+                  odc.ctype = CardTypeEnum.RecentlyAdded;
+                }
+                else{
+                  odc.ctype = CardTypeEnum.OnDemand;
+                }
                 odSet.push(odc);
                 return await cb;
               }, Promise.resolve(0));
@@ -1022,7 +1152,6 @@ class Plex {
       );
       throw err;
     }
-
     return odSet;
   }
 }

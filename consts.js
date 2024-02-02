@@ -53,6 +53,8 @@ const DEFAULT_SETTINGS = {
   nowScreening: "",
   comingSoon: "",
   onDemand: "",
+  recentlyAdded: "",
+  recentlyAddedDays: "0",
   iframe: "",
   playing: "",
   ebook: "",
@@ -61,7 +63,8 @@ const DEFAULT_SETTINGS = {
   triviaTimer: 15,
   triviaCategories: "",
   enableTrivia: "false",
-  triviaNumber: ""
+  triviaNumber: "",
+  contentRatings: ""
 };
 
 module.exports = DEFAULT_SETTINGS;
