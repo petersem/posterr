@@ -27,7 +27,12 @@ class Health {
 
     try {
       let result = await Promise.resolve(ms.client.query("/status/sessions"));
-      console.log(result);
+      if(result.MediaContainer.size == 0){
+        console.log("Nothing returned as playing. Please verify this is correct");
+      }
+      else{
+        console.log(result.MediaContainer.size + " media item(s) playing.");
+      }
     } catch (err) {
       console.log(err);
     }

@@ -1002,9 +1002,6 @@ async function checkEnabled() {
    Trivia: ` +
     isTriviaEnabled + 
     `
-   Links: ` +
-    isLinksEnabled + 
-    `
    `
   );
   return;
