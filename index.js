@@ -1588,13 +1588,13 @@ app.post(
         if (isNaN(parseInt(value))) {
           throw new Error("'On-demand refresh period' must be a number (setting default)");
         }
-        if (parseInt(value) < 10) {
-          throw new Error("'On-demand refresh period' must be 10 or more");
+        if (parseInt(value) < 5) {
+          throw new Error("'On-demand refresh period' must be 5 or more");
         }
         // Indicates the success of this synchronous custom validator
         return true;
       })
-      .withMessage("'Slide Duration' is required and must be 5 or more"),
+      .withMessage("'On-demand refresh period' is required and must be 5 or more"),
     check("numberOnDemand")
       .not()
       .isEmpty()
