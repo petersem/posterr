@@ -15,7 +15,7 @@ class Awtrix {
    * @desc Custom link slide array
    */
   async post(ip,payload) {
-  
+  try{
     await axios.post(
       ip + "/api/custom?name=posterr", null
     )
@@ -25,6 +25,11 @@ class Awtrix {
     )
   
     return 0;
+    }
+    catch(ex){
+      let now = new Date();
+      console.log(now.toLocaleString() + " * Awtrix post failed - " + ex);
+    }
   }
 
 

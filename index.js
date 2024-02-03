@@ -487,40 +487,47 @@ async function loadNowScreening() {
 
     // Send to Awtrix, if enabled
     var awt = new awtrix();
-    var awtrixJson = [{
-      'text': "AlienS (1979)",
-      'pushIcon': 0,
-      'icon': "1944",
-      'color': [255,0,0],
-      'duration': 10,
-      'textCase': 2,
-      'scrollSpeed': 50,
-      'progress': 15,
-      'progressC': [255,0,0]
-      },
-      {
-      'text': "Buck Rojers (1980)",
-      'pushIcon': 0,
-      'icon': "1944",
-      'color': [255,255,0],
-      'duration': 10,
-      'textCase': 2,
-      'scrollSpeed': 50,
-      'progress': 60,
-      'progressC': [255,255,0]
-      }]
-  
+    var awtrixJson = [];
+    
+    nsCards.forEach(card => {
+      var customApp = {
+        'text': card.title.toUpperCase(),
+        'pushIcon': 0,
+        'icon': "1944",
+        'color': [255,0,0],
+        'duration': 10,
+        'textCase': 2,
+        'scrollSpeed': 50,
+        'progress': card.progressPercent,
+        'progressC': [255,0,0]
+        };
+      awtrixJson.push(customApp)
+      // console.log(awtrixJson);
+    });
+  //console.log(awtrixJson);
     //console.log(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson));
     
-    // if(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson)){
-    //   await awt.post("http://192.168.1.28",awtrixJson);
-    //   oldAwtrixJson = awtrixJson;
-    //   //console.log('updated awtrix');
+    // if (isNowShowingEnabled && nsCards.length > 0) {  
+    //   if(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson)){
+    //     nsCards.forEach(card => {
+    //       // console.log(card);
+    //       // console.log(card.mediaType);
+    //       // console.log(card.title);
+    //       // console.log(card.progressPercent);
+    //     });
+
+    //     await awt.post("http://192.168.1.28",awtrixJson);
+    //     oldAwtrixJson = awtrixJson;
+    //     console.log('updated awtrix');
+    //   }
+    //   else{
+    //     console.log('skipped awtrix update - no changes');
+    //   }
     // }
     // else{
-    //   //console.log('skipped awtrix update');
-    // }
-
+    //   console.log('awtrix cleared - no now showing')
+    //   await awt.post("http://192.168.1.28",null);
+    // };
 
     // restore defaults if plex now available after an error
     if (isPlexUnavailable) {
@@ -529,7 +536,7 @@ async function loadNowScreening() {
     }
   } catch (err) {
     let now = new Date();
-    console.log(now.toLocaleString() + " *Now Scrn. - Get full data: " + err);
+    console.log(now.toLocaleString() + " *Now Showing. - Get full data: " + err);
     pollInterval = nsCheckSeconds + 60000;
     console.log(
       "✘✘ WARNING ✘✘ - Next Now Screening query will be delayed by 1 minute:",

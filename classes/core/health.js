@@ -74,11 +74,11 @@ class Health {
 
     // return first 5 titles in library
 
-    ms.client.query("/library/sections/" + 5 + "/all").then(
+    ms.client.query("/library/sections/" + 1 + "/all").then(
       function (result) {
         let now = new Date();
         console.log(
-          now.toLocaleString() + " *On-demand - get titles from random library");
+          now.toLocaleString() + " *On-demand - get 5 titles from first library");
         for (let x = 0; x < 5; x++) {
           console.log(" -", result.MediaContainer.Metadata[x].title);
         }
