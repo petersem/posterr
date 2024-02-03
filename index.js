@@ -1594,7 +1594,7 @@ app.post(
         // Indicates the success of this synchronous custom validator
         return true;
       })
-      .withMessage("'Slide Duration' is required and must be 5 or more"),
+      .withMessage("'On-demand refresh period' cannot be less than 10 minutes"),
     check("numberOnDemand")
       .not()
       .isEmpty()
