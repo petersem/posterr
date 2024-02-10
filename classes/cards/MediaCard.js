@@ -20,6 +20,7 @@ class MediaCard {
     this.rating = "";
     this.summary = "";
     this.tagLine = "";
+    this.episodeName = "";
     this.runTime = "";
     this.pageCount = "";
     this.resCodec = "";

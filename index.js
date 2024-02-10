@@ -113,7 +113,9 @@ let tmpSleepStart;
 let tmpSleepEnd;
 let recentlyAddedDays;
 let contentRatings;
-let oldAwtrixJson = "";
+let oldAwtrixApps = [];
+let isAwtrixEnabled = false;
+let awtrixIP = "";
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -486,48 +488,128 @@ async function loadNowScreening() {
     );
 
     // Send to Awtrix, if enabled
-    var awt = new awtrix();
-    var awtrixJson = [];
-    
-    nsCards.forEach(card => {
-      var customApp = {
-        'text': card.title.toUpperCase(),
-        'pushIcon': 0,
-        'icon': "1944",
-        'color': [255,0,0],
-        'duration': 10,
-        'textCase': 2,
-        'scrollSpeed': 50,
-        'progress': card.progressPercent,
-        'progressC': [255,0,0]
-        };
-      awtrixJson.push(customApp)
-      // console.log(awtrixJson);
-    });
-  //console.log(awtrixJson);
-    //console.log(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson));
-    
-    // if (isNowShowingEnabled && nsCards.length > 0) {  
-    //   if(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson)){
-    //     nsCards.forEach(card => {
-    //       // console.log(card);
-    //       // console.log(card.mediaType);
-    //       // console.log(card.title);
-    //       // console.log(card.progressPercent);
-    //     });
+    if(isAwtrixEnabled){
+      var awt = new awtrix();
+      var awtrixApps = []; 
 
-    //     await awt.post("http://192.168.1.28",awtrixJson);
-    //     oldAwtrixJson = awtrixJson;
-    //     console.log('updated awtrix');
-    //   }
-    //   else{
-    //     console.log('skipped awtrix update - no changes');
-    //   }
-    // }
-    // else{
-    //   console.log('awtrix cleared - no now showing')
-    //   await awt.post("http://192.168.1.28",null);
-    // };
+      nsCards.forEach(card => {
+        var titleText = card.title.toUpperCase();
+        //console.log(card);
+        var RED = [255,0,0];
+        var GREEN = [0,255,0];
+        var BLUE = [0,0,255];
+        switch(card.mediaType.toLowerCase()) {
+          case 'movie':
+            appColour = RED;
+            break;
+          case 'episode':
+            appColour = BLUE;    
+            titleText = card.title.toUpperCase() + " - " + card.episodeName;
+              break;
+          case 'track':
+            appColour = GREEN;
+              break;
+          default:
+            appColour = RED;
+        }
+
+        var customApp = {
+          'text': titleText,
+          'pushIcon': 0,
+          'icon': "1944",
+          'color': appColour,
+          'duration': 15,
+          'textCase': 2,
+          'scrollSpeed': 80,
+          'progress': card.progressPercent,
+          'progressC': appColour,
+          'unique': "posterr:" + card.playerIP + ":" + card.playerDevice + ":" + card.title.toUpperCase()
+          };
+          try{
+            awtrixApps.push(customApp)
+          }
+          catch(ex){
+            let now = new Date();
+            console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
+            isAwtrixEnabled = false;
+          }
+        //console.log(awtrixJson);
+      });
+    //console.log(awtrixJson);
+      //console.log(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson));
+      
+        if (isNowShowingEnabled && isAwtrixEnabled) {  
+          // add or update now playing item
+          await awtrixApps.reduce(async (memo, md) => {
+            await memo;
+            awtrixIP = loadedSettings.awtrixIP;
+            const result = await awt.appFind(oldAwtrixApps,md.unique);
+            // add to awtrix if not there
+            if(result==undefined){
+              try{
+                await awt.post(awtrixIP,md);
+              }
+              catch(ex){
+                let now = new Date();
+                console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
+                isAwtrixEnabled = false;
+              }
+              oldAwtrixApps.push(md);
+              let now = new Date();
+              console.log(now.toLocaleString() + " Awtrix add: " + md.text);
+            }
+            else{
+              // update if progress has changed
+              if(result.progress !== md.progress){
+                // find array item id to update
+                const index = oldAwtrixApps.map(function (e) {
+                  return e.text
+                  }).indexOf(md.text);
+                //console.log("Awtrix: History index of item to update:" + index);
+
+                // remove from old array and add with new value
+                oldAwtrixApps.splice(index,1)
+                oldAwtrixApps.push(md);
+
+                // upate with new value
+                try{
+                  await awt.post(awtrixIP,md);
+                }
+                catch(ex){
+                  let now = new Date();
+                  console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
+                  isAwtrixEnabled = false;
+                }
+                let now = new Date();
+              //console.log(now.toLocaleString() + " Awtrix update: " + md.text + " - " + result.progress + "% --> " + md.progress +"%");
+              }
+
+            }
+          }, undefined);
+
+          // remove item if no longer playing
+          await oldAwtrixApps.reduce(async (memo, md) => {
+            await memo;
+            const result = await awt.appFind(awtrixApps,md.unique);
+            // remove from awtrix if not playing
+            if(result==undefined){
+              // remove from display
+              await awt.delete(awtrixIP,md.unique);
+              // find index
+              const index = oldAwtrixApps.map(function (e) {
+                return e.text
+                }).indexOf(md.text);
+              //console.log("Awtrix: History index of item to update:" + index);
+
+              // remove from old array and add with new value
+              oldAwtrixApps.splice(index,1)
+
+              let now = new Date();
+              console.log(now.toLocaleString() + " Awtrix removed: " + md.text);
+            }
+          }, undefined);
+        }
+      }
 
     // restore defaults if plex now available after an error
     if (isPlexUnavailable) {
@@ -805,10 +887,14 @@ async function checkEnabled() {
   isSleepEnabled = false;
   isTriviaEnabled = false;
   isLinksEnabled = false;
+  isAwtrixEnabled = false;
 
   let sleepStart;
   let sleepEnd;
   let sleepTicks;
+
+  // check links
+  if (loadedSettings.enableAwtrix == 'true' && loadedSettings.awtrixIP != null) isAwtrixEnabled = true;
 
   // check links
   if (loadedSettings.enableLinks == 'true') isLinksEnabled = true;
@@ -950,15 +1036,16 @@ async function checkEnabled() {
     isTriviaEnabled = false;
   }
 
-// check links
+// check Awtrix
   if (
-    loadedSettings.links !== undefined &&
-    loadedSettings.enableLinks !== 'false'
+    loadedSettings.awtrixIP !== undefined &&
+    loadedSettings.enableAwtrix !== 'false' &&
+    loadedSettings.enableNS !== 'false'
   ) {
-    isLinksEnabled = true;
+    isAwtrixEnabled = true;
   }
   else{
-    isLinksEnabled = false;
+    isAwtrixEnabled = false;
   }
 
   // display status
@@ -980,6 +1067,9 @@ async function checkEnabled() {
     `
    Now Showing: ` +
     isNowShowingEnabled +
+    `
+   Awtrix: ` +
+    isAwtrixEnabled +
     `
    On-demand: ` +
     isOnDemandEnabled +
@@ -1076,6 +1166,7 @@ async function wake(theater) {
  * @returns nothing
  */
 async function startup(clearCache) {
+
   // stop all clocks
   clearInterval(nowScreeningClock);
   clearInterval(onDemandClock);
@@ -1138,6 +1229,26 @@ async function startup(clearCache) {
   if (isReadarrEnabled) await loadReadarrComingSoon();
   if (isTriviaEnabled) await loadTrivia();
   if (isLinksEnabled) await loadLinks();
+
+  // Awtrix initialize - if enabled
+  if(isAwtrixEnabled){
+    var awt = new awtrix();
+    awtrixIP = loadedSettings.awtrixIP;
+    try{
+      // clear any old awtrix apps
+      await awt.clear(awtrixIP);
+      // play a pleasant greeting
+      var tune = {
+        "Flntstn":"d=4,o=5,b=200:g#,c#,8p,c#6,8a#,g#,c#,8p"
+      }
+      await awt.rtttl(awtrixIP,tune);
+    }
+    catch(ex){
+      let now = new Date();
+      console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
+      isAwtrixEnabled = false;
+    }
+  }
 
   await loadNowScreening();
 
@@ -1737,6 +1848,8 @@ app.post(
       enableTrivia: req.body.enableTrivia,
       triviaNumber: req.body.triviaNumber,
       triviaFrequency: req.body.triviaFrequency,
+      enableAwtrix: req.body.enableAwtrix,
+      awtrixIP: req.body.awtrixIP,
       saved: false
     };
 

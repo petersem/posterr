@@ -674,6 +674,24 @@
                   <small id="filterUsersHelp" class="form-text text-muted">Enter user names to include (Comma seperated and no spaces. Leave blank for all users)</small>
               </div>    
 
+
+              <div class="form-group">
+                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                    <input type="checkbox" class="custom-control-input" name="enableAwtrix" id="enableAwtrix" 
+                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableAwtrix ? 'checked' : '' %><%}else{%><%=(settings.enableAwtrix == 'true') ? 'checked' : '' %><%}%>>
+                    <label class="custom-control-label" for="enableAwtrix">Enable Awtrix integration </label><a href="https://blueforcer.github.io/awtrix-light/#/" target=”_blank”> (Awtrix docs)</a>
+                    <small id="awtrixIPHelp" class="form-text text-muted">If you disable this, you will need to manually restart the Awtrix device to remove any Posterr displays running</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                <label for="filterUsers">Awtrix URL</label>
+                <input type="text" class="form-control" id="awtrixIP" name="awtrixIP" aria-describedby="awtrixIPHelp"
+                  placeholder="Example -> http://192.168.1.134" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.awtrixIP%>"<%}else{%><%=settings.awtrixIP%>"<%}%>>
+                  <small id="awtrixIPHelp" class="form-text text-muted">Enter the URL for the Awtrix clock</small>
+              </div>   
+
+
               <h6>Network Boundaries</h6>
               <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">

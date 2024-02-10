@@ -155,6 +155,7 @@ class Plex {
               " - '" +
               md.title +
               "'";
+            medCard.episodeName = md.title;
             result = md.guid.split("/");
 
             // Use TVDB ID if available, otherwise use GUID

@@ -78,8 +78,8 @@ class Settings {
     this.hideUser = DEFAULT_SETTINGS.hideUser;
     this.contentRatings = DEFAULT_SETTINGS.contentRatings;
     this.links = DEFAULT_SETTINGS.links;
-    this.enableLinks = DEFAULT_SETTINGS.enableLinks;
-    this.linkFrequency = DEFAULT_SETTINGS.linkFrequency;
+    this.enableAwtrix = DEFAULT_SETTINGS.enableAwtrix;
+    this.awtrixIP = DEFAULT_SETTINGS.awtrixIP;
     return;
   }
 
@@ -142,6 +142,7 @@ class Settings {
       if(readSettings.enableTrivia==undefined) readSettings.enableTrivia = 'false';
       if(readSettings.enableLinks==undefined) readSettings.enableLinks = 'false';
       if(readSettings.recentlyAddedDays==undefined) readSettings.recentlyAddedDays = 0;
+      if(readSettings.enableAwtrix==undefined) readSettings.enableAwtrix = 'false';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -173,6 +174,7 @@ class Settings {
     this.enableReadarr = 'false';
     this.enableTrivia = 'false';
     this.enableLinks = 'false';
+    this.enableAwtrix = 'false';
 
     const data = JSON.stringify(this, null, 4);
 
@@ -367,9 +369,13 @@ class Settings {
     else this.enableLinks = cs.enableLinks;
     if (jsonObject.linkFrequency) this.linkFrequency = jsonObject.linkFrequency;
     else this.linkFrequency = cs.linkFrequency;
+    if (jsonObject.enableAwtrix) this.enableAwtrix = jsonObject.enableAwtrix;
+    else this.enableAwtrix = cs.enableAwtrix;
+    if (jsonObject.awtrixIP) this.awtrixIP = jsonObject.awtrixIP;
+    else this.awtrixIP = cs.awtrixIP;
+
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);
-
     
     // write JSON string to a file
     fs.writeFileSync("config/settings.json", data, (err) => {
