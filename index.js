@@ -494,6 +494,7 @@ async function loadNowScreening() {
 
       nsCards.forEach(card => {
         var titleText = card.title.toUpperCase();
+        var appIcon;
         //console.log(card);
         var RED = [255,0,0];
         var GREEN = [0,255,0];
@@ -501,13 +502,16 @@ async function loadNowScreening() {
         switch(card.mediaType.toLowerCase()) {
           case 'movie':
             appColour = RED;
+            appIcon = 1944;
             break;
           case 'episode':
             appColour = BLUE;    
             titleText = card.title.toUpperCase() + " - " + card.episodeName;
+            appIcon = 2649;            
               break;
           case 'track':
             appColour = GREEN;
+            appIcon = 17668;            
               break;
           default:
             appColour = RED;
@@ -516,7 +520,7 @@ async function loadNowScreening() {
         var customApp = {
           'text': titleText,
           'pushIcon': 0,
-          'icon': "1944",
+          'icon': appIcon,
           'color': appColour,
           'duration': 15,
           'textCase': 2,
