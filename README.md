@@ -10,6 +10,7 @@
 [![User Guide](https://img.shields.io/badge/user_guide-wiki-informational?logo=github)](https://github.com/petersem/posterr/wiki/Posterr-Configuration)
 
 ![Slides](https://github.com/petersem/posterr/blob/master/doco/posterr.jpg?raw=true)
+![Awtrix](https://github.com/petersem/posterr/blob/master/doco/awtrix.gif?raw=true)
 
 - Check [Here](https://github.com/petersem/posterr/wiki/Latest-changes) for the latest updates
 - Visit the [wiki](https://github.com/petersem/posterr/wiki/Known-Issues) for more information on known issues.
@@ -35,6 +36,7 @@
  - Automatically scales for most display sizes and orientation.
  - 'Sleep timer' disables the display during set hours.
  - Trivia Quiz (multiple selectable topics)
+ - Support LED Matrix displays running Awtrix software
 ---
 ## Prerequisites
 ### Mandatory
@@ -151,6 +153,7 @@ Posterr uses the following:
  - Radarr (via API)
  - Readarr (via API)
  - Posters and artwork from Plex, TVDB and TMDB.
+ - Awtrix (via API)
 
 ---
 ## Notice
