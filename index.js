@@ -553,8 +553,7 @@ async function loadNowScreening() {
               }
               catch(ex){
                 let now = new Date();
-                console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
-                isAwtrixEnabled = false;
+                console.log(now.toLocaleString() + " - Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster. " + ex);
               }
               oldAwtrixApps.push(md);
               let now = new Date();
@@ -579,8 +578,7 @@ async function loadNowScreening() {
                 }
                 catch(ex){
                   let now = new Date();
-                  console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
-                  isAwtrixEnabled = false;
+                  console.log(now.toLocaleString() + " - Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster. " + ex);
                 }
                 let now = new Date();
               //console.log(now.toLocaleString() + " Awtrix update: " + md.text + " - " + result.progress + "% --> " + md.progress +"%");

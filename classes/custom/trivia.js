@@ -55,11 +55,11 @@ class Trivia {
       if(token !== undefined && token.length !== 0 && token !== 'false'){
         apiToken = "&token=" + token
       }
-      console.log("https://opentdb.com/api.php?amount=" +
-      numberOfQuestions +
-      "&category=" +
-      category +
-      apiToken);
+      //console.log("https://opentdb.com/api.php?amount=" +
+      //numberOfQuestions +
+      //"&category=" +
+      //category +
+      //apiToken);
        
       response = await axios
         .get(
