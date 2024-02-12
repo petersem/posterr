@@ -486,7 +486,6 @@ async function loadNowScreening() {
       loadedSettings.filterUsers,
       loadedSettings.hideUser
     );
-
     // Send to Awtrix, if enabled
     if(isAwtrixEnabled){
       var awt = new awtrix();
@@ -494,6 +493,7 @@ async function loadNowScreening() {
 
       nsCards.forEach(card => {
         var titleText = card.title.toUpperCase();
+        titleText = titleText;
         var appIcon;
         //console.log(card);
         var RED = [255,0,0];
@@ -518,17 +518,18 @@ async function loadNowScreening() {
         }
 
         var customApp = {
-          'text': titleText,
+          'text': titleText.replaceAll("’","'"),
           'pushIcon': 0,
           'icon': appIcon,
           'color': appColour,
-          'duration': 15,
+          //'duration': 10,
           'textCase': 2,
-          'scrollSpeed': 80,
+          'scrollSpeed': 60,
           'progress': card.progressPercent,
           'progressC': appColour,
-          'unique': "posterr:" + card.playerIP + ":" + card.playerDevice + ":" + card.title.toUpperCase()
+          'unique': "posterr:" + card.playerIP + ":" + card.playerDevice + ":" + card.title.toUpperCase().replaceAll("’","")
           };
+
           try{
             awtrixApps.push(customApp)
           }
@@ -537,10 +538,7 @@ async function loadNowScreening() {
             console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
             isAwtrixEnabled = false;
           }
-        //console.log(awtrixJson);
       });
-    //console.log(awtrixJson);
-      //console.log(JSON.stringify(oldAwtrixJson) !== JSON.stringify(awtrixJson));
       
         if (isNowShowingEnabled && isAwtrixEnabled) {  
           // add or update now playing item
@@ -1245,7 +1243,7 @@ async function startup(clearCache) {
       var tune = {
         "Flntstn":"d=4,o=5,b=200:g#,c#,8p,c#6,8a#,g#,c#,8p"
       }
-      await awt.rtttl(awtrixIP,tune);
+      //await awt.rtttl(awtrixIP,tune);
     }
     catch(ex){
       let now = new Date();
@@ -1856,6 +1854,22 @@ app.post(
       awtrixIP: req.body.awtrixIP,
       saved: false
     };
+
+    // 'try' to reset awtrix if previous enabled
+    if(isAwtrixEnabled == true){
+      // try to reboot
+      let now = new Date();
+      console.log(now.toLocaleString() + " *Attempting to reset Awtrix if previously running");
+      var awt = new awtrix();
+      try{
+        awt.reboot(awtrixIP);
+      }
+      catch(ex){
+        let now = new Date();
+        console.log(now.toLocaleString() + " *Unable to reset Awtrix, you 'may' need to do so manually. " + ex);
+      }
+    }
+
 
     var errors = validationResult(req).array();
     if (errors.length > 0) {

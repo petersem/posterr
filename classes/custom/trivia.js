@@ -59,7 +59,7 @@ class Trivia {
       numberOfQuestions +
       "&category=" +
       category +
-      apiToken)
+      apiToken);
        
       response = await axios
         .get(

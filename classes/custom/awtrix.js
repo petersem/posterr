@@ -11,6 +11,18 @@ var playing = null;
 class Awtrix {
   constructor() {}
 
+  async reboot(ip){
+    try {
+      await axios.post(ip + "/api/reboot");
+      let now = new Date();
+      console.log(now.toLocaleString() + " *Awtrix reset");
+      return 0;
+    } catch (ex) {
+      throw " Failed to reset Awtrix";
+    } 
+
+  }
+
   /**
    * @desc Custom link slide array
    */
@@ -22,7 +34,7 @@ class Awtrix {
         return 0;
       } catch (ex) {
         let now = new Date();
-        throw "Awtrix add failed - " + ex;
+        throw " Awtrix add failed - " + ex;
       } 
     }
   }
@@ -34,7 +46,7 @@ class Awtrix {
       return 0;
     } catch (ex) {
       let now = new Date();
-      throw "Awtrix delete failed - " + ex;
+      throw " Awtrix delete failed - " + ex;
     } 
   }
 
