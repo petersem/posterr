@@ -535,7 +535,7 @@ async function loadNowScreening() {
           }
           catch(ex){
             let now = new Date();
-            console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
+            console.log(now.toLocaleString() + ex + " - Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster");
             isAwtrixEnabled = false;
           }
       });
@@ -1236,6 +1236,15 @@ async function startup(clearCache) {
   if(isAwtrixEnabled){
     var awt = new awtrix();
     awtrixIP = loadedSettings.awtrixIP;
+    try{
+      const STATS = await awt.stats(awtrixIP);
+      let now = new Date();
+      console.log(now.toLocaleString() + " *Awtrix device status: " + STATS.statusText);
+    }
+    catch(ex){
+      let now = new Date();
+      throw " Awtrix failed connectivity test - " + ex;
+    }
     try{
       // clear any old awtrix apps
       await awt.clear(awtrixIP);

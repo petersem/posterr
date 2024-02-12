@@ -4,6 +4,7 @@ const util = require("util");
 const axios = require("axios");
 const { CardTypeEnum } = require("../cards/CardType");
 var playing = null;
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
 /**
  * @desc Used to get a list of custom pictures
@@ -23,6 +24,19 @@ class Awtrix {
 
   }
 
+
+  async stats(ip){
+    try {
+      // pause whilst Awtrix restarts
+      await sleep(6000);
+      const STATS = await axios.get(ip + "/api/stats");
+      return STATS;
+    } catch(ex) {
+        throw " Awtrix failed connectivity test - " + ex;
+    } 
+
+  }
+
   /**
    * @desc Custom link slide array
    */
@@ -33,7 +47,6 @@ class Awtrix {
 
         return 0;
       } catch (ex) {
-        let now = new Date();
         throw " Awtrix add failed - " + ex;
       } 
     }
@@ -45,7 +58,6 @@ class Awtrix {
 
       return 0;
     } catch (ex) {
-      let now = new Date();
       throw " Awtrix delete failed - " + ex;
     } 
   }
@@ -65,7 +77,6 @@ class Awtrix {
       });
     } catch (ex) {
       throw " Awtrix initialisation failed";
-      console.log('throw');
     } 
   }
 
