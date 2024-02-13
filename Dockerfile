@@ -1,4 +1,4 @@
-FROM node:21.6.1-alpine3.18
+FROM node:21-alpine3.18
 
 # tzdata for timzone and net-tools
 RUN apk update 
