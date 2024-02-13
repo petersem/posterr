@@ -1,4 +1,4 @@
-FROM node:lts-alpine as node
+FROM node:lts-alpine
 # tzdata for timzone and net-tools
 RUN apk update 
 RUN apk add tzdata
