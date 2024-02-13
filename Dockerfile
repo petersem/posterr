@@ -1,4 +1,4 @@
-FROM node:20.11-apline
+FROM node:16.17.0-bullseye-slim
 # tzdata for timzone and net-tools
 RUN apk update 
 RUN apk add tzdata
