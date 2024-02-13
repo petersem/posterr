@@ -1,4 +1,4 @@
-FROM node:18-bullseye
+FROM node:20-alpine-3.19
 # tzdata for timzone and net-tools
 RUN apk update 
 RUN apk add tzdata
