@@ -493,6 +493,7 @@ async function loadNowScreening() {
 
       nsCards.forEach(card => {
         var titleText = card.title.toUpperCase();
+        
         titleText = titleText.replaceAll("’","'");
         var appIcon;
         //console.log(card);
