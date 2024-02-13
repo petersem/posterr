@@ -29,6 +29,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm/v7,linux/arm/v6,linux/arm64/v8
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           push: true
           tags: petersem/posterr:latest
