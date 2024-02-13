@@ -493,7 +493,7 @@ async function loadNowScreening() {
 
       nsCards.forEach(card => {
         var titleText = card.title.toUpperCase();
-        titleText = titleText;
+        titleText = titleText.replaceAll("’","'");
         var appIcon;
         //console.log(card);
         var RED = [255,0,0];
@@ -518,7 +518,7 @@ async function loadNowScreening() {
         }
 
         var customApp = {
-          'text': titleText.replaceAll("’","'"),
+          'text': titleText,
           'pushIcon': 0,
           'icon': appIcon,
           'color': appColour,
