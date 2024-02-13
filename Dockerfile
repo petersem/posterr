@@ -1,4 +1,4 @@
-FROM node:20.11-apline
+FROM node:lts-alpine as node
 # tzdata for timzone and net-tools
 RUN apk update 
 RUN apk add tzdata
@@ -8,7 +8,7 @@ ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production && mv node_modules ../
+RUN npm install --production --silent && mv node_modules ../
 
 COPY . .
 EXPOSE 3000
