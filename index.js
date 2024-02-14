@@ -536,7 +536,7 @@ async function loadNowScreening() {
           }
           catch(ex){
             let now = new Date();
-            console.log(now.toLocaleString() + ex + " - Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster");
+            console.log(now.toLocaleString() + " Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster - " + ex);
             isAwtrixEnabled = false;
           }
       });
@@ -554,7 +554,8 @@ async function loadNowScreening() {
               }
               catch(ex){
                 let now = new Date();
-                console.log(now.toLocaleString() + " - Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster. " + ex);
+                console.log(now.toLocaleString() + " Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster. " + ex);
+                isAwtrixEnabled = false;
               }
               oldAwtrixApps.push(md);
               let now = new Date();
@@ -580,6 +581,7 @@ async function loadNowScreening() {
                 catch(ex){
                   let now = new Date();
                   console.log(now.toLocaleString() + " - Failed to communicate with Awtrix. Check Awtrix settings/device, then restart poster. " + ex);
+                  isAwtrixEnabled = false;
                 }
                 let now = new Date();
               //console.log(now.toLocaleString() + " Awtrix update: " + md.text + " - " + result.progress + "% --> " + md.progress +"%");
@@ -1242,7 +1244,10 @@ async function startup(clearCache) {
     }
     catch(ex){
       let now = new Date();
-      throw " Awtrix failed connectivity test - " + ex;
+      //console.log(now.toLocaleString() + " Awtrix failed connectivity test");
+      console.log(now.toLocaleString() + " Disabling Awtrix. Check Awtrix settings/device, then restart poster - " + ex);
+
+      isAwtrixEnabled = false;
     }
     try{
       // clear any old awtrix apps
@@ -1255,7 +1260,8 @@ async function startup(clearCache) {
     }
     catch(ex){
       let now = new Date();
-      console.log(now.toLocaleString() + ex + " - Disabling Awtrix. Check Awtrix settings/device, then restart poster");
+      //console.log(now.toLocaleString() + " Awtrix failed clear operation");
+      console.log(now.toLocaleString() + " Disabling Awtrix. Check Awtrix settings/device, then restart poster - " + ex);
       isAwtrixEnabled = false;
     }
   }
@@ -1875,6 +1881,7 @@ app.post(
       catch(ex){
         let now = new Date();
         console.log(now.toLocaleString() + " *Unable to reset Awtrix, you 'may' need to do so manually. " + ex);
+        isAwtrixEnabled = false;
       }
     }
 
