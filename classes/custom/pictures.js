@@ -103,7 +103,7 @@ async GetPictures(theme, hasThemes, hasArt) {
   // ];
 
   // reutrn an empty array if no results
-  if (pics.length !== 0) {
+  if (pics !== undefined && pics.length !== 0) {
     // move through results and populate media cards
     await pics.reduce(async (memo, md) => {
       await memo;
