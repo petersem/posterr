@@ -74,12 +74,13 @@ class Pictures {
           pictures.push(pic);
         });
         // shuffle pictures array
-        pictures = pictures.sort((a, b) => 0.5 - Math.random());
+        //pictures = pictures.sort((a, b) => 0.5 - Math.random());
         // pictures.forEach(p => {
         //   console.log(p.url);
           
         // });
-        // return pictures;
+        
+        return pictures;
 
       });
   }
