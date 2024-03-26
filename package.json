@@ -41,7 +41,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "ejs": "^3.1.6",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "express-hbs": "^2.3.4",
     "express-session": "^1.17.1",
     "express-validator": "^6.10.0",
