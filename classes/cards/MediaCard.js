@@ -50,6 +50,7 @@ class MediaCard {
     this.runDuration = "";
     this.runProgress = "";
     this.linkUrl = "";
+    this.youtubeKeys = [];
   }
 
   /**

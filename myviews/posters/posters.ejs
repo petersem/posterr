@@ -16,6 +16,39 @@
 </div>
 
 <script language='javascript'>
+
+startInactivityCheck(
+  document.querySelector('#myCarousel'),
+  2000,
+  (element) => element.style.cursor = 'none',
+  (element) => element.style.cursor = null
+);
+
+function startInactivityCheck(element, delay, callbackInactivity, callbackActive) {
+  let timeoutId;
+  
+  setupTimers();
+
+  function setupTimers () {
+    element.addEventListener("mousemove", resetTimer, false);
+    element.addEventListener("mousedown", resetTimer, false);
+    element.addEventListener("keypress", resetTimer, false);
+    element.addEventListener("touchmove", resetTimer, false);
+
+    startTimer();
+  }
+
+  function startTimer() { 
+    timeoutId = setTimeout(() => callbackInactivity(element), delay);
+  }
+
+  function resetTimer() {
+    callbackActive(element);
+    clearTimeout(timeoutId);
+    startTimer();
+  }
+}
+
   var initialLoadTime = new Date().getTime();
   var connCheckClock;
   var connOk = true;

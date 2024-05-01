@@ -48,6 +48,31 @@ class Radarr {
     return response;
   }
 
+  async GetYoutubeTrailerID(tmdbId,tmdbApiKey){
+    let response;
+    try {
+      response = await axios
+        .get(
+          "https://api.themoviedb.org/3/movie/" +
+          tmdbId +
+          "/videos?api_key=" +
+          tmdbApiKey
+        )
+        .catch((err) => {
+          throw err;
+        });
+    } catch (err) {
+      let d = new Date();
+      console.log(d.toLocaleString() + " *Radarr - Get trailer data:", err.message);
+      throw err;
+    }
+    //console.log("<iframe width='979' height='551' src='https://www.youtube.com/embed/" + 
+    //response.data.results[0].key + 
+    //"?autoplay=1' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen autoplay></iframe>");
+    //console.log(response.data.results[0].key);
+    return response.data.results[0].key;
+  }
+
   /**
    * @desc Get Movie coming soon data and formats into mediaCard array
    * @param {string} startDate - in yyyy-mm-dd format - Generally todays date
@@ -85,6 +110,8 @@ class Radarr {
           md.title + " (" + releaseDate + ")";
         medCard.title = md.title;
         medCard.DBID = md.tmdbId;
+        //medCard.youtubeKeys = await this.GetYoutubeTrailerID(md.tmdbId, "");
+        //console.log("Youtube trailer ID for " + medCard.title + ": " + medCard.youtubeKeys);
         medCard.runTime = md.runtime;
         medCard.genre = md.genres;
         medCard.summary = await util.emptyIfNull(md.overview);

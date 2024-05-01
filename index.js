@@ -862,7 +862,7 @@ async function houseKeeping() {
   await core.DeleteMP3Cache();
   await core.DeleteImageCache();
   // restart timer
-  setInterval(houseKeeping, 86400000); // daily
+  houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
 }
 
 /*
@@ -1134,7 +1134,7 @@ async function suspend() {
   clearInterval(onDemandClock);
   clearInterval(sonarrClock);
   clearInterval(radarrClock);
-  clearInterval(houseKeepingClock);
+  //todo - possibly remove this permanenetly. trying to debug if cache is cleared inadvertantly. Leave commented for now.      clearInterval(houseKeepingClock);
   clearInterval(picturesClock);
   clearInterval(readarrClock);
   clearInterval(linksClock);
@@ -1192,7 +1192,7 @@ async function startup(clearCache) {
 
   // run housekeeping job 
   if (clearCache !== false) await houseKeeping();
-
+// TODO to remove this!       console.log(clearCache);
   // load settings object
   loadedSettings = await Promise.resolve(await loadSettings());
   if (loadedSettings == 'undefined') {
@@ -1206,7 +1206,7 @@ async function startup(clearCache) {
   globalPage.hideSettingsLinks = loadedSettings.hideSettingsLinks !== undefined ? loadedSettings.hideSettingsLinks : 'false';
 
     // restart timer for houseKeeping
-    setInterval(houseKeeping, 86400000); // daily
+    houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
   }
 
   // check status
@@ -1402,6 +1402,7 @@ async function saveReset(formObject) {
 }
 
 // call all card providers - initial card loads and sets scheduled runs
+//TODO - to remove!    console.log('<< INITIAL START >>');
 startup(true);
 
 //use ejs templating engine

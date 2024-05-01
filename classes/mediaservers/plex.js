@@ -568,7 +568,6 @@ class Plex {
       // move through results and populate media cards
       await odRaw.reduce(async (memo, md) => {
         await memo;
-        
         const medCard = new mediaCard();
         // modify inputs, based upon tv episode or movie result structure
         switch (md.type) {
