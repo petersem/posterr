@@ -25,6 +25,7 @@ const MAX_OD_SLIDES = 150;  // this is with themes. Will be double this if tv an
 const triv = require("./classes/custom/trivia");
 const links = require("./classes/custom/links");
 const awtrix = require("./classes/custom/awtrix");
+const movieTrailers = require("./classes/arr/radarrtrailers");
 
 // just in case someone puts in a / for the basepath value
 if (process.env.BASEPATH == "/") process.env.BASEPATH = "";
@@ -62,6 +63,7 @@ let odCards = [];
 let nsCards = [];
 let csCards = [];
 let csrCards = [];
+let rtCards = [];
 let picCards = [];
 let csbCards = [];
 let trivCards = [];
@@ -366,6 +368,11 @@ async function loadRadarrComingSoon() {
   }
   // restart the 24 hour timer
   radarrClock = setInterval(loadRadarrComingSoon, radarrTicks); // daily
+
+// Temporarily do the radarr trailer call
+    
+//let mt = new movieTrailers()
+//  rtCards = await mt.AssembleRadarrTrailers(csrCards,"xxx")
 
   return csrCards;
 }

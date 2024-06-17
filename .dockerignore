@@ -25,3 +25,4 @@ README.md
 /public/custom/pictures/**
 
 !keep
+!custom.css
