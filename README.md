@@ -1,5 +1,5 @@
 # Posterr
-## Media display software for Plex, Sonarr, Radarr, and Readarr. (Just like the display screens outside movie theatres)
+## Media display software for Plex, Sonarr, Radarr, and Readarr. (Just like the display screens in movie theatre foyers)
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/petersem/posterr) 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/petersem/posterr/latest?logo=docker) 
