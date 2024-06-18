@@ -122,6 +122,9 @@ Get to the settings page in a number of ways:
  > Please see the [Posterr Wiki](https://github.com/petersem/posterr/wiki/Posterr-Configuration) for more information.
 
 ---
+## Star History
+[![Star History Chart](https://api.star-history.com/svg?repos=petersem/posterr,petersem/monocker,petersem/dockerholics,petersem/exportarr&type=Date)](https://star-history.com/#petersem/posterr&petersem/monocker&petersem/dockerholics&petersem/exportarr&Date)
+---
 ## Troubleshooting
 Should you encounter a problem, the solution may be listed [HERE](https://github.com/petersem/posterr/wiki/Troubleshooting).
 
