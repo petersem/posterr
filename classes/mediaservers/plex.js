@@ -106,15 +106,25 @@ class Plex {
             medCard.DBID = result[2];
 
             // download poster image to local server
-            fileName = result[3] + ".jpg";
+            let guid = md.key.split("/")[3];
+            fileName = guid + result[3] + ".jpg";
             prefix = "http://";
             if (this.https) prefix = "https://";
+            let thumb = "";
+
+            thumb = guid;
+            if(md.parentThumb){
+              thumb = md.parentThumb;
+            }
+            else{
+              thumb = md.grandparentThumb;
+            }
             url =
               prefix +
               this.plexIP +
               ":" +
               this.plexPort +
-              md.parentThumb +
+              thumb +
               "?X-Plex-Token=" +
               this.plexToken;
             await core.CacheImage(url, fileName);
@@ -123,7 +133,7 @@ class Plex {
             // download artist art image to local server
             // check art exists
             if (md.grandparentArt !== undefined && hasArt == "true") {
-              fileName = result[3] + "-art.jpg";
+              fileName = guid + result[3] + "-art.jpg";
               prefix = "http://";
               if (this.https) prefix = "https://";
               url =

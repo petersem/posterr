@@ -372,7 +372,7 @@ async function loadRadarrComingSoon() {
 // Temporarily do the radarr trailer call
     
 //let mt = new movieTrailers()
-//  rtCards = await mt.AssembleRadarrTrailers(csrCards,"xxx")
+//  rtCards = await mt.AssembleRadarrTrailers(csrCards,"xx")
 
   return csrCards;
 }
