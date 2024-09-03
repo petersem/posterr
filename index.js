@@ -111,6 +111,7 @@ let sleep = "false";
 let sleepClock;
 let triviaToken = "";
 let theaterMode = false;
+let sleepAPI = false;
 let tmpSleepStart;
 let tmpSleepEnd;
 let recentlyAddedDays;
@@ -1575,25 +1576,25 @@ function getDirectories(path) {
 
 app.get('/api/sleep', (req, res) => {
   res.send({
-    theatreMode: theaterMode
+    sleepAPI: sleepAPI
   })
 })
 
 app.post(
   BASEURL + "/api/sleep", (req, res) => {
     if(req.body.psw==loadedSettings.password){
-      if(theaterMode==true){
-        theaterMode=false;
+      if(sleepAPI==true){
+        sleepAPI=false;
         theaterOff()
         res.send({
-          status: theaterMode
+          status: sleepAPI
         })
       }
       else{
         theaterMode=true;
         theaterOn()
         res.send({
-          status: theaterMode
+          status: sleepAPI
         })
       }
     }
