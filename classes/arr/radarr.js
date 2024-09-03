@@ -72,15 +72,18 @@ class Radarr {
     if (raw != null) {
       // move through results and populate media cards
       await raw.data.reduce(async (memo, md) => {
+        let noReleaseDate = false;
         await memo;
         const medCard = new mediaCard();
         let releaseDate;
         if(!await util.isEmpty(md.digitalRelease)){
           let digitalRelease = new Date(md.digitalRelease);
           releaseDate = digitalRelease.toISOString().split("T")[0];
+          noReleaseDate = true;
         }
         else {
           releaseDate = "No digital release date";
+          noReleaseDate = false;
         }
         medCard.tagLine =
           md.title + " (" + releaseDate + ")";
@@ -197,7 +200,7 @@ class Radarr {
         // }
 
         // add media card to array, only if not released yet (caters to old movies being released digitally)
-        if (md.hasFile == false && md.status != "released"){ //&& !await util.isEmpty(md.digitalRelease) ) {
+        if (md.hasFile == false && md.status != "released" && noReleaseDate != false){ //&& !await util.isEmpty(md.digitalRelease) ) {
           csrCards.push(medCard);
         }
 
