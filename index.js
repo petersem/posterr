@@ -1591,7 +1591,7 @@ app.post(
         })
       }
       else{
-        theaterMode=true;
+        sleepAPI=true;
         theaterOn()
         res.send({
           status: sleepAPI
