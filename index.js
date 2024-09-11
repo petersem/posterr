@@ -119,6 +119,7 @@ let contentRatings;
 let oldAwtrixApps = [];
 let isAwtrixEnabled = false;
 let awtrixIP = "";
+let restartSeconds = 86400000; //60000; //
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -128,6 +129,7 @@ const { titleColour, enableSleep, sleepStart, sleepEnd, numberOnDemand } = requi
 const CardType = require("./classes/cards/CardType");
 const MediaCard = require("./classes/cards/MediaCard");
 const Links = require("./classes/custom/links");
+const { now } = require("jquery");
 
 var dir = './config';
 
@@ -864,13 +866,9 @@ async function loadOnDemand() {
  * @returns nothing
  */
 async function houseKeeping() {
-  // stop the clock
-  clearInterval(houseKeepingClock);
   // clean cache
   await core.DeleteMP3Cache();
   await core.DeleteImageCache();
-  // restart timer
-  houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
 }
 
 /*
@@ -1071,6 +1069,9 @@ async function checkEnabled() {
     sleepRange = "";
   }
 
+  // calculate daily restart time
+  let timeObject = new Date(Date.now() + restartSeconds);
+  
   console.log(
     `--- Enabled Status ---
    Plex: ` +
@@ -1103,7 +1104,10 @@ async function checkEnabled() {
    Trivia: ` +
     isTriviaEnabled + 
     `
-   `
+   Daily restart commencing at: ` +
+    timeObject.toLocaleTimeString() + 
+    `
+  `
   );
   return;
 }
@@ -1199,7 +1203,11 @@ async function startup(clearCache) {
   linkCards = [];
 
   // run housekeeping job 
-  if (clearCache !== false) await houseKeeping();
+  if (clearCache !== false){
+    await houseKeeping();
+//    let d = new Date();
+//    console.log(d.toLocaleString() + ` ** Restart/reload **`);
+  }
 // TODO to remove this!       console.log(clearCache);
   // load settings object
   loadedSettings = await Promise.resolve(await loadSettings());
@@ -1214,7 +1222,7 @@ async function startup(clearCache) {
   globalPage.hideSettingsLinks = loadedSettings.hideSettingsLinks !== undefined ? loadedSettings.hideSettingsLinks : 'false';
 
     // restart timer for houseKeeping
-    houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
+    //houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
   }
 
   // check status
@@ -1370,6 +1378,9 @@ async function startup(clearCache) {
     clearInterval(sleepClock);
     sleep = "false";
   }
+  // restart timer
+  houseKeepingClock = setInterval(startup, restartSeconds); // daily
+
   return;
 }
 
