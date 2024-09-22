@@ -66,7 +66,9 @@ const DEFAULT_SETTINGS = {
   triviaNumber: "",
   contentRatings: "",
   enableAwtrix: "false",
-  awtrixIP: ""
+  awtrixIP: "",
+  enableLinks: "false",
+  links: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

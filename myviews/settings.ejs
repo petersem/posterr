@@ -937,6 +937,38 @@
             </div>  
             <hr>
 
+
+<div class="panel panel-default">
+  <div class="panel-heading" role="tab" id="headingLinks">
+    <h4 class="panel-title">
+      <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseLinks" aria-expanded="false" aria-controls="collapseLinks">
+        CUSTOM LINKS <i class="accordion_icon fal fa-plus"></i>
+      </a>
+    </h4>
+  </div>
+  <div id="collapseLinks" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingLinks">
+    <div class="panel-body">
+
+      <div class="form-group">
+      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+        <input type="checkbox" class="custom-control-input" name="enableLinks" id="enableLinks" 
+          value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableLinks ? 'checked' : '' %><%}else{%><%=(settings.enableLinks == 'true') ? 'checked' : '' %><%}%>>
+        <label class="custom-control-label" for="enableLinks">Enabled</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="links">Links</label>
+      <input type="text" class="form-control" id="links" name="links" aria-describedby="linksHelp"
+        placeholder="http://n.n.n.n;https://n.n.n.n" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.links%>"<%}else{%><%=settings.links%>"<%}%>>
+      <small id="linksHelp" class="form-text text-muted">Enter links separated by ;. (This feature is somewhat experimental. Only links that allow being loaded in iframes will work. If a link doesnt work, try another.)</small>
+    </div>
+
+      </div>
+  </div>
+</div>  
+<hr>
+
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingTrivia">
                 <h4 class="panel-title">
@@ -1021,6 +1053,8 @@
   <small class="form-text text-muted">Select the trivia categories you want to display.</small>
 
 </div>
+
+
 
 <script type="text/javascript">
   $(".checkbox-menu").on("change", "input[type='checkbox']", function() {

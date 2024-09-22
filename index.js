@@ -119,7 +119,7 @@ let contentRatings;
 let oldAwtrixApps = [];
 let isAwtrixEnabled = false;
 let awtrixIP = "";
-let restartSeconds = 86400000; //60000; //
+let restartSeconds = 86400000; 
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -179,7 +179,7 @@ function checkTime(i) {
     return i;
   }
 }
-
+loadLinks
 /**
  * @desc Wrapper function to call links.
  * @returns {Promise<object>} mediaCards array - LINKS
@@ -187,7 +187,7 @@ function checkTime(i) {
 async function loadLinks() {
   // stop the clock
   clearInterval(linksClock);
-  let linkTicks = loadedSettings.linkFrequency * 1000 * 60; // convert to seconds and then minutes
+  let linkTicks = 86400000; //loadedSettings.linkFrequency * 1000 * 60; // convert to seconds and then minutes
 
   // stop timers and dont run if disabled
   if (!isLinksEnabled) {
@@ -200,10 +200,10 @@ async function loadLinks() {
   // call links
   try {
     linkCards = await links.GetAllLinks(linkArray);
+    //console.log(linkCards);
   } catch (err) {
     let now = new Date();
     console.log(now.toLocaleString() + " *Links: " + err);
-    linkTicks = 60000;
     console.log("✘✘ WARNING ✘✘ - Next links query will run in 1 minute.");
     isLinksUnavailable = true;
   }
@@ -769,7 +769,7 @@ async function loadNowScreening() {
         }
       }
     }
-
+//console.log(linkCards.length);
 //    globalPage.cards = mCards;
   }
 
@@ -866,6 +866,8 @@ async function loadOnDemand() {
  * @returns nothing
  */
 async function houseKeeping() {
+  //cold_start_time = new Date();
+
   // clean cache
   await core.DeleteMP3Cache();
   await core.DeleteImageCache();
@@ -1104,6 +1106,9 @@ async function checkEnabled() {
    Trivia: ` +
     isTriviaEnabled + 
     `
+   Links: ` +
+    isLinksEnabled + 
+    `
    Daily restart commencing at: ` +
     timeObject.toLocaleTimeString() + 
     `
@@ -1181,7 +1186,6 @@ async function wake(theater) {
  * @returns nothing
  */
 async function startup(clearCache) {
-
   // stop all clocks
   clearInterval(nowScreeningClock);
   clearInterval(onDemandClock);
@@ -1886,6 +1890,8 @@ app.post(
       triviaFrequency: req.body.triviaFrequency,
       enableAwtrix: req.body.enableAwtrix,
       awtrixIP: req.body.awtrixIP,
+      enableLinks: req.body.enableLinks,
+      links: req.body.links,
       saved: false
     };
 

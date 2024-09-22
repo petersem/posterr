@@ -16,8 +16,10 @@ class Links {
   async GetAllLinks(linksArray) {
     let allLinkCards = [];
     // get link cards
-    for (const linkURL of linksArray) {
-      const linkSet = await this.GetLinkCard(linkURL);
+    for (const lnk of linksArray) {
+    //console.log('process link', lnk);
+      const linkSet = await this.GetLinkCard(lnk);
+      //console.log(linkSet);
       if(linkSet.length !== 0) {
         allLinkCards = allLinkCards.concat(linkSet);
       }
@@ -47,7 +49,7 @@ class Links {
       medCard.cardType = cType.CardTypeEnum.WebURL;
       medCard.mediaType = "WebURL";
       medCard.linkUrl = url;
-      medCard.posterAR = 0;
+      medCard.posterAR = 1.47;
       medCard.theme = "";
       medCard.posterURL = "";
       medCard.posterArtURL = "";

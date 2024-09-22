@@ -80,6 +80,8 @@ class Settings {
     this.links = DEFAULT_SETTINGS.links;
     this.enableAwtrix = DEFAULT_SETTINGS.enableAwtrix;
     this.awtrixIP = DEFAULT_SETTINGS.awtrixIP;
+    this.enableLinks = DEFAULT_SETTINGS.enableLinks;
+    this.links = DEFAULT_SETTINGS.links;
     return;
   }
 
@@ -367,8 +369,6 @@ class Settings {
     else this.links = cs.links;
     if (jsonObject.enableLinks) this.enableLinks = jsonObject.enableLinks;
     else this.enableLinks = cs.enableLinks;
-    if (jsonObject.linkFrequency) this.linkFrequency = jsonObject.linkFrequency;
-    else this.linkFrequency = cs.linkFrequency;
     if (jsonObject.enableAwtrix) this.enableAwtrix = jsonObject.enableAwtrix;
     else this.enableAwtrix = cs.enableAwtrix;
     if (jsonObject.awtrixIP) this.awtrixIP = jsonObject.awtrixIP;

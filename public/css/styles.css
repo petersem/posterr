@@ -176,6 +176,7 @@ h1 {
 
 .hidden {
   visibility: hidden;
+  height: 0px;
 }
 
 #warning {

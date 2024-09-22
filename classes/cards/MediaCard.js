@@ -94,6 +94,7 @@ class MediaCard {
     var endTime = et.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'});
 
     this.triviaRender="";
+    this.linkRender="";
     // if a trivia card, then prepare html
 
     if(this.cardType[0] == "Trivia Question"){
@@ -125,8 +126,9 @@ class MediaCard {
       hiddenFooter = "hidden";
       fullScreen="fullscreen";
       hiddenTitle="hidden";
-      //this.linkRender = `<embed type="text/html" src="` + this.linkUrl + `" width=100% height=100%>`
-      this.linkRender = `<iframe scrolling="no" src="` + this.linkUrl + `" width=100% height=100%  style="border: none; overflow: hidden;" >`
+      this.linkRender = `<embed type="text/html" src="` + this.linkUrl + `" width=100% height=100% style="border: none; overflow: hidden;>`
+      //this.linkRender = `<iframe scrolling="no" src="` + this.linkUrl + `" width=100% height=100%  style="border: none; overflow: hidden;" >`;
+//      console.log(this.linkRender);
     }
 
 
@@ -301,7 +303,7 @@ class MediaCard {
       `"></div>
         </div>
       <div class="hidden" id="poster` + this.ID + `AR">`+this.posterAR+`</div>` +
-      this.triviaRender +
+      this.triviaRender + this.linkRender +
       `</div>
 
       <div class="bottomBanner mx-auto transparent` +
