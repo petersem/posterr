@@ -82,6 +82,7 @@ class Settings {
     this.awtrixIP = DEFAULT_SETTINGS.awtrixIP;
     this.enableLinks = DEFAULT_SETTINGS.enableLinks;
     this.links = DEFAULT_SETTINGS.links;
+    this.rotate = DEFAULT_SETTINGS.rotate;
     return;
   }
 
@@ -145,6 +146,7 @@ class Settings {
       if(readSettings.enableLinks==undefined) readSettings.enableLinks = 'false';
       if(readSettings.recentlyAddedDays==undefined) readSettings.recentlyAddedDays = 0;
       if(readSettings.enableAwtrix==undefined) readSettings.enableAwtrix = 'false';
+      if(readSettings.rotate==undefined) readSettings.rotate = 'false';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -373,6 +375,8 @@ class Settings {
     else this.enableAwtrix = cs.enableAwtrix;
     if (jsonObject.awtrixIP) this.awtrixIP = jsonObject.awtrixIP;
     else this.awtrixIP = cs.awtrixIP;
+    if (jsonObject.rotate) this.rotate = jsonObject.rotate;
+    else this.rotate = cs.rotate;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

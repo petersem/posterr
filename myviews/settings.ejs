@@ -285,6 +285,16 @@
               <div id="collapseUI" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingUI">
                 <div class="panel-body">
 
+                  <h6>Screen Orientation</h6>
+                  <div class="form-group">
+                    <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                      <input type="checkbox" class="custom-control-input" name="rotate" id="rotate" aria-describedby="rotateHelp"
+                        value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.rotate ? 'checked' : '' %><%}else{%><%=(settings.rotate == 'true') ? 'checked' : '' %><%}%>>
+                      <label class="custom-control-label" for="rotate">Rotate screen</label>
+                      <small id="themeHelp" class="form-text text-muted">Rotate screen orientation -90 degrees (ideal for Amazon Firestick devices)</small>
+                    </div>
+                  </div>
+
                   <h6>Colours</h6>
                   <div class="form-group">
                     &nbsp;&nbsp;<input type="color" value="#FAFAD2" id="colourWellTitle">

@@ -37,6 +37,9 @@
  - 'Sleep timer' disables the display during set hours.
  - Trivia Quiz (multiple selectable topics)
  - Support LED Matrix displays running Awtrix software
+ - Display custom web pages as slides (if web page compatible) - **EXPERIMENTAL!**
+ - Rotate display -90° (for running on display devices, like Firesticks, which do not support portait rotation)
+ - Post API (at '/api/sleep') to toggle sleep mode. (Pass in header 'psw: your Posterr password')
 ---
 ## Prerequisites
 ### Mandatory

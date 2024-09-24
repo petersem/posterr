@@ -20,6 +20,18 @@
   <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/styles.css">
   <!-- Apply UI customisations -->
+  <%if(globals.rotate == "true"){%>
+    <style>html {
+      transform: rotate(-90deg) !important;
+      transform-origin: left top !important;
+      width: 100vh !important;
+      height: 100vw !important;
+      overflow-x: hidden !important;
+      position: absolute !important;
+      top: 100% !important;
+      left: 0 !important;
+    } </style>
+  <%}%>
   <%if(globals.custBrand !== ""){%>
     <style>.banners { font-family: '<%=globals.custBrand%>'; }</style>
   <%}%>

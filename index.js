@@ -794,6 +794,7 @@ async function loadNowScreening() {
   globalPage.hasArt = loadedSettings.hasArt;
   globalPage.quizTime = loadedSettings.triviaTimer !== undefined ? loadedSettings.triviaTimer : 15;
   globalPage.hideSettingsLinks = loadedSettings.hideSettingsLinks !== undefined ? loadedSettings.hideSettingsLinks : 'false';
+  globalPage.rotate = loadedSettings.rotate !== undefined ? loadedSettings.rotate : "false";
 
   // restart the clock
   nowScreeningClock = setInterval(loadNowScreening, pollInterval);
@@ -1486,7 +1487,7 @@ else {
 // set routes
 app.get(BASEURL + "/", (req, res) => {
   // try {
-  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand, hasArt: globalPage.hasArt, quizTime: globalPage.quizTime }); // index refers to index.ejs
+  res.render("index", { globals: globalPage, hasConfig: setng.GetChanged(), baseUrl: BASEURL, custBrand: globalPage.custBrand, hasArt: globalPage.hasArt, quizTime: globalPage.quizTime, rotate: globalPage.rotate }); // index refers to index.ejs
   // }
   // catch (ex) {
   //   console.log('res.render:' + __dirname);
@@ -1892,6 +1893,7 @@ app.post(
       awtrixIP: req.body.awtrixIP,
       enableLinks: req.body.enableLinks,
       links: req.body.links,
+      rotate: req.body.rotate,
       saved: false
     };
 
