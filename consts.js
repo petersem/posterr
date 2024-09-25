@@ -68,7 +68,8 @@ const DEFAULT_SETTINGS = {
   enableAwtrix: "false",
   awtrixIP: "",
   enableLinks: "false",
-  links: ""
+  links: "",
+  excludeLibs: ""
 };
 
 module.exports = DEFAULT_SETTINGS;

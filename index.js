@@ -120,6 +120,7 @@ let oldAwtrixApps = [];
 let isAwtrixEnabled = false;
 let awtrixIP = "";
 let restartSeconds = 86400000; 
+let excludeLibs = "";
 
 // create working folders if they do not exist
 // needed for package binaries
@@ -482,6 +483,16 @@ async function loadNowScreening() {
     plexToken: loadedSettings.plexToken,
   });
 
+  let excludeLibraries;
+  if(loadedSettings.excludeLibs !== undefined && loadedSettings.excludeLibs !== ""){
+    excludeLibraries = loadedSettings.excludeLibs.split(",");
+    
+    // trim leading and trailing spaces
+    excludeLibraries = excludeLibraries.map(function (el) {
+      return el.trim();
+    });
+  }
+  
 
   let pollInterval = nsCheckSeconds;
   // call now screening method
@@ -494,7 +505,8 @@ async function loadNowScreening() {
       loadedSettings.filterLocal,
       loadedSettings.filterDevices,
       loadedSettings.filterUsers,
-      loadedSettings.hideUser
+      loadedSettings.hideUser,
+      excludeLibraries
     );
     // Send to Awtrix, if enabled
     if(isAwtrixEnabled){
@@ -1894,6 +1906,7 @@ app.post(
       enableLinks: req.body.enableLinks,
       links: req.body.links,
       rotate: req.body.rotate,
+      excludeLibs: req.body.excludeLibs,
       saved: false
     };
 

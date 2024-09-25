@@ -83,6 +83,7 @@ class Settings {
     this.enableLinks = DEFAULT_SETTINGS.enableLinks;
     this.links = DEFAULT_SETTINGS.links;
     this.rotate = DEFAULT_SETTINGS.rotate;
+    this.excludeLibs = DEFAULT_SETTINGS.excludeLibs;
     return;
   }
 
@@ -377,6 +378,8 @@ class Settings {
     else this.awtrixIP = cs.awtrixIP;
     if (jsonObject.rotate) this.rotate = jsonObject.rotate;
     else this.rotate = cs.rotate;
+    if (jsonObject.excludeLibs) this.excludeLibs = jsonObject.excludeLibs;
+    else this.excludeLibs = cs.excludeLibs;
 
     // convert JSON object to string (pretty format)
     const data = JSON.stringify(this, null, 4);

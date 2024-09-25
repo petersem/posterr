@@ -684,6 +684,12 @@
                   <small id="filterUsersHelp" class="form-text text-muted">Enter user names to include (Comma seperated and no spaces. Leave blank for all users)</small>
               </div>    
 
+              <div class="form-group">
+                <label for="excludeLibs">Exclude libraries</label>
+                <input type="text" class="form-control" id="excludeLibs" name="excludeLibs" aria-describedby="excludeLibsHelp"
+                  placeholder="examples -> TV Shows,Movies" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.excludeLibs%>"<%}else{%><%=settings.excludeLibs%>"<%}%>>
+                  <small id="excludeLibsHelp" class="form-text text-muted">Enter any libraries to exclude (Comma seperated and no leading or trailing spaces. Leave blank to include all libraries)</small>
+              </div>    
 
               <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
