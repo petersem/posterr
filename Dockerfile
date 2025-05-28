@@ -1,8 +1,8 @@
-FROM node:20.11-alpine
+FROM node:24.1.0
 # tzdata for timzone and net-tools
-RUN apk update 
-RUN apk add tzdata
-RUN apk add net-tools
+RUN apt update 
+RUN apt install tzdata
+RUN apt install net-tools
 
 ENV NODE_ENV=production
 
