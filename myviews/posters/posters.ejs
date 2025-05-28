@@ -17,6 +17,64 @@
 
 <script language='javascript'>
 
+   // look for space to pause carousel
+  document.addEventListener("keydown", manualKey, false);
+
+
+  function manualKey(event){
+    // check if quiz
+    var quizTimer = $('.timer' + curPlayID);
+    var isTrivia;
+    if(quizTimer.length !== 0 && quizTimer !== null) {
+      isTrivia = true;
+    }
+    else {
+      isTrivia = false;
+    }
+
+    const keyName = event.key;
+    var tagLine = document.getElementById("tagLine" + curPlayID);
+    var myAudio = document.getElementById("audio" + curPlayID);
+
+    switch (keyName) {
+      case " ":
+        // Spacebar pressed (pause/resume)
+        if(pauseDetect == false && isTrivia !== true){
+          originalTagline = document.getElementById("tagLine" + curPlayID).innerText;
+          tagLine.innerText = "PAUSED - Space bar to resume";
+          $('#myCarousel').carousel('pause');
+          pauseDetect = true;
+        }
+        else if(isTrivia !== true) {
+          pauseDetect = false;    
+          tagLine.innerText = originalTagline;
+          $('#myCarousel').carousel('cycle');
+        }
+        break;
+      case "ArrowRight":
+        myAudio.volume = 0;
+        $('#myCarousel').carousel('next');
+        break;
+      case "ArrowLeft":
+        myAudio.volume = 0;
+        $('#myCarousel').carousel('prev');
+        break;
+      default:
+        //console.log(keyName);
+        break;
+    }
+  }
+
+
+
+
+// document.addEventListener("keydown", myFunction);
+
+// function myFunction(e) {
+//   alert("*" + e.key + "*");
+// }
+
+
 startInactivityCheck(
   document.querySelector('#myCarousel'),
   2000,
@@ -55,6 +113,8 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   var sleeping = false;
   var counter;
   var curPlayID = 1;
+  var pauseDetect = false;
+  var originalTagline;
 
   function openNav() {
     document.getElementById("myNav").style.width = "100%";
@@ -232,7 +292,6 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   function aud_fadeOut(id) {
     var timer
     var myAudio = document.getElementById("audio" + id);
-    //console.log('working on fade for id: ' + id);
     if (myAudio.volume > 0) {
 	    // console.log('fading out');
 		  if(myAudio.volume < 0.005) {
@@ -240,6 +299,25 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
       }
 		  else{
 			  myAudio.volume -= 0.005;
+		  }
+		  timer = setTimeout(aud_fadeOut,5,id);
+    }
+  	else{
+	  	myAudio.pause();
+	    // console.log('Stopped');
+	  }
+  };
+
+    function aud_fastFadeOut(id) {
+    var timer
+    var myAudio = document.getElementById("audio" + id);
+    if (myAudio.volume > 0) {
+	    // console.log('fading out');
+		  if(myAudio.volume < 0.005) {
+			  myAudio.volume = 0;
+      }
+		  else{
+			  myAudio.volume -= 0.02;
 		  }
 		  timer = setTimeout(aud_fadeOut,5,id);
     }
@@ -426,7 +504,7 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   $('#myCarousel').on('slid.bs.carousel', function (ev) {
     StopAudio(curPlayID);
     
-    // ensire carousel active if manually slid via touch
+    // ensure carousel active if manually slid via touch
     $('#myCarousel').carousel('cycle');
 
     var id = ev.relatedTarget.id;
@@ -447,6 +525,7 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
 
       // fade in theme
       aud_fadeIn(x);
+
     }
 
 
@@ -538,12 +617,7 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   function StopAudio(id) {
     //$('audio').each(function (id) {
       try {
-        //var audElement = document.getElementById("audio" + id);
-        //console.log('fading out id: ' + id);
-      //  console.log('aud: ' + audElement);
         aud_fadeOut(id);
-        //this.pause(); // Stop playing
-        //this.currentme = 0;Ti // Reset time
       } catch (err) {
         //console.warn(err);
       }
