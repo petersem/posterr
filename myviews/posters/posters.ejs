@@ -32,6 +32,8 @@
       isTrivia = false;
     }
 
+
+    // manage manual key presses for space and left/right arrows - pause and prev/next slides
     const keyName = event.key;
     var tagLine = document.getElementById("tagLine" + curPlayID);
     var myAudio = document.getElementById("audio" + curPlayID);
@@ -52,10 +54,18 @@
         }
         break;
       case "ArrowRight":
+        if(pauseDetect == true){
+          pauseDetect = false;    
+          tagLine.innerText = originalTagline;
+        }
         myAudio.volume = 0;
         $('#myCarousel').carousel('next');
         break;
       case "ArrowLeft":
+        if(pauseDetect == true){
+          pauseDetect = false;    
+          tagLine.innerText = originalTagline;
+        }
         myAudio.volume = 0;
         $('#myCarousel').carousel('prev');
         break;
@@ -64,15 +74,6 @@
         break;
     }
   }
-
-
-
-
-// document.addEventListener("keydown", myFunction);
-
-// function myFunction(e) {
-//   alert("*" + e.key + "*");
-// }
 
 
 startInactivityCheck(
