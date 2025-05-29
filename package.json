@@ -1,6 +1,6 @@
 {
   "name": "posterr",
-  "version": "1.22.1",
+  "version": "1.20.0",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
@@ -35,7 +35,7 @@
   "license": "MIT",
   "dependencies": {
     "@jaames/iro": "^5.5.2",
-    "axios": "^1.9.0",
+    "axios": "^0.27.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^5.0.2",
     "cookie-parser": "^1.4.5",
@@ -51,12 +51,12 @@
     "jquery": "^3.6.0",
     "memorystore": "^1.6.6",
     "ping": "^0.4.1",
-    "plex-api": "^2.5.0",
+    "plex-api": "^5.3.1",
     "sleep-promise": "^9.1.0",
     "yarn": "^1.22.11"
   },
   "devDependencies": {
     "jsdoc": "^4.0.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^2.0.22"
   }
 }
