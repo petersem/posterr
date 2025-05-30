@@ -62,6 +62,7 @@ class MediaCard {
     let hiddenFooter = "";
     let hidden = "";
     let fullScreen = "";
+    let pauseMessage = "";
 
     // set header/footer hidden values
     if(hideTitle=='true' && this.cardType[0] == "On-demand") hiddenTitle = "hidden";
@@ -79,6 +80,13 @@ class MediaCard {
         fullScreen="fullscreen";
       }
     }
+
+    if(this.cardType[0] == "Picture"){
+      pauseMessage = `<div style="position: relative; z-index: 1;">
+  <span id="overlay_text` + this.ID + `" style="position: fixed; bottom: 5px; z-index: 3;"></span>
+  </div>`
+    }
+
 
     // set to hide progress bar if not a playing type of card
     if (this.cardType[0] != "Now Screening" && this.cardType[0] != "Playing") hidden = "hidden";
@@ -285,7 +293,7 @@ class MediaCard {
       " " + fullScreen +
       `" style="background-image: url('` +
       baseUrl + 
-      this.posterURL + `')">
+      this.posterURL + `')">` + pauseMessage + `
 
       <div class="progress ` +
       hidden +

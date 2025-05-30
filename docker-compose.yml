@@ -13,8 +13,8 @@ services:
       BASEPATH: ""
       ET: "false"
     volumes:
-      - /c/docker/posterr/custom:/usr/src/app/public/custom
-      - /c/docker/posterr/config:/usr/src/app/config
+      - ~/docker/posterr/custom:/usr/src/app/public/custom
+      - ~/docker/posterr/config:/usr/src/app/config
     ports:
       - 9876:3000
 

@@ -37,19 +37,28 @@
     const keyName = event.key;
     var tagLine = document.getElementById("tagLine" + curPlayID);
     var myAudio = document.getElementById("audio" + curPlayID);
+    var customPicture = false
+    if(document.getElementById("overlay_text" + curPlayID))
+    {
+      customPicture = true;
+      var pauseLine = document.getElementById("overlay_text" + curPlayID);
+    }
+
 
     switch (keyName) {
       case " ":
         // Spacebar pressed (pause/resume)
         if(pauseDetect == false && isTrivia !== true){
           originalTagline = document.getElementById("tagLine" + curPlayID).innerText;
-          tagLine.innerText = "PAUSED - Space bar to resume";
+          tagLine.innerText = "PAUSED - Space to resume";
+          if(customPicture){pauseLine.innerText = "PAUSED - Space to resume"};
           $('#myCarousel').carousel('pause');
           pauseDetect = true;
         }
         else if(isTrivia !== true) {
           pauseDetect = false;    
           tagLine.innerText = originalTagline;
+          if(customPicture){pauseLine.innerText = ""};
           $('#myCarousel').carousel('cycle');
         }
         break;
@@ -57,6 +66,7 @@
         if(pauseDetect == true){
           pauseDetect = false;    
           tagLine.innerText = originalTagline;
+          if(customPicture){pauseLine.innerText = ""};
         }
         myAudio.volume = 0;
         $('#myCarousel').carousel('next');
@@ -65,6 +75,7 @@
         if(pauseDetect == true){
           pauseDetect = false;    
           tagLine.innerText = originalTagline;
+          if(customPicture){pauseLine.innerText = ""};
         }
         myAudio.volume = 0;
         $('#myCarousel').carousel('prev');
