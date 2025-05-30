@@ -22,7 +22,7 @@
  
 ---
 ## Features
- - Displays movies, shows, music poster for what is currently playing.
+ - Displays movies, shows, music poster for what's currently playing.
  - Displays random (on-demand) titles from multiple Plex libraries.
  - Displays custom pictures, background art, and themes
  - Shows coming soon titles from Sonarr (or Season premieres).
