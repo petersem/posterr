@@ -19,10 +19,10 @@
 
  > **IMPORTANT NOTE ON UPGRADES**
  > - There are rare times that you will need to update settings. Check [here](https://github.com/petersem/posterr/wiki/Latest-changes) for detailed notes on each updated.
-
+ 
 ---
 ## Features
- - Displays movies, shows, music poster for what is currently playing.
+ - Displays movies, shows, music poster for what's currently playing.
  - Displays random (on-demand) titles from multiple Plex libraries.
  - Displays custom pictures, background art, and themes
  - Shows coming soon titles from Sonarr (or Season premieres).
