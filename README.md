@@ -83,12 +83,12 @@ Create the following directories in your docker folder:
  - ./docker/posterr/custom
 
 ```
-docker run -d --name posterr /
--p 9876:3000 /
--v ~/docker/posterr/config:/usr/src/app/config /
--v ~/docker/posterr/custom:/usr/src/app/public/custom /
--e TZ=Australia/Brisbane /
---restart=always /
+docker run -d --name posterr \
+-p 9876:3000 \
+-v ~/docker/posterr/config:/usr/src/app/config \
+-v ~/docker/posterr/custom:/usr/src/app/public/custom \
+-e TZ=Australia/Brisbane \
+--restart=always \
 petersem/posterr
 ```
 
