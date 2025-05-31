@@ -53,8 +53,9 @@
 
 ## Installation
 Installation details are as follows:
-### <ins>Docker Compose (X86, ARM32, ARM64)</ins>
+### <ins>Docker Compose (X86, ARM64)</ins>
 Create the following directories in your docker folder:
+ - ./docker/posterr
  - ./docker/posterr/config
  - ./docker/posterr/custom
 
@@ -75,6 +76,22 @@ services:
       - 9876:3000
     restart: unless-stopped
 ```
+### <ins>Docker CLI (X86, ARM64)</ins>
+Create the following directories in your docker folder:
+ - ./docker/posterr
+ - ./docker/posterr/config
+ - ./docker/posterr/custom
+
+```
+docker run -d --name posterr /
+-p 9876:3000 /
+-v ~/docker/posterr/config:/usr/src/app/config /
+-v ~/docker/posterr/custom:/usr/src/app/public/custom /
+-e TZ=Australia/Brisbane /
+--restart=always /
+petersem/posterr
+```
+
 #### Details
 |Option|Details|
 |--|--|
