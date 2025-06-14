@@ -1,0 +1,49 @@
+#!/bin/bash
+# Script to call posterr api to get display state.
+# triggers appropriate on|off for CEC compatible display
+# Requires cec-utils installed on rPi OS
+#
+#
+# Set the url to your Posterr instance
+url=http://192.168.1.134:9876
+poll_frequency=5
+
+
+# check if cec-utils installed
+ready="$(apt list --installed | grep "cec-utils" | grep "installed")"
+if [[ $ready == *"installed"* ]] 
+then
+  echo "cec-utils package installed!"
+else
+  echo "You must install cec-utils for this script to run. 
+sudo apt install cec-utils
+
+Script terminated"
+  exit 1
+fi
+
+
+state="unset"
+until false; 
+do
+  output="$(curl -s ${url}/api/sleep | grep -o 'false\|true')"
+#  echo "Start run Hidden: ${output} and State: ${state}"
+  if $output -eq "true" 
+  then   
+    if [ ${state} != "hidden" ]
+    then
+      state="hidden"
+      echo "Visibility: ${state}" 
+      echo 'standby 0.0.0.0' | cec-client -s -d 1
+    fi 
+    sleep ${poll_frequency}
+  else
+    if [ ${state} != "showing" ]
+    then
+      state="showing"
+      echo "Visibility: ${state}"
+      echo 'on 0.0.0.0' | cec-client -s -d 1
+    fi
+    sleep ${poll_frequency}
+  fi
+done
