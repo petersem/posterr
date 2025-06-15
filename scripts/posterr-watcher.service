@@ -5,9 +5,9 @@ After=network.target
 [Service]
 Type=simple
 #ExecStartPre=/usr/bin/sleep 10
-ExecStart=/home/user/sleepwatch.sh
-User=user
-WorkingDirectory=/home/user
+ExecStart=WORKING_DIRECTORY/sleepwatch.sh
+User=USER
+WorkingDirectory=WORKING_DIRECTORY
 Restart=on-failure
 
 [Install]

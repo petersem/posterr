@@ -5,7 +5,7 @@
 #
 #
 # Set the url to your Posterr instance
-url=http://192.168.1.134:9876
+url=POSTERR_URL
 poll_frequency=5
 
 
@@ -47,3 +47,4 @@ do
     sleep ${poll_frequency}
   fi
 done
+
