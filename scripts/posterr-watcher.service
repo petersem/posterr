@@ -1,0 +1,14 @@
+[Unit]
+Description=Launch Poster sleepwatch.sh script
+After=network.target
+
+[Service]
+Type=simple
+#ExecStartPre=/usr/bin/sleep 10
+ExecStart=/home/user/sleepwatch.sh
+User=user
+WorkingDirectory=/home/user
+Restart=on-failure
+
+[Install]
+WantedBy=graphical.target

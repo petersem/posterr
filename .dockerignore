@@ -24,5 +24,6 @@
 README.md
 /public/custom/pictures/**
 **/custom.css
+/scripts/**
 
 !keep
