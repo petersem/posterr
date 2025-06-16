@@ -1391,7 +1391,7 @@ async function startup(clearCache) {
           }
         }
         else{
-          if(sleep=="true" && apiSleep!="true"){
+          if(sleep=="true" && apiSleep!=true){
             wake();
             sleep="false";
           } 
