@@ -7,8 +7,8 @@ if [ "$EUID" -ne 0 ]; then
    echo
    sudo $0
 else
-   sudo systemctl daemon-reload
    sudo systemctl stop posterr-watcher.service
    sudo rm /etc/systemd/system/posterr-watcher.service
    echo "posterr-watcher.service removed"
+   sudo systemctl daemon-reload
 fi

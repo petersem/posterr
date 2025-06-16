@@ -35,6 +35,16 @@ else
     echo "Running secondary install as super user"
     echo  
 
+    # check if cec-utils installed
+    ready="$(apt list --installed | grep "cec-utils" | grep "installed")"
+    if [[ $ready == *"installed"* ]] 
+    then
+        echo "cec-utils package installed!"
+    else
+        echo "Installing cec-utils package." 
+        sudo apt update && sudo apt install cec-utils -y
+    fi
+
     # modify the service template prior to istallation
     sed -e "s|WORKING_DIRECTORY|${working_dir}|g" \
     -e "s|USER|${user}|g" \
