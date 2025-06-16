@@ -10,15 +10,20 @@
   <meta charset="utf-8">
   <meta http-equiv="Cache-control" content="public">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="mobile-web-app-capable" content="yes" />
 
   <!-- Additional js libs -->
   <script src="<%=baseUrl%>/js/jquery-3.3.1.slim.min.js"></script>
   <script src="<%=baseUrl%>/js/bootstrap.min.js"></script>
+ 
+  <!-- Manifest -->
+  <link rel="manifest" href="<%=baseUrl%>/site.webmanifest">
 
   <!--- CSS -->
   <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/font-awesome.min.css">
   <link rel="stylesheet" href="<%=baseUrl%>/css/styles.css">
+
   <!-- Apply UI customisations -->
   <%if(globals.rotate == "true"){%>
     <style>html {
