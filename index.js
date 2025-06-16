@@ -108,6 +108,7 @@ let message = "";
 let latestVersion = "";
 let updateAvailable = false
 let sleep = "false";
+let apiSleep = false;
 let sleepClock;
 let triviaToken = "";
 let theaterMode = false;
@@ -1175,7 +1176,14 @@ async function suspend() {
   // loadedSettings.enableCustomPictureThemes = 'false';
 
   let d = new Date();
-  console.log(d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)`);
+  if (apiSleep==true)
+  {
+    console.log(" ** api/sleep - Sleep command issued. (Overrides set schedules)");
+  }
+  else
+  {
+    console.log(d.toLocaleString() + ` ** Sleep mode activated (sleep terminates at ` + loadedSettings.sleepEnd + `)`);
+  }
 }
 
 
@@ -1383,7 +1391,7 @@ async function startup(clearCache) {
           }
         }
         else{
-          if(sleep=="true"){
+          if(sleep=="true" && apiSleep=="false"){
             wake();
             sleep="false";
           } 
@@ -1604,25 +1612,27 @@ function getDirectories(path) {
 
 app.get('/api/sleep', (req, res) => {
   res.send({
-    sleepAPI: sleepAPI
+    status: sleep
   })
 })
 
 app.post(
   BASEURL + "/api/sleep", (req, res) => {
     if(req.body.psw==loadedSettings.password){
-      if(sleepAPI==true){
-        sleepAPI=false;
-        theaterOff()
+      if(req.body.sleep=='true'){
+        sleep=true;
+        apiSleep=true;
+        suspend()
         res.send({
-          status: sleepAPI
+          status: sleep
         })
       }
       else{
-        sleepAPI=true;
-        theaterOn()
+        sleep=false;
+        apiSleep=false;
+        console.log(" ** api/sleep - Wake command issued");
         res.send({
-          status: sleepAPI
+          status: sleep
         })
       }
     }
