@@ -3,7 +3,7 @@
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/petersem/posterr) 
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/petersem/posterr/latest?logo=docker) 
-![Image Build](https://img.shields.io/github/workflow/status/petersem/posterr/ci?color=green)
+![GitHub Stars](https://img.shields.io/github/stars/petersem/posterr?style=flat)
 ![Version](https://img.shields.io/github/package-json/v/petersem/posterr?logoColor=blue)
 ![GitHub last commit](https://img.shields.io/github/last-commit/petersem/posterr)
 ![Platforms](https://img.shields.io/badge/platform-docker-blue)
@@ -39,7 +39,9 @@
  - Support LED Matrix displays running Awtrix software
  - Display custom web pages as slides (if web page compatible) - **EXPERIMENTAL!**
  - Rotate display -90° (for running on display devices, like Firesticks, which do not support portait rotation)
- - Post API (at '/api/sleep') to toggle sleep mode. (Pass in header 'psw: your Posterr password')
+ - Post API (at '/api/sleep') to toggle sleep mode. (Pass in header values `'psw: your Posterr password'` and `'sleep: true|false'`)
+ - Get API at the same endpoint will return the sleep status without any parsed parameters.
+ - Supports `CEC` control of monitor inconjunction with the Posterr `Sleep Timer`. 
 ---
 ## Prerequisites
 ### Mandatory
@@ -103,6 +105,10 @@ petersem/posterr
 
 ### <ins>Unraid</ins>
  - Use the Posterr template in community apps. (Being replaced with new version)
+
+---
+## CEC Control script installation **(rPi only)**
+ - Install instructions are located [HERE](/scripts/scriptdoco.md)
 
 ---
 ## Updates
