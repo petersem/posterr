@@ -99,7 +99,7 @@ class MediaCard {
     et.setMinutes(et.getMinutes()+decRemainingTime);
     //console.log(decRemainingTime);
     //console.log(et.toLocaleTimeString());
-    var endTime = et.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'});
+    var endTime = et.toLocaleTimeString("en-US", {hour12: false, hour: "2-digit", minute: "2-digit"});
 
     this.triviaRender="";
     this.linkRender="";
