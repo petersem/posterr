@@ -4,6 +4,7 @@ const cType = require("./../cards/CardType");
 const util = require("./../core/utility");
 const core = require("./../core/cache");
 const { CardTypeEnum } = require("./../cards/CardType");
+const { error } = require("jquery");
 // const sizeOf = require("image-size");
 
 /**
