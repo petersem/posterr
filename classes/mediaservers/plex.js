@@ -317,7 +317,7 @@ class Plex {
 
             medCard.posterAR = 1.5;
             // play movie theme or add generic random theme if applicable
-            if (playGenenericThemes == "true") {
+            if (playGenenericThemes == "true" && !(await util.isEmpty(md.theme))) {
               if(await util.isEmpty(md.theme)){
               }
               else{
@@ -601,7 +601,7 @@ class Plex {
 
             // include if playThemes is enabled
             medCard.theme = "";
-            if (playThemes == "true" && md.theme !== undefined) {
+            if (playThemes == "true" &&  !(await util.isEmpty(md.theme))) {
               // download mp3 from plex tv theme server
               let fileName = mediaId + ".mp3";
               let prefix = "http://";
