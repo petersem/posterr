@@ -478,7 +478,7 @@ class Plex {
           if(filterRemote=='true' && medCard.playerLocal == false) okToAdd = true;
           if(filterLocal=='true' && medCard.playerLocal == true) okToAdd = true;
           if(users.length > 0 && users.includes(md.User.title.toLowerCase())==false && users[0] !== "") okToAdd = false;
-          if(devices.length > 0 && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
+          if(devices.length > 0 && !util.isEmpty(medCard.playerDevice) && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
           if(excludeLibs !== undefined && excludeLibs !== "" && excludeLibs.includes(md.librarySectionTitle)) { 
             //console.log('Now Screening - Excluded library:', md.librarySectionTitle);
             okToAdd = false;
