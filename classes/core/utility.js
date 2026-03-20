@@ -47,45 +47,41 @@ class utility {
   }
 
   /**
-   * @desc builds random set of on-demand cards
+   * @desc builds random set of on-demand cards (unique items; shuffle + slice)
    * @param {number} numberOnDemand - the number of on-demand cards to return
    * @param {object} mediaCards - an array of on-demand mediaCards
    * @returns {Promise<object>} mediaCard[] - an array of mediaCards
    */
   static async build_random_od_set(numberOnDemand, mediaCards, recentlyAdded) {
-    let onDemandCards = [];
-    let libTooSmall = false;
-    if(recentlyAdded > 0) {
+    if (recentlyAdded > 0) {
       return mediaCards;
     }
-    else{
-      for await (let i of Array(numberOnDemand).keys()) {
-        let odc;
-        odc = await this.random_item(mediaCards);
-        let tryCount = 0;
-        // try at least five times to get unique random titles. If not, then ommit
-        while(onDemandCards.includes(odc) && tryCount < 5){
-          //console.log('Dupe found:' + odc.title);
-          tryCount++;
-          odc = await this.random_item(mediaCards);
-        }
-        // finally, if card still a duplicate, then ommit from display
-        if(!onDemandCards.includes(odc)){
-          onDemandCards.push(odc);
-        }
-        else{
-          libTooSmall = true;
-        }
-      }
-      // display a warning if 'number to display' was too large for library size.
-      if(libTooSmall && mediaCards.length !== 0){
-        let d = new Date();
-        console.log(d.toLocaleString() + " ✘✘ WARNING ✘✘ On-demand library too small to get consistent unique titles. Requested titles reduced. (Reduce the 'number to display')");
-      }
-      return onDemandCards;
+    if (!mediaCards || !mediaCards.length) {
+      return [];
     }
-  
+    const want = Math.max(0, Math.floor(Number(numberOnDemand)) || 0);
+    const pool = mediaCards.slice();
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
     }
+    const have = pool.length;
+    const take = Math.min(want, have);
+    if (want > have) {
+      const d = new Date();
+      console.log(
+        d.toLocaleString() +
+          " ✘✘ WARNING ✘✘ On-demand: asked for " +
+          want +
+          " title(s) but only " +
+          have +
+          " match your library/filters. Showing " +
+          have +
+          ". Lower 'Number to display' or use more libraries / looser filters."
+      );
+    }
+    return pool.slice(0, take);
+  }
 }
 
 module.exports = utility;

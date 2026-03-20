@@ -543,13 +543,24 @@
               <div class="panel-heading" role="tab" id="headingThree">
                 <h4 class="panel-title">
                   <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    PLEX <i class="accordion_icon fal fa-plus"></i>
+                    MEDIA SERVER (PLEX / JELLYFIN / EMBY) <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
               <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                 <div class="panel-body">
 
+                  <div class="form-group">
+                    <label for="mediaServer">Library source for Now Screening &amp; On-demand</label>
+                    <select class="form-control" name="mediaServer" id="mediaServer">
+                      <option value="plex" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.mediaServer !== 'jellyfin' && formData.mediaServer !== 'emby') ? 'selected' : '' %><%}else{%><%=(settings.mediaServer !== 'jellyfin' && settings.mediaServer !== 'emby') ? 'selected' : '' %><%}%>>Plex</option>
+                      <option value="jellyfin" <% if(typeof formData !== 'undefined' && errors){%><%=formData.mediaServer === 'jellyfin' ? 'selected' : '' %><%}else{%><%=settings.mediaServer === 'jellyfin' ? 'selected' : '' %><%}%>>Jellyfin</option>
+                      <option value="emby" <% if(typeof formData !== 'undefined' && errors){%><%=formData.mediaServer === 'emby' ? 'selected' : '' %><%}else{%><%=settings.mediaServer === 'emby' ? 'selected' : '' %><%}%>>Emby</option>
+                    </select>
+                    <small class="form-text text-muted">Choose which server Posterr reads for playback and on-demand slides.</small>
+                  </div>
+
+                  <div id="plexServerFields">
                   <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="plexHTTPSSwitch" id="plexHTTPSSwitch"
@@ -568,7 +579,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="plexIP">Server Port</label>
+                  <label for="plexIPort">Server Port</label>
                   <input type="text" class="form-control" id="plexIPort" name="plexPort" aria-describedby="plexPortHelp"
                     placeholder="usually port 32400" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexPort%>"<%}else{%><%=settings.plexPort%>"<%}%>>
                   <small id="plexPortHelp" class="form-text text-muted">Enter the server port. (usually 32400).</small>
@@ -582,6 +593,88 @@
                     (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
                       target="_blank">details</a>)</small>
                 </div>
+                </div>
+
+                <div id="jfServerFields" style="display:none;">
+                  <div class="form-group">
+                    <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                      <input type="checkbox" class="custom-control-input" name="jfHTTPSSwitch" id="jfHTTPSSwitch"
+                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.jfHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.jfHTTPS == 'true') ? 'checked' : '' %><%}%>>
+                      <label class="custom-control-label" for="jfHTTPSSwitch">HTTPS Connection</label>
+                      <small class="form-text text-muted">Enable if Jellyfin uses HTTPS.</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="jfIP">Jellyfin server address</label>
+                    <input type="text" class="form-control" id="jfIP" name="jfIP" placeholder="host or IP"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.jfIP%>"<%}else{%><%=settings.jfIP%>"<%}%>>
+                  </div>
+                  <div class="form-group">
+                    <label for="jfPort">Jellyfin port</label>
+                    <input type="text" class="form-control" id="jfPort" name="jfPort" placeholder="8096"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.jfPort%>"<%}else{%><%=settings.jfPort%>"<%}%>>
+                  </div>
+                  <div class="form-group">
+                    <label for="jfToken">Jellyfin API key</label>
+                    <input type="password" class="form-control" name="jfToken" id="jfToken" placeholder="Dashboard → API Keys"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.jfToken%>"<%}else{%><%=settings.jfToken%>"<%}%>>
+                    <small class="form-text text-muted">Create an API key in Jellyfin Dashboard → Administration → API Keys.</small>
+                  </div>
+                </div>
+
+                <div id="embyServerFields" style="display:none;">
+                  <div class="form-group">
+                    <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                      <input type="checkbox" class="custom-control-input" name="embyHTTPSSwitch" id="embyHTTPSSwitch"
+                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.embyHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.embyHTTPS == 'true') ? 'checked' : '' %><%}%>>
+                      <label class="custom-control-label" for="embyHTTPSSwitch">HTTPS Connection</label>
+                      <small class="form-text text-muted">Enable if Emby uses HTTPS.</small>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="embyIP">Emby server address</label>
+                    <input type="text" class="form-control" id="embyIP" name="embyIP" placeholder="host or IP"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.embyIP%>"<%}else{%><%=settings.embyIP%>"<%}%>>
+                  </div>
+                  <div class="form-group">
+                    <label for="embyPort">Emby port</label>
+                    <input type="text" class="form-control" id="embyPort" name="embyPort" placeholder="8096"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.embyPort%>"<%}else{%><%=settings.embyPort%>"<%}%>>
+                  </div>
+                  <div class="form-group">
+                    <label for="embyToken">Emby API key</label>
+                    <input type="password" class="form-control" name="embyToken" id="embyToken" placeholder="Server Dashboard → API Keys"
+                      value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.embyToken%>"<%}else{%><%=settings.embyToken%>"<%}%>>
+                    <small class="form-text text-muted">Create an API key in Emby Server → Advanced → API Keys.</small>
+                  </div>
+                </div>
+
+                <script>
+                  (function () {
+                    var sel = document.getElementById("mediaServer");
+                    var plexEl = document.getElementById("plexServerFields");
+                    var jfEl = document.getElementById("jfServerFields");
+                    var embyEl = document.getElementById("embyServerFields");
+                    function sync() {
+                      if (!sel || !plexEl || !jfEl || !embyEl) return;
+                      if (sel.value === "jellyfin") {
+                        plexEl.style.display = "none";
+                        jfEl.style.display = "block";
+                        embyEl.style.display = "none";
+                      } else if (sel.value === "emby") {
+                        plexEl.style.display = "none";
+                        jfEl.style.display = "none";
+                        embyEl.style.display = "block";
+                      } else {
+                        plexEl.style.display = "block";
+                        jfEl.style.display = "none";
+                        embyEl.style.display = "none";
+                      }
+                    }
+                    sel.addEventListener("change", sync);
+                    sync();
+                  })();
+                </script>
                   
                 </div>
               </div>
@@ -671,6 +764,24 @@
               </div>
 
               <div class="form-group">
+                <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                  <input type="checkbox" class="custom-control-input" name="seriesPosterForEpisodesSwitch" id="seriesPosterForEpisodesSwitch"
+                    value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.seriesPosterForEpisodesSwitch ? 'checked' : '' %><%}else{%><%=(settings.seriesPosterForEpisodes == 'true') ? 'checked' : '' %><%}%>>
+                  <label class="custom-control-label" for="seriesPosterForEpisodesSwitch">Series poster for TV episodes</label>
+                  <small id="seriesPosterForEpisodesHelp" class="form-text text-muted">When on, Now Screening uses the show poster for episodes. When off, uses the episode image (Plex, Jellyfin, Emby).</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="custom-control custom-control-nolabel custom-switch ml-auto">
+                  <input type="checkbox" class="custom-control-input" name="jfEmbyPlaybackControlsSwitch" id="jfEmbyPlaybackControlsSwitch"
+                    value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.jfEmbyPlaybackControlsSwitch ? 'checked' : '' %><%}else{%><%=(settings.jfEmbyPlaybackControls == 'true') ? 'checked' : '' %><%}%>>
+                  <label class="custom-control-label" for="jfEmbyPlaybackControlsSwitch">Jellyfin / Emby playback controls</label>
+                  <small id="jfEmbyPlaybackControlsHelp" class="form-text text-muted">When on and the library source is Jellyfin or Emby, Now Screening / Now Playing slides show Play/Pause and Stop (sends commands to the server).</small>
+                </div>
+              </div>
+
+              <div class="form-group">
                 <label for="filterDevices">Filter by device(s)</label>
                 <input type="text" class="form-control" id="filterDevices" name="filterDevices" aria-describedby="filterDevicesHelp"
                   placeholder="examples -> chromecast,chrome,Roku Ultra - XYZ123456789" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.filterDevices%>"<%}else{%><%=settings.filterDevices%>"<%}%>>
@@ -750,10 +861,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
+                  <label for="plexLibraries">Libraries for On-Demand Titles</label>
                   <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
-                    placeholder="suggestions -> movies,tv shows,anime" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
-                  <small id="plexLibrariesHelp" class="form-text text-muted">Enter Plex library names to use (comma seperated and no spaces, except in the name)
+                    placeholder="Plex, Jellyfin, or Emby library names" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
+                  <small id="plexLibrariesHelp" class="form-text text-muted">Enter library names as shown in Plex, Jellyfin, or Emby (comma separated; spaces allowed inside a name).
                     (Leave blank to disable)</small>
                 </div>
                 <div class="form-group">
@@ -761,14 +872,14 @@
                   <input type="text" class="form-control" id="recentlyAddedDays" name="recentlyAddedDays" aria-describedby="recentlyAddedDaysHelp"
                     placeholder="suggest no more than 45." value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.recentlyAddedDays%>"<%}else{%><%=settings.recentlyAddedDays%>"<%}%>>
                   <small id="recentlyAddedDaysHelp" class="form-text text-muted">Show recently added titles from
-                    each specified Plex library. <b>'Content rating'</b> and <b>'Genre' <u>are ignored</u> if this is set to a non-zero value.</b></small>
+                    each specified library. <b>'Content rating'</b> and <b>'Genre' <u>are ignored</u> if this is set to a non-zero value.</b></small>
                 </div>
                 <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
                   <input type="text" class="form-control" id="numberOnDemand" name="numberOnDemand" aria-describedby="numberOnDemandHelp"
                     placeholder="suggest 5 or 6. (lower numbers perform better)" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
                   <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to display from
-                    each specified Plex library.</small>
+                    each specified library.</small>
                 </div>
 
                 <div class="form-group">

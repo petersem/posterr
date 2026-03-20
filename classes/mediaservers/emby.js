@@ -1,16 +1,17 @@
-//const plexAPI = require("plex-api");
+const Jellyfin = require("./jellyfin");
 
-class Emby {
-  constructor({HTTPS, embyIP, embyPort, embyToken}) {
-    return {error: "Not yet implemented"};
-  }
-
-  async GetNowScreening() {
-    return {error: "Not yet implemented"};
-  }
-
-  async GetOnDemand() {
-    return {error: "Not yet implemented"};
+/**
+ * Emby uses the same HTTP API shape as Jellyfin (MediaBrowser token, /Sessions, /Items, etc.).
+ */
+class Emby extends Jellyfin {
+  constructor({ HTTPS, embyIP, embyPort, embyToken }) {
+    super({
+      HTTPS,
+      jfIP: embyIP,
+      jfPort: embyPort,
+      jfToken: embyToken,
+      displayName: "Emby",
+    });
   }
 }
 

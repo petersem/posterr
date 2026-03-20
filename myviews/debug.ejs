@@ -39,9 +39,9 @@ See logs for results
 <br/><br/>
 <button type="button" class="test btn btn-success" onclick="location.href = '<%=baseUrl%>/';">Return</button>
 <button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/ping';">Ping Tests</button>
-<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexns';">Now Screening Test</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/nowscreening';">Now Screening (Plex, Jellyfin, Emby)</button>
 <br><br>
-<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexod';">On-demand Test</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/ondemand';">On-demand (Plex, Jellyfin, Emby)</button>
 <button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/sonarr';">Sonarr Test</button>
 <button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/radarr';">Radarr Test</button>
 <br><br>
@@ -60,6 +60,12 @@ See logs for results
           keyVal = 'suppressed';
           break;
         case "plextoken":
+          keyVal = 'suppressed';
+          break;
+        case "jftoken":
+          keyVal = 'suppressed';
+          break;
+        case "embytoken":
           keyVal = 'suppressed';
           break;
         case "radarrtoken":

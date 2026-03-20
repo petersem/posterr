@@ -649,4 +649,21 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   }
 
   //  });
+
+<% if (typeof globals !== 'undefined' && globals && globals.jfEmbyPlaybackControls === 'true') { %>
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest(".jf-emby-playback-btn");
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var sid = btn.getAttribute("data-session");
+    var cmd = btn.getAttribute("data-cmd");
+    if (!sid || !cmd) return;
+    fetch("<%=baseUrl%>/api/session/playstate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId: sid, command: cmd })
+    }).catch(function () {});
+  }, true);
+<% } %>
 </script>

@@ -37,9 +37,16 @@ class globalPage {
    * @desc Takes merged mediaCard set and applies card order number and active card slide, then generates the rendered HTML for each media card.
    * @returns nothing
    */
-  async OrderAndRenderCards(baseUrl,hasArt, hideTitle, hideFooter) {
+  async OrderAndRenderCards(
+    baseUrl,
+    hasArt,
+    hideTitle,
+    hideFooter,
+    remotePlaybackControls
+  ) {
     if (this.cards.length != 0) {
       let webID = 0;
+      const showPb = remotePlaybackControls === true;
       // move through cards and update ID's and active, then render
       await this.cards.reduce(async (memo, card) => {
         await memo;
@@ -52,7 +59,7 @@ class globalPage {
           card.active = "";
         }
        // console.log(card);
-        await card.Render(hasArt,baseUrl,hideTitle,hideFooter);
+        await card.Render(hasArt, baseUrl, hideTitle, hideFooter, showPb);
       }, undefined);
     }
     return;

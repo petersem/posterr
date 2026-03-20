@@ -17,10 +17,19 @@ class Settings {
     this.fade = DEFAULT_SETTINGS.fade;
     this.hideSettingsLinks = DEFAULT_SETTINGS.hideSettingsLinks;
     this.theaterRoomMode = DEFAULT_SETTINGS.theaterRoomMode;
+    this.mediaServer = DEFAULT_SETTINGS.mediaServer;
     this.plexIP = DEFAULT_SETTINGS.plexIP;
     this.plexHTTPS = DEFAULT_SETTINGS.plexHTTPS;
     this.plexPort = DEFAULT_SETTINGS.plexPort;
     this.plexToken = DEFAULT_SETTINGS.plexToken;
+    this.jfHTTPS = DEFAULT_SETTINGS.jfHTTPS;
+    this.jfIP = DEFAULT_SETTINGS.jfIP;
+    this.jfPort = DEFAULT_SETTINGS.jfPort;
+    this.jfToken = DEFAULT_SETTINGS.jfToken;
+    this.embyHTTPS = DEFAULT_SETTINGS.embyHTTPS;
+    this.embyIP = DEFAULT_SETTINGS.embyIP;
+    this.embyPort = DEFAULT_SETTINGS.embyPort;
+    this.embyToken = DEFAULT_SETTINGS.embyToken;
     this.onDemandLibraries = DEFAULT_SETTINGS.onDemandLibraries;
     this.numberOnDemand = DEFAULT_SETTINGS.numberOnDemand;
     this.onDemandRefresh = DEFAULT_SETTINGS.onDemandRefresh;
@@ -75,6 +84,8 @@ class Settings {
     this.triviaNumber = DEFAULT_SETTINGS.triviaNumber;
     this.triviaFrequency = DEFAULT_SETTINGS.triviaFrequency;
     this.pinNS = DEFAULT_SETTINGS.pinNS;
+    this.seriesPosterForEpisodes = DEFAULT_SETTINGS.seriesPosterForEpisodes;
+    this.jfEmbyPlaybackControls = DEFAULT_SETTINGS.jfEmbyPlaybackControls;
     this.hideUser = DEFAULT_SETTINGS.hideUser;
     this.contentRatings = DEFAULT_SETTINGS.contentRatings;
     this.links = DEFAULT_SETTINGS.links;
@@ -95,15 +106,34 @@ class Settings {
     let hasChanged = false;
     let SettingChanged;
     try {
-      // only worry about required Plex settings. (other settings can remain default or be blank)
-      if (this.plexIP !== "" && this.plexPort !== "" && this.plexToken !== "") {
+      // Required media server settings (Plex, Jellyfin, or Emby)
+      const jfOk =
+        this.jfIP !== "" && this.jfPort !== "" && this.jfToken !== "";
+      const embyOk =
+        this.embyIP !== "" && this.embyPort !== "" && this.embyToken !== "";
+      const plexOk =
+        this.plexIP !== "" && this.plexPort !== "" && this.plexToken !== "";
+      if (this.mediaServer === "jellyfin" && jfOk) {
         hasChanged = true;
         throw SettingChanged;
-      } else {
+      }
+      if (this.mediaServer === "emby" && embyOk) {
+        hasChanged = true;
+        throw SettingChanged;
+      }
+      if (
+        this.mediaServer !== "jellyfin" &&
+        this.mediaServer !== "emby" &&
+        plexOk
+      ) {
+        hasChanged = true;
+        throw SettingChanged;
+      }
+      {
         let now = new Date();
         console.log(
           now.toISOString().split("T")[0] +
-            " INVALID PLEX SERVER SETTINGS - Please visit setup page to resolve"
+            " INVALID MEDIA SERVER SETTINGS - Please visit setup page to resolve"
         );
       }
     } catch (e) {
@@ -148,6 +178,17 @@ class Settings {
       if(readSettings.recentlyAddedDays==undefined) readSettings.recentlyAddedDays = 0;
       if(readSettings.enableAwtrix==undefined) readSettings.enableAwtrix = 'false';
       if(readSettings.rotate==undefined) readSettings.rotate = 'false';
+      if(readSettings.mediaServer==undefined) readSettings.mediaServer = 'plex';
+      if(readSettings.jfHTTPS==undefined) readSettings.jfHTTPS = 'false';
+      if(readSettings.jfIP==undefined) readSettings.jfIP = '';
+      if(readSettings.jfPort==undefined) readSettings.jfPort = 8096;
+      if(readSettings.jfToken==undefined) readSettings.jfToken = '';
+      if(readSettings.seriesPosterForEpisodes==undefined) readSettings.seriesPosterForEpisodes = 'true';
+      if(readSettings.jfEmbyPlaybackControls==undefined) readSettings.jfEmbyPlaybackControls = 'false';
+      if(readSettings.embyHTTPS==undefined) readSettings.embyHTTPS = 'false';
+      if(readSettings.embyIP==undefined) readSettings.embyIP = '';
+      if(readSettings.embyPort==undefined) readSettings.embyPort = 8096;
+      if(readSettings.embyToken==undefined) readSettings.embyToken = '';
     } catch (ex) {
       // do nothing if error as it reads ok anyhow
       let d = new Date();
@@ -252,6 +293,26 @@ class Settings {
     else this.plexPort = cs.plexPort;
     if (jsonObject.plexToken) this.plexToken = jsonObject.plexToken;
     else this.plexToken = cs.plexToken;
+    if (jsonObject.mediaServer) this.mediaServer = jsonObject.mediaServer;
+    else this.mediaServer = cs.mediaServer !== undefined ? cs.mediaServer : "plex";
+    if (jsonObject.jfHTTPSSwitch) this.jfHTTPS = jsonObject.jfHTTPSSwitch;
+    else this.jfHTTPS = "false";
+    if (jsonObject.jfIP) this.jfIP = jsonObject.jfIP;
+    else this.jfIP = cs.jfIP;
+    if (jsonObject.jfPort !== undefined && jsonObject.jfPort !== "")
+      this.jfPort = parseInt(jsonObject.jfPort, 10);
+    else this.jfPort = cs.jfPort;
+    if (jsonObject.jfToken) this.jfToken = jsonObject.jfToken;
+    else this.jfToken = cs.jfToken;
+    if (jsonObject.embyHTTPSSwitch) this.embyHTTPS = jsonObject.embyHTTPSSwitch;
+    else this.embyHTTPS = "false";
+    if (jsonObject.embyIP) this.embyIP = jsonObject.embyIP;
+    else this.embyIP = cs.embyIP;
+    if (jsonObject.embyPort !== undefined && jsonObject.embyPort !== "")
+      this.embyPort = parseInt(jsonObject.embyPort, 10);
+    else this.embyPort = cs.embyPort;
+    if (jsonObject.embyToken) this.embyToken = jsonObject.embyToken;
+    else this.embyToken = cs.embyToken;
     if (jsonObject.plexLibraries)
       this.onDemandLibraries = jsonObject.plexLibraries;
     else this.onDemandLibraries = cs.onDemandLibraries;
@@ -290,6 +351,12 @@ class Settings {
     else this.genres = cs.genres;
     if (jsonObject.pinNSSwitch) this.pinNS = jsonObject.pinNSSwitch;
     else this.pinNS = cs.pinNS;
+    if (jsonObject.seriesPosterForEpisodesSwitch)
+      this.seriesPosterForEpisodes = "true";
+    else this.seriesPosterForEpisodes = "false";
+    if (jsonObject.jfEmbyPlaybackControlsSwitch)
+      this.jfEmbyPlaybackControls = "true";
+    else this.jfEmbyPlaybackControls = "false";
     if (jsonObject.hideUser) this.hideUser = jsonObject.hideUser;
     else this.hideUser = cs.hideUser;
     if (jsonObject.titleFont) this.custBrand = jsonObject.titleFont;

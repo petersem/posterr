@@ -51,24 +51,31 @@ class MediaCard {
     this.runProgress = "";
     this.linkUrl = "";
     this.youtubeKey = "";
+    this.remoteSessionId = "";
   }
 
   /**
    * @desc renders the properties of the card into html, then sets this to the 'rendered' property
    * @returns nothing
    */
-  async Render(hasArt,baseUrl,hideTitle,hideFooter) {
+  async Render(hasArt, baseUrl, hideTitle, hideFooter, remotePlaybackControls) {
     let hiddenTitle = "";
     let hiddenFooter = "";
     let hidden = "";
     let fullScreen = "";
     let pauseMessage = "";
+    const ct0 = Array.isArray(this.cardType)
+      ? this.cardType[0] || ""
+      : typeof this.cardType === "string"
+        ? this.cardType
+        : "";
+    const ct1 = Array.isArray(this.cardType) ? this.cardType[1] || "" : "";
 
     // set header/footer hidden values
-    if(hideTitle=='true' && this.cardType[0] == "On-demand") hiddenTitle = "hidden";
-    if(hideFooter=='true' && this.cardType[0] == "On-demand") hiddenFooter = "hidden";
+    if(hideTitle=='true' && ct0 == "On-demand") hiddenTitle = "hidden";
+    if(hideFooter=='true' && ct0 == "On-demand") hiddenFooter = "hidden";
     if(hiddenTitle !== "" && hiddenFooter !== "") fullScreen="fullscreen";
-    if(this.cardType[0] == "Picture" || this.cardType == "Trivia Question" || this.cardType == "WebURL"){
+    if(ct0 == "Picture" || ct0 == "Trivia Question" || ct0 == "WebURL"){
       hiddenTitle="hidden";
       hiddenFooter="hidden";
       if(hasArt && this.posterArtURL !== ""){
@@ -81,7 +88,7 @@ class MediaCard {
       }
     }
 
-    if(this.cardType[0] == "Picture"){
+    if(ct0 == "Picture"){
       pauseMessage = `<div style="position: relative; z-index: 1;">
   <span id="overlay_text` + this.ID + `" style="position: fixed; bottom: 5px; z-index: 3;"></span>
   </div>`
@@ -89,10 +96,10 @@ class MediaCard {
 
 
     // set to hide progress bar if not a playing type of card
-    if (this.cardType[0] != "Now Screening" && this.cardType[0] != "Playing") hidden = "hidden";
+    if (ct0 != "Now Screening" && ct0 != "Playing") hidden = "hidden";
     
     // get custom card title
-    let cardCustomTitle = this.cardType[1] !== "" ? this.cardType[1] : this.cardType[0];
+    let cardCustomTitle = ct1 !== "" ? ct1 : ct0;
 
     var decRemainingTime = this.runDuration - this.runProgress;
     var et = new Date();
@@ -105,7 +112,7 @@ class MediaCard {
     this.linkRender="";
     // if a trivia card, then prepare html
 
-    if(this.cardType[0] == "Trivia Question"){
+    if(ct0 == "Trivia Question"){
      
       let options = "<ol type='A' class='listOptions'>";
       this.triviaOptions.forEach(o => {
@@ -130,7 +137,7 @@ class MediaCard {
       </div>`;
     }
 
-    if(this.cardType[0] == "WebURL"){
+    if(ct0 == "WebURL"){
       hiddenFooter = "hidden";
       fullScreen="fullscreen";
       hiddenTitle="hidden";
@@ -252,9 +259,23 @@ class MediaCard {
         "<span class='badge badge-pill badge-dark'> " + this.rating + "</span>";
     }
 
-    if(this.cardType[0] == "Now Screening" || this.cardType[0] == "Playing") {
+    if(ct0 == "Now Screening" || ct0 == "Playing") {
       endTimePill =
         "<span class='badge badge-pill badge-dark'>End: " + endTime + "</span>";
+    }
+
+    let playbackToolbar = "";
+    if (
+      remotePlaybackControls === true &&
+      this.remoteSessionId &&
+      (ct0 == "Now Screening" || ct0 == "Playing")
+    ) {
+      const sid = String(this.remoteSessionId).replace(/"/g, "&quot;");
+      playbackToolbar =
+        `<div class="jf-emby-playback-bar" style="position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:25;display:flex;gap:6px;opacity:0.9;">` +
+        `<button type="button" class="btn btn-sm btn-dark jf-emby-playback-btn" data-session="${sid}" data-cmd="PlayPause" title="Play/Pause">Play/Pause</button>` +
+        `<button type="button" class="btn btn-sm btn-dark jf-emby-playback-btn" data-session="${sid}" data-cmd="Stop" title="Stop">Stop</button>` +
+        `</div>`;
     }
 
     // render data into html
@@ -280,7 +301,7 @@ class MediaCard {
       </div>
         <div class="banners">
           <div class="bannerBigText ` +
-      this.cardType[0] +
+      ct0 +
       ` ` + hiddenTitle + 
       `">` +
       cardCustomTitle +
@@ -293,7 +314,7 @@ class MediaCard {
       " " + fullScreen +
       `" style="background-image: url('` +
       baseUrl + 
-      this.posterURL + `')">` + pauseMessage + `
+      this.posterURL + `')">` + pauseMessage + playbackToolbar + `
 
       <div class="progress ` +
       hidden +

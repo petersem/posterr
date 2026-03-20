@@ -7,6 +7,33 @@ const session = require("express-session");
 const { check, validationResult } = require("express-validator");
 //const user = require('./routes/user.routes');
 const pms = require("./classes/mediaservers/plex");
+const Jellyfin = require("./classes/mediaservers/jellyfin");
+const Emby = require("./classes/mediaservers/emby");
+
+function createMediaServer(settings) {
+  if (settings.mediaServer === "jellyfin") {
+    return new Jellyfin({
+      HTTPS: settings.jfHTTPS,
+      jfIP: settings.jfIP,
+      jfPort: settings.jfPort,
+      jfToken: settings.jfToken,
+    });
+  }
+  if (settings.mediaServer === "emby") {
+    return new Emby({
+      HTTPS: settings.embyHTTPS,
+      embyIP: settings.embyIP,
+      embyPort: settings.embyPort,
+      embyToken: settings.embyToken,
+    });
+  }
+  return new pms({
+    plexHTTPS: settings.plexHTTPS,
+    plexIP: settings.plexIP,
+    plexPort: settings.plexPort,
+    plexToken: settings.plexToken,
+  });
+}
 const vers = require("./classes/core/ver");
 const glb = require("./classes/core/globalPage");
 const core = require("./classes/core/cache");
@@ -476,13 +503,8 @@ async function loadNowScreening() {
     return nsCards;
   }
 
-  // load MediaServer(s) (switch statement for different server settings server option - TODO)
-  let ms = new pms({
-    plexHTTPS: loadedSettings.plexHTTPS,
-    plexIP: loadedSettings.plexIP,
-    plexPort: loadedSettings.plexPort,
-    plexToken: loadedSettings.plexToken,
-  });
+  // load MediaServer(s) — Plex or Jellyfin
+  let ms = createMediaServer(loadedSettings);
 
   let excludeLibraries;
   if(loadedSettings.excludeLibs !== undefined && loadedSettings.excludeLibs !== ""){
@@ -507,7 +529,8 @@ async function loadNowScreening() {
       loadedSettings.filterDevices,
       loadedSettings.filterUsers,
       loadedSettings.hideUser,
-      excludeLibraries
+      excludeLibraries,
+      loadedSettings.seriesPosterForEpisodes
     );
     // Send to Awtrix, if enabled
     if(isAwtrixEnabled){
@@ -638,9 +661,9 @@ async function loadNowScreening() {
         }
       }
 
-    // restore defaults if plex now available after an error
+    // restore defaults if media server now available after an error
     if (isPlexUnavailable) {
-      console.log("✅ Plex connection restored - defualt poll timers restored");
+      console.log("✅ Media server connection restored - default poll timers restored");
       isPlexUnavailable = false;
     }
   } catch (err) {
@@ -794,8 +817,19 @@ async function loadNowScreening() {
   }
 
   // put everything into global class, ready to be passed to poster.ejs
+  globalPage.jfEmbyPlaybackControls = loadedSettings.jfEmbyPlaybackControls;
+  const remotePlaybackControls =
+    (loadedSettings.mediaServer === "jellyfin" ||
+      loadedSettings.mediaServer === "emby") &&
+    loadedSettings.jfEmbyPlaybackControls === "true";
   // render html for all cards
-  await globalPage.OrderAndRenderCards(BASEURL, loadedSettings.hasArt, loadedSettings.odHideTitle, loadedSettings.odHideFooter);
+  await globalPage.OrderAndRenderCards(
+    BASEURL,
+    loadedSettings.hasArt,
+    loadedSettings.odHideTitle,
+    loadedSettings.odHideFooter,
+    remotePlaybackControls
+  );
   globalPage.slideDuration = loadedSettings.slideDuration * 1000;
   globalPage.playThemes = loadedSettings.playThemes;
   globalPage.playGenericThemes = loadedSettings.genericThemes;
@@ -839,13 +873,7 @@ async function loadOnDemand() {
     return odCards;
   }
 
-  // load MediaServer(s) (switch statement for different server settings server option - TODO)
-  let ms = new pms({
-    plexHTTPS: loadedSettings.plexHTTPS,
-    plexIP: loadedSettings.plexIP,
-    plexPort: loadedSettings.plexPort,
-    plexToken: loadedSettings.plexToken,
-  });
+  let ms = createMediaServer(loadedSettings);
 
   try {
     odCards = await ms.GetOnDemand(
@@ -982,16 +1010,36 @@ async function checkEnabled() {
     isSleepEnabled = false;
   }
 
-  // check Plex
-  if (
-    (loadedSettings.plexIP !== undefined && loadedSettings.plexIP !== '') &&
-    (loadedSettings.plexToken !== undefined && loadedSettings.plexToken !== '') &&
-    (loadedSettings.plexPort !== undefined && loadedSettings.plexPort !== undefined)
-  ) {
-    isPlexEnabled = true;
-  }
-  else{
-    isPlexEnabled = false;
+  // check Plex, Jellyfin, or Emby
+  if (loadedSettings.mediaServer === "jellyfin") {
+    isPlexEnabled =
+      loadedSettings.jfIP !== undefined &&
+      loadedSettings.jfIP !== "" &&
+      loadedSettings.jfToken !== undefined &&
+      loadedSettings.jfToken !== "" &&
+      loadedSettings.jfPort !== undefined &&
+      loadedSettings.jfPort !== "";
+  } else if (loadedSettings.mediaServer === "emby") {
+    isPlexEnabled =
+      loadedSettings.embyIP !== undefined &&
+      loadedSettings.embyIP !== "" &&
+      loadedSettings.embyToken !== undefined &&
+      loadedSettings.embyToken !== "" &&
+      loadedSettings.embyPort !== undefined &&
+      loadedSettings.embyPort !== "";
+  } else {
+    if (
+      loadedSettings.plexIP !== undefined &&
+      loadedSettings.plexIP !== "" &&
+      loadedSettings.plexToken !== undefined &&
+      loadedSettings.plexToken !== "" &&
+      loadedSettings.plexPort !== undefined &&
+      loadedSettings.plexPort !== ""
+    ) {
+      isPlexEnabled = true;
+    } else {
+      isPlexEnabled = false;
+    }
   }
   
   // check on-demand
@@ -1091,7 +1139,13 @@ async function checkEnabled() {
   
   console.log(
     `--- Enabled Status ---
-   Plex: ` +
+   Media server (` +
+    (loadedSettings.mediaServer === "jellyfin"
+      ? "Jellyfin"
+      : loadedSettings.mediaServer === "emby"
+        ? "Emby"
+        : "Plex") +
+    `): ` +
     isPlexEnabled +
     `
    Now Showing: ` +
@@ -1246,6 +1300,10 @@ async function startup(clearCache) {
 
   // set values for noLinks
   globalPage.hideSettingsLinks = loadedSettings.hideSettingsLinks !== undefined ? loadedSettings.hideSettingsLinks : 'false';
+  globalPage.jfEmbyPlaybackControls =
+    loadedSettings.jfEmbyPlaybackControls !== undefined
+      ? loadedSettings.jfEmbyPlaybackControls
+      : "false";
 
     // restart timer for houseKeeping
     //houseKeepingClock = setInterval(houseKeeping, 86400000); // daily
@@ -1526,6 +1584,51 @@ app.get(BASEURL + "/conncheck", (req, res) => {
   res.send({ "status": cold_start_time, "sleep": sleep });
 });
 
+app.post(BASEURL + "/api/session/playstate", async (req, res) => {
+  const allowed = ["Pause", "Unpause", "Stop", "PlayPause"];
+  const sessionId = req.body && req.body.sessionId;
+  const command = req.body && req.body.command;
+  const sid = sessionId != null ? String(sessionId).trim() : "";
+  if (!sid || !allowed.includes(command)) {
+    return res.status(400).json({ ok: false, error: "invalid request" });
+  }
+  if (
+    loadedSettings.mediaServer !== "jellyfin" &&
+    loadedSettings.mediaServer !== "emby"
+  ) {
+    return res.status(400).json({ ok: false, error: "not supported" });
+  }
+  if (loadedSettings.jfEmbyPlaybackControls !== "true") {
+    return res.status(403).json({ ok: false, error: "disabled" });
+  }
+  try {
+    const ms = createMediaServer(loadedSettings);
+    await ms.sendPlaystateCommand(sid, command);
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.status(502).json({ ok: false, error: String(err.message) });
+  }
+});
+
+/** Register GET at BASEURL+path and, when BASEPATH is set, at path alone (reverse proxies / bookmarks). */
+function registerDebugGet(path, handler) {
+  app.get(BASEURL + path, handler);
+  if (BASEURL) {
+    app.get(path, handler);
+  }
+}
+
+const nowScreeningDebugHandler = async (req, res) => {
+  const test = new health(loadedSettings);
+  await test.AllNowScreeningCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
+};
+
+const onDemandDebugHandler = async (req, res) => {
+  const test = new health(loadedSettings);
+  await test.AllOnDemandCheck();
+  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
+};
 
 app.get(BASEURL + "/debug", (req, res) => {
   res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
@@ -1540,23 +1643,24 @@ app.get(BASEURL + "/debug/ping", (req, res) => {
   res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
 });
 
-app.get(BASEURL + "/debug/plexns", (req, res) => {
-  console.log(' ');
-  console.log("** PLEX 'NOW SCREENING' CHECK **");
-  console.log('-------------------------------------------------------');
-  let test = new health(loadedSettings);
-  test.PlexNSCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
-});
+registerDebugGet("/debug/nowscreening", nowScreeningDebugHandler);
+registerDebugGet("/debug/now-screening", nowScreeningDebugHandler);
 
-app.get(BASEURL + "/debug/plexod", (req, res) => {
-  console.log(' ');
-  console.log("** PLEX 'ON-DEMAND' CHECK **");
-  console.log('-------------------------------------------------------');
-  let test = new health(loadedSettings);
-  test.PlexODCheck();
-  res.render("debug", { settings: loadedSettings, version: pjson.version, baseUrl: BASEURL });
-});
+const redirectNowScreening = (req, res) => {
+  res.redirect(302, BASEURL + "/debug/nowscreening");
+};
+registerDebugGet("/debug/plexns", redirectNowScreening);
+registerDebugGet("/debug/jellyfinns", redirectNowScreening);
+registerDebugGet("/debug/embyns", redirectNowScreening);
+
+registerDebugGet("/debug/ondemand", onDemandDebugHandler);
+
+const redirectOnDemand = (req, res) => {
+  res.redirect(302, BASEURL + "/debug/ondemand");
+};
+registerDebugGet("/debug/plexod", redirectOnDemand);
+registerDebugGet("/debug/jellyfinod", redirectOnDemand);
+registerDebugGet("/debug/embyod", redirectOnDemand);
 
 app.get(BASEURL + "/debug/sonarr", (req, res) => {
   console.log(' ');
@@ -1744,16 +1848,27 @@ app.post(
         return true;
       })
       .withMessage("'Slide Duration' is required and must be 5 or more"),
-    check("plexIP").not().isEmpty().withMessage("'Plex IP' is required"),
+    check("plexIP").custom((value, { req }) => {
+      if (
+        req.body.mediaServer === "jellyfin" ||
+        req.body.mediaServer === "emby"
+      )
+        return true;
+      if (!value || String(value).trim() === "") {
+        throw new Error("'Plex IP' is required when using Plex as the media source");
+      }
+      return true;
+    }),
     check("plexPort")
-      .not()
-      .isEmpty()
-      .withMessage("'Plex port' is required. (setting default)")
-      .custom((value) => {
-        if (parseInt(value) === "NaN") {
-          throw new Error("'Plex Port' must be a number");
+      .custom((value, { req }) => {
+        if (
+          req.body.mediaServer === "jellyfin" ||
+          req.body.mediaServer === "emby"
+        )
+          return true;
+        if (value === undefined || value === "" || isNaN(parseInt(value, 10))) {
+          throw new Error("'Plex port' is required. (setting default)");
         }
-        // Indicates the success of this synchronous custom validator
         return true;
       }),
     check("onDemandRefresh")
@@ -1804,7 +1919,59 @@ app.post(
         // Indicates the success of this synchronous custom validator
         return true;
       }),
-    check("plexToken").not().isEmpty().withMessage("'Plex token' is required"),
+    check("plexToken").custom((value, { req }) => {
+      if (
+        req.body.mediaServer === "jellyfin" ||
+        req.body.mediaServer === "emby"
+      )
+        return true;
+      if (!value || String(value).trim() === "") {
+        throw new Error("'Plex token' is required when using Plex as the media source");
+      }
+      return true;
+    }),
+    check("jfIP").custom((value, { req }) => {
+      if (req.body.mediaServer !== "jellyfin") return true;
+      if (!value || String(value).trim() === "") {
+        throw new Error("'Jellyfin server address' is required");
+      }
+      return true;
+    }),
+    check("jfPort").custom((value, { req }) => {
+      if (req.body.mediaServer !== "jellyfin") return true;
+      if (value === undefined || value === "" || isNaN(parseInt(value, 10))) {
+        throw new Error("'Jellyfin port' is required (usually 8096)");
+      }
+      return true;
+    }),
+    check("jfToken").custom((value, { req }) => {
+      if (req.body.mediaServer !== "jellyfin") return true;
+      if (!value || String(value).trim() === "") {
+        throw new Error("'Jellyfin API key' is required");
+      }
+      return true;
+    }),
+    check("embyIP").custom((value, { req }) => {
+      if (req.body.mediaServer !== "emby") return true;
+      if (!value || String(value).trim() === "") {
+        throw new Error("'Emby server address' is required");
+      }
+      return true;
+    }),
+    check("embyPort").custom((value, { req }) => {
+      if (req.body.mediaServer !== "emby") return true;
+      if (value === undefined || value === "" || isNaN(parseInt(value, 10))) {
+        throw new Error("'Emby port' is required (usually 8096)");
+      }
+      return true;
+    }),
+    check("embyToken").custom((value, { req }) => {
+      if (req.body.mediaServer !== "emby") return true;
+      if (!value || String(value).trim() === "") {
+        throw new Error("'Emby API key' is required");
+      }
+      return true;
+    }),
     check("enableSleep")
       .custom((value, { req }) => {
         if(value == "true"){
@@ -1853,12 +2020,25 @@ app.post(
       shuffleSwitch: req.body.shuffleSwitch,
       hideSettingsLinks: req.body.hideSettingsLinks,
       theaterRoomMode: req.body.theaterRoomMode,
+      mediaServer: req.body.mediaServer || "plex",
       plexToken: req.body.plexToken,
       plexIP: req.body.plexIP,
       plexHTTPSSwitch: req.body.plexHTTPSSwitch,
       plexPort: req.body.plexPort ? parseInt(req.body.plexPort) : DEFAULT_SETTINGS.plexPort,
+      jfToken: req.body.jfToken,
+      jfIP: req.body.jfIP,
+      jfHTTPSSwitch: req.body.jfHTTPSSwitch,
+      jfPort: req.body.jfPort ? parseInt(req.body.jfPort, 10) : DEFAULT_SETTINGS.jfPort,
+      embyToken: req.body.embyToken,
+      embyIP: req.body.embyIP,
+      embyHTTPSSwitch: req.body.embyHTTPSSwitch,
+      embyPort: req.body.embyPort
+        ? parseInt(req.body.embyPort, 10)
+        : DEFAULT_SETTINGS.embyPort,
       plexLibraries: req.body.plexLibraries,
       pinNSSwitch: req.body.pinNSSwitch,
+      seriesPosterForEpisodesSwitch: req.body.seriesPosterForEpisodesSwitch,
+      jfEmbyPlaybackControlsSwitch: req.body.jfEmbyPlaybackControlsSwitch,
       hideUser: req.body.hideUser,
       numberOnDemand: !isNaN(parseInt(req.body.numberOnDemand)) ? parseInt(req.body.numberOnDemand) : DEFAULT_SETTINGS.numberOnDemand,
       recentlyAddedDays: !isNaN(parseInt(req.body.recentlyAddedDays)) ? parseInt(req.body.recentlyAddedDays) : DEFAULT_SETTINGS.recentlyAddedDays, 

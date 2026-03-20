@@ -34,6 +34,24 @@ class Plex {
     this.client.options = { product: "Poster" };
   }
 
+  useEpisodeThumbSetting(seriesPosterForEpisodes) {
+    return (
+      seriesPosterForEpisodes === false ||
+      seriesPosterForEpisodes === "false" ||
+      String(seriesPosterForEpisodes ?? "").toLowerCase() === "false"
+    );
+  }
+
+  /** Show poster for an episode: grandparentThumb, or /library/metadata/{grandparentRatingKey}/thumb. */
+  plexEpisodeSeriesThumbPath(md) {
+    if (md.grandparentThumb) return md.grandparentThumb;
+    const gk = md.grandparentRatingKey;
+    if (gk != null && String(gk).trim() !== "") {
+      return "/library/metadata/" + String(gk) + "/thumb";
+    }
+    return md.parentThumb || md.thumb;
+  }
+
   /**
    * @desc Get raw results for now screening
    * @returns {object} JSON - Plex now screening results
@@ -60,7 +78,7 @@ class Plex {
    * @desc Gets now screening cards
    * @returns {object} mediaCard[] - Returns an array of mediaCards
    */
-    async GetNowScreening(playThemes, playGenenericThemes, hasArt, filterRemote, filterLocal, filterDevices, filterUsers, hideUser, excludeLibs) {
+    async GetNowScreening(playThemes, playGenenericThemes, hasArt, filterRemote, filterLocal, filterDevices, filterUsers, hideUser, excludeLibs, seriesPosterForEpisodes) {
     // get raw data first
     let nsCards = [];
     let nsRaw;
@@ -202,8 +220,14 @@ class Plex {
               medCard.rating = Math.round(md.rating * 10) + "%";
             }
 
-            // download poster image to local server
-            fileName = mediaId + ".jpg";
+            // download poster image to local server (series vs episode thumb)
+            const useEpThumb = this.useEpisodeThumbSetting(seriesPosterForEpisodes);
+            let episodeThumb =
+              md.thumb || md.parentThumb || md.grandparentThumb;
+            let seriesThumb = this.plexEpisodeSeriesThumbPath(md);
+            let posterThumb = useEpThumb ? episodeThumb : seriesThumb;
+            let posterSuffix = useEpThumb ? "-epthumb" : "-show";
+            fileName = mediaId + posterSuffix + ".jpg";
             prefix = "http://";
             if (this.https) prefix = "https://";
             url =
@@ -211,7 +235,7 @@ class Plex {
               this.plexIP +
               ":" +
               this.plexPort +
-              md.grandparentThumb +
+              posterThumb +
               "?X-Plex-Token=" +
               this.plexToken;
             await core.CacheImage(url, fileName);
@@ -220,7 +244,7 @@ class Plex {
             //download poster
             // check art exists
             if (md.art !== undefined && hasArt == "true") {
-              fileName = mediaId + "-art.jpg";
+              fileName = mediaId + posterSuffix + "-art.jpg";
               if (this.https) prefix = "https://";
               url =
                 prefix +
@@ -469,14 +493,19 @@ class Plex {
         // add media card to array
         if ((md.type == "episode" || md.type == "movie" || md.type == "track") && (md.live == undefined )) {
           // Sanitise inputs and apply filter checks
-          let okToAdd = false;
           let devices = filterDevices !== undefined ? filterDevices : "";
           devices = devices.toLowerCase().replace(", ",",").replace(" ,",",").replace(/,+$/, "").split(",");
           let users = filterUsers !== undefined ? filterUsers : "";
           users = users.toLowerCase().replace(", ",",").replace(" ,",",").replace(/,+$/, "").split(",");
-          // apply filter checks
-          if(filterRemote=='true' && medCard.playerLocal == false) okToAdd = true;
-          if(filterLocal=='true' && medCard.playerLocal == true) okToAdd = true;
+          const anyLocationFilter =
+            filterRemote === "true" || filterLocal === "true";
+          let okToAdd = false;
+          if (!anyLocationFilter) {
+            okToAdd = true;
+          } else {
+            if (filterRemote === "true" && medCard.playerLocal === false) okToAdd = true;
+            if (filterLocal === "true" && medCard.playerLocal === true) okToAdd = true;
+          }
           if(users.length > 0 && users.includes(md.User.title.toLowerCase())==false && users[0] !== "") okToAdd = false;
           if(devices.length > 0 && !util.isEmpty(medCard.playerDevice) && devices.includes(medCard.playerDevice.toLowerCase())==false && devices[0] !== "") okToAdd = false;
           if(excludeLibs !== undefined && excludeLibs !== "" && excludeLibs.includes(md.librarySectionTitle)) { 
