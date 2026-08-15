@@ -8,17 +8,14 @@ const sizeOf = require('image-size');
 const bookcovers=""; // = require("bookcovers");
 
 /**
- * @desc Used to communicate with Readarr or Chaptarr (Readarr-compatible API) for upcoming books.
- * @param {string} readarrUrl - Base URL (no trailing slash)
- * @param {string} readarrToken - API key
- * @param {string} [bookArrKind="readarr"] - "readarr" | "chaptarr"
+ * @desc Used to communicate with Radarr to obtain a list of future releases
+ * @param radarrUrl
+ * @param radarrToken
  */
 class Readarr {
-  constructor(readarrUrl, readarrToken, bookArrKind) {
+  constructor(readarrUrl, readarrToken) {
     this.readarrUrl = readarrUrl;
     this.readarrToken = readarrToken;
-    this.bookArrKind = bookArrKind === "chaptarr" ? "chaptarr" : "readarr";
-    this.appLabel = this.bookArrKind === "chaptarr" ? "Chaptarr" : "Readarr";
   }
 
   async getCovers(isbn) {
@@ -99,10 +96,7 @@ class Readarr {
         });
     } catch (err) {
       let d = new Date();
-      console.log(
-        d.toLocaleString() + " *" + this.appLabel + " - Get calendar data:",
-        err.message
-      );
+      console.log(d.toLocaleString() + " *Readarr - Get calendar data:", err.message);
       throw err;
     }
     return response;
@@ -130,10 +124,7 @@ class Readarr {
         });
     } catch (err) {
       let d = new Date();
-      console.log(
-        d.toLocaleString() + " *" + this.appLabel + " - Get book data:",
-        err.message
-      );
+      console.log(d.toLocaleString() + " *Readarr - Get book data:", err.message);
       throw err;
     }
     return response;
@@ -154,7 +145,7 @@ class Readarr {
     }
     catch (err) {
       let d = new Date();
-      console.log(d.toLocaleString() + " *" + this.appLabel + " - Get Raw Data: " + err);
+      console.log(d.toLocaleString() + " *Readarr - Get Raw Data: " + err);
       throw err;
     }
 
@@ -173,7 +164,7 @@ class Readarr {
         }
         catch (err) {
           let d = new Date();
-          console.log(d.toLocaleString() + " *" + this.appLabel + " - Get book Data: " + err);
+          console.log(d.toLocaleString() + " *Readarr - Get book Data: " + err);
           throw err;
         }
 
@@ -198,20 +189,7 @@ class Readarr {
         medCard.summary = await util.emptyIfNull(md.overview);
         medCard.mediaType = "ebook";
         medCard.cardType = cType.CardTypeEnum.EBook;
-        let authorsStr = "";
-        const auth = rawBook.data && rawBook.data.author;
-        if (auth) {
-          if (Array.isArray(auth)) {
-            authorsStr = auth
-              .map((x) => (x && x.authorName) || "")
-              .filter(Boolean)
-              .join(", ");
-          } else if (auth.authorName) {
-            authorsStr = auth.authorName;
-          }
-        }
-        medCard.authors = authorsStr;
-        medCard.studio = authorsStr;
+        medCard.studio = rawBook.data.author.authorName;
         if (Math.round(md.ratings.value * 20) !== 0) medCard.rating = Math.round(md.ratings.value * 20) + "%";
         medCard.theme = "";
         medCard.pageCount = md.pageCount;
@@ -238,26 +216,7 @@ class Readarr {
           dlResult = await core.CacheImage(url, fileName);
           medCard.posterURL = "/imagecache/" + fileName;
         }
-        if (
-          hasArt === "true" &&
-          cover !== "none" &&
-          medCard.posterURL &&
-          medCard.posterURL.indexOf("/imagecache/") === 0
-        ) {
-          try {
-            const artName = md.foreignBookId + "-art.jpg";
-            const artUrl =
-              this.readarrUrl +
-              "/api/v1/mediacover/book/" +
-              md.id +
-              "/cover.jpg?apikey=" +
-              this.readarrToken;
-            await core.CacheImage(artUrl, artName);
-            medCard.posterArtURL = "/imagecache/" + artName;
-          } catch (e) {
-            medCard.posterArtURL = "";
-          }
-        }
+        if(hasArt=='true') medCard.posterArtURL = "/images/german.png";
         medCard.posterAR = 1.47;
 
         if (md.grabbed == false && !await util.isEmpty(md.releaseDate)) {
@@ -279,10 +238,6 @@ class Readarr {
 
 
 
-  /** @param {string} [kind] */
-  static displayLabel(kind) {
-    return kind === "chaptarr" ? "Chaptarr" : "Readarr";
-  }
 }
 
 module.exports = Readarr;

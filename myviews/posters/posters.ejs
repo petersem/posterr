@@ -14,39 +14,6 @@
     <div class="carousel-inner cardHolder h-100 w-100 ">
     </div>
 </div>
-<style>
-  /* Home cycle dedicated views run in an iframe; hard-override legacy global iframe CSS. */
-  #homeCycleEmbedWrap {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 20000 !important;
-    background: #000 !important;
-    overflow: hidden !important;
-  }
-  #homeCycleEmbedFrame {
-    display: block !important;
-    position: absolute !important;
-    inset: 0 !important;
-    left: 0 !important;
-    top: 0 !important;
-    right: auto !important;
-    bottom: auto !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    min-width: 100vw !important;
-    min-height: 100vh !important;
-    max-width: none !important;
-    max-height: none !important;
-    border: 0 !important;
-    z-index: 0 !important;
-    background: transparent !important;
-  }
-</style>
-<div id="homeCycleEmbedWrap" class="home-cycle-embed-wrap" style="display:none;position:fixed;inset:0;z-index:20000;background:#000;">
-  <iframe id="homeCycleEmbedFrame" title="Dedicated screen" style="position:absolute;inset:0;left:0;top:0;right:auto;bottom:auto;width:100%;height:100%;min-width:0;min-height:0;z-index:0;border:0;background:transparent;" loading="eager"></iframe>
-</div>
 
 <script language='javascript'>
 
@@ -155,17 +122,6 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   var connCheckClock;
   var connOk = true;
   var sleeping = false;
-  var getCardsPath = "<%=baseUrl%>/getcards";
-  var getCardsRetryTimer = null;
-  var getCardsFailCount = 0;
-  function resolveGetCardsPath() {
-    if (typeof getCardsPath === "string" && getCardsPath.trim() !== "") {
-      return getCardsPath;
-    }
-    return "<%=baseUrl%>/getcards";
-  }
-
-  var nowShowingCycleTimer = null;
   var counter;
   var curPlayID = 1;
   var pauseDetect = false;
@@ -182,18 +138,9 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
 
   function noConnection() {
     cardHtml = `<div class="container d-flex align-items-center justify-content-center no-content"><div class="d-flex">
-      <div class="settingsLink">Lost connectivity with PosterX server!</br>Attempting to restore connection..</div></div></div>`
+      <div class="settingsLink">Lost connectivity with Posterr server!</br>Attempting to restore connection..</div></div></div>`
     $(".cardHolder").html(cardHtml);    
     $("body").css("background-color","black");
-  }
-
-  function queueGetCardsRetry(delayMs) {
-    if (getCardsRetryTimer) return;
-    var wait = Math.max(1000, parseInt(delayMs, 10) || 2000);
-    getCardsRetryTimer = setTimeout(function () {
-      getCardsRetryTimer = null;
-      getCards();
-    }, wait);
   }
 
   function shutdown(){
@@ -223,8 +170,7 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
 //console.log('check for connection');
     const xhr = new XMLHttpRequest();
    
-    xhr.open('GET', "<%=baseUrl%>/conncheck");
-    xhr.timeout = 5000;
+    xhr.open('GET', window.location.href + 'conncheck');
     // set response format
     xhr.responseType = 'json';
     xhr.send();
@@ -233,26 +179,12 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
       console.log('Conection failed. Trying to restore connection.')
       connOk = false;
       noConnection();
-      queueGetCardsRetry(2000);
-    }
-    xhr.ontimeout = () => {
-      console.log('Connection check timed out. Trying to restore connection.')
-      connOk = false;
-      noConnection();
-      queueGetCardsRetry(2000);
     }
 
     xhr.onload = () => {
       // check that there hasn't been rapid a cold restart of posterr that this connection check missed
       const res = xhr.response;
-      if(!res){
-        if (sleeping !== true) {
-          connOk = false;
-          noConnection();
-          queueGetCardsRetry(2000);
-        }
-        return;
-      }
+      if(res==null && sleeping !== true) noConnection();
       let serverDate = new Date(res.status);
       // enable overlay if sleep signalled
       if(res.sleep=="true") {
@@ -301,36 +233,17 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   function getCards(){
     //console.log('getting cards');
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', resolveGetCardsPath());
-    xhr.timeout = 10000;
+    xhr.open('GET', window.location.href + 'getcards');
 
     // set response format
     xhr.responseType = 'json';
     xhr.send();
 
-    xhr.onerror = () => {
-      getCardsFailCount++;
-      noConnection();
-      queueGetCardsRetry(Math.min(10000, 1500 * Math.max(1, getCardsFailCount)));
-    };
-    xhr.ontimeout = () => {
-      getCardsFailCount++;
-      noConnection();
-      queueGetCardsRetry(Math.min(10000, 1500 * Math.max(1, getCardsFailCount)));
-    };
-
     xhr.onload = () => {
       // get JSON response
   //    console.log('got response');
       const posterr = xhr.response;
-      if (
-        posterr &&
-        posterr.globalPage &&
-        Array.isArray(posterr.globalPage.cards) &&
-        posterr.globalPage.cards.length !== 0 &&
-        sleeping !== true
-      ) {
-        getCardsFailCount = 0;
+      if((!posterr == null || posterr.globalPage.cards.length !== 0) && sleeping !== "true") {
         let cardHtml = "";
         posterr.globalPage.cards.forEach(card => {
           cardHtml += card.rendered;
@@ -345,8 +258,7 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
         }
       }
       else {
-        getCardsFailCount++;
-        queueGetCardsRetry(Math.min(10000, 1500 * Math.max(1, getCardsFailCount)));
+        location.reload();
       }
     }
   }
@@ -355,7 +267,7 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   function updateFirstCard(){
     //console.log('getting cards');
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', resolveGetCardsPath());
+    xhr.open('GET', window.location.href + 'getcards');
 
     // set response format
     xhr.responseType = 'json';
@@ -482,109 +394,9 @@ function startInactivityCheck(element, delay, callbackInactivity, callbackActive
   }
 
   $(function () {
-    var postersQs = new URLSearchParams(window.location.search || "");
-    var inHubEmbed = postersQs.get("hubEmbed") === "1";
-    var isStandalonePosters = !inHubEmbed;
-    getCardsPath = "<%=baseUrl%>/getcards" + (inHubEmbed ? "?postersOnly=1" : "");
-    var viewHotkeysEnabled = <%- JSON.stringify(String(typeof viewHotkeysEnabled !== "undefined" ? viewHotkeysEnabled : "true")) %> === "true";
     // initial load of cards and connection check timer every 5 seconds
     setInterval(connCheck,5000);
     getCards();
-    var nsCycleEnabled = <%- JSON.stringify(String(typeof nowShowingPageCycleEnabled !== "undefined" ? nowShowingPageCycleEnabled : "false")) %> === "true";
-    var nsCycleEveryMins = parseInt(<%- JSON.stringify(String(typeof nowShowingPageCycleEveryMins !== "undefined" ? nowShowingPageCycleEveryMins : "30")) %>, 10);
-    var nsCycleStayMins = parseInt(<%- JSON.stringify(String(typeof nowShowingPageCycleStayMins !== "undefined" ? nowShowingPageCycleStayMins : "5")) %>, 10);
-    var homeCycleDedicatedView = <%- JSON.stringify(String(typeof homePageCycleDedicatedView !== "undefined" ? homePageCycleDedicatedView : "now-showing")) %>;
-    var HOME_CYCLE_EMBED_MSG = "posterr-home-cycle-embed-close";
-    var VIEW_SWITCH_MSG = "posterr-view-switch";
-
-    function openDedicatedEmbed(path) {
-      if (nowShowingCycleTimer) {
-        clearTimeout(nowShowingCycleTimer);
-        nowShowingCycleTimer = null;
-      }
-      var wrap = document.getElementById("homeCycleEmbedWrap");
-      var frame = document.getElementById("homeCycleEmbedFrame");
-      if (!wrap || !frame) return;
-      var stay = Number.isFinite(nsCycleStayMins) && nsCycleStayMins > 0 ? nsCycleStayMins : 5;
-      var url = "<%=baseUrl%>" + path + "?cycleEmbed=1&_k=" + Date.now();
-      if (path === "/ads") {
-        url += "&cycleStayMins=" + encodeURIComponent(String(stay));
-      }
-      frame.src = url;
-      wrap.style.display = "block";
-    }
-
-    function scheduleHomeCycleEmbedOpen() {
-      if (!nsCycleEnabled || !Number.isFinite(nsCycleEveryMins) || nsCycleEveryMins <= 0) return;
-      if (nowShowingCycleTimer) clearTimeout(nowShowingCycleTimer);
-      var ms = nsCycleEveryMins * 60 * 1000;
-      nowShowingCycleTimer = setTimeout(openHomeCycleEmbed, ms);
-    }
-
-    function closeHomeCycleEmbed() {
-      var wrap = document.getElementById("homeCycleEmbedWrap");
-      var frame = document.getElementById("homeCycleEmbedFrame");
-      if (wrap) wrap.style.display = "none";
-      if (frame) frame.src = "about:blank";
-      nowShowingCycleTimer = null;
-      scheduleHomeCycleEmbedOpen();
-    }
-
-    window.addEventListener("message", function (ev) {
-      if (ev.origin !== window.location.origin) return;
-      var d = ev.data;
-      if (d && d.type === HOME_CYCLE_EMBED_MSG) {
-        closeHomeCycleEmbed();
-        return;
-      }
-      if (d && d.type === VIEW_SWITCH_MSG && d.view) {
-        if (d.view === "posters") {
-          closeHomeCycleEmbed();
-        } else if (d.view === "now-showing") {
-          openDedicatedEmbed("/now-showing");
-        } else if (d.view === "ads") {
-          openDedicatedEmbed("/ads");
-        }
-      }
-    });
-
-    function openHomeCycleEmbed() {
-      openDedicatedEmbed(homeCycleDedicatedView === "ads" ? "/ads" : "/now-showing");
-      nowShowingCycleTimer = null;
-    }
-
-    window.__posterrHomeViewSwitch = function (digitKey) {
-      if (digitKey === "1") {
-        closeHomeCycleEmbed();
-        return;
-      }
-      if (digitKey === "2") {
-        openDedicatedEmbed("/now-showing");
-        return;
-      }
-      if (digitKey === "3") {
-        openDedicatedEmbed("/ads");
-      }
-    };
-
-    if (isStandalonePosters && viewHotkeysEnabled) {
-      document.addEventListener(
-        "keydown",
-        function (ev) {
-          if (ev.defaultPrevented || ev.ctrlKey || ev.metaKey || ev.altKey) return;
-          var t = ev.target && ev.target.tagName && ev.target.tagName.toLowerCase();
-          if (t === "input" || t === "textarea" || t === "select" || (ev.target && ev.target.isContentEditable)) return;
-          if (ev.key !== "1" && ev.key !== "2" && ev.key !== "3") return;
-          if (typeof window.__posterrHomeViewSwitch !== "function") return;
-          ev.preventDefault();
-          window.__posterrHomeViewSwitch(ev.key);
-        },
-        true
-      );
-      if (nsCycleEnabled && Number.isFinite(nsCycleEveryMins) && nsCycleEveryMins > 0) {
-        scheduleHomeCycleEmbedOpen();
-      }
-    }
   });
 
   async function sleep(ms) {

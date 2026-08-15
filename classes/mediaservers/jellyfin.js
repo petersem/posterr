@@ -1,9 +1,17 @@
-const EmbyJellyfinBase = require("./embyJellyfinBase");
+//const plexAPI = require("plex-api");
 
-/**
- * Jellyfin media server plugin (Emby-compatible REST API).
- * Shared logic lives in {@link ./embyJellyfinBase}.
- */
-class Jellyfin extends EmbyJellyfinBase {}
+class Jellyfin {
+  constructor({HTTPS, jfIP, jfPort, jfToken}) {
+    return {error: "Not yet implemented"};
+  }
+
+  async GetNowScreening() {
+    return {error: "Not yet implemented"};
+  }
+
+  async GetOnDemand() {
+    return {error: "Not yet implemented"};
+  }
+}
 
 module.exports = Jellyfin;

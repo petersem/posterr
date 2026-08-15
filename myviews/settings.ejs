@@ -2,7 +2,7 @@
 <html lang="en">
 <!--
 ***********************************************************
-* PosterX - Your home media display                       *
+* Posterr - Your home media display                       *
 * Developed by Matt Petersen - Brisbane, Australia        *
 ***********************************************************
 -->
@@ -28,7 +28,7 @@
   <!-- <link rel="stylesheet" href="<%=baseUrl%>/css/bootstrap-colourpicker.min.css"> -->
   <!-- <script src="/js/script.js"></script> -->
 
-  <title>PosterX - Settings</title>
+  <title>Posterr - Settings</title>
   <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico" />
 </head>
 
@@ -37,31 +37,17 @@
   <%if(!user.valid){%><script language='javascript'>
     window.location.href = '<%=baseUrl%>/logon';
   </script>%><%}%>
-  <%- include('new-features-banner.ejs') %>
   <div class="container">
 
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="main-breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<%=baseUrl%>/">PosterX</a></li>
-  <li class="breadcrumb-item active" aria-current="page">PosterX Settings</li>
+        <li class="breadcrumb-item"><a href="<%=baseUrl%>/">Posterr</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Posterr Settings</li>
   </ol>
   </nav>
-  <% if (typeof showNewFeaturesBanner !== 'undefined' && showNewFeaturesBanner && user && user.valid) { %>
-  <div class="card border-danger mb-3">
-    <div class="card-body">
-      <p class="mb-2">PosterX <strong>v<%= typeof appVersion !== 'undefined' ? appVersion : '' %></strong> includes changes you have not acknowledged yet. The red banner appears on the main display and other pages until you confirm below.</p>
-      <form method="post" action="<%= baseUrl %>/settings/new-features-acknowledge">
-        <button type="submit" class="btn btn-danger">Acknowledge there are new features</button>
-      </form>
-    </div>
-  </div>
-  <% } %>
   <%if(typeof formData !== 'undefined' && formData.saved == true) {%><script language='javascript'>
-    alert("PosterX Settings Saved. Please allow a few seconds for PosterX to restart.");
-  </script><%}%>
-  <%if(typeof cacheClearNotice !== 'undefined' && cacheClearNotice && cacheClearNotice.text) {%><script>
-    alert(<%- JSON.stringify(cacheClearNotice.text) %>);
+    alert("Posterr Settings Saved. Please allow a few seconds for Posterr to restart.");
   </script><%}%>
     <!-- Layout -->
     <div class="row gutters-sm">
@@ -72,24 +58,6 @@
             <nav class="nav flex-column nav-pills nav-gap-y-1">
               <a href="#settings" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
                 <i class="fal fa-cog"></i><span class="menu">Settings</span>
-              </a>
-              <a href="<%=baseUrl%>/settings/sync" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-sync"></i><span class="menu">Sync</span>
-              </a>
-              <a href="<%=baseUrl%>/settings/now-showing" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-film"></i><span class="menu">Now Showing</span>
-              </a>
-              <a href="<%=baseUrl%>/settings/ads" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-bullhorn"></i><span class="menu">Ads</span>
-              </a>
-              <a href="<%=baseUrl%>/settings/holidays" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-snowflake"></i><span class="menu">Holidays</span>
-              </a>
-              <a href="<%=baseUrl%>/settings/tmdb-api" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-key"></i><span class="menu">TMDB API</span>
-              </a>
-              <a href="<%=baseUrl%>/settings/cache" class="nav-item nav-link has-icon nav-link-faded">
-                <i class="fal fa-database"></i><span class="menu">Cache</span>
               </a>
               <a href="<%=baseUrl%>/debug" class="nav-item nav-link has-icon nav-link-faded">
   <i class="fal fa-debug"></i><span class="menu">Debug</span>
@@ -105,10 +73,6 @@
 
   <div class="col-md-8">
     <div class="card">
-      <div class="d-none d-md-flex border-bottom py-2 px-3 justify-content-end align-items-center flex-wrap">
-        <a href="#collapseFive" class="nav-link has-icon text-body py-1 mr-3" data-toggle="collapse" data-target="#collapseFive"><i class="fal fa-play"></i><span class="menu">Now Playing</span></a>
-        <a href="<%=baseUrl%>/settings/now-showing" class="nav-link has-icon text-body py-1"><i class="fal fa-film"></i><span class="menu">Now Showing settings</span></a>
-      </div>
       <!-- Mobile Menu View -->
       <div class="card-header border-bottom mb-3 d-flex d-md-none">
         <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
@@ -119,37 +83,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<%=baseUrl%>/settings/sync" class="nav-link has-icon"><i class="fal fa-sync"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="<%=baseUrl%>/settings/cache" class="nav-link has-icon"><i class="fal fa-database"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="<%=baseUrl%>/settings/now-showing" class="nav-link has-icon"><i class="fal fa-film"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="<%=baseUrl%>/settings/ads" class="nav-link has-icon"><i class="fal fa-bullhorn"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="<%=baseUrl%>/settings/holidays" class="nav-link has-icon"><i class="fal fa-snowflake"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="#collapseFive" class="nav-link has-icon" data-toggle="collapse" data-target="#collapseFive"><i class="fal fa-play"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="<%=baseUrl%>/settings/now-showing" class="nav-link has-icon"><i class="fal fa-film"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="<%=baseUrl%>/settings/tmdb-api" class="nav-link has-icon"><i class="fal fa-key"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="<%=baseUrl%>/debug" class="nav-link has-icon"><i class="fal fa-debug"></i>
+            <a href="/debug" class="nav-link has-icon"><i class="fal fa-debug"></i>
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
               </svg>
             </a>
           </li>
-          <li class="nav-item ml-auto">
+          <li class="nav-item">
             <a href="#about" data-toggle="tab" class="nav-link has-icon"><i class="fal fa-person-sign"></i>
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -160,7 +100,7 @@
 
       </div>
       <% if(latestVersion !== undefined && latestVersion !== "" && latestVersion !== version.toString() && (typeof errors == 'undefined' || errors.length == 0) && updateAvailable == true){%>
-      <p id="rcorners-u"><span id="message">Update</span><br>Please upgrade to PosterX v<%=latestVersion%></br>
+      <p id="rcorners-u"><span id="message">Update</span><br>Please upgrade to Posterr v<%=latestVersion%></br>
       <%}%>
 
                   <!-- show validation errors -->
@@ -219,101 +159,6 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="showCast" id="showCast"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.showCast == 'true' || formData.showCast === true) ? 'checked' : '' %><%}else{%><%=(settings.showCast == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="showCast">Show cast (actors) — coming soon ™</label>
-                    <small class="form-text text-muted">Shows principal cast on cards when the media server provides it (Plex, Jellyfin, Emby).</small>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="showDirectors" id="showDirectors"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.showDirectors == 'true' || formData.showDirectors === true) ? 'checked' : '' %><%}else{%><%=(settings.showDirectors == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="showDirectors">Display directors — coming soon ™</label>
-                    <small class="form-text text-muted">Shows director names on cards when the media server provides them (Plex, Jellyfin, Emby).</small>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="showAuthors" id="showAuthors"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.showAuthors == 'true' || formData.showAuthors === true) ? 'checked' : '' %><%}else{%><%=(settings.showAuthors == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="showAuthors">Show authors — coming soon ™</label>
-                    <small class="form-text text-muted">Shows author names on book cards from Readarr/Chaptarr and on Jellyfin/Emby ebooks and audiobooks when metadata includes them.</small>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="showAlbumArtist" id="showAlbumArtist"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.showAlbumArtist == 'true' || formData.showAlbumArtist === true) ? 'checked' : '' %><%}else{%><%=(settings.showAlbumArtist == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="showAlbumArtist">Display artist — coming soon ™</label>
-                    <small class="form-text text-muted">Shows artist names on music album and track cards (Plex, Jellyfin, Emby, Kodi), on-demand albums, and Lidarr coming-soon albums when available.</small>
-                  </div>
-                </div>
-
-                <label class="d-block">Display posters &amp; portraits</label>
-                <p class="small text-muted">Main music cover and small corner portraits when the media server provides images. Background artwork still follows <strong>Enable background artwork</strong> above.</p>
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="displayPosterAlbum" id="displayPosterAlbum"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.displayPosterAlbum == 'true' || formData.displayPosterAlbum === true) ? 'checked' : '' %><%}else{%><%=(settings.displayPosterAlbum == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="displayPosterAlbum">Display albums — coming soon ™</label>
-                    <small class="form-text text-muted">Shows album/track cover art as the main poster (movie/TV style) with music metadata in the bottom banner. When off, music cards use a placeholder image.</small>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="displayPosterVideo" id="displayPosterVideo"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.displayPosterVideo == 'true' || formData.displayPosterVideo === true) ? 'checked' : '' %><%}else{%><%=((settings.displayPosterVideo == 'true') || (settings.displayPosterVideo === true) || (settings.displayPosterVideo == 'on') || (settings.displayPosterVideo == 1) || (settings.displayPosterVideo == '1')) ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="displayPosterVideo">Display movie and TV posters</label>
-                    <small class="form-text text-muted">Shows posters for movies and TV (shows/episodes). When off, video cards use a placeholder image.</small>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="displayPosterBooks" id="displayPosterBooks"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.displayPosterBooks == 'true' || formData.displayPosterBooks === true) ? 'checked' : '' %><%}else{%><%=(settings.displayPosterBooks == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="displayPosterBooks">Display books and audiobooks — coming soon ™</label>
-                    <small class="form-text text-muted">Shows ebook/audiobook cover art as the main poster (movie/TV style) with book metadata in the bottom banner. When off, book cards use a placeholder image.</small>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="displayPosterCast" id="displayPosterCast"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.displayPosterActor == 'true' || formData.displayPosterActress == 'true' || formData.displayPosterCast) ? 'checked' : '' %><%}else{%><%=(settings.displayPosterActor == 'true' || settings.displayPosterActress == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="displayPosterCast">Display actors and actresses — coming soon ™</label>
-                    <small class="form-text text-muted">Shows cast portraits when available (Plex, Jellyfin, Emby).</small>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="displayPosterDirector" id="displayPosterDirector"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.displayPosterDirector == 'true' || formData.displayPosterDirector === true) ? 'checked' : '' %><%}else{%><%=(settings.displayPosterDirector == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="displayPosterDirector">Display director portrait — coming soon ™</label>
-                    <small class="form-text text-muted">Shows a director image when available.</small>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="displayPosterAuthor" id="displayPosterAuthor"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.displayPosterAuthor == 'true' || formData.displayPosterAuthor === true) ? 'checked' : '' %><%}else{%><%=(settings.displayPosterAuthor == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="displayPosterAuthor">Show author portrait — coming soon ™</label>
-                    <small class="form-text text-muted">Writer/author person image when the server provides it (Plex Writer thumb; Jellyfin/Emby People).</small>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="displayPosterArtist" id="displayPosterArtist"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.displayPosterArtist == 'true' || formData.displayPosterArtist === true) ? 'checked' : '' %><%}else{%><%=(settings.displayPosterArtist == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="displayPosterArtist">Display artist portrait — coming soon ™</label>
-                    <small class="form-text text-muted">Shows an artist image when metadata includes it (for example Plex grandparent/parent thumb or Jellyfin album artist image).</small>
-                  </div>
-                </div>
-
                 <label class="d-block">Theme Options</label>
                 <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
@@ -365,7 +210,7 @@
                     <input type="checkbox" class="custom-control-input" name="shuffleSwitch" id="shuffleSwitch"
                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.shuffleSwitch ? 'checked' : '' %><%}else{%><%=(settings.shuffleSlides == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="shuffleSwitch">Shuffle slides</label>
-                    <small id="suffleSwitchHelp" class="form-text text-muted">Shuffles on-demand, coming soon (Radarr, Sonarr, Lidarr, Readarr)</small>
+                    <small id="suffleSwitchHelp" class="form-text text-muted">Shuffles on-demand, coming soon (radar) & coming soon (Sonarr)</small>
                   </div>
                 </div>
                 <div class="form-group">
@@ -381,7 +226,7 @@
                     <input type="checkbox" class="custom-control-input" name="theaterRoomMode" id="theaterRoomMode"
                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.theaterRoomMode ? 'checked' : '' %><%}else{%><%=(settings.theaterRoomMode == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="theaterRoomMode">Theatre room mode</label>
-                    <small id="theaterRoomModeHelp" class="form-text text-muted">PosterX sleeps whenever anything playing (Requires 'Now Playing' enabled)</small>
+                    <small id="theaterRoomModeHelp" class="form-text text-muted">Posterr sleeps whenever anything playing (Requires 'Now Screening' enabled)</small>
                   </div>
                 </div>
                 
@@ -414,14 +259,14 @@
                   <label for="sleepStart">Sleep start time</label>
                   <input type="text" class="form-control" id="sleepStart" name="sleepStart" aria-describedby="sleepStart"
                     placeholder="23:00 (military time)" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sleepStart%>"<%}else{%><%=settings.sleepStart%>"<%}%>>
-                  <small id="sleepStartHelp" class="form-text text-muted">The time to put PosterX to sleep</small>
+                  <small id="sleepStartHelp" class="form-text text-muted">The time to put Posterr to sleep</small>
                 </div>
 
                 <div class="form-group">
                   <label for="sleepEnd">Sleep end time</label>
                   <input type="text" class="form-control" id="sleepEnd" name="sleepEnd" aria-describedby="sleepEnd"
                     placeholder="07:00 (military time)" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.sleepEnd%>"<%}else{%><%=settings.sleepEnd%>"<%}%>>
-                  <small id="sleepEndHelp" class="form-text text-muted">The time to wake PosterX up</small>
+                  <small id="sleepEndHelp" class="form-text text-muted">The time to wake Posterr up</small>
                 </div>
 
                 </div>
@@ -447,14 +292,6 @@
                         value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.rotate ? 'checked' : '' %><%}else{%><%=(settings.rotate == 'true') ? 'checked' : '' %><%}%>>
                       <label class="custom-control-label" for="rotate">Rotate screen</label>
                       <small id="themeHelp" class="form-text text-muted">Rotate screen orientation -90 degrees (ideal for Amazon Firestick devices)</small>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                      <input type="checkbox" class="custom-control-input" name="enableViewHotkeys" id="enableViewHotkeys" aria-describedby="enableViewHotkeysHelp"
-                        value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableViewHotkeys ? 'checked' : '' %><%}else{%><%=(settings.enableViewHotkeys == 'true') ? 'checked' : '' %><%}%>>
-                      <label class="custom-control-label" for="enableViewHotkeys">Enable view hotkeys (1/2/3)</label>
-                      <small id="enableViewHotkeysHelp" class="form-text text-muted">Global shortcuts: 1 = posters, 2 = ads, 3 = now showing (home hub and dedicated views).</small>
                     </div>
                   </div>
 
@@ -650,10 +487,10 @@
                   </div>
   
                   <div class="form-group">
-                    <label for="nowScreening">Now Playing (Alternate text)</label>
+                    <label for="nowScreening">Now Screening (Alternate text)</label>
                     <input type="text" class="form-control" id="nowScreening" name="nowScreening" aria-describedby="nowScreeningHelp"
                       placeholder="Leave blank for default" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.nowScreening%>"<%}else{%><%=settings.nowScreening%>"<%}%>>
-                    <small id="nowScreeningHelp" class="form-text text-muted">Alternate text for 'Now Playing'</small>
+                    <small id="nowScreeningHelp" class="form-text text-muted">Alternate text for 'Now Screening'</small>
                   </div>
   
                   <div class="form-group">
@@ -706,7 +543,7 @@
               <div class="panel-heading" role="tab" id="headingThree">
                 <h4 class="panel-title">
                   <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    MEDIA SERVER (PLEX / JELLYFIN / EMBY / KODI) <i class="accordion_icon fal fa-plus"></i>
+                    PLEX <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
@@ -714,23 +551,12 @@
                 <div class="panel-body">
 
                   <div class="form-group">
-                    <label for="mediaServerType">Server type</label>
-                    <select class="custom-select" name="mediaServerType" id="mediaServerType">
-                      <% var _mst = (typeof formData !== 'undefined' && errors && formData.mediaServerType) ? formData.mediaServerType : (settings.mediaServerType || 'plex'); %>
-                      <option value="plex" <% if (_mst === 'plex') { %>selected<% } %>>Plex</option>
-                      <option value="jellyfin" <% if (_mst === 'jellyfin') { %>selected<% } %>>Jellyfin</option>
-                      <option value="emby" <% if (_mst === 'emby') { %>selected<% } %>>Emby</option>
-                      <option value="kodi" <% if (_mst === 'kodi') { %>selected<% } %>>Kodi</option>
-                    </select>
-                    <small class="form-text text-muted">Jellyfin/Emby: API key in server dashboard. Kodi: enable <strong>Settings → Services → Control → Allow remote control via HTTP</strong>; use JSON-RPC port (often 8080). Token: leave blank if no login, or <code>password</code> / <code>username:password</code> for HTTP auth.</small>
-                  </div>
-
-                  <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="plexHTTPSSwitch" id="plexHTTPSSwitch"
                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.plexHTTPSSwitch ? 'checked' : '' %><%}else{%><%=(settings.plexHTTPS == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="plexHTTPSSwitch">HTTPS Connection</label>
-                    <small id="plexHTTPSHelp" class="form-text text-muted">Enable if your media server only allows HTTPS.</small>
+                    <small id="plexHTTPSHelp" class="form-text text-muted">Enable if Plex requires a HTTPS 'secure'
+                      connection.</small>
                   </div>
                 </div>
 
@@ -738,58 +564,24 @@
                   <label for="plexIP">Server IP or Domain Name</label>
                   <input type="text" class="form-control" id="plexIP" name="plexIP" aria-describedby="plexIPHelp"
                     placeholder="n.n.n.n" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexIP%>"<%}else{%><%=settings.plexIP%>"<%}%>>
-                  <small id="plexIPHelp" class="form-text text-muted">Host for Plex, Jellyfin, Emby, or Kodi (same setting for all types).</small>
+                  <small id="plexIPHelp" class="form-text text-muted">Enter the Plex IP or Domain Name.</small>
                 </div>
 
                 <div class="form-group">
                   <label for="plexIP">Server Port</label>
                   <input type="text" class="form-control" id="plexIPort" name="plexPort" aria-describedby="plexPortHelp"
-                    placeholder="32400 / 8096" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexPort%>"<%}else{%><%=settings.plexPort%>"<%}%>>
-                  <small id="plexPortHelp" class="form-text text-muted">Plex 32400; Jellyfin/Emby 8096; Kodi JSON-RPC often 8080.</small>
+                    placeholder="usually port 32400" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexPort%>"<%}else{%><%=settings.plexPort%>"<%}%>>
+                  <small id="plexPortHelp" class="form-text text-muted">Enter the server port. (usually 32400).</small>
                 </div>
 
                 <div class="form-group">
-                  <label for="plexToken">Token / API key</label>
+                  <label for="plexToken">Plex Token</label>
                   <input type="password" class="form-control" name="plexToken" id="plexToken" aria-describedby="plexToken"
-                    placeholder="Token or API key" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexToken%>"<%}else{%><%=settings.plexToken%>"<%}%>>
-                  <small id="plexTokenHelp" class="form-text text-muted">Plex: <a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
-                      target="_blank">X-Plex-Token</a>. Jellyfin/Emby: API key. Kodi: optional HTTP auth (<code>kodi:password</code> or just password, user defaults to <code>kodi</code>).</small>
+                    placeholder="Plex Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexToken%>"<%}else{%><%=settings.plexToken%>"<%}%>>
+                  <small id="plexTokenHelp" class="form-text text-muted">Needed to communicate with your Plex server.
+                    (<a href="https://support.plex.tv/articles/204059436-finding-an-authentication-token-x-plex-token/"
+                      target="_blank">details</a>)</small>
                 </div>
-
-                  <div class="form-group mt-3">
-                    <label>Poster cache</label>
-                    <div class="form-group">
-                      <label for="posterCacheRefreshMins">Refresh poster DB &amp; images every (minutes)</label>
-                      <input type="number" class="form-control" style="max-width: 8rem;" name="posterCacheRefreshMins" id="posterCacheRefreshMins" min="0" step="1"
-                        value="<% if(typeof formData !== 'undefined' && errors && formData.posterCacheRefreshMins !== undefined){%><%=formData.posterCacheRefreshMins%><%}else{%><%=(settings.posterCacheRefreshMins != null ? settings.posterCacheRefreshMins : 0)%><%}%>">
-                      <small class="form-text text-muted">0 = disabled. Uses the same interval as the maximum age: on each run, entries older than this many minutes are checked—images with a saved server URL are re-downloaded; others are removed until the library serves them again. Timer runs at least every 5 minutes when enabled.</small>
-                    </div>
-                    <div class="form-group">
-                      <label for="posterCacheMinAgeBeforeChangeCheckMins">Minimum cache age before change checks (minutes)</label>
-                      <input type="number" class="form-control" style="max-width: 8rem;" name="posterCacheMinAgeBeforeChangeCheckMins" id="posterCacheMinAgeBeforeChangeCheckMins" min="0" step="1"
-                        value="<% if(typeof formData !== 'undefined' && errors && formData.posterCacheMinAgeBeforeChangeCheckMins !== undefined){%><%=formData.posterCacheMinAgeBeforeChangeCheckMins%><%}else{%><%=(settings.posterCacheMinAgeBeforeChangeCheckMins != null ? settings.posterCacheMinAgeBeforeChangeCheckMins : 0)%><%}%>">
-                      <small class="form-text text-muted">0 = no extra wait. Otherwise a poster row must be at least this many minutes old (since it was last registered or refreshed) before we probe the media server for deleted items or re-download the image. New rows are left alone until they reach this age.</small>
-                    </div>
-                    <div class="form-group">
-                      <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" name="preferCachedPosters" id="preferCachedPosters" value="true"
-                          <% if(typeof formData !== 'undefined' && errors){%><%=(formData.preferCachedPosters == 'true') ? 'checked' : '' %><%}else{%><%=(settings.preferCachedPosters == 'true') ? 'checked' : '' %><%}%>>
-                        <label class="custom-control-label" for="preferCachedPosters">Prefer cached poster library</label>
-                      </div>
-                      <small class="form-text text-muted">When on (default), slideshow library slides come from the poster cache and metadata database. Plex/Jellyfin/Emby/Kodi on-demand is only used if the cache is empty, and still runs in the background to fill the cache. Now Playing slides are unchanged.</small>
-                    </div>
-                    <div class="form-group">
-                      <label for="cachedPosterSlideCount">Cached poster slide count</label>
-                      <input type="number" class="form-control" style="max-width: 10rem;" name="cachedPosterSlideCount" id="cachedPosterSlideCount" min="1" step="1"
-                        value="<% if(typeof formData !== 'undefined' && errors && formData.cachedPosterSlideCount !== undefined){%><%=formData.cachedPosterSlideCount%><%}else{%><%=(settings.cachedPosterSlideCount != null ? settings.cachedPosterSlideCount : 48)%><%}%>">
-                      <small class="form-text text-muted">How many random cached titles to include per refresh when “Prefer cached poster library” is enabled. There is no fixed upper limit; you cannot get more distinct slides than you have poster rows on disk.</small>
-                    </div>
-                    <p class="form-text text-muted mb-2">Clear removes all files in <code>config/cache/imagecache</code> and the poster metadata database (<code>config/posterr-poster-metadata.db</code>). Sonarr/Radarr/Lidarr/Readarr cached art in that folder is removed too.</p>
-                    <button type="submit" class="btn btn-outline-warning btn-sm d-inline"
-                      formaction="<%=baseUrl%>/settings/clear-poster-cache"
-                      formmethod="post"
-                      onclick="return confirm('Clear all cached poster images and poster metadata? This cannot be undone.');">Clear poster cache &amp; metadata</button>
-                  </div>
                   
                 </div>
               </div>
@@ -817,86 +609,35 @@
                 </div>
 
               <div class="form-group">
-                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Theme Folder(s)</label>
-                <select class="custom-select my-1 mr-sm-2" name="customPictureTheme" id="customPictureTheme" multiple size="6">
+                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Theme Folder</label>
+                <select class="custom-select my-1 mr-sm-2" name="customPictureTheme" id="customPictureTheme">
                   <% customPicFolders.forEach(function(fld) { %>
                     <option value="<%=fld%>"><%=fld%></option>>
                   <% }); %>
                 </select>
-                <small class="form-text text-muted">Hold Ctrl (or Cmd on Mac) to select multiple folders.</small>
-              </div>
-              <div class="form-group border rounded p-3">
-                <label for="customPictureUploadFile">Upload new custom image</label>
-                <input type="file" class="form-control-file mb-2" id="customPictureUploadFile" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp">
-                <label for="customPictureNewFolder">Create new folder (optional)</label>
-                <input type="text" class="form-control mb-2" id="customPictureNewFolder" placeholder="Example: halloween">
-                <small class="form-text text-muted mb-2">If a new folder is provided, the image uploads there. Otherwise it uploads to the selected Theme Folder.</small>
-                <button type="button" class="btn btn-outline-primary btn-sm" id="customPictureUploadBtn">Upload image</button>
-              </div>
-              <div class="form-group">
-                <label for="customPictureEveryPosters">Show custom picture after this many posters</label>
-                <input type="number" min="0" step="1" class="form-control" id="customPictureEveryPosters" name="customPictureEveryPosters"
-                  value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.customPictureEveryPosters !== undefined ? formData.customPictureEveryPosters : 0%><%}else{%><%=settings.customPictureEveryPosters !== undefined ? settings.customPictureEveryPosters : 0%><%}%>">
-                <small class="form-text text-muted">0 disables spacing. Example: 5 means one custom picture appears after every 5 poster slides.</small>
               </div>
               <script lang='javascript'>
-                    // set pre-selected folder(s)
+                    // set pre-selected or saved font
                     var picTheme = document.getElementById("customPictureTheme");
                   <%
-                    var _selectedThemesRaw = (typeof formData !== 'undefined' && errors)
-                      ? formData.customPictureTheme
-                      : settings.customPictureTheme;
-                  %>
-                    var selectedThemes = String(<%- JSON.stringify(_selectedThemesRaw || "") %> || "")
-                      .split(',')
-                      .map(function (v) { return v.trim(); })
-                      .filter(Boolean);
-                    if (!selectedThemes.length) selectedThemes = ["default"];
-                    for (var i = 0; i < picTheme.options.length; i++) {
-                      picTheme.options[i].selected = selectedThemes.indexOf(picTheme.options[i].value) >= 0;
+                    if(typeof formData !== 'undefined' && errors){%> picTheme.value='<%=formData.customPictureTheme%>' ;<%
                     }
-                    var uploadBtn = document.getElementById("customPictureUploadBtn");
-                    if (uploadBtn) {
-                      uploadBtn.addEventListener("click", function () {
-                        var fileInput = document.getElementById("customPictureUploadFile");
-                        var folderInput = document.getElementById("customPictureNewFolder");
-                        var selectedTheme = document.getElementById("customPictureTheme");
-                        if (!fileInput || !fileInput.files || !fileInput.files.length) {
-                          alert("Please choose an image file first.");
-                          return;
-                        }
-                        var selectedValues = [];
-                        if (selectedTheme && selectedTheme.options) {
-                          for (var i = 0; i < selectedTheme.options.length; i++) {
-                            if (selectedTheme.options[i].selected) selectedValues.push(selectedTheme.options[i].value);
-                          }
-                        }
-                        var fd = new FormData();
-                        fd.append("customPictureUpload", fileInput.files[0]);
-                        fd.append("customPictureTheme", selectedValues.length ? selectedValues[0] : "default");
-                        fd.append("customPictureNewFolder", folderInput ? folderInput.value : "");
-                        fetch("<%=baseUrl%>/settings/custom-pictures/upload", {
-                          method: "POST",
-                          body: fd,
-                          credentials: "same-origin"
-                        }).then(function () {
-                          window.location.reload();
-                        }).catch(function (err) {
-                          alert(err && err.message ? err.message : "Upload failed");
-                        });
-                      });
+                    else{%> picTheme.value='<%=settings.customPictureTheme%>' ;<%
                     }
-                  </script>
+                  %> </script>
                </div>
               </div>
             </div>
             <hr>
 
+
+
+
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingFive">
                 <h4 class="panel-title">
                   <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                    NOW PLAYING (MEDIA SERVER) <i class="accordion_icon fal fa-plus"></i>
+                    NOW SCREENING <i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
@@ -911,18 +652,11 @@
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label for="nowPlayingEveryPosters">Show Now Playing after this many poster slides</label>
-                  <input type="number" min="0" step="1" class="form-control" id="nowPlayingEveryPosters" name="nowPlayingEveryPosters"
-                    value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.nowPlayingEveryPosters !== undefined ? formData.nowPlayingEveryPosters : 0%><%}else{%><%=settings.nowPlayingEveryPosters !== undefined ? settings.nowPlayingEveryPosters : 0%><%}%>">
-                  <small class="form-text text-muted">0 disables spacing. Example: 5 means one Now Playing (media server) slide appears after every 5 other poster slides. Configure all TMDB <strong>Now Showing</strong> options in <a href="<%=baseUrl%>/settings/now-showing">Now Showing settings</a>.</small>
-                </div>
-
                   <div class="form-group">
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                   <input type="checkbox" class="custom-control-input" name="pinNSSwitch" id="pinNSSwitch" 
                     value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.pinNSSwitch ? 'checked' : '' %><%}else{%><%=(settings.pinNS == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="pinNSSwitch">Pin Now Playing (Media Server)</label>
+                  <label class="custom-control-label" for="pinNSSwitch">Pin Now Screening / Now Playing</label>
                   <small id="randomThemeHelp" class="form-text text-muted">If something is playing, then hide on-demand and coming soon</small>
                 </div>
               </div>
@@ -940,7 +674,7 @@
                 <label for="filterDevices">Filter by device(s)</label>
                 <input type="text" class="form-control" id="filterDevices" name="filterDevices" aria-describedby="filterDevicesHelp"
                   placeholder="examples -> chromecast,chrome,Roku Ultra - XYZ123456789" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.filterDevices%>"<%}else{%><%=settings.filterDevices%>"<%}%>>
-                  <small id="filterDevicesHelp" class="form-text text-muted">Comma-separated substrings to match against the playing client (leave blank for all). <strong>Jellyfin/Emby</strong> uses app name and device name (e.g. <code>Jellyfin Web</code>, <code>Android</code>). Old Plex-only values like <code>Edge Chromium</code> will not match Jellyfin clients—clear this field or use a substring that appears in Dashboard → Active devices.</small>
+                  <small id="filterDevicesHelp" class="form-text text-muted">Enter device names to include (Comma seperated and no spaces, except in the name. Leave blank for all devices)</small>
               </div>
 
               <div class="form-group">
@@ -954,7 +688,7 @@
                 <label for="excludeLibs">Exclude libraries</label>
                 <input type="text" class="form-control" id="excludeLibs" name="excludeLibs" aria-describedby="excludeLibsHelp"
                   placeholder="examples -> TV Shows,Movies" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.excludeLibs%>"<%}else{%><%=settings.excludeLibs%>"<%}%>>
-                  <small id="excludeLibsHelp" class="form-text text-muted">Now screening: hide titles from these libraries (Plex / Jellyfin-Emby folder name, or Kodi video source label). Comma separated, trimmed. Blank = include all.</small>
+                  <small id="excludeLibsHelp" class="form-text text-muted">Enter any libraries to exclude (Comma seperated and no leading or trailing spaces. Leave blank to include all libraries)</small>
               </div>    
 
               <div class="form-group">
@@ -962,7 +696,7 @@
                     <input type="checkbox" class="custom-control-input" name="enableAwtrix" id="enableAwtrix" 
                       value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableAwtrix ? 'checked' : '' %><%}else{%><%=(settings.enableAwtrix == 'true') ? 'checked' : '' %><%}%>>
                     <label class="custom-control-label" for="enableAwtrix">Enable Awtrix integration </label><a href="https://blueforcer.github.io/awtrix-light/#/" target=”_blank”> (Awtrix docs)</a>
-                    <small id="awtrixIPHelp" class="form-text text-muted">Enable integration of Now Playing titles with devices running Awtrix.</small>
+                    <small id="awtrixIPHelp" class="form-text text-muted">Enable integration of Now Screening titles with devices running Awtrix.</small>
                     </div>
                 </div>
 
@@ -994,7 +728,8 @@
                 </div>
               </div>
             </div>
-
+            <hr>
+            
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingSix">
                 <h4 class="panel-title">
@@ -1015,30 +750,25 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="plexLibraries">Libraries for On-Demand Titles</label>
+                  <label for="plexLibraries">Plex Libraries for On-Demand Titles</label>
                   <input type="text" class="form-control" id="plexLibraries" name="plexLibraries" aria-describedby="plexLibraries"
-                    placeholder="suggestions -> movies,tv shows,music,books" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
-                  <small id="plexLibrariesHelp" class="form-text text-muted">Names: Plex libraries, Jellyfin/Emby media folders, or <strong>Kodi video source labels</strong> (comma separated; spaces only inside a name)
+                    placeholder="suggestions -> movies,tv shows,anime" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.plexLibraries%>"<%}else{%><%=settings.onDemandLibraries%>"<%}%>>
+                  <small id="plexLibrariesHelp" class="form-text text-muted">Enter Plex library names to use (comma seperated and no spaces, except in the name)
                     (Leave blank to disable)</small>
-                </div>
-                <div class="form-group">
-                  <label for="onDemand3dLibraries">3D Libraries</label>
-                  <input type="text" class="form-control" id="onDemand3dLibraries" name="onDemand3dLibraries" aria-describedby="onDemand3dLibrariesHelp"
-                    placeholder="example -> movies 3d,3d films" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.onDemand3dLibraries%>"<%}else{%><%=settings.onDemand3dLibraries%>"<%}%>>
-                  <small id="onDemand3dLibrariesHelp" class="form-text text-muted">Comma-separated on-demand library names that should show a <strong>3D</strong> pill on On-demand and <code>/now-showing</code> cards.</small>
                 </div>
                 <div class="form-group">
                   <label for="recentlyAddedDays">Recently Added In Last n Days</label>
                   <input type="text" class="form-control" id="recentlyAddedDays" name="recentlyAddedDays" aria-describedby="recentlyAddedDaysHelp"
                     placeholder="suggest no more than 45." value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.recentlyAddedDays%>"<%}else{%><%=settings.recentlyAddedDays%>"<%}%>>
                   <small id="recentlyAddedDaysHelp" class="form-text text-muted">Show recently added titles from
-                    each library / media folder / <strong>Kodi video source</strong>. <b>'Content rating'</b> and <b>'Genre' <u>are ignored</u> if this is set to a non-zero value.</b></small>
+                    each specified Plex library. <b>'Content rating'</b> and <b>'Genre' <u>are ignored</u> if this is set to a non-zero value.</b></small>
                 </div>
                 <div class="form-group">
                   <label for="numberOnDemand">Number to Display</label>
                   <input type="text" class="form-control" id="numberOnDemand" name="numberOnDemand" aria-describedby="numberOnDemandHelp"
                     placeholder="suggest 5 or 6. (lower numbers perform better)" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.numberOnDemand%>"<%}else{%><%=settings.numberOnDemand%>"<%}%>>
-                  <small id="numberOnDemandHelp" class="form-text text-muted">Random titles per library, media folder, or <strong>Kodi source</strong> (see list above). Set to <strong>0</strong> to show the full library poster set.</small>
+                  <small id="numberOnDemandHelp" class="form-text text-muted">The number of random titles to display from
+                    each specified Plex library.</small>
                 </div>
 
                 <div class="form-group">
@@ -1051,13 +781,13 @@
                   <label for="genres">Genres</label>
                   <input type="text" class="form-control" id="genres" name="genres" aria-describedby="genres"
                     placeholder="genre1,genre2" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.genres%>"<%}else{%><%=settings.genres%>"<%}%>>
-                  <small id="genres" class="form-text text-muted">Filter on-demand/recently added (Plex, Jellyfin, Emby, Kodi) to only show selected genres (not cumulative). Ignored if recently added is non-zero.</small>
+                  <small id="genres" class="form-text text-muted">Filter on-demand/recently added to only show selected genres (not cumulative). Ignored if recently added is non-zero</small>
                 </div>
                 <div class="form-group">
                   <label for="contentRatings">Hide Ratings</label>
                   <input type="text" class="form-control" id="contentRatings" name="contentRatings" aria-describedby="contentRatings"
                     placeholder="r,nc-17,pg-13" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.contentRatings%>"<%}else{%><%=settings.contentRatings%>"<%}%>>
-                  <small id="contentRatings" class="form-text text-muted">Do not show titles with these official ratings (metadata from your server). Ignored if recently added is non-zero.</small>
+                  <small id="contentRatings" class="form-text text-muted">Do not show titles with these ratings. (based on agent metadata country in plex) Ignored if recently added is non-zero</small>
                 </div>
 
                 <h6>Hide Banners</h6>
@@ -1126,7 +856,7 @@
 
                 <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                   <input type="checkbox" class="custom-control-input" id="premiereSwitch" name="premiereSwitch"
-                  value="true" <% if(typeof formData !== 'undefined' && errors){%><%=(formData.premiereSwitch == 'true' || formData.premiereSwitch === true) ? 'checked' : '' %> <%}else{%><%=(settings.sonarrPremieres == 'true') ? 'checked' : '' %><%}%>>
+                  value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.premiereSwitch ? 'checked' : '' %> <%}else{%><%=(settings.sonarrPremieres == 'true') ? 'checked' : '' %><%}%>>
                   <label class="custom-control-label" for="premiereSwitch">Show premieres</label>
                   <small id="premiereSwitchHelp" class="form-text text-muted">Only show season premieres.</small>
                 </div>
@@ -1181,68 +911,15 @@
             <hr>
 
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingLidarr">
-                <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseLidarr" aria-expanded="false" aria-controls="collapseLidarr">
-                    LIDARR <i class="accordion_icon fal fa-plus"></i>
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseLidarr" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingLidarr">
-                <div class="panel-body">
-
-                  <div class="form-group">
-                  <div class="custom-control custom-control-nolabel custom-switch ml-auto">
-                    <input type="checkbox" class="custom-control-input" name="enableLidarr" id="enableLidarr"
-                      value="true" <% if(typeof formData !== 'undefined' && errors){%><%=formData.enableLidarr ? 'checked' : '' %><%}else{%><%=(settings.enableLidarr == 'true') ? 'checked' : '' %><%}%>>
-                    <label class="custom-control-label" for="enableLidarr">Enabled</label>
-                  </div>
-                </div>
-
-              <div class="form-group">
-                <label for="lidarrToken">Lidarr Token</label>
-                <input type="password" class="form-control" id="lidarrToken" name="lidarrToken" aria-describedby="lidarrTokenHelp"
-                  placeholder="Lidarr API key" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.lidarrToken%>"<%}else{%><%=settings.lidarrToken%>"<%}%>>
-                <small id="lidarrTokenHelp" class="form-text text-muted">Enter the Lidarr API key. (Leave blank to disable)</small>
-              </div>
-                <div class="form-group">
-                  <label for="lidarrUrl">Lidarr URL</label>
-                  <small class="form-text text-muted">Coming soon music albums from the Lidarr calendar (same idea as Sonarr for TV).</small>
-                  <input type="text" class="form-control" id="lidarrUrl" name="lidarrUrl" aria-describedby="lidarrUrlHelp"
-                    placeholder="http://n.n.n.n:8686" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.lidarrUrl%>"<%}else{%><%=settings.lidarrURL%>"<%}%>>
-                  <small id="lidarrUrlHelp" class="form-text text-muted">Full URL and port for Lidarr (no trailing slash).</small>
-                </div>
-                <div class="form-group">
-                  <label for="lidarrDays">Days ahead</label>
-                  <input type="text" class="form-control" id="lidarrDays" aria-describedby="lidarrDays" name="lidarrDays" placeholder="Suggest 30–90"
-                   value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.lidarrDays%>"<%}else{%><%=settings.lidarrCalDays%>"<%}%>>
-                  <small class="form-text text-muted">How many days ahead to read from the Lidarr calendar.</small>
-                </div>
-
-                  </div>
-              </div>
-            </div>
-            <hr>
-
-            <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingNine">
                 <h4 class="panel-title">
                   <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                    BOOKS (READARR / CHAPTARR)<i class="accordion_icon fal fa-plus"></i>
+                    READARR<i class="accordion_icon fal fa-plus"></i>
                   </a>
                 </h4>
               </div>
               <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
                 <div class="panel-body">
-                  <div class="form-group">
-                    <label for="bookArrKind">Book app</label>
-                    <% var _bak = (typeof formData !== 'undefined' && errors && formData.bookArrKind) ? formData.bookArrKind : (settings.bookArrKind || 'readarr'); %>
-                    <select class="custom-select" name="bookArrKind" id="bookArrKind">
-                      <option value="readarr" <% if (_bak === 'readarr') { %>selected<% } %>>Readarr</option>
-                      <option value="chaptarr" <% if (_bak === 'chaptarr') { %>selected<% } %>>Chaptarr</option>
-                    </select>
-                    <small class="form-text text-muted">Same API as Readarr; use Chaptarr if that is your instance.</small>
-                  </div>
                   <div class="form-group">
                   <div class="custom-control custom-control-nolabel custom-switch ml-auto">
                     <input type="checkbox" class="custom-control-input" name="enableReadarr" id="enableReadarr" 
@@ -1252,22 +929,23 @@
                 </div>
 
               <div class="form-group">
-                <label for="readarrToken">API token</label>
+                <label for="readarrToken">Readarr Token</label>
                 <input type="password" class="form-control" id="readarrToken" name="readarrToken" aria-describedby="readarrTokenHelp"
-                  placeholder="API key from the app" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrToken%>"<%}else{%><%=settings.readarrToken%>"<%}%>>
-                <small id="readarrTokenHelp" class="form-text text-muted">Readarr or Chaptarr API key (dashboard → Settings → General).</small>
+                  placeholder="Readarr API Token" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrToken%>"<%}else{%><%=settings.readarrToken%>"<%}%>>
+                <small id="readarrTokenHelp" class="form-text text-muted">Enter the Readarr API token. (Leave blank to disable)</small>
               </div>
                 <div class="form-group">
-                  <label for="readarrUrl">App base URL</label>
+                  <label for="radarrUrl">Readarr URL</label>
                   <input type="text" class="form-control" id="readarrUrl" name="readarrUrl" aria-describedby="readarrUrlHelp"
-                    placeholder="http://host:8787" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrUrl%>"<%}else{%><%=settings.readarrURL%>"<%}%>>
-                  <small id="readarUrlHelp" class="form-text text-muted">Full URL and port (no trailing slash). Readarr default is often 8787; Chaptarr may differ.</small>
+                    placeholder="http://n.n.n.n:8787" value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrUrl%>"<%}else{%><%=settings.readarrURL%>"<%}%>>
+                  <small id="readarUrlHelp" class="form-text text-muted">Enter the ful URL and port for Readarr.</small>
                 </div>
                 <div class="form-group">
                   <label for="readarrDays">Days ahead</label>
                   <input type="text" class="form-control" id="readarrDays" name="readarrDays" aria-describedby="readarrDays" placeholder="Suggest 60-90"
                    value="<% if(typeof formData !== 'undefined' && errors){%><%=formData.readarrDays%>"<%}else{%><%=settings.readarrCalDays%>"<%}%>>
-                  <small id="readarrUrlHelp" class="form-text text-muted">How many days ahead to read from the calendar.</small>
+                  <small id="readarrUrlHelp" class="form-text text-muted">Enter the days to look ahead in the Readarr
+                    calendar.</small>
                 </div>
 
                   </div>
@@ -1464,20 +1142,15 @@
 
                   <!-- About -->
                   <div class="tab-pane" id="about">
-                    <h5>ABOUT POSTERX <span class="text-muted font-weight-normal">v<%= version %></span></h5>
-                    <div class="alert alert-secondary mb-3" role="note">
-                      <p class="mb-1"><strong>PosterX</strong> is a fork of <a href="https://github.com/petersem/posterr" target="_blank" rel="noopener noreferrer">Posterr</a> (Matt Petersen). This build is maintained by <strong>binarygeek119</strong>.</p>
-                      <p class="mb-1 small"><a href="https://github.com/binarygeek119/posterrX" target="_blank" rel="noopener noreferrer">GitHub — binarygeek119/posterrX</a></p>
-                      <p class="mb-1 small">Sister project: <a href="https://github.com/binarygeek119/ubuntudisplayos" target="_blank" rel="noopener noreferrer">binarygeek119/ubuntudisplayos</a> — Ubuntu-based multi-display kiosk hosts that pair well with PosterX.</p>
-                      <p class="mb-0 small text-muted">This fork is purely AI-modified.</p>
-                    </div>
+                    <h5>ABOUT POSTERR</h5>
+                    <p><%="Version: " + version%></p>
                     <p><b>Support my efforts and continued development.</b></br> <a
                         href="https://www.paypal.com/paypalme/thanksmp" target="_blank">Buy me a coffee to say
                         thanks.</a></p>
                     <hr>
 
                     <p>
-                      Posterr was initially born from a desire for me to learn Node. Over time, I decided to
+                      POSTERR was initially born from a desire for me to learn Node. Over time, I decided to
                       take it from an excercise to being a full product.
                     </p>
                     <p>
@@ -1496,21 +1169,16 @@
                     <label class="d-block" style="text-decoration: underline;">Project Details</label>
                     <p>
                       <ul>
-                        <li>PosterX maintainer Discord (this fork): <a href="https://discord.gg/AEhVjqX4Af"
-                            target="_blank" rel="noopener noreferrer">https://discord.gg/AEhVjqX4Af</a></li>
-                        <li>Original Posterr community Discord: <a href="https://discord.gg/TcnEkMEf9J"
-                            target="_blank" rel="noopener noreferrer">https://discord.gg/TcnEkMEf9J</a></li>
-                        <li>Do not ask the original Posterr developer for support when using PosterX.</li>
-                        <li>For fork support, use GitHub: <a href="https://github.com/binarygeek119/posterrX" target="_blank" rel="noopener noreferrer">https://github.com/binarygeek119/posterrX</a></li>
-                        <li>Sister project (kiosk displays): <a href="https://github.com/binarygeek119/ubuntudisplayos" target="_blank" rel="noopener noreferrer">https://github.com/binarygeek119/ubuntudisplayos</a></li>
-                        <li>Upstream GitHub repository: <a href="https://github.com/petersem/posterr" target="_blank" rel="noopener noreferrer">petersem/posterr</a>
+                        <li>GitHub repository: <a href="https://github.com/petersem/posterr" target="_blank">Here</a>
                         </li>
-                        <li>Docker image (PosterX): <a href="https://hub.docker.com/r/binarygeek119/posterrx"
-                            target="_blank" rel="noopener noreferrer">binarygeek119/posterrx</a> (Docker Hub names are lowercase)</li>
+                        <li>Docker repository: <a href="https://hub.docker.com/repository/docker/petersem/posterr"
+                            target="_blank">Here</a></li>
+                        <li>Discord: <a href="https://discord.gg/TcnEkMEf9J"
+                            target="_blank">Here</a></li>
                       </ul>
                     </p>
                     <label class="d-block" style="text-decoration: underline;">Disclaimer</label>
-                    <p class="small">PosterX is dependant on third party applications and services. Some features may fail temporarily or permenantly if the dependancies are unavailable, or become incompatible for any technical or legal reason. This software comes with no warranty or guarantee of any kind. Images and themes that you download through PosterX may be copyrighted, and are the property of the respective copyright holders.</p>
+                    <p class="small">Posterr is dependant on third party applications and services. Some features may fail temporarily or permenantly if the dependancies are unavailable, or become incompatible for any technical or legal reason. This software comes with no warranty or guarantee of any kind. Images and themes that you download through Posterr may be copyrighted, and are the property of the respective copyright holders.</p>
                   </div>
                 </div>
               </div>

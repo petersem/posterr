@@ -4,7 +4,7 @@
 # Requires cec-utils installed on rPi OS
 #
 #
-# Set the url to your PosterX instance
+# Set the url to your Posterr instance
 url=POSTERR_URL
 poll_frequency=5
 
