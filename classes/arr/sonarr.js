@@ -253,13 +253,13 @@ class Sonarr {
 
         medCard.posterAR = 1.47;
 
-        // add media card to array (taking into account premieres option).
-        // premieres is a string ("true"/"false") — must compare explicitly; "false" is truthy in JS.
-        const premieresOnly = premieres == "true";
-        if (md.hasFile == false && premieresOnly && md.episodeNumber == 1) {
+        // add media card to array (taking into account premieres option)
+        if (md.hasFile == false && premieres && md.episodeNumber == 1) {
           csCards.push(medCard);
-        } else if (md.hasFile == false && !premieresOnly) {
-          csCards.push(medCard);
+        } else {
+          if (!premieres) {
+            csCards.push(medCard);
+          }
         }
       }, undefined);
     }

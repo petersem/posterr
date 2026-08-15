@@ -1,9 +1,7 @@
 const fs = require("fs");
-const path = require("path");
 const request = require("request");
 const fsExtra = require("fs-extra");
 const util = require("./utility");
-const { IMAGE_CACHE_DIR, MP3_CACHE_DIR } = require("./appPaths");
 
 /**
  * @desc Cache class manages the downloaad, cleanup and random selection of mp3 and poster image assets. Methods are static.
@@ -20,46 +18,10 @@ class Cache {
    * @param {string} fileName - the filename to save the image file as
    * @returns nothing
    */
-  /**
-   * @param {object} [options] — e.g. `{ headers: { Authorization: "…" } }` for Jellyfin image endpoints
-   */
-  static async CacheImage(url, fileName, options) {
-    const savePath = path.join(IMAGE_CACHE_DIR, fileName);
-    const result = await this.download(url, savePath, options);
+  static async CacheImage(url, fileName) {
+    const savePath = "./saved/imagecache/" + fileName;
+    const result = await this.download(url, savePath, fileName);
     return result;
-  }
-
-  /**
-   * Re-download an image even if the file already exists (poster metadata refresh).
-   * @param {string} url
-   * @param {string} savePath absolute or relative path
-   */
-  static downloadImageForce(url, savePath, options) {
-    const cleanUrl = String(url || "").trim();
-    if (!cleanUrl || cleanUrl.includes("undefined") || cleanUrl.includes("null")) {
-      return Promise.resolve(false);
-    }
-    const headers = options && options.headers;
-    return new Promise((resolve, reject) => {
-      try {
-        if (fs.existsSync(savePath)) fs.unlinkSync(savePath);
-      } catch (e) {
-        /* ignore */
-      }
-      const ws = fs.createWriteStream(savePath, { autoClose: true });
-      const req = headers ? request({ url: cleanUrl, headers }) : request(cleanUrl);
-      req.on("error", (err) => {
-        try {
-          ws.destroy();
-        } catch (e) {
-          /* ignore */
-        }
-        reject(err);
-      });
-      req.pipe(ws);
-      ws.on("error", (err) => reject(err));
-      ws.on("finish", () => resolve(true));
-    });
   }
 
   /**
@@ -68,22 +30,22 @@ class Cache {
    * @returns nothing
    */
   static async CacheMP3(fileName) {
-    const savePath = path.join(MP3_CACHE_DIR, fileName);
+    const savePath = "./saved/mp3cache/" + fileName;
     const url = "http://tvthemes.plexapp.com/" + fileName;
-    const result = await this.download(url, savePath, undefined);
+    const result = await this.download(url, savePath);
     return result;
   }
 
   /**
-   * @desc Downloads an mp3 from a URL (e.g. Plex theme URL or tvthemes.plexapp.com)
-   * @param {string} url - the fully qualified URL for the media file
+   * @desc Downloads the tv mp3 file from the Plex server
+   * @param {string} url - the fully qualified URL for the plex media file
    * @param {string} fileName - the filename to download and save. this in the format of tvdbid.mp3
    * @returns nothing
    */
   static async CachePlexMP3(url, fileName) {
-    const savePath = path.join(MP3_CACHE_DIR, fileName);
+    const savePath = "./saved/mp3cache/" + fileName;
     //console.log(fileName, url);
-    const result = await this.download(url, savePath, undefined);
+    const result = await this.download(url, savePath);
     return result;
   }
 
@@ -91,60 +53,56 @@ class Cache {
    * @desc Download any asset, providing it does not already exist in the save location
    * @param {string} url - the full url to the asset
    * @param {string} savePath - the path to save the asset to
-   * @param {object} [options] — optional `{ headers }` for authenticated image URLs
-   * @returns {Promise<boolean>}
+   * @param {string} fileName - the filename to save the asset as
+   * @returns nothing
    */
-  static download(url, savePath, options) {
-    const cleanUrl = String(url || "").trim();
-    if (!cleanUrl || cleanUrl.includes("undefined") || cleanUrl.includes("null")) {
-      return Promise.resolve(false);
-    }
-    if (fs.existsSync(savePath)) {
-      return Promise.resolve(true);
-    }
-    try {
-      fs.mkdirSync(path.dirname(savePath), { recursive: true });
-    } catch (e) {
-      /* ignore */
-    }
-    const headers = options && options.headers;
-    return new Promise((resolve) => {
-      const ws = fs.createWriteStream(savePath, { autoClose: true });
-      const req = headers
-        ? request({ url: cleanUrl, headers })
-        : request(cleanUrl);
-      req.on("error", (err) => {
-        try {
-          ws.destroy();
-        } catch (e) {
-          /* ignore */
-        }
-        if (err.code !== "EPERM") {
-          console.log(
-            "download failed for: ",
-            url,
-            err.message,
-            err.code,
-            err.errno
-          );
-        }
-        resolve(false);
+  static async download(url, savePath) {
+    // download file function
+    let status=true;
+    const download = (url, savePath, callback) => {
+      // request.head(url, (err, res, body) => {
+      request(url, function (err, res, body) {
+        //console.log(res.rawHeaders[1]);
+        // check to see if no content, then if mp3, throw exception
+//         var size = parseInt(res.headers["content-length"], 10);
+// //        console.log("file size: " + size);
+//         if (isNaN(size) || (size < 250 && url.toLowerCase().includes("themes"))) {
+//           //console.log('no mp3',url);
+//           status=false;
+//           return callback;
+//         }
+      })
+        .pipe(fs.createWriteStream(savePath, { autoClose: true }))
+        .on("error", (err) => {
+          // throw error unless the download failed due to a restart
+          if (err.code !== "EPERM") {
+            console.log(
+              "download failed for: ",
+              url,
+              err.message,
+              err.code,
+              err.errno
+            );
+          }
+          status=false;
+          return callback(true);
+        })
+        .on("close", () => {
+          return callback;
+        });
+         return callback;
+    };
+
+    //
+    // check if file exists before downloading
+    if (!fs.existsSync(savePath)) {
+      //file not present, so download
+      download(url, savePath, function (dlRes) {
+        // console.log("✅ Downloaded: " + fileName);
       });
-      req.pipe(ws);
-      ws.on("error", (err) => {
-        if (err.code !== "EPERM") {
-          console.log(
-            "download failed for: ",
-            url,
-            err.message,
-            err.code,
-            err.errno
-          );
-        }
-        resolve(false);
-      });
-      ws.on("finish", () => resolve(true));
-    });
+    } else {
+      // console.log("✘ " + fileName + " exists, DL aborted");
+    }
   }
 
   // not implemented yet!
@@ -164,7 +122,7 @@ class Cache {
    * @returns nothing
    */
   static async DeleteMP3Cache() {
-    const directory = MP3_CACHE_DIR;
+    const directory = "./saved/mp3cache/";
     try {
       fsExtra.emptyDirSync(directory);
     } catch (err) {
@@ -181,7 +139,7 @@ class Cache {
    * @returns nothing
    */
   static async DeleteImageCache() {
-    const directory = IMAGE_CACHE_DIR;
+    const directory = "./saved/imagecache/";
     try {
       fsExtra.emptyDirSync(directory);
     } catch (err) {
@@ -200,7 +158,7 @@ class Cache {
   //  * @returns {string} fileName - a random filename
   //  */
   // static async GetRandomMP3(cardArray) {
-  //   let directory = require("./appPaths").RANDOM_THEMES_DIR;
+  //   let directory = "./saved/randomthemes";
   //   // get all mp3 files from directory
   //   let fileArr = fs.readdirSync(directory);
   //   let mp3Files = fileArr.filter(function (elm) {

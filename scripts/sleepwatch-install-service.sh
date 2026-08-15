@@ -12,15 +12,15 @@ fi
 # run initial install as standard user
 if [ $EUID -ne 0 ]; then
     echo
-    echo "PosterX CEC display service install"
+    echo "Posterr CEC display service install"
     echo "-----------------------------------"
     echo
     # gather parameters
     working_dir=$(pwd)
     user=$USER
-    read -p "What is the full url for your PosterX instance? 
+    read -p "What is the full url for your posterr instance? 
 (eg http://192.168.1.134:9876) " url
-    echo "PosterX URL: ${url}"
+    echo "Posterr URL: ${url}"
     echo "User name: ${user}"
     echo "Working directory: ${working_dir}"
     echo  
@@ -54,7 +54,7 @@ else
 
     sed -e "s|POSTERR_URL|${url}|g" \
     "$working_dir/sleepwatch.template" > "$working_dir/sleepwatch.sh"
-    echo "Updated sleepwatch.sh script with PosterX url"
+    echo "Updated sleepwatch.sh script with Posterr url"
     echo
 
     # update script permissions

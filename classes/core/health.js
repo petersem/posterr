@@ -4,14 +4,6 @@ const DEFAULT_SETTINGS = require("../../consts");
 const util = require("../core/utility");
 const ping = require("ping");
 const pms = require("../mediaservers/plex");
-const Kodi = require("../mediaservers/kodi");
-const {
-  getMediaServerClass,
-  isJellyfinFamily,
-  isKodi,
-  getMediaServerShortLabel,
-  usesPlexThemeHost,
-} = require("../mediaservers/mediaServerFactory");
 const axios = require("axios");
 
 /**
@@ -26,56 +18,7 @@ class Health {
   }
 
   async PlexNSCheck() {
-    if (isJellyfinFamily(this.settings.mediaServerType)) {
-      const Pms = getMediaServerClass(this.settings.mediaServerType);
-      const ms = new Pms({
-        plexHTTPS: this.settings.plexHTTPS,
-        plexIP: this.settings.plexIP,
-        plexPort: this.settings.plexPort,
-        plexToken: this.settings.plexToken,
-      });
-      try {
-        const sessions = await ms.GetNowScreeningRawData();
-        const playing = Array.isArray(sessions)
-          ? sessions.filter((s) => s.NowPlayingItem || s.nowPlayingItem).length
-          : 0;
-        if (playing === 0) {
-          console.log(
-            "Nothing returned as playing. Please verify this is correct"
-          );
-        } else {
-          console.log(playing + " media item(s) playing.");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-      return;
-    }
-
-    if (isKodi(this.settings.mediaServerType)) {
-      const ms = new Kodi({
-        plexHTTPS: this.settings.plexHTTPS,
-        plexIP: this.settings.plexIP,
-        plexPort: this.settings.plexPort,
-        plexToken: this.settings.plexToken,
-      });
-      try {
-        const players = await ms.GetNowScreeningRawData();
-        const n = Array.isArray(players) ? players.length : 0;
-        if (n === 0) {
-          console.log(
-            "Nothing returned as playing. Please verify this is correct"
-          );
-        } else {
-          console.log(n + " media item(s) playing.");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-      return;
-    }
-
-    const ms = new pms({
+    let ms = new pms({
       plexHTTPS: this.settings.plexHTTPS,
       plexIP: this.settings.plexIP,
       plexPort: this.settings.plexPort,
@@ -83,17 +26,12 @@ class Health {
     });
 
     try {
-      const result = await Promise.resolve(
-        ms.client.query("/status/sessions")
-      );
-      const size =
-        result && result.MediaContainer ? result.MediaContainer.size : 0;
-      if (size == 0) {
-        console.log(
-          "Nothing returned as playing. Please verify this is correct"
-        );
-      } else {
-        console.log(size + " media item(s) playing.");
+      let result = await Promise.resolve(ms.client.query("/status/sessions"));
+      if(result.MediaContainer.size == 0){
+        console.log("Nothing returned as playing. Please verify this is correct");
+      }
+      else{
+        console.log(result.MediaContainer.size + " media item(s) playing.");
       }
     } catch (err) {
       console.log(err);
@@ -101,141 +39,62 @@ class Health {
   }
 
   async PlexODCheck() {
-    if (isJellyfinFamily(this.settings.mediaServerType)) {
-      const Pms = getMediaServerClass(this.settings.mediaServerType);
-      const ms = new Pms({
-        plexHTTPS: this.settings.plexHTTPS,
-        plexIP: this.settings.plexIP,
-        plexPort: this.settings.plexPort,
-        plexToken: this.settings.plexToken,
-      });
-      try {
-        const data = await ms.apiGet("/Library/MediaFolders");
-        const folders = (data && data.Items) || [];
-        let now = new Date();
-        console.log(
-          now.toLocaleString() +
-            " *On-demand - " +
-            getMediaServerShortLabel(this.settings.mediaServerType) +
-            " libraries (" +
-            folders.length +
-            " folders)"
-        );
-        folders.slice(0, 5).forEach((lib) => {
-          console.log(" -", lib.Name);
-        });
-
-        const sample = await ms.fetchSampleTitlesFromFirstLibrary(5);
-        now = new Date();
-        if (!sample.ok) {
-          console.log(now.toLocaleString() + " *On-demand - " + sample.message);
-          return;
-        }
-        console.log(
-          now.toLocaleString() +
-            " *On-demand - get 5 titles from first library"
-        );
-        const n = sample.titles.length;
-        for (let x = 0; x < n; x++) {
-          console.log(" -", sample.titles[x]);
-        }
-        if (n === 0) {
-          console.log(
-            " - (no items returned — empty library or adjust IncludeItemTypes for folder type '" +
-              (sample.collectionType || "unknown") +
-              "')"
-          );
-        }
-      } catch (err) {
-        const now = new Date();
-        console.log(
-          now.toLocaleString() + " *On-demand - title retrieval: " + err
-        );
-      }
-      return;
-    }
-
-    if (isKodi(this.settings.mediaServerType)) {
-      const ms = new Kodi({
-        plexHTTPS: this.settings.plexHTTPS,
-        plexIP: this.settings.plexIP,
-        plexPort: this.settings.plexPort,
-        plexToken: this.settings.plexToken,
-      });
-      try {
-        const sources = await ms.GetVideoSources();
-        let now = new Date();
-        console.log(
-          now.toLocaleString() +
-            " *On-demand - " +
-            getMediaServerShortLabel(this.settings.mediaServerType) +
-            " video sources (" +
-            sources.length +
-            ")"
-        );
-        sources.slice(0, 5).forEach((s) => {
-          console.log(" -", s.label);
-        });
-
-        const sample = await ms.fetchSampleTitlesFromFirstLibrary(5);
-        now = new Date();
-        if (!sample.ok) {
-          console.log(now.toLocaleString() + " *On-demand - " + sample.message);
-          return;
-        }
-        console.log(
-          now.toLocaleString() +
-            " *On-demand - get 5 titles from first library"
-        );
-        const n = sample.titles.length;
-        for (let x = 0; x < n; x++) {
-          console.log(" -", sample.titles[x]);
-        }
-        if (n === 0) {
-          console.log(
-            " - (no items — empty source or library not scanned in Kodi)"
-          );
-        }
-      } catch (err) {
-        const now = new Date();
-        console.log(
-          now.toLocaleString() + " *On-demand - title retrieval: " + err
-        );
-      }
-      return;
-    }
-
-    const ms = new pms({
+    let ms = new pms({
       plexHTTPS: this.settings.plexHTTPS,
       plexIP: this.settings.plexIP,
       plexPort: this.settings.plexPort,
       plexToken: this.settings.plexToken,
     });
 
-    try {
-      const result = await Promise.resolve(
-        ms.client.query("/library/sections/" + 1 + "/all")
-      );
-      const now = new Date();
-      console.log(
-        now.toLocaleString() + " *On-demand - get 5 titles from first library"
-      );
-      const meta = (result.MediaContainer && result.MediaContainer.Metadata) || [];
-      const n = Math.min(5, meta.length);
-      for (let x = 0; x < n; x++) {
-        console.log(" -", meta[x].title);
-      }
-      if (n === 0) {
+    // return first movie library found
+    // let key;
+    // ms.client
+    //   .query("/library/sections")
+    //   .then(function (result) {
+    //     const children = result.MediaContainer.Directory;
+    //     return children.filter((dir) => (dir.type = "movie"));
+    //   })
+    //   .then(
+    //     function (result) {
+    //       // list directory objects
+    //       //for (let d=0; d < result.length; d++){
+    //       console.log(
+    //         "Library Name:",
+    //         result[0].title,
+    //         ", Key:",
+    //         result[0].key,
+    //         "(first 5 titles)"
+    //       );
+    //       key = parseInt(result[0].key);
+    //       //}
+    //       return;
+    //     },
+    //     function (err) {
+    //       let now = new Date();
+    //       console.log(
+    //         now.toLocaleString() + " *On-demand - get a library key:" + err
+    //       );
+    //     }
+    //   );
+
+    // return first 5 titles in library
+
+    ms.client.query("/library/sections/" + 1 + "/all").then(
+      function (result) {
+        let now = new Date();
         console.log(
-          " - (no titles in library section 1 — check library key exists)"
+          now.toLocaleString() + " *On-demand - get 5 titles from first library");
+        for (let x = 0; x < 5; x++) {
+          console.log(" -", result.MediaContainer.Metadata[x].title);
+        }
+      },
+      function (err) {
+        let now = new Date();
+        console.log(
+          now.toLocaleString() + " *On-demand - title retrieval: " + err
         );
       }
-    } catch (err) {
-      const now = new Date();
-      console.log(
-        now.toLocaleString() + " *On-demand - title retrieval: " + err
-      );
-    }
+    );
   }
 
 async SonarrCheck() {
@@ -305,20 +164,18 @@ async TriviaCheck() {
 
 async ReadarrCheck() {
   let resp;
-  const bookLabel =
-    this.settings.bookArrKind === "chaptarr" ? "Chaptarr" : "Readarr";
   // set up date range and date formats
   let today = new Date();
   let later = new Date();
   later.setDate(later.getDate() + 30);
   let startDate = today.toISOString().split("T")[0];
   let endDate = later.toISOString().split("T")[0];
-  // Readarr / Chaptarr share the same calendar API
+  // call readarr API and return results
   try {
     resp = await axios
       .get(
         this.settings.readarrURL +
-          "/api/v1/calendar?unmonitored=false&apikey=" +
+          "/api/v1/calendar?apikey=" +
           this.settings.readarrToken +
           "&start=" +
           startDate +
@@ -332,7 +189,7 @@ async ReadarrCheck() {
     // displpay error if call failed
     let d = new Date();
     console.log(
-      d.toLocaleString() + " *" + bookLabel.toUpperCase() + " CHECK- Get calendar data:",
+      d.toLocaleString() + " *READARR CHECK- Get calendar data:",
       err.message
     );
     throw err;
@@ -384,71 +241,20 @@ async RadarrCheck() {
   });
   return;
 }
-
-async LidarrCheck() {
-  let resp;
-  const today = new Date();
-  const later = new Date();
-  later.setDate(later.getDate() + 30);
-  const startDate = today.toISOString().split("T")[0];
-  const endDate = later.toISOString().split("T")[0];
-  try {
-    resp = await axios
-      .get(
-        this.settings.lidarrURL +
-          "/api/v1/calendar?unmonitored=false&apikey=" +
-          this.settings.lidarrToken +
-          "&start=" +
-          startDate +
-          "&end=" +
-          endDate
-      )
-      .catch((err) => {
-        throw err;
-      });
-  } catch (err) {
-    const d = new Date();
-    console.log(
-      d.toLocaleString() + " *LIDARR CHECK - Get calendar data:",
-      err.message
-    );
-    throw err;
-  }
-
-  (resp.data || []).forEach((album) => {
-    console.log(
-      (album.artist && album.artist.artistName) || "",
-      "-",
-      album.title
-    );
-  });
-  return;
-}
-
   /**
    * @desc Checks all services available
    * @returns nothing
    */
   async TestPing() {
-    this.PingSingleIP(
-      getMediaServerShortLabel(this.settings.mediaServerType),
-      this.settings.plexIP
-    );
+    this.PingSingleIP("Plex", this.settings.plexIP);
     if (this.settings.radarrURL !== undefined)
       this.PingSingleIP("Radarr", this.settings.radarrURL);
     if (this.settings.sonarrURL !== undefined)
       this.PingSingleIP("Sonarr", this.settings.sonarrURL);
-    if (this.settings.lidarrURL !== undefined)
-      this.PingSingleIP("Lidarr", this.settings.lidarrURL);
     if (this.settings.readarrURL !== undefined)
-      this.PingSingleIP(
-        this.settings.bookArrKind === "chaptarr" ? "Chaptarr" : "Readarr",
-        this.settings.readarrURL
-      );
+      this.PingSingleIP("Readarr", this.settings.readarrURL);
     this.PingSingleIP("TVDB", "artworks.thetvdb.com");
-    if (usesPlexThemeHost(this.settings.mediaServerType)) {
-      this.PingSingleIP("Plex Themes", "tvthemes.plexapp.com");
-    }
+    this.PingSingleIP("Plex Themes", "tvthemes.plexapp.com");
     this.PingSingleIP("TMDB", "https://image.tmdb.org");
     this.PingSingleIP("Open Trivia DB", "https://opentdb.com");
     return Promise.resolve(0);

@@ -1,11 +1,8 @@
-# Debug compose — same host-gateway helper as docker-compose.yml for media servers on the host.
-# Bind-mount config (cache/, ads/, ads-view/, DBs, settings) like production so data survives rebuilds.
-
-version: "3.8"
+version: '3.4'
 
 services:
   posterr:
-    image: posterrx
+    image: posterr
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -16,9 +13,6 @@ services:
     ports:
       - 3000:3000
       - 9229:9229
-    volumes:
-      - ./docker-data/config:/usr/src/app/config
-      - ./docker-data/custom:/usr/src/app/public/custom
     command: ["node", "--inspect=0.0.0.0:9229", "index.js"]
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+
+

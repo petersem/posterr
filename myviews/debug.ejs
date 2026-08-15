@@ -2,7 +2,7 @@
 <html lang="en">
 <!--
 ***********************************************************
-* PosterX - Your home media display                        *
+* Posterr - Your home media display                        *
 * Developed by Matt Petersen - Brisbane, Australia        *
 ***********************************************************
 -->
@@ -22,38 +22,34 @@
   <link rel="stylesheet" href="<%=baseUrl%>/css/light.min.css">
   <!-- <script src="/js/script.js"></script> -->
 
-  <title>PosterX Debug Page</title>
+  <title>Posterr Debug Page</title>
   <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>
 </head>
 
 <body>
-  <h1>  <i class="fal fa-debug" style="font-size: 48px; color:forestgreen;"></i> PosterX Debug Page</h1>
+  <h1>  <i class="fal fa-debug" style="font-size: 48px; color:forestgreen;"></i> Posterr Debug Page</h1>
 </br>
-<p>Use this page to help debug any connectivity issues with PosterX</p>
-<p class="text-muted">Support (maintainer): <a href="https://discord.gg/AEhVjqX4Af" target="_blank" rel="noopener noreferrer">Discord — discord.gg/AEhVjqX4Af</a></p>
+<p>Use this page to help debug any connectivity issues with Posterr</p>
 </br>
 <h3>Software Version</h3>
-<p>PosterX Verson: <%=version%></p>
+<p>Posterr Verson: <%=version%></p>
 </br>
 <h3>Tests</h3>
-<p class="text-muted">Open server logs for output. Media server tests match your <strong>Server type</strong> (Plex, Jellyfin, Emby, or Kodi). On-demand test lists libraries/sources, then up to 5 titles from the first — same idea as the legacy Plex check.</p>
 See logs for results
 <br/><br/>
 <button type="button" class="test btn btn-success" onclick="location.href = '<%=baseUrl%>/';">Return</button>
 <button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/ping';">Ping Tests</button>
-<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/medians';">Media server — Now screening</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexns';">Now Screening Test</button>
 <br><br>
-<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/mediaod';">Media server — On-demand</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/plexod';">On-demand Test</button>
 <button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/sonarr';">Sonarr Test</button>
 <button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/radarr';">Radarr Test</button>
-<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/lidarr';">Lidarr Test</button>
 <br><br>
-<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/readarr';">Books (Readarr / Chaptarr) Test</button>
+<button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/readarr';">Readarr Test</button>
 <button type="button" class="test btn btn-secondary" onclick="location.href = '<%=baseUrl%>/debug/trivia';">Open Trivia DB Test</button><br/>
 </br>
 </br>
 <h3>Settings</h3>
-<p class="text-muted">Media server type: <strong><%= settings && settings.mediaServerType ? settings.mediaServerType : 'plex' %></strong> (Plex / Jellyfin / Emby / Kodi)</p>
 <ul>
   <ul>
     <% 
@@ -73,9 +69,6 @@ See logs for results
           keyVal = 'suppressed';
           break;
         case "readarrtoken":
-          keyVal = 'suppressed';
-          break;
-        case "lidarrtoken":
           keyVal = 'suppressed';
           break;
         case "filterusers":
