@@ -478,7 +478,7 @@ async function loadNowScreening() {
 
   // load MediaServer(s) (switch statement for different server settings server option - TODO)
   let ms = new pms({
-    plexHTTPS: loadedSettings.plexHTTPS,
+    HTTPS: loadedSettings.plexHTTPS,
     plexIP: loadedSettings.plexIP,
     plexPort: loadedSettings.plexPort,
     plexToken: loadedSettings.plexToken,
@@ -841,7 +841,7 @@ async function loadOnDemand() {
 
   // load MediaServer(s) (switch statement for different server settings server option - TODO)
   let ms = new pms({
-    plexHTTPS: loadedSettings.plexHTTPS,
+    HTTPS: loadedSettings.plexHTTPS,
     plexIP: loadedSettings.plexIP,
     plexPort: loadedSettings.plexPort,
     plexToken: loadedSettings.plexToken,
