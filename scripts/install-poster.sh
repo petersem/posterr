@@ -30,7 +30,7 @@ docker run -d \
   -p 8811:8080 \
   nickfedor/watchtower
 
-docker ps
+docker ps -a --format "table {{.Names}}\t{{.ID}}\t{{.Status}}" | (read -r; printf "%s\n" "$REPLY"; sort -k 1 )
 echo 'If you see the posterr and watchtower containers listed, then you are done!'
 
 # Run this script from a linux terminal, as follows:
