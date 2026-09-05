@@ -1,4 +1,12 @@
 #!/bin/bash
+# ----------------------------------------
+# install posterr and watchtower docker containers
+#  Ensure you have created an account on hub.docker.com and you remember the username and password
+#  - docker login --username <your username> --password <your password>
+#  Run this script from a linux terminal, as follows:
+#  wget https://raw.githubusercontent.com/petersem/posterr/refs/heads/master/scripts/install-poster.sh -O script.sh && chmod +x script.sh && ./script.sh && rm script.sh
+# ----------------------------------------  
+
 cd /home/$LOGNAME
 mkdir docker
 mkdir docker/posterr
