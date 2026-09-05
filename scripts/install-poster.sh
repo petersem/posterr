@@ -5,11 +5,12 @@ mkdir docker/posterr
 mkdir docker/posterr/config
 mkdir docker/posterr/custom
 cd docker
+TZ_VALUE=$(readlink /etc/localtime | sed 's|.*/zoneinfo/||')
 
 docker run -d \
   --name posterr \
   --restart always \
-  -e TZ=US/Central \
+  -e TZ=$TZ_VALUE \
   -v /home/$LOGNAME/docker/posterr/custom:/usr/src/app/public/custom \
   -v /home/$LOGNAME/docker/posterr/config:/usr/src/app/config \
   -p 9876:3000 \
@@ -18,7 +19,7 @@ docker run -d \
 docker run -d \
   --name watchtower \
   --restart always \
-  -e TZ=US/Central \
+  -e TZ=$TZ_VALUE \
   -e WATCHTOWER_REMOVE_VOLUMES=true \
   -e WATCHTOWER_CLEANUP=true \
   -e WATCHTOWER_INCLUDE_STOPPED=true \
