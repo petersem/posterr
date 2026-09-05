@@ -10,8 +10,8 @@ docker run -d \
   --name posterr \
   --restart always \
   -e TZ=US/Central \
-  -v /var/home/$LOGNAME/docker/posterr/custom:/usr/src/app/public/custom \
-  -v /var/home/$LOGNAME/docker/posterr/config:/usr/src/app/config \
+  -v /home/$LOGNAME/docker/posterr/custom:/usr/src/app/public/custom \
+  -v /home/$LOGNAME/docker/posterr/config:/usr/src/app/config \
   -p 9876:3000 \
   petersem/posterr
 
@@ -33,4 +33,4 @@ docker ps
 echo 'If you see the posterr and watchtower containers listed, then you are done!'
 
 # Run this script from a linux terminal, as follows:
-# wget https://raw.githubusercontent.com/petersem/posterr/refs/heads/master/scripts/sinstall-poster.sh -O script.sh && chmod +x script.sh && ./script.sh && rm script.sh
+# wget https://raw.githubusercontent.com/petersem/posterr/refs/heads/master/scripts/install-poster.sh -O script.sh && chmod +x script.sh && ./script.sh && rm script.sh
