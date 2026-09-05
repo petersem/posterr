@@ -1,6 +1,6 @@
 {
   "name": "posterr",
-  "version": "1.21.12",
+  "version": "1.21.13",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
@@ -24,7 +24,7 @@
       "docs/*",
       "settings.json"
     ],
-    "delay": "2500"
+    "delay": 2500
   },
   "scripts": {
     "start": "node index.js",
