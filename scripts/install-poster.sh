@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /var/home/$LOGNAME
+cd /home/$LOGNAME
 mkdir docker
 mkdir docker/posterr
 mkdir docker/posterr/config

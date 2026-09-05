@@ -1,6 +1,6 @@
 {
   "name": "posterr",
-  "version": "1.21.14",
+  "version": "1.21.15",
   "description": "A digital display for your media",
   "main": "index.js",
   "bin": "index.js",
@@ -58,5 +58,8 @@
   "devDependencies": {
     "jsdoc": "^4.0.0",
     "nodemon": "^2.0.22"
+  },
+  "allowScripts": {
+    "yarn@1.22.22": true
   }
 }
