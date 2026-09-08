@@ -8,6 +8,8 @@
     "scripts": "public/js/*.js",
     "assets": [
       "public/js/*.map",
+      "public/service-worker.js",
+      "public/site.webmanifest",
       "public/css/**/*",
       "public/favicons/**/*",
       "public/images/**/*",

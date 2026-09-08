@@ -24,6 +24,12 @@
 
   <title>Posterr Debug Page</title>
   <link rel="shortcut icon" type="image/png" href="<%=baseUrl%>/favicons/favicon.ico"/>
+  <link rel="manifest" href="<%=baseUrl%>/site.webmanifest">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Posterr">
+  <link rel="apple-touch-icon" href="<%=baseUrl%>/favicons/apple-touch-icon.png">
 </head>
 
 <body>
@@ -85,5 +91,6 @@ See logs for results
       <li><%= k %>: <span class="settings"><%= keyVal %></span></li>
     <% } %> 
    </ul>
+<script src="<%=baseUrl%>/js/pwa-register.js" defer data-base-url="<%=baseUrl%>"></script>
 </body>
 </html>
